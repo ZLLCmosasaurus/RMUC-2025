@@ -293,8 +293,10 @@ public:
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
 
-    Class_IMU *IMU;
+    Class_IMU* IMU;
+   
     Class_Referee *Referee;
+
 
 protected:
     //初始化相关常量

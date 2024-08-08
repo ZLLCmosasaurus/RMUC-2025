@@ -41,19 +41,24 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Velocity_Y_Max = __Velocity_Y_Max;
     Omega_Max = __Omega_Max;
     Steer_Power_Ratio = __Steer_Power_Ratio;
-
+    #ifdef SPEED_SLOPE
     //斜坡函数加减速速度X  控制周期1ms
     Slope_Velocity_X.Init(0.004f,0.008f);
     //斜坡函数加减速速度Y  控制周期1ms
     Slope_Velocity_Y.Init(0.004f,0.008f);
     //斜坡函数加减速角速度
     Slope_Omega.Init(0.05f, 0.05f);
-
-    #ifdef POWER_LIMIT
+    #endif
+    #ifdef SUPERCAP
     //超级电容初始化
     Supercap.Init(&hcan2,45);
     #endif
-
+    #ifdef C_IMU
+    Boardc_BMI.Init();
+    yaw.IMU=&Boardc_BMI;
+    pitch.IMU=&Boardc_BMI;
+    roll.IMU=&Boardc_BMI;
+    #endif
     //电机PID批量初始化
     for (int i = 0; i < 4; i++)
     {
@@ -75,6 +80,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 float temp_test_1,temp_test_2,temp_test_3,temp_test_4;
 void Class_Tricycle_Chassis::Speed_Resolution(){
     //获取当前速度值，用于速度解算初始值获取
+    
     switch (Chassis_Control_Type)
     {
         case (Chassis_Control_Type_DISABLE):
@@ -123,7 +129,7 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             float motor2_temp_linear_vel = Target_Velocity_Y + Target_Velocity_X - Target_Omega*(HALF_WIDTH+HALF_LENGTH);
             float motor3_temp_linear_vel = Target_Velocity_Y + Target_Velocity_X + Target_Omega*(HALF_WIDTH+HALF_LENGTH);
             float motor4_temp_linear_vel = Target_Velocity_Y - Target_Velocity_X - Target_Omega*(HALF_WIDTH+HALF_LENGTH);
-            #endif            
+            #endif     
             //线速度 cm/s  转角速度  RAD 
             float motor1_temp_rad = motor1_temp_linear_vel * VEL2RAD;
             float motor2_temp_rad = motor2_temp_linear_vel * VEL2RAD;
@@ -138,19 +144,7 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             for (int i = 0; i < 4; i++){
                 Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
             }
-            //            Motor_Wheel[0].Set_Target_Omega_Radian(  temp_test_1);
-            //            Motor_Wheel[1].Set_Target_Omega_Radian( temp_test_2);
-            //            Motor_Wheel[2].Set_Target_Omega_Radian( temp_test_3);
-            //            Motor_Wheel[3].Set_Target_Omega_Radian(  temp_test_4);
 
-            // max=find_max();
-            // if(max>MAX_MOTOR_SPEED)
-            // {
-            //     Motor_Wheel[0].Set_Target_Omega(chassis_motor1.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor2.target_speed=(int)(chassis_motor2.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor3.target_speed=(int)(chassis_motor3.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor4.target_speed=(int)(chassis_motor4.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            // }
         }
         break;
     }   
@@ -164,8 +158,12 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
 float Power_Limit_K = 1.0f;
 void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status)
 {
+    #ifdef C_IMU
+    yaw.Transform_Angle();
+    pitch.Transform_Angle();
+    roll.Transform_Angle();
+    #endif
     #ifdef SPEED_SLOPE
-
     //斜坡函数计算用于速度解算初始值获取
     Slope_Velocity_X.Set_Target(Target_Velocity_X);
     Slope_Velocity_X.TIM_Calculate_PeriodElapsedCallback();
@@ -173,15 +171,15 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Slope_Velocity_Y.TIM_Calculate_PeriodElapsedCallback();
     Slope_Omega.Set_Target(Target_Omega);
     Slope_Omega.TIM_Calculate_PeriodElapsedCallback();
-
     #endif
+ 
     //速度解算
     Speed_Resolution();
-
-    #ifdef POWER_LIMIT
-    
+    #ifdef SUPERCAP
     /****************************超级电容***********************************/
+    #ifdef REFEREE
     Supercap.Set_Now_Power(Referee->Get_Chassis_Power());
+
     if(Referee->Get_Referee_Status()==Referee_Status_DISABLE)
         Supercap.Set_Limit_Power(45.0f);
     else
@@ -190,22 +188,37 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
         offset = (Referee->Get_Chassis_Energy_Buffer()-20.0f)/4;
         Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() + offset);
     }
-        
+    #else
+        Supercap.Set_Limit_Power(45.0f);
+    #endif
     Supercap.TIM_Supercap_PeriodElapsedCallback();
-
+    #endif
     /*************************功率限制策略*******************************/
+    #ifdef POWER_LIMIT
     if(__Sprint_Status==Sprint_Status_ENABLE)
     {
         //功率限制  
+        #ifdef REFEREE
         Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max()*1.5f);
+        #else
+        Power_Limit.Set_Power_Limit(45.0f);
+        #endif
     }
     else
-    {
+    {   
+        #ifdef REFEREE
         Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
+        #else
+        Power_Limit.Set_Power_Limit(30.0f);
+        #endif
     }
-    //Power_Limit.Set_Power_Limit(45.0f);
+   
     Power_Limit.Set_Motor(Motor_Wheel);   //添加四个电机的控制电流和当前转速
+    #ifdef REFEREE
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
+    #else
+    Power_Limit.Set_Chassis_Buffer(30);
+    #endif
 
     if(Supercap.Get_Supercap_Status()==Supercap_Status_DISABLE)
         Power_Limit.Set_Supercap_Enegry(0.0f);
@@ -213,8 +226,34 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
         Power_Limit.Set_Supercap_Enegry(Supercap.Get_Stored_Energy());
     
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
-
     #endif
+   
+}
+
+void Class_Chassis_Pitch::Transform_Angle()
+{
+    True_Rad_Pitch  =   IMU->Get_Rad_Roll();
+    True_Gyro_Pitch =   IMU->Get_Gyro_Roll();
+    True_Angle_Pitch =   IMU->Get_Angle_Roll();
+    True_Angle_Total_Pitch =   IMU->Get_True_Angle_Total_Roll();
+}
+
+void Class_Chassis_Yaw::Transform_Angle()
+{
+    True_Rad_Yaw  =   IMU->Get_Rad_Yaw();
+    True_Gyro_Yaw =   IMU->Get_Gyro_Yaw();
+    True_Angle_Yaw =   IMU->Get_Angle_Yaw();
+    True_Angle_Total_Yaw =   IMU->Get_True_Angle_Total_Yaw();
+
+}
+
+void Class_Chassis_Roll::Transform_Angle()
+{
+    True_Rad_Roll  =   IMU->Get_Rad_Pitch();
+    True_Gyro_Roll =   IMU->Get_Gyro_Pitch();
+    True_Angle_Roll =   IMU->Get_Angle_Pitch();
+    True_Angle_Total_Roll =   IMU->Get_True_Angle_Total_Pitch();
+
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

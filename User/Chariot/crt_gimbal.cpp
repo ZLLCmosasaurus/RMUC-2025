@@ -380,12 +380,13 @@ void Class_Gimbal::Output()
             Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
             Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle);           
         }
+        #ifdef MIMI_PC
         else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
         {   
             Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
             Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();          
         }
-
+        #endif
         //限制角度范围 处理yaw轴180度问题
         if((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())>Max_Yaw_Angle)
         {

@@ -45,6 +45,8 @@ typedef struct
     float Pitch;
     float Yaw;
     float YawTotalAngle;
+    float PitchTotalAngle;
+    float RollTotalAngle;
 } INS_t;
 
 enum Enum_IMU_Status 
@@ -66,6 +68,10 @@ class Class_IMU
     float Get_Angle_Roll(void);
     float Get_Angle_Pitch(void);
     float Get_Angle_Yaw(void);
+
+    float Get_True_Angle_Total_Yaw(void);
+    float Get_True_Angle_Total_Pitch(void);
+    float Get_True_Angle_Total_Roll(void);
 
     float Get_Rad_Roll(void);
     float Get_Rad_Pitch(void);

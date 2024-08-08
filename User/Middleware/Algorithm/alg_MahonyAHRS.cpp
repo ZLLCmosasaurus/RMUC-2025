@@ -35,7 +35,7 @@ void Class_MahonyAHRS::init(float quat[4])
 void Class_MahonyAHRS::AHRS_update(float quat[4], float time, float gyro[3], float accel[3], float mag[3])
 {
     MahonyAHRSupdate(quat, gyro[0], gyro[1], gyro[2], accel[0], accel[1], accel[2], mag[0], mag[1], mag[2]);
-	//MahonyAHRSupdate(quat, gyro[0], gyro[1], gyro[2], accel[0], accel[1], accel[2],0, 0, 0);
+	
 }
 
 // AHRS algorithm update

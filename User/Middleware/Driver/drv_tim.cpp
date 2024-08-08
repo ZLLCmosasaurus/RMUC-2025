@@ -125,11 +125,7 @@ void TIM_Init(TIM_HandleTypeDef *htim, TIM_Call_Back Callback_Function)
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    // //判断程序初始化完成
-    // if(init_finished == 0)
-    // {
-    //     return;
-    // }
+
 
     //选择回调函数
     if (htim->Instance == TIM1)

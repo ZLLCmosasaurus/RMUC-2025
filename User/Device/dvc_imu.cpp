@@ -110,6 +110,8 @@ void Class_IMU::Get_Angle()
     INS.Pitch = QEKF_INS.Pitch;
     INS.Roll = QEKF_INS.Roll;
     INS.YawTotalAngle = QEKF_INS.YawTotalAngle;
+    INS.PitchTotalAngle = QEKF_INS.PitchTotalAngle;
+    INS.RollTotalAngle = QEKF_INS.RollTotalAngle;
 
     INS_Rad[0] = atan2f(2.0f*(INS_Quat[0]*INS_Quat[3]+INS_Quat[1]*INS_Quat[2]), 2.0f*(INS_Quat[0]*INS_Quat[0]+INS_Quat[1]*INS_Quat[1])-1.0f);
     INS_Rad[1] = asinf(-2.0f*(INS_Quat[1]*INS_Quat[3]-INS_Quat[0]*INS_Quat[2]));
@@ -201,6 +203,21 @@ float Class_IMU::Get_Rad_Yaw(void)
 {
     return (INS.Yaw/180.f*PI);
 }
+float Class_IMU::Get_True_Angle_Total_Yaw(void)
+{
+    return (INS.YawTotalAngle);
+}
+
+float Class_IMU::Get_True_Angle_Total_Pitch(void)
+{
+    return (INS.PitchTotalAngle);
+}
+
+float Class_IMU::Get_True_Angle_Total_Roll(void)
+{
+    return (INS.RollTotalAngle);
+}
+
 
 Enum_IMU_Status Class_IMU::Get_IMU_Status(void)
 {

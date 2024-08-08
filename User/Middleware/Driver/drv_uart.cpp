@@ -173,12 +173,5 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 				__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
     }
 }
-//void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
-//{
-//	if (huart->Instance == USART3)
-//    {
-//        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
-//				__HAL_DMA_DISABLE_IT(&hdma_usart3_rx, DMA_IT_HT);	
-//		}
-//}
+
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

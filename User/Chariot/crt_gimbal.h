@@ -207,10 +207,12 @@ class Class_Gimbal
 public:
 
     //imu对象
+    #ifdef C_IMU
     Class_IMU Boardc_BMI;
-
+    #endif
+    #ifdef MINI_PC
     Class_MiniPC *MiniPC;
-
+    #endif
     /*后期yaw pitch这两个类要换成其父类，大疆电机类*/
 
     // yaw轴电机

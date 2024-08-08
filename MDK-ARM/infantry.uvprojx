@@ -680,19 +680,14 @@
               <FilePath>..\User\Device\dvc_dwt.cpp</FilePath>
             </File>
             <File>
-              <FileName>CharSendTask.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\User\Device\CharSendTask.cpp</FilePath>
-            </File>
-            <File>
               <FileName>dvc_GraphicsSendTask.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_GraphicsSendTask.cpp</FilePath>
             </File>
             <File>
-              <FileName>GraphicsSendTask.cpp</FileName>
+              <FileName>dvc_information_platform.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\User\Device\GraphicsSendTask.cpp</FilePath>
+              <FilePath>..\User\Device\dvc_information_platform.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -892,9 +887,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
           <GroupName>Middlewares/Library/DSP Library/DSP Library</GroupName>
           <GroupOption>
             <CommonProperty>
@@ -991,6 +983,9 @@
               </FileOption>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>

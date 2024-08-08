@@ -1199,12 +1199,12 @@ public:
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
 
-    #ifdef GIMBAL
+   
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
     inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
-    #endif
+   
 
     void Referee_UI_Draw_Line(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Rectangle(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
@@ -2251,12 +2251,12 @@ float Class_Referee::Get_Radar_Send_Coordinate_Y()
  *
  * @param __Robot_ID 机器人ID
  */
-#ifdef GIMBAL
+
 void Class_Referee::Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID)
 {
     this->Robot_Status.Robot_ID = __Robot_ID;
 }
-#endif
+
 
 
 /**
@@ -2264,12 +2264,12 @@ void Class_Referee::Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID)
  *
  * @param __Level 机器人等级
  */
-#ifdef GIMBAL
+
 void Class_Referee::Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage)
 {
     this->Game_Status.Stage_Enum = __Game_Stage;
 }
-#endif
+
 
 
 /**
@@ -2277,12 +2277,12 @@ void Class_Referee::Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage)
  *
  * @param __Booster_17mm_1_Heat_CD 枪管冷却cd
  */
-#ifdef GIMBAL
+
 void Class_Referee::Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD)
 {
     this->Robot_Status.Shooter_Barrel_Cooling_Value = __Booster_17mm_1_Heat_CD;
 }
-#endif
+
 
 
 /**
@@ -2290,12 +2290,12 @@ void Class_Referee::Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD
  *
  * @param __Booster_17mm_1_Heat_Max 枪管热量上限
  */
-#ifdef GIMBAL
+
 void Class_Referee::Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max)
 {
     this->Robot_Status.Shooter_Barrel_Heat_Limit = __Booster_17mm_1_Heat_Max;
 }
-#endif
+
 
 #endif
 

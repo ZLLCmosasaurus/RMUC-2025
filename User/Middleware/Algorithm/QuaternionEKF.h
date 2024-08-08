@@ -50,6 +50,8 @@ typedef struct
     float Yaw;
 
     float YawTotalAngle;
+    float PitchTotalAngle;
+    float RollTotalAngle;
 
     float Q1; // 四元数更新过程噪声
     float Q2; // 陀螺仪零偏过程噪声
@@ -62,8 +64,12 @@ typedef struct
     float lambda;                 // 渐消因子
 
     int16_t YawRoundCount;
+    int16_t PitchRoundCount;
+    int16_t RollRoundCount;
 
     float YawAngleLast;
+    float PitchAngleLast;
+    float RollAngleLast;
 } QEKF_INS_t;
 
 extern QEKF_INS_t QEKF_INS;

@@ -15,7 +15,6 @@
 unsigned char JudgeSend[SEND_MAX_SIZE];
 JudgeReceive_t JudgeReceiveData;
 JudgeReceive_t Last_JudgeReceiveData;
-// extern SuperPower superpower;
 F405_typedef F405;
 #define Robot_ID 46
 

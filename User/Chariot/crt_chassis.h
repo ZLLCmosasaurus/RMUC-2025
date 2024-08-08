@@ -27,6 +27,7 @@
 #include "alg_power_limit.h"
 #include "dvc_supercap.h"
 #include "config.h"
+#include "dvc_imu.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -53,6 +54,126 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_SPIN,
 };
 
+class Class_Chassis_Yaw
+{
+public:
+    Class_IMU* IMU;
+    
+    inline float Get_True_Rad_Yaw();
+    inline float Get_True_Gyro_Yaw();
+    inline float Get_True_Angle_Yaw();
+    inline float Get_True_Angle_Total_Yaw();
+
+    void Transform_Angle();
+
+protected:
+    float True_Rad_Yaw = 0.0f;
+    float True_Angle_Yaw = 0.0f;
+    float True_Gyro_Yaw = 0.0f;
+    float True_Angle_Total_Yaw = 0.0f;
+};
+
+class Class_Chassis_Pitch
+{
+public:
+    Class_IMU* IMU;
+
+    inline float Get_True_Rad_Pitch();
+    inline float Get_True_Gyro_Pitch();
+    inline float Get_True_Angle_Pitch();
+    inline float Get_True_Angle_Total_Pitch();
+
+    void Transform_Angle();
+
+protected:
+    float True_Rad_Pitch = 0.0f;
+    float True_Angle_Pitch = 0.0f;
+    float True_Gyro_Pitch = 0.0f;
+    float True_Angle_Total_Pitch = 0.0f;
+};
+
+class Class_Chassis_Roll
+{
+public:
+    Class_IMU* IMU;
+
+    inline float Get_True_Rad_Roll();
+    inline float Get_True_Gyro_Roll();
+    inline float Get_True_Angle_Roll();
+    inline float Get_True_Angle_Total_Roll();
+
+    void Transform_Angle();
+
+protected:
+    float True_Rad_Roll = 0.0f;
+    float True_Angle_Roll = 0.0f;
+    float True_Gyro_Roll = 0.0f;
+    float True_Angle_Total_Roll = 0.0f;
+};
+
+float Class_Chassis_Yaw::Get_True_Rad_Yaw()
+{
+    return True_Rad_Yaw;
+}
+
+float Class_Chassis_Yaw::Get_True_Gyro_Yaw()
+{
+    return True_Gyro_Yaw;
+}
+
+float Class_Chassis_Yaw::Get_True_Angle_Yaw()
+{
+    return True_Angle_Yaw;
+
+}
+
+float Class_Chassis_Yaw::Get_True_Angle_Total_Yaw()
+{
+    return True_Angle_Total_Yaw;
+}
+
+float Class_Chassis_Pitch::Get_True_Rad_Pitch()
+{
+    return True_Rad_Pitch;
+}
+
+float Class_Chassis_Pitch::Get_True_Gyro_Pitch()
+{
+    return True_Gyro_Pitch;
+
+}
+float Class_Chassis_Pitch::Get_True_Angle_Pitch()
+{
+    return True_Angle_Pitch;
+}
+
+float Class_Chassis_Pitch::Get_True_Angle_Total_Pitch()
+{
+    return True_Angle_Total_Pitch;
+}
+
+float Class_Chassis_Roll::Get_True_Rad_Roll()
+{
+    return True_Rad_Roll;
+
+}
+
+float Class_Chassis_Roll::Get_True_Gyro_Roll()
+{
+    return True_Gyro_Roll;
+}
+
+float Class_Chassis_Roll::Get_True_Angle_Roll()
+{
+    return True_Angle_Roll;
+}
+
+float Class_Chassis_Roll::Get_True_Angle_Total_Roll()
+{
+    return True_Angle_Total_Roll;
+
+}
+
 /**
  * @brief Specialized, 三轮舵轮底盘类
  *
@@ -61,25 +182,32 @@ enum Enum_Chassis_Control_Type :uint8_t
 class Class_Tricycle_Chassis
 {
 public:
-
+    #ifdef SPEED_SLOPE
     //斜坡函数加减速速度X
     Class_Slope Slope_Velocity_X;
     //斜坡函数加减速速度Y
     Class_Slope Slope_Velocity_Y;
     //斜坡函数加减速角速度
     Class_Slope Slope_Omega;
-
+    #endif
+    #ifdef SUPERCAP
     Class_Supercap Supercap;
+    #endif
+    #ifdef C_IMU
+    Class_IMU Boardc_BMI;
+    Class_Chassis_Yaw yaw;
+    Class_Chassis_Pitch pitch;
+    Class_Chassis_Roll roll;
+    #endif
     #ifdef POWER_LIMIT
-    
     //功率限制
     Class_Power_Limit Power_Limit;
-    
-    
     #endif
+    
+    #ifdef REFEREE
     //裁判系统
     Class_Referee *Referee;
-
+    #endif
     //下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 

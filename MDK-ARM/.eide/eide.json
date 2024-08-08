@@ -251,13 +251,10 @@
             "path": "../User/Device/dvc_dwt.cpp"
           },
           {
-            "path": "../User/Device/CharSendTask.cpp"
-          },
-          {
             "path": "../User/Device/dvc_GraphicsSendTask.cpp"
           },
           {
-            "path": "../User/Device/GraphicsSendTask.cpp"
+            "path": "../User/Device/dvc_information_platform.cpp"
           }
         ],
         "folders": []

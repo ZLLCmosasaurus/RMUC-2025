@@ -270,8 +270,7 @@ void Class_Referee::Data_Process()
         buffer_index++;
     }
    
-    // buffer_index += UART_Manage_Object->Rx_Length;
-    // buffer_index %= UART_Manage_Object->Rx_Buffer_Length;
+
 }
 
 
@@ -315,21 +314,21 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
 void Class_Referee::UART_Tx_Referee_UI()
 {
     Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 500, "Chassis", (sizeof("chassis")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
+    
     Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
+
     HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
 
     Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 800, "Gimbal", (sizeof("Gimbal")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
+
     Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
+
     HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
 
     Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 1200, "Fric", (sizeof("Fric")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
+
     Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
+
     HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
 }
 

@@ -20,9 +20,8 @@
 #include "dvc_imu.h"
 #include "tsk_config_and_callback.h"
 #include "dvc_supercap.h"
-#include "crt_chassis.h"
 #include "config.h"
-
+#include "dvc_information_platform.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -65,25 +64,6 @@ enum Enum_Bulletcap_Status :uint8_t
 };
 
 
-/**
- * @brief 底盘通讯状态
- *
- */
-enum Enum_Chassis_Status
-{
-    Chassis_Status_DISABLE = 0,
-    Chassis_Status_ENABLE,
-};
-
-/**
- * @brief 云台通讯状态
- *
- */
-enum Enum_Gimbal_Status
-{
-    Gimbal_Status_DISABLE = 0,
-    Gimbal_Status_ENABLE,
-};
 
 /**
  * @brief DR16控制数据来源
@@ -114,74 +94,89 @@ public:
 class Class_Chariot
 {
 public:
+  
     #ifdef CHASSIS
-    
         //获取yaw电机编码器值 用于底盘和云台坐标系的转换
-        //底盘随动PID环
-        Class_DJI_Motor_GM6020 Motor_Yaw;
-        Class_PID PID_Chassis_Fllow;
-
-    #endif 
-
-        //裁判系统
-        Class_Referee Referee;
+        
+        
         //底盘
         Class_Tricycle_Chassis Chassis;
 
-    #ifdef GIMBAL
+        inline Enum_Chassis_Control_Type Get_Pre_Chassis_Control_Type();
+        inline void Set_Pre_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
+
+
+    #endif
+        
+    #ifdef REFEREE
+        //裁判系统
+        Class_Referee Referee;
+    #endif
+        
+    #ifdef CONTROLLER
+
+    #ifdef DR16_REMOTE
         //遥控器
         Class_DR16 DR16;
-        //上位机
-        Class_MiniPC MiniPC;
-        //云台
-        Class_Gimbal Gimbal;
-        //发射机构
-        Class_Booster Booster;
 
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
 
-    #endif
-
-    void Init(float __DR16_Dead_Zone = 0);
-    
-    #ifdef CHASSIS
-
-        void CAN_Chassis_Rx_Gimbal_Callback();
-        void CAN_Chassis_Tx_Gimbal_Callback();
-        void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
-
-    #elif defined(GIMBAL)
-
         inline void DR16_Offline_Cnt_Plus();
-
         inline uint16_t Get_DR16_Offline_Cnt();
         inline void Clear_DR16_Offline_Cnt();
-
-        inline Enum_Chassis_Control_Type Get_Pre_Chassis_Control_Type();
-        inline Enum_Gimbal_Control_Type Get_Pre_Gimbal_Control_Type();
-        inline Enum_Booster_Control_Type Get_Pre_Booster_Control_Type();
-
-        inline void Set_Pre_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
-        inline void Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
-        inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
-
-        inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
+        void TIM_Unline_Protect_PeriodElapsedCallback();
 
-        void CAN_Gimbal_Rx_Chassis_Callback();
-        void CAN_Gimbal_Tx_Chassis_Callback();
+    #endif
+    
+    #endif
+       
+    #ifdef MINI_PC
+        //上位机
+        Class_MiniPC MiniPC;
+    #endif
+ 
+    #ifdef GIMBAL
+        //云台
+        Class_Gimbal Gimbal;
+
+        Class_DJI_Motor_GM6020 Motor_Yaw;
+        //底盘随动PID环
+        Class_PID PID_Chassis_Fllow;
+
+        void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+
+        inline Enum_Gimbal_Control_Type Get_Pre_Gimbal_Control_Type();
+        inline void Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
         
-        void TIM_Control_Callback();
+    #endif  
+        
+    #ifdef BOOSTER
+        //发射机构
+        Class_Booster Booster;
 
-        void TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
+        
+        inline Enum_Booster_Control_Type Get_Pre_Booster_Control_Type();
+        inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
     #endif
 
-    void TIM_Calculate_PeriodElapsedCallback();
-    void TIM_Unline_Protect_PeriodElapsedCallback();
-    void TIM1msMod50_Alive_PeriodElapsedCallback();
-    
+    #ifdef INFORMATION_PLATFORM
+
+        Class_Information_Platform Information_Platform;
+
+        #ifdef CHASSIS
+            void CAN_Chassis_Rx_Gimbal_Callback();
+            void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+        #endif 
+       
+       #ifdef GIMBAL
+            void CAN_Gimbal_Rx_Chassis_Callback();
+            void TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
+       #endif
+            void Information_Platform_Update();
+
     //底盘云台通讯变量
     //冲刺
     Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
@@ -197,32 +192,34 @@ public:
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
+        
+    #endif 
+       
+    void Init(float __DR16_Dead_Zone = 0);
+    void TIM_Control_Callback();
+    void TIM_Calculate_PeriodElapsedCallback();
+    void TIM1msMod50_Alive_PeriodElapsedCallback();
+    
+    
 
 protected:
 
-    //pitch控制状态 锁定和自由控制
-    Enum_Pitch_Control_Status  Pitch_Control_Status = Pitch_Status_Control_Free;
-     
-    //初始化相关常量
-
-    //绑定的CAN
-    Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
-
+    
     #ifdef CHASSIS
-        //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 0.520019531f;
-        //小陀螺云台坐标系稳定偏转角度 用于矫正
-        float Offset_Angle = 0.0f;  //7.5°
-        //底盘转换后的角度（数据来源yaw电机）
-        float Chassis_Angle;
-        //写变量
-        uint32_t Gimbal_Alive_Flag = 0;
-        uint32_t Pre_Gimbal_Alive_Flag = 0;
+        
 
-        Enum_Gimbal_Status Gimbal_Status =  Gimbal_Status_DISABLE;
+        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+        
+        void Control_Chassis();
     #endif
+        
+    #ifdef REFEREE
 
-    #ifdef GIMBAL
+    #endif
+        
+    #ifdef CONTROLLER
+
+    #ifdef DR16_REMOTE
         //遥控器拨动的死区, 0~1
         float DR16_Dead_Zone;
         //常量
@@ -249,46 +246,68 @@ protected:
         float DR16_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
         //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
         float DR16_Mouse_Pitch_Angle_Resolution = 57.8f;
-        
+        //遥控器离线计数
+        uint16_t DR16_Offline_Cnt = 0;
+
+        float True_Mouse_X;
+        float True_Mouse_Y;
+        float True_Mouse_Z;
+
+        //DR16控制数据来源
+        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
+        void Judge_DR16_Control_Type();
+        void Transform_Mouse_Axis();
+    #endif
+    
+    #endif
+       
+    #ifdef MINI_PC
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Pitch_Angle_Resolution = 0.003f;
-
-        //内部变量
-        //遥控器离线计数
-        uint16_t DR16_Offline_Cnt = 0;
-        //拨盘发射标志位
-        uint16_t Shoot_Cnt = 0;
-        //读变量
-        float True_Mouse_X;
-        float True_Mouse_Y;
-        float True_Mouse_Z;
-        //写变量
-        uint32_t Chassis_Alive_Flag = 0;
-        uint32_t Pre_Chassis_Alive_Flag = 0;
-        //读写变量
-        Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
-
-        //底盘 云台 发射机构 前一帧控制类型
-        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+    #endif
+ 
+    #ifdef GIMBAL
+        //pitch控制状态 锁定和自由控制
+        //底盘标定参考正方向角度(数据来源yaw电机)
+        float Reference_Angle = 0.520019531f;
+        //小陀螺云台坐标系稳定偏转角度 用于矫正
+        float Offset_Angle = 0.0f;  //7.5°
+        //底盘转换后的角度（数据来源yaw电机）
+        float Chassis_Angle;
+        Enum_Pitch_Control_Status  Pitch_Control_Status = Pitch_Status_Control_Free;
         Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
+        void Control_Gimbal();
+        
+    #endif  
+        
+    #ifdef BOOSTER
+        uint16_t Shoot_Cnt = 0;
         Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
 
         //单发连发标志位
         uint8_t Shoot_Flag = 0;
-        //DR16控制数据来源
-        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
-        //内部函数
-
-        void Judge_DR16_Control_Type();
-
-        void Control_Chassis();
-        void Control_Gimbal();
         void Control_Booster();
-
-        void Transform_Mouse_Axis();
     #endif
+
+    #ifdef INFORMATION_PLATFORM
+
+        #ifdef CHASSIS
+            
+        #endif 
+       
+        #ifdef GIMBAL
+            
+            
+            void Control_Platform();
+        #endif
+        //绑定的CAN
+        Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
+        
+    #endif 
+    
+  
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -296,60 +315,7 @@ protected:
 /* Exported function declarations --------------------------------------------*/
 
 
-#ifdef GIMBAL
-    /**
-     * @brief 获取底盘通讯状态
-     * 
-     * @return Enum_Chassis_Status 底盘通讯状态
-     */
-    Enum_Chassis_Status Class_Chariot::Get_Chassis_Status()
-    {
-        return (Chassis_Status);
-    }
-
-    /**
-     * @brief 获取DR16控制数据来源
-     * 
-     * @return Enum_DR16_Control_Type DR16控制数据来源
-     */
-
-    Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
-    {
-        return (DR16_Control_Type);
-    }
-
-    /**
-     * @brief 获取前一帧底盘控制类型
-     * 
-     * @return Enum_Chassis_Control_Type 前一帧底盘控制类型
-     */
-
-    Enum_Chassis_Control_Type Class_Chariot::Get_Pre_Chassis_Control_Type()
-    {
-        return (Pre_Chassis_Control_Type);
-    }
-
-    /**
-     * @brief 获取前一帧云台控制类型
-     * 
-     * @return Enum_Gimbal_Control_Type 前一帧云台控制类型
-     */
-
-    Enum_Gimbal_Control_Type Class_Chariot::Get_Pre_Gimbal_Control_Type()
-    {
-        return (Pre_Gimbal_Control_Type);
-    }
-
-    /**
-     * @brief 获取前一帧发射机构控制类型
-     * 
-     * @return Enum_Booster_Control_Type 前一帧发射机构控制类型
-     */
-    Enum_Booster_Control_Type Class_Chariot::Get_Pre_Booster_Control_Type()
-    {
-        return (Pre_Booster_Control_Type);
-    }
-
+    #ifdef CHASSIS
     /**
      * @brief 设置前一帧底盘控制类型
      * 
@@ -359,27 +325,36 @@ protected:
     {
         Pre_Chassis_Control_Type = __Chassis_Control_Type;
     }
+    #endif
+        
+    #ifdef REFEREE
 
-    /**
-     * @brief 设置前一帧云台控制类型
+    #endif
+        
+    #ifdef CONTROLLER
+
+    #ifdef DR16_REMOTE
+     /**
+     * @brief 获取DR16控制数据来源
      * 
-     * @param __Gimbal_Control_Type 前一帧云台控制类型
+     * @return Enum_DR16_Control_Type DR16控制数据来源
      */
-    void Class_Chariot::Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type)
-    {
-        Pre_Gimbal_Control_Type = __Gimbal_Control_Type;
-    }
 
+    Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
+    {
+        return (DR16_Control_Type);
+    }
     /**
-     * @brief 设置前一帧发射机构控制类型
+     * @brief 获取前一帧底盘控制类型
      * 
-     * @param __Booster_Control_Type 前一帧发射机构控制类型
+     * @return Enum_Chassis_Control_Type 前一帧底盘控制类型
      */
-    void Class_Chariot::Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type)
+#ifdef CHASSIS
+    Enum_Chassis_Control_Type Class_Chariot::Get_Pre_Chassis_Control_Type()
     {
-        Pre_Booster_Control_Type = __Booster_Control_Type;
+        return (Pre_Chassis_Control_Type);
     }
-
+#endif
     /**
      * @brief DR16离线计数加一
      */
@@ -408,10 +383,112 @@ protected:
     
     }
 
+    #endif
+    
+    #endif
+       
+    #ifdef MINI_PC
+      
+    #endif
+ 
+    #ifdef GIMBAL
+    /**
+     * @brief 获取前一帧云台控制类型
+     * 
+     * @return Enum_Gimbal_Control_Type 前一帧云台控制类型
+     */
 
-#endif
+    Enum_Gimbal_Control_Type Class_Chariot::Get_Pre_Gimbal_Control_Type()
+    {
+        return (Pre_Gimbal_Control_Type);
+    }
+    /**
+     * @brief 设置前一帧云台控制类型
+     * 
+     * @param __Gimbal_Control_Type 前一帧云台控制类型
+     */
+    void Class_Chariot::Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type)
+    {
+        Pre_Gimbal_Control_Type = __Gimbal_Control_Type;
+    }
+   
+        
+    #endif  
+        
+    #ifdef BOOSTER
+    /**
+     * @brief 获取前一帧发射机构控制类型
+     * 
+     * @return Enum_Booster_Control_Type 前一帧发射机构控制类型
+     */
+    Enum_Booster_Control_Type Class_Chariot::Get_Pre_Booster_Control_Type()
+    {
+        return (Pre_Booster_Control_Type);
+    }
+    /**
+     * @brief 设置前一帧发射机构控制类型
+     * 
+     * @param __Booster_Control_Type 前一帧发射机构控制类型
+     */
+    void Class_Chariot::Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type)
+    {
+        Pre_Booster_Control_Type = __Booster_Control_Type;
+    }  
+    #endif
+
+    #ifdef INFORMATION_PLATFORM
+
+        #ifdef CHASSIS
+
+        #endif 
+       
+        #ifdef GIMBAL
+          
+        #endif
+       
+    #endif 
 
 
+    // #ifdef CHASSIS
+
+    // #endif
+        
+    // #ifdef REFEREE
+
+    // #endif
+        
+    // #ifdef CONTROLLER
+
+    // #ifdef DR16_REMOTE
+
+
+    // #endif
+    
+    // #endif
+       
+    // #ifdef MINI_PC
+      
+    // #endif
+ 
+    // #ifdef GIMBAL
+    
+    // #endif  
+        
+    // #ifdef BOOSTER
+ 
+    // #endif
+
+    // #ifdef INFORMATION_PLATFORM
+
+    //     #ifdef CHASSIS
+
+    //     #endif 
+       
+    //     #ifdef GIMBAL
+          
+    //     #endif
+       
+    // #endif 
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

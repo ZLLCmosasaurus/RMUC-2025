@@ -95,8 +95,9 @@ public:
     friend class Class_FSM_Antijamming;
 
     //裁判系统
+    #ifdef REFEREE
     Class_Referee *Referee;
-
+    #endif
     //拨弹盘电机
     Class_DJI_Motor_C610 Motor_Driver;
 

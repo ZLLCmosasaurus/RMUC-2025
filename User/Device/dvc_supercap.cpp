@@ -108,7 +108,7 @@ void Class_Supercap::Output()
  */
 void Class_Supercap::Output_UART()
 {
-    //float now_power = Supercap_Data.Now_Power;
+    // float now_power = Supercap_Data.Now_Power;
     
 
     // UART_Manage_Object->Tx_Buffer[0] = Fame_Header;

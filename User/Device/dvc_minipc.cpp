@@ -45,19 +45,18 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  */
 void Class_MiniPC::Data_Process()
 {
-    // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
+    
     memcpy(&Pack_Rx,(Pack_rx_t*)USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length);
 
     float tmp_yaw,tmp_pitch;
     
     Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
 
-    // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    // Rx_Angle_Pitch = meanFilter(tmp_pitch);
+    
     Rx_Angle_Pitch = -tmp_pitch;
     Rx_Angle_Yaw = tmp_yaw;
     Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
-    // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
+    
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 }
@@ -71,17 +70,24 @@ void Class_MiniPC::Output()
 	Pack_Tx.header       = Frame_Header;
 
   // 根据referee判断红蓝方
+  #ifdef REFEREE
   if(Referee->Get_ID()>=101)
 	  Pack_Tx.detect_color = 101;
   else
     Pack_Tx.detect_color = 0;
-
+#else
+  Pack_Tx.detect_color = 0;
+  #endif
 	Pack_Tx.target_id    = 0x08;
 	Pack_Tx.roll         = Tx_Angle_Roll;
 	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
 	Pack_Tx.yaw          = Tx_Angle_Yaw;
 	Pack_Tx.crc16        = 0xffff;
-  Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
+  #ifdef REFEREE
+  Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage(); 
+  #else
+  Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)0; 
+  #endif
 	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx,sizeof(Pack_Tx));
 	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx));
   USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
