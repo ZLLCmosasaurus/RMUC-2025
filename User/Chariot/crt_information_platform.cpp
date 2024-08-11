@@ -1,4 +1,4 @@
-#include "dvc_information_platform.h""
+#include "crt_information_platform.h""
 
 void Class_Information_Platform::Init(Struct_CAN_Manage_Object* __CAN_Manage_Object)
 {

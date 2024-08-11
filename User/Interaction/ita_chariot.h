@@ -21,7 +21,7 @@
 #include "tsk_config_and_callback.h"
 #include "dvc_supercap.h"
 #include "config.h"
-#include "dvc_information_platform.h"
+#include "crt_information_platform.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/

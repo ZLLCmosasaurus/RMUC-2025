@@ -594,6 +594,11 @@
               <FileType>8</FileType>
               <FilePath>..\User\Chariot\crt_gimbal.cpp</FilePath>
             </File>
+            <File>
+              <FileName>crt_information_platform.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Chariot\crt_information_platform.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -683,11 +688,6 @@
               <FileName>dvc_GraphicsSendTask.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_GraphicsSendTask.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>dvc_information_platform.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\User\Device\dvc_information_platform.cpp</FilePath>
             </File>
           </Files>
         </Group>
