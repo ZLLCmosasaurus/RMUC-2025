@@ -26,10 +26,11 @@
 /*Speed optimization*/
 #define SPEED_SLOPE
 /*SperCap*/
-#define SUPERCAP
+// #define SUPERCAP
 #define SPI
 #define IIC
 #define UART
+#define CAN
 #ifdef SUPERCAP
 #define POWER_LIMIT
 #endif

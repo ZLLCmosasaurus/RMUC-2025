@@ -815,9 +815,12 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
     #ifdef CHASSIS
         //云台掉线保护
+
+           
 //        if( Information_Platform.Gimbal_Status == Gimbal_Status_ENABLE)
-//        {
-            Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+  
+										Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+								
 //        }
 //        else
 //        {
@@ -912,9 +915,16 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
          #ifdef SUPERCAP
               Chassis.Supercap.TIM_Alive_PeriodElapsedCallback();
          #endif
-         for (auto& wheel : Chassis.Motor_Wheel) {
-                wheel.TIM_Alive_PeriodElapsedCallback();
-            }
+        //  for (auto& wheel : Chassis.Motor_Wheel) {
+        //         wheel.TIM_Alive_PeriodElapsedCallback();
+        //     }
+        for (auto& Joint_motor : Chassis.Joint_Motor) {
+            Joint_motor.motor.TIM_Alive_PeriodElapsedCallback();
+        }
+        for (auto& Wheel_Motor : Chassis.Wheel_Motor) {
+            
+            Wheel_Motor.motor.Task_Alive_PeriodElapsedCallback();
+        }
       
     #endif
         

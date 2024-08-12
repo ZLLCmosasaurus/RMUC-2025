@@ -81,24 +81,51 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
      switch (CAN_RxMessage->Header.StdId)
     {
         #ifdef CHASSIS
+            case (0x5f):
+            {
+							switch(CAN_RxMessage->Data[0]&0xf)
+               {
+                   case (0x01):
+                   {
+                        chariot.Chassis.Joint_Motor[0].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                   }
+                   break;
+                   case (0x02):
+                   {
+                        chariot.Chassis.Joint_Motor[1].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                   }
+                   break;
+                    case (0x03):
+                   {
+                        chariot.Chassis.Joint_Motor[2].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                   }
+                   break;
+                   case (0x04):
+                   { 
+                        chariot.Chassis.Joint_Motor[3].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                   }
+                   break;
+               }
+            }
+            break;
             case (0x201):
             {
-                chariot.Chassis.Motor_Wheel[0].CAN_RxCpltCallback(CAN_RxMessage->Data);
+                // chariot.Chassis.Motor_Wheel[0].CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
             case (0x202):
             {
-                chariot.Chassis.Motor_Wheel[1].CAN_RxCpltCallback(CAN_RxMessage->Data);
+                // chariot.Chassis.Motor_Wheel[1].CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
             case (0x203):
             {
-                chariot.Chassis.Motor_Wheel[2].CAN_RxCpltCallback(CAN_RxMessage->Data);
+                // chariot.Chassis.Motor_Wheel[2].CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
             case (0x204):
             {
-                chariot.Chassis.Motor_Wheel[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
+                // chariot.Chassis.Motor_Wheel[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
             case (0x206):  
@@ -143,6 +170,25 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
             break;
         #endif
     }
+    switch (CAN_RxMessage->Header.ExtId)
+    {
+        #ifdef CHASSIS
+            case (0x2911):
+            {
+                chariot.Chassis.Wheel_Motor[0].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+            }
+						break;
+            case (0x2912):
+            {
+                chariot.Chassis.Wheel_Motor[1].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+            }	
+						break;
+						default:
+							
+						break;
+        #endif
+
+    }
     
     
 }
@@ -170,7 +216,7 @@ void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
             break;
             case (0x67):  //留给超级电容
             {
-            chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
+            // chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
             case (0x205):
@@ -324,7 +370,7 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 #ifdef CHASSIS
 void SuperCAP_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.Chassis.Supercap.UART_RxCpltCallback(Buffer);
+    // chariot.Chassis.Supercap.UART_RxCpltCallback(Buffer);
 }
 #endif
 /**
@@ -382,11 +428,13 @@ void Task1ms_TIM5_Callback()
         
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 
+        
+        
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
-        TIM_CAN_PeriodElapsedCallback();
+//        TIM_CAN_PeriodElapsedCallback();
 
         TIM_UART_PeriodElapsedCallback();
         
@@ -501,8 +549,8 @@ extern "C" void Task_Init()
         JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;         //自瞄是否离线
         JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;  //自瞄是否瞄准
         #ifdef CHASSIS
-        JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();  //超级电容储能  
-        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();  //超级电容电压
+        // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();  //超级电容储能  
+        // JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();  //超级电容电压
         JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); //底盘控制模式
         #endif
         if(chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)

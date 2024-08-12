@@ -195,6 +195,9 @@
           },
           {
             "path": "../User/Chariot/crt_gimbal.cpp"
+          },
+          {
+            "path": "../User/Chariot/crt_information_platform.cpp"
           }
         ],
         "folders": []
@@ -254,7 +257,7 @@
             "path": "../User/Device/dvc_GraphicsSendTask.cpp"
           },
           {
-            "path": "../User/Device/dvc_information_platform.cpp"
+            "path": "../User/Device/dvc_AKmotor.cpp"
           }
         ],
         "folders": []
@@ -304,6 +307,9 @@
               },
               {
                 "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_vmc.cpp"
               }
             ],
             "folders": []

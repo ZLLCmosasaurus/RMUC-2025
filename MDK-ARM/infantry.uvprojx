@@ -689,6 +689,11 @@
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_GraphicsSendTask.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dvc_AKmotor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_AKmotor.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -753,6 +758,11 @@
               <FileName>alg_power_limit.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Middleware\Algorithm\alg_power_limit.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>alg_vmc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Middleware\Algorithm\alg_vmc.cpp</FilePath>
             </File>
           </Files>
         </Group>

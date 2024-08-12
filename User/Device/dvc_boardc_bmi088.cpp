@@ -117,7 +117,7 @@ uint8_t Class_BoardC_BMI::BMI088_Init(IMU_Data_t *__BMI088)
 void Class_BoardC_BMI::Calibrate_MPU_Offset(IMU_Data_t *bmi088)
 {
     static float startTime;
-    static uint16_t CaliTimes = 6000; // 需要足够多的数据才能得到有效陀螺仪零偏校准结果
+    static uint16_t CaliTimes = 8000; // 需要足够多的数据才能得到有效陀螺仪零偏校准结果
     uint8_t buf[8] = {0, 0, 0, 0, 0, 0};
     int16_t bmi088_raw_temp;
     float gyroMax[3], gyroMin[3];

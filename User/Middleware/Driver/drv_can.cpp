@@ -35,6 +35,24 @@ uint8_t CAN1_0xxf6_Tx_Data[8];
 uint8_t CAN1_0xxf7_Tx_Data[8];
 uint8_t CAN1_0xxf8_Tx_Data[8];
 
+ uint8_t CAN1_0xx01_Tx_Data[8];
+ uint8_t CAN1_0xx02_Tx_Data[8];
+ uint8_t CAN1_0xx03_Tx_Data[8];
+ uint8_t CAN1_0xx04_Tx_Data[8];
+ uint8_t CAN1_0xx05_Tx_Data[8];
+ uint8_t CAN1_0xx06_Tx_Data[8];
+ uint8_t CAN1_0xx07_Tx_Data[8];
+ uint8_t CAN1_0xx08_Tx_Data[8];
+
+ uint8_t CAN2_0xx01_Tx_Data[8];
+ uint8_t CAN2_0xx02_Tx_Data[8];
+ uint8_t CAN2_0xx03_Tx_Data[8];
+ uint8_t CAN2_0xx04_Tx_Data[8];
+ uint8_t CAN2_0xx05_Tx_Data[8];
+ uint8_t CAN2_0xx06_Tx_Data[8];
+ uint8_t CAN2_0xx07_Tx_Data[8];
+ uint8_t CAN2_0xx08_Tx_Data[8];
+
 uint8_t CAN2_0x1ff_Tx_Data[8];
 uint8_t CAN2_0x200_Tx_Data[8];
 uint8_t CAN2_0x2ff_Tx_Data[8];
@@ -157,6 +175,8 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
 //         can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0x200, 0x7F8);
 			can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
 			can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
+			can_filter_mask_config(hcan, CAN_FILTER(2) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0 ,0);  //只接收
+	    can_filter_mask_config(hcan, CAN_FILTER(3) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
     }
     else if (hcan->Instance == CAN2)
     {
@@ -182,21 +202,42 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
  * @param Length 长度
  * @return uint8_t 执行状态
  */
-uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length)
+uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length,uint8_t data_type) 
 {
-    CAN_TxHeaderTypeDef tx_header;
-    uint32_t used_mailbox;
-
+   CAN_TxHeaderTypeDef tx_header;
+    uint32_t freeMailboxes;
+		
     //检测传参是否正确
     assert_param(hcan != NULL);
 
-    tx_header.StdId = ID;
-    tx_header.ExtId = 0;
-    tx_header.IDE = 0;
-    tx_header.RTR = 0;
-    tx_header.DLC = Length;
+    // 获取空闲邮箱数量
+    freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);
 
-    return (HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &used_mailbox));
+    // 如果没有空闲邮箱，则返回错误码
+    if (freeMailboxes == 0)
+    {
+        return HAL_ERROR;
+    }
+
+    // 根据 data_type 设置帧类型
+    if (data_type == CAN_ID_STD)  // 标准帧
+    {
+        tx_header.IDE = CAN_ID_STD;  // 使用标准标识符 (11位)
+        tx_header.StdId = ID;        // 设置标准标识符
+        tx_header.ExtId = 0;         // 扩展标识符设为0
+    }
+    else if (data_type == CAN_ID_EXT)  // 扩展帧
+    {
+        tx_header.IDE = CAN_ID_EXT;  // 使用扩展标识符 (29位)
+        tx_header.ExtId = ID;        // 设置扩展标识符
+        tx_header.StdId = 0;         // 标准标识符设为0
+    }
+
+    tx_header.RTR = CAN_RTR_DATA; // 数据帧
+    tx_header.DLC = Length;       // 数据长度
+
+    // 发送数据
+    return HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &freeMailboxes);
 }
 
 /**
@@ -213,25 +254,25 @@ void TIM_CAN_PeriodElapsedCallback()
     {
         mod10 = 0;
         // CAN2超级电容
-        CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8);
+        CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8,CAN_ID_STD);
     }
 
     // CAN1总线  四个底盘电机  
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
+    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8,CAN_ID_STD);
     //上板
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
+    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8,CAN_ID_STD);
 
    
 
     // CAN1 摩擦轮*2 pitch
     //CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
+    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8,CAN_ID_STD); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
 
-    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); //pitch-LK6010  按照0x141 ID 发送 一次只能控制一个电机
+    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8,CAN_ID_STD); //pitch-LK6010  按照0x141 ID 发送 一次只能控制一个电机
     
     // CAN2 yaw 下板
-    CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+    CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8,CAN_ID_STD); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
+    CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8,CAN_ID_STD); //给底盘发送控制命令 按照0x77 ID 发送
     
 }
 

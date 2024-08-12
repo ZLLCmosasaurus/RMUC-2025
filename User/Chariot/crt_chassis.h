@@ -28,6 +28,9 @@
 #include "dvc_supercap.h"
 #include "config.h"
 #include "dvc_imu.h"
+#include "alg_vmc.h"
+#include "dvc_dmmotor.h"
+#include "dvc_AKmotor.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -174,6 +177,21 @@ float Class_Chassis_Roll::Get_True_Angle_Total_Roll()
 
 }
 
+class Class_Joint_Motor
+{
+public:
+   Class_DM_Motor_J4310 motor;
+    
+};
+
+class Class_Wheel_Motor
+{
+public:
+   Class_AK_Motor_80_6 motor;
+   float wheel_T;
+    
+};
+
 /**
  * @brief Specialized, 三轮舵轮底盘类
  *
@@ -195,9 +213,9 @@ public:
     #endif
     #ifdef C_IMU
     Class_IMU Boardc_BMI;
-    Class_Chassis_Yaw yaw;
-    Class_Chassis_Pitch pitch;
-    Class_Chassis_Roll roll;
+    Class_Chassis_Yaw Yaw;
+    Class_Chassis_Pitch Pitch;
+    Class_Chassis_Roll Roll;
     #endif
     #ifdef POWER_LIMIT
     //功率限制
@@ -209,7 +227,77 @@ public:
     Class_Referee *Referee;
     #endif
     //下方转动电机
-    Class_DJI_Motor_C620 Motor_Wheel[4];
+    void mySaturate(float *in,float min,float max);
+    void Pose_Calculate(void);
+    float CHASSIS_DWT_Dt;
+    uint32_t CHASSIS_DWT_Count;
+    float mg=21.f;
+    Class_VMC Left_Leg;
+    Class_VMC Right_Leg;
+
+    Class_Joint_Motor Joint_Motor[4];
+    Class_Wheel_Motor Wheel_Motor[2];
+
+
+    Class_PID left_leg_length_pid;
+    Class_PID right_leg_length_pid;
+    Class_PID roll_pid;
+    Class_PID Tp_pid;
+    Class_PID turn_pid;
+
+    float v_set;
+    float x_set;
+    float v_ramp_set;
+
+    float yaw_set;
+    float roll_set;
+    float roll_x;
+    float phi_set;
+    float theta_set;
+
+    float leg_set;
+    float last_leg_set;
+
+    float v_filter;
+    float x_filter;
+
+    float mypitch[2];
+    float mypitchgyro[2];
+
+    float roll;
+    float total_yaw;
+    float leg_theta_err;
+
+    float turn_T;
+    float roll_f0;
+
+    float leg_tp;
+
+    uint8_t start_flag;
+
+    uint8_t prejump_flag;
+    uint8_t recover_flag;
+
+    uint8_t jump_flag[2];
+    float jump_time[2];
+
+    uint8_t suspend_flag[2];
+
+    float Poly_Coefficient[12][4]={{-237.3349, 159.4788, -49.261, -0.25734},
+{-5.8103, 3.2874, -3.6591, 0.035335},
+{-145.8174, 82.6187, -16.0157, -1.3217},
+{-77.5916, 44.5871, -9.8462, -0.80907},
+{-1346.2612, 838.4644, -189.44, 17.337},
+{-38.3945, 25.816, -6.5944, 0.79561},
+{-359.5611, 252.751, -67.8172, 8.6161},
+{-27.545, 18.9408, -5.0846, 0.75336},
+{-1099.2532, 682.5184, -153.2639, 13.7166},
+{-656.3217, 405.396, -90.4953, 8.0957},
+{4014.0347, -2279.5118, 443.6074, 33.2126},
+{144.59, -85.5986, 17.7971, 0.2118}
+};
+
+    // Class_DJI_Motor_C620 Motor_Wheel[4];
 
     void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
 

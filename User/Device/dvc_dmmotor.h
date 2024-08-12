@@ -16,7 +16,7 @@
 
 #include "drv_math.h"
 #include "drv_can.h"
-
+#include "dvc_dwt.h""
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -142,6 +142,7 @@ public:
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_Process_PeriodElapsedCallback();
 
+		Enum_DM_Motor_Status DM_Motor_Status = DM_Motor_Status_DISABLE;
 protected:
     //初始化相关变量
 
@@ -161,7 +162,7 @@ protected:
     //常量
     
     //一圈位置刻度
-    uint32_t Position_Max = 65536;
+    uint32_t Position_Max = 16384;
 
     //内部变量
 
@@ -173,7 +174,7 @@ protected:
     //读变量
 
     //电机状态
-    Enum_DM_Motor_Status DM_Motor_Status = DM_Motor_Status_DISABLE;
+    
     //电机对外接口信息
     Struct_DM_Motor_Rx_Data Data;
 
