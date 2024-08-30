@@ -87,12 +87,12 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
                {
                    case (0x01):
                    {
-                        chariot.Chassis.Joint_Motor[0].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                        chariot.Chassis.Joint_Motor[1].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
                    }
                    break;
                    case (0x02):
                    {
-                        chariot.Chassis.Joint_Motor[1].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
+                        chariot.Chassis.Joint_Motor[0].motor.CAN_RxCpltCallback(CAN_RxMessage->Data);
                    }
                    break;
                     case (0x03):
@@ -436,7 +436,7 @@ void Task1ms_TIM5_Callback()
         //统一打包发送
 //        TIM_CAN_PeriodElapsedCallback();
 
-        TIM_UART_PeriodElapsedCallback();
+//        TIM_UART_PeriodElapsedCallback();
         
         static int mod5 = 0;
         mod5++;

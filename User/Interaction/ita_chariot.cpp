@@ -498,7 +498,7 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
             }
 
             //超过一秒的遥控器离线 跳转到 遥控器关闭状态
-            if(Status[Now_Status_Serial].Time > 1000)
+            if(Status[Now_Status_Serial].Time > 20)
             {
                 Status[Now_Status_Serial].Time = 0;
                 Set_Status(1);
@@ -571,7 +571,8 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
         case (4):
         {
             HAL_UART_DMAStop(&huart3); // 停止以重启
-            //HAL_Delay(10); // 等待错误结束
+            DWT_Delay(0.01); // 等待错误结束
+						__HAL_UART_FLUSH_DRREGISTER(&huart3);
             HAL_UARTEx_ReceiveToIdle_DMA(&huart3, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
 
             //处理完直接跳转到 离线检测状态
@@ -817,16 +818,10 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //云台掉线保护
 
            
-//        if( Information_Platform.Gimbal_Status == Gimbal_Status_ENABLE)
+        
   
-										Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
-								
-//        }
-//        else
-//        {
-//            for(auto i = 0; i < 4; i++)
-//                Chassis.Motor_Wheel[i].Set_Out(0.0f);
-//        }
+			Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+				
 
     #endif
         
@@ -966,7 +961,8 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
                  #ifdef INFORMATION_PLATFORM
                  Information_Platform.Platform_Alive_PeriodElapsedCallback();
                  #endif
-                 DR16.TIM1msMod50_Alive_PeriodElapsedCallback();	   
+                 DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
+       
                 mod50_mod3 = 0;
             }
         

@@ -77,6 +77,7 @@ float LQR_K[12];
 void VMC_Init(Enum_Leg_Side leg_side);
 void VMC_calc_1(float dt);
 void VMC_calc_2(void);
+void Set_LQR_K(float Length_L[]);
 uint8_t ground_detection( Enum_Leg_Side leg_side);
 float LQR_K_calc(float *coe, float len);
 
@@ -92,12 +93,12 @@ inline float Get_MotionAccel(void);
 
 void Class_VMC  :: Set_Pitch(float pitch)
 {
-    Pitch = pitch;
+    Raw_Pitch = pitch;
 }
 
 void Class_VMC  :: Set_Pitch_Gyro(float gyro)
 {
-    PithGyro = gyro;
+    Raw_Gyro = gyro;
 }
 
 void Class_VMC  :: Set_MotionAccel(float accel)

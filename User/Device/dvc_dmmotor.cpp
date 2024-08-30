@@ -239,7 +239,7 @@ void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
         //电机保持连接
         DM_Motor_Status = DM_Motor_Status_ENABLE;
     }
-
+    
     //控制电机使能或失能
     switch (DM_Motor_Control_Status)
     {
@@ -309,7 +309,9 @@ void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
     break;
     }
 		DWT_Delay(0.001);
+    
     Pre_Flag = Flag;
+    
 }
 
 /**
@@ -322,11 +324,11 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
     {
     case (DM_Motor_Control_Method_MIT_POSITION):
     {
-        uint16_t tmp_position = Math_Float_To_Int(Target_Angle, -PI, PI, 0, (1 << 16) - 1);
-        uint16_t tmp_velocity = Math_Float_To_Int(Target_Omega, -Omega_Max, Omega_Max, 0, (1 << 12) - 1);
-        uint16_t tmp_k_p = Math_Float_To_Int(MIT_K_P, 0.0f, 500.0f, 0, (1 << 12) - 1);
-        uint16_t tmp_k_d = Math_Float_To_Int(MIT_K_D, 0.0f, 5.0f, 0, (1 << 12) - 1);
-        uint16_t tmp_torque = Math_Float_To_Int(Target_Torque, -Torque_Max, Torque_Max, 0, (1 << 12) - 1);
+        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI, 16);
+        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max, 12);
+        uint16_t tmp_k_p = float_to_uint(MIT_K_P, 0.0f, 500.0f,12);
+        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f,12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,12);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));
@@ -354,11 +356,11 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
     break;
     case (DM_Motor_Control_Method_MIT_OMEGA):
     {
-        uint16_t tmp_position = Math_Float_To_Int(Target_Angle, -PI, PI, 0, (1 << 16) - 1);
-        uint16_t tmp_velocity = Math_Float_To_Int(Target_Omega, -Omega_Max, Omega_Max, 0, (1 << 12) - 1);
-        uint16_t tmp_k_p = 0;
-        uint16_t tmp_k_d = Math_Float_To_Int(MIT_K_D, 0.0f, 5.0f, 0, (1 << 12) - 1);
-        uint16_t tmp_torque = Math_Float_To_Int(Target_Torque, -Torque_Max, Torque_Max, 0, (1 << 12) - 1);
+        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI,16);
+        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max,16);
+       uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f,12);
+        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f,12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,16);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));
@@ -386,11 +388,11 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
     break;
     case (DM_Motor_Control_Method_MIT_TORQUE):
     {
-        uint16_t tmp_position = Math_Float_To_Int(Target_Angle, -PI, PI, 0, (1 << 16) - 1);
-        uint16_t tmp_velocity = Math_Float_To_Int(Target_Omega, -Omega_Max, Omega_Max, 0, (1 << 12) - 1);
-        uint16_t tmp_k_p = 0;
-        uint16_t tmp_k_d = 0;
-        uint16_t tmp_torque = Math_Float_To_Int(Target_Torque, -Torque_Max, Torque_Max, 0, (1 << 12) - 1);
+        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI,16);
+        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max,12);
+        uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f,12);
+        uint16_t tmp_k_d = float_to_uint(0, 0.0f, 5.0f,12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,12);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));

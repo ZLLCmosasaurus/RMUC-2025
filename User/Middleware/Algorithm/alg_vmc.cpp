@@ -1,6 +1,6 @@
 #include "alg_vmc.h"
 
-void Class_VMC::VMC_Init(Enum_Leg_Side leg_side)
+void Class_VMC::VMC_Init(Enum_Leg_Side side)
 {
     l1  =   0.15f;
     l2  =   0.27f;
@@ -8,7 +8,7 @@ void Class_VMC::VMC_Init(Enum_Leg_Side leg_side)
     l4  =   0.15f;
     l5  =   0.15f;
 
-    leg_side    =   leg_side;
+    leg_side    =   side;
 
 }
 
@@ -61,6 +61,16 @@ void Class_VMC::VMC_calc_1(float dt) {
     last_d_theta = d_theta;
 }
 
+void Class_VMC::Set_LQR_K(float Length_L[]){
+
+   for (size_t i = 0; i < 12; i++)
+   {
+    LQR_K[i] = Length_L[i];
+   }
+   
+    
+}
+
 void Class_VMC::VMC_calc_2(void) {
     j11 = (l1*arm_sin_f32(phi0-phi3)*arm_sin_f32(phi1-phi2))/arm_sin_f32(phi3-phi2);
     j12 = (l1*arm_cos_f32(phi0-phi3)*arm_sin_f32(phi1-phi2))/(L0*arm_sin_f32(phi3-phi2));
@@ -73,9 +83,10 @@ void Class_VMC::VMC_calc_2(void) {
 
 uint8_t Class_VMC::ground_detection(Enum_Leg_Side leg_side) {
     // 计算当前的支持力 FN
-    FN = F0 * arm_cos_f32(theta) + Tp * arm_sin_f32(theta) / L0
-        + 0.6f * (MotionAccel_n - dd_L0 * arm_cos_f32(theta) + 2.0f * d_L0 * d_theta * arm_sin_f32(theta)
-                  + L0 * dd_theta * arm_sin_f32(theta) + L0 * d_theta * d_theta * arm_cos_f32(theta));
+    FN=F0*arm_cos_f32(theta)+Tp*arm_sin_f32(theta)/L0+13.23f;
+    // FN = F0 * arm_cos_f32(theta) + Tp * arm_sin_f32(theta) / L0
+    //     + 0.6f * (MotionAccel_n - dd_L0 * arm_cos_f32(theta) + 2.0f * d_L0 * d_theta * arm_sin_f32(theta)
+    //               + L0 * dd_theta * arm_sin_f32(theta) + L0 * d_theta * d_theta * arm_cos_f32(theta));
 
     // 更新平均值数组（FIFO队列的形式）
     aver[0] = aver[1];
@@ -87,7 +98,7 @@ uint8_t Class_VMC::ground_detection(Enum_Leg_Side leg_side) {
     aver_fn = 0.25f * (aver[0] + aver[1] + aver[2] + aver[3]);
 
     // 根据滤波后的支持力判断是否离地
-    if (aver_fn < 3.0f) { // 离地
+    if (aver_fn < 13.0f) { // 离地
         return 1;
     } else { // 没有离地
         return 0;
