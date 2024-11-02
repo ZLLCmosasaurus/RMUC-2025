@@ -203,7 +203,7 @@ public:
 	//斜坡函数加减速速度X
     Class_Slope Slope_Joint_Angle;
     void Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID, Enum_AK_Motor_Control_Method __Control_Method = CAN_PACKET_SET_CURRENT, float __MIT_K_P = 12.0f,float __MIT_K_D = 0.8f,
-			  int32_t __Position_Offset = 0, float __Angle_Max = 12.5f,float __Omega_Max = 76.0f, float __Torque_Max = 50.0f,float __Slope_Angle =0.1f);
+			  int32_t __Position_Offset = 0, float __Angle_Max = 12.5f,float __Omega_Max = 76.0f, float __Torque_Max = 12.0f,float __Slope_Angle =0.1f);
 
     inline Enum_AK_Motor_Control_Status Get_AK_Motor_Control_Status();
     inline Enum_AK_Motor_Status Get_AK_Motor_Status();

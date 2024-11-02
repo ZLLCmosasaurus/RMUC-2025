@@ -174,16 +174,18 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
 //         can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0x200 ,0x7F8);  //只接收0x200-0x207
 //         can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0x200, 0x7F8);
 			can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
-			can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
+			can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
 			can_filter_mask_config(hcan, CAN_FILTER(2) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0 ,0);  //只接收
-	    can_filter_mask_config(hcan, CAN_FILTER(3) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
+	    can_filter_mask_config(hcan, CAN_FILTER(3) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
     }
     else if (hcan->Instance == CAN2)
     {
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
-		can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
+		can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
 	    can_filter_mask_config(hcan, CAN_FILTER(15) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0, 0);
+			can_filter_mask_config(hcan, CAN_FILTER(16) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0 ,0);  //只接收
+	    can_filter_mask_config(hcan, CAN_FILTER(17) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
     }
     /*离开初始模式*/
     HAL_CAN_Start(hcan);				
@@ -211,13 +213,16 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
     assert_param(hcan != NULL);
 
     // 获取空闲邮箱数量
-    freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);
+//   do{ freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);}
+//		 while(freeMailboxes==0);
 
     // 如果没有空闲邮箱，则返回错误码
-    if (freeMailboxes == 0)
-    {
-        return HAL_ERROR;
-    }
+	 while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0)
+	 {}
+//    if (freeMailboxes == 0)
+//    {
+//        return HAL_ERROR;
+//    }
 
     // 根据 data_type 设置帧类型
     if (data_type == CAN_ID_STD)  // 标准帧
@@ -250,30 +255,22 @@ void TIM_CAN_PeriodElapsedCallback()
     
     static uint8_t mod10 = 0;
     mod10++;
-    if (mod10 == 10)
-    {
-        mod10 = 0;
-        // CAN2超级电容
-        CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8,CAN_ID_STD);
-    }
-
-    // CAN1总线  四个底盘电机  
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8,CAN_ID_STD);
-    //上板
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8,CAN_ID_STD);
-
-   
-
-    // CAN1 摩擦轮*2 pitch
-    //CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8,CAN_ID_STD); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
-
-    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8,CAN_ID_STD); //pitch-LK6010  按照0x141 ID 发送 一次只能控制一个电机
-    
-    // CAN2 yaw 下板
-    CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8,CAN_ID_STD); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8,CAN_ID_STD); //给底盘发送控制命令 按照0x77 ID 发送
-    
+   if(mod10%2==0)
+	 {
+		CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8,CAN_ID_STD);
+		CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8,CAN_ID_STD);
+	
+		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x11), CAN2_0xx01_Tx_Data, 8,CAN_ID_EXT);
+	 }
+	if(mod10%2==1)
+	{
+		CAN_Send_Data(&hcan1, 0x03, CAN1_0xxf3_Tx_Data, 8,CAN_ID_STD);
+		CAN_Send_Data(&hcan1, 0x04, CAN1_0xxf4_Tx_Data, 8,CAN_ID_STD);
+	
+		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x12), CAN2_0xx02_Tx_Data, 8,CAN_ID_EXT);
+	}
+		
+		
 }
 
 /**

@@ -29,8 +29,8 @@
 #include "config.h"
 #include "dvc_imu.h"
 #include "alg_vmc.h"
-#include "dvc_dmmotor.h"
-#include "dvc_AKmotor.h"
+
+#include "crt_observe.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -57,140 +57,7 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_SPIN,
 };
 
-class Class_Chassis_Yaw
-{
-public:
-    Class_IMU* IMU;
-    
-    inline float Get_True_Rad_Yaw();
-    inline float Get_True_Gyro_Yaw();
-    inline float Get_True_Angle_Yaw();
-    inline float Get_True_Angle_Total_Yaw();
 
-    void Transform_Angle();
-
-protected:
-    float True_Rad_Yaw = 0.0f;
-    float True_Angle_Yaw = 0.0f;
-    float True_Gyro_Yaw = 0.0f;
-    float True_Angle_Total_Yaw = 0.0f;
-};
-
-class Class_Chassis_Pitch
-{
-public:
-    Class_IMU* IMU;
-
-    inline float Get_True_Rad_Pitch();
-    inline float Get_True_Gyro_Pitch();
-    inline float Get_True_Angle_Pitch();
-    inline float Get_True_Angle_Total_Pitch();
-
-    void Transform_Angle();
-
-protected:
-    float True_Rad_Pitch = 0.0f;
-    float True_Angle_Pitch = 0.0f;
-    float True_Gyro_Pitch = 0.0f;
-    float True_Angle_Total_Pitch = 0.0f;
-};
-
-class Class_Chassis_Roll
-{
-public:
-    Class_IMU* IMU;
-
-    inline float Get_True_Rad_Roll();
-    inline float Get_True_Gyro_Roll();
-    inline float Get_True_Angle_Roll();
-    inline float Get_True_Angle_Total_Roll();
-
-    void Transform_Angle();
-
-protected:
-    float True_Rad_Roll = 0.0f;
-    float True_Angle_Roll = 0.0f;
-    float True_Gyro_Roll = 0.0f;
-    float True_Angle_Total_Roll = 0.0f;
-};
-
-float Class_Chassis_Yaw::Get_True_Rad_Yaw()
-{
-    return True_Rad_Yaw;
-}
-
-float Class_Chassis_Yaw::Get_True_Gyro_Yaw()
-{
-    return True_Gyro_Yaw;
-}
-
-float Class_Chassis_Yaw::Get_True_Angle_Yaw()
-{
-    return True_Angle_Yaw;
-
-}
-
-float Class_Chassis_Yaw::Get_True_Angle_Total_Yaw()
-{
-    return True_Angle_Total_Yaw;
-}
-
-float Class_Chassis_Pitch::Get_True_Rad_Pitch()
-{
-    return True_Rad_Pitch;
-}
-
-float Class_Chassis_Pitch::Get_True_Gyro_Pitch()
-{
-    return True_Gyro_Pitch;
-
-}
-float Class_Chassis_Pitch::Get_True_Angle_Pitch()
-{
-    return True_Angle_Pitch;
-}
-
-float Class_Chassis_Pitch::Get_True_Angle_Total_Pitch()
-{
-    return True_Angle_Total_Pitch;
-}
-
-float Class_Chassis_Roll::Get_True_Rad_Roll()
-{
-    return True_Rad_Roll;
-
-}
-
-float Class_Chassis_Roll::Get_True_Gyro_Roll()
-{
-    return True_Gyro_Roll;
-}
-
-float Class_Chassis_Roll::Get_True_Angle_Roll()
-{
-    return True_Angle_Roll;
-}
-
-float Class_Chassis_Roll::Get_True_Angle_Total_Roll()
-{
-    return True_Angle_Total_Roll;
-
-}
-
-class Class_Joint_Motor
-{
-public:
-   Class_DM_Motor_J4310 motor;
-    
-};
-
-class Class_Wheel_Motor
-{
-public:
-   Class_AK_Motor_80_6 motor;
-   float wheel_T;
-    
-};
 
 /**
  * @brief Specialized, 三轮舵轮底盘类
@@ -213,9 +80,7 @@ public:
     #endif
     #ifdef C_IMU
     Class_IMU Boardc_BMI;
-    Class_Chassis_Yaw Yaw;
-    Class_Chassis_Pitch Pitch;
-    Class_Chassis_Roll Roll;
+
     #endif
     #ifdef POWER_LIMIT
     //功率限制
@@ -235,8 +100,8 @@ public:
     Class_VMC Left_Leg;
     Class_VMC Right_Leg;
 
-    Class_Joint_Motor Joint_Motor[4];
-    Class_Wheel_Motor Wheel_Motor[2];
+    Joint_Motor_T Joint_Motor[4];
+    Wheel_Motor_T Wheel_Motor[2];
 
 
     Class_PID left_leg_length_pid;
@@ -261,8 +126,8 @@ public:
     float v_filter;
     float x_filter;
 
-    float mypitch[2];
-    float mypitchgyro[2];
+    float mypitch;
+    float mypitchgyro;
 
     float roll;
     float total_yaw;
@@ -283,20 +148,20 @@ public:
 
     uint8_t suspend_flag[2];
 
-    float Poly_Coefficient[12][4]={{-127.1708,186.3127,-110.7809,1.9832},
-{3.5394,-0.8251,-5.6576,0.1987},
-{-15.6548,17.8019,-7.1543,0.2274},
-{-29.8907,34.1142,-13.9360,0.4134},
-{61.6171,-45.0353,-0.8936,8.3963},
-{7.2060,-6.8798,1.7269,0.4753},
-{1164.0926,-1145.2650,329.9446,14.0979},
-{70.2614,-77.6299,27.8075,0.1040},
-{10.5235,5.8244,-14.6583,6.4689},
-{22.3402,8.7217,-27.2194,12.4026},
-{700.9154,-848.2240,374.2772,-37.9526},
-{30.9163,-42.3907,21.8568,-3.3445}
+    float Poly_Coefficient[12][4]={{-76.9979,105.9114,-64.9616,0.7344},
+{3.7446,-2.2845,-4.4331,0.1291},
+{-27.2457,29.3704,-11.3412,-0.1478},
+{-28.2823,30.9176,-12.6474,-0.2663},
+{9.8085,13.0682,-22.2879,10.4822},
+{4.9405,-2.2052,-1.4609,1.4435},
+{255.3113,-243.0448,71.0275,4.2785},
+{20.4603,-22.1931,8.0161,0.1069},
+{-6.7938,19.4710,-15.8375,5.1344},
+{-9.2937,22.5758,-17.5690,5.7190},
+{336.2836,-369.7908,148.6145,-4.6627},
+{42.4009,-48.4684,20.6784,-1.3454}
 };
-
+    Class_observe Observe;
     // Class_DJI_Motor_C620 Motor_Wheel[4];
 
     void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);

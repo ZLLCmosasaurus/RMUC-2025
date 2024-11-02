@@ -6,12 +6,6 @@
 
 #define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
-enum Enum_Leg_Side :    uint8_t
-{
-    LEFT = 0,
-    RIGHT = 1,
-};
-
 class Class_VMC
 {
 public:
@@ -64,7 +58,7 @@ float FN;
 
 uint8_t first_flag;
 uint8_t leg_flag;
-Enum_Leg_Side leg_side;
+
 
 float MotionAccel_n;
 float Pitch;
@@ -74,11 +68,11 @@ float aver[4];
 float aver_fn;
 float LQR_K[12];
     
-void VMC_Init(Enum_Leg_Side leg_side);
+void VMC_Init();
 void VMC_calc_1(float dt);
 void VMC_calc_2(void);
 void Set_LQR_K(float Length_L[]);
-uint8_t ground_detection( Enum_Leg_Side leg_side);
+uint8_t ground_detection();
 float LQR_K_calc(float *coe, float len);
 
 inline void Set_Pitch(float pitch);

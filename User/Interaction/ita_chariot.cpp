@@ -571,7 +571,7 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
         case (4):
         {
             HAL_UART_DMAStop(&huart3); // 停止以重启
-            DWT_Delay(0.01); // 等待错误结束
+            DWT_Delay(0.001); // 等待错误结束
 						__HAL_UART_FLUSH_DRREGISTER(&huart3);
             HAL_UARTEx_ReceiveToIdle_DMA(&huart3, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
 
@@ -915,11 +915,12 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         //     }
         for (auto& Joint_motor : Chassis.Joint_Motor) {
             Joint_motor.motor.TIM_Alive_PeriodElapsedCallback();
+							DWT_Delay(0.0001);
         }
-        for (auto& Wheel_Motor : Chassis.Wheel_Motor) {
-            
-            Wheel_Motor.motor.Task_Alive_PeriodElapsedCallback();
-        }
+//        for (auto& Wheel_Motor : Chassis.Wheel_Motor) {
+//            
+//            Wheel_Motor.motor.Task_Alive_PeriodElapsedCallback();
+//        }
       
     #endif
         

@@ -137,7 +137,7 @@ void Class_BoardC_BMI::Calibrate_MPU_Offset(IMU_Data_t *bmi088)
             break;
         }
 
-        DWT_Delay(0.005);
+        DWT_Delay(0.0005);
         bmi088->gNorm = 0;
         bmi088->GyroOffset[0] = 0;
         bmi088->GyroOffset[1] = 0;

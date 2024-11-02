@@ -229,12 +229,12 @@ float Class_IMU::Get_Motion_Accel_X_N(void)
 
 float Class_IMU::Get_Motion_Accel_Y_N(void)
 {
-    return (INS.MotionAccel_n[0]);
+    return (INS.MotionAccel_n[1]);
 }
 
 float Class_IMU::Get_Motion_Accel_Z_N(void)
 {
-    return (INS.MotionAccel_n[0]);
+    return (INS.MotionAccel_n[2]);
 }
 
 

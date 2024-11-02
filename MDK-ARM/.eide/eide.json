@@ -198,6 +198,9 @@
           },
           {
             "path": "../User/Chariot/crt_information_platform.cpp"
+          },
+          {
+            "path": "../User/Chariot/crt_observe.cpp"
           }
         ],
         "folders": []

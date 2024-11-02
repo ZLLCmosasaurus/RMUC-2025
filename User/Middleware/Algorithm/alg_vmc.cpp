@@ -1,6 +1,6 @@
 #include "alg_vmc.h"
 
-void Class_VMC::VMC_Init(Enum_Leg_Side side)
+void Class_VMC::VMC_Init(void)
 {
     l1  =   0.15f;
     l2  =   0.27f;
@@ -8,14 +8,12 @@ void Class_VMC::VMC_Init(Enum_Leg_Side side)
     l4  =   0.15f;
     l5  =   0.15f;
 
-    leg_side    =   side;
-
 }
 
 void Class_VMC::VMC_calc_1(float dt) {
 
-    Pitch = leg_side?-Raw_Pitch: Raw_Pitch;
-    PithGyro = leg_side?0.0-Raw_Gyro: Raw_Gyro;
+    Pitch = Raw_Pitch;
+    PithGyro = Raw_Gyro;
 
     Y_D = l4 * arm_sin_f32(phi4); // D的y坐标
     Y_B = l1 * arm_sin_f32(phi1); // B的y坐标
@@ -46,7 +44,7 @@ void Class_VMC::VMC_calc_1(float dt) {
     d_phi0 = (phi0 - last_phi0) / dt; // 计算phi0变化率，d_phi0用于计算lqr需要的d_theta
     d_alpha = 0.0f - d_phi0;
 
-    theta = PI / 2.0f - Pitch - phi0; // 得到状态变量1
+    theta = -PI / 2.0f - Pitch + phi0; // 得到状态变量1
     d_theta = (-PithGyro - d_phi0); // 得到状态变量2
 
     last_phi0 = phi0;
@@ -81,7 +79,7 @@ void Class_VMC::VMC_calc_2(void) {
     torque_set[1] = j21 * F0 + j22 * Tp;
 }
 
-uint8_t Class_VMC::ground_detection(Enum_Leg_Side leg_side) {
+uint8_t Class_VMC::ground_detection() {
     // 计算当前的支持力 FN
     FN=F0*arm_cos_f32(theta)+Tp*arm_sin_f32(theta)/L0+13.23f;
     // FN = F0 * arm_cos_f32(theta) + Tp * arm_sin_f32(theta) / L0

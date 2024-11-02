@@ -50,7 +50,7 @@ uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID)
         break;
         case (AK_Motor_ID_0x02):
         {
-            tmp_tx_data_ptr = CAN1_0xx02_Tx_Data;
+            tmp_tx_data_ptr = CAN1_0xx02_Tx_Data ;
         }
         break;
         case (AK_Motor_ID_0x03):
@@ -178,7 +178,7 @@ void Class_AK_Motor_80_6::Data_Process()
 	{
 		//数据处理过程
 		int32_t delta_position;
-		uint16_t tmp_position, tmp_omega, tmp_torque;
+		int16_t tmp_position, tmp_omega, tmp_torque;
 		Struct_AK_Motor_RUN_CAN_Rx_Data *tmp_buffer = (Struct_AK_Motor_RUN_CAN_Rx_Data *)CAN_Manage_Object->Rx_Buffer.Data;
 
 		//处理大小端
@@ -216,11 +216,12 @@ void Class_AK_Motor_80_6::Data_Process()
 	{
 		//数据处理过程
 		int32_t delta_position;
-		uint16_t tmp_position, tmp_omega, tmp_torque;
+		int16_t tmp_position, tmp_omega, tmp_torque;
+		float tmp_speed;
 		Struct_AK_Motor_CAN_Rx_Data *tmp_buffer = (Struct_AK_Motor_CAN_Rx_Data *)CAN_Manage_Object->Rx_Buffer.Data;
 
 		//处理大小端
-		Math_Endian_Reverse_16((void *)&tmp_buffer->Position_Reverse, &tmp_position);
+		Math_Endian_Reverse_16((void *)&tmp_buffer->Position_Reverse, (void *)&tmp_position);
 		Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
 		Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
 
@@ -241,10 +242,10 @@ void Class_AK_Motor_80_6::Data_Process()
 		Data.Total_Position = Data.Total_Round * Position_Max + tmp_position + Position_Offset;
 
 		//计算电机本身信息
-		if(fabs(tmp_omega) < 600.0f)
+		if(fabs(tmp_omega) < 32000.0f)
 		{
 			Data.Now_Angle = AK80_POSITION_FROM_LSB_TO_FLOAT(tmp_position);
-			Data.Now_Omega = AK80_SPEED_FROM_LSB_TO_FLOAT(tmp_omega);
+			Data.Now_Omega = AK80_SPEED_FROM_LSB_TO_FLOAT(tmp_omega)*PI/180.f/21.f;
 			Data.Now_Torque = AK80_CURRENT_FROM_LSB_TO_FLOAT(tmp_torque);
 			Data.Now_Rotor_Temperature = AK80_TEMPERATURE_FROM_LSB_TO_FLOAT(tmp_buffer->Motor_Temperature);
 			Data.error_statue = tmp_buffer->error_statue;
@@ -382,7 +383,7 @@ void Class_AK_Motor_80_6::Task_Process_PeriodElapsedCallback()
 		Math_Endian_Reverse_16(&tmp_torque);
         memcpy(&CAN_Tx_Data[6], &tmp_torque, sizeof(uint16_t));
 
-        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
+//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
     }
     break;
 	case (CAN_PACKET_SET_RPM):
@@ -392,7 +393,7 @@ void Class_AK_Motor_80_6::Task_Process_PeriodElapsedCallback()
         Math_Endian_Reverse_32(&tmp_velocity);
         memcpy(&CAN_Tx_Data[0], &tmp_velocity, sizeof(uint32_t));
 			
-        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
+//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
     }
     break;
     	case (CAN_PACKET_SET_CURRENT):
@@ -400,9 +401,9 @@ void Class_AK_Motor_80_6::Task_Process_PeriodElapsedCallback()
         int32_t tmp_current = AK80_SPEED_FROM_FLOAT_TO_LSB(Target_Current*1000.f);
 
         Math_Endian_Reverse_32(&tmp_current);
-        memcpy(&CAN_Tx_Data[0], &tmp_current, sizeof(uint32_t));
+        memcpy(CAN_Tx_Data, &tmp_current, sizeof(int32_t));
 			
-        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
+//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
     }
     break;
     default:
