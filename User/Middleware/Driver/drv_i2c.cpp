@@ -106,8 +106,6 @@ uint8_t IIC_Send_Receive_Data(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint
             return (HAL_I2C_Mem_Write(hi2c,DevAddress,MemAddress,MemAddSize,pData, Size, Timeout));
         }
     }
-    else 
-	    return 0;
 }
 
 /* Function prototypes -------------------------------------------------------*/

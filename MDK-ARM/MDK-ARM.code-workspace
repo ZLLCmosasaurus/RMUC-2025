@@ -4,6 +4,12 @@
             "path": "."
         }
     ],
-    "settings": {},
+    "settings": {
+        "files.associations": {
+            "compare": "cpp",
+            "limits": "cpp",
+            "drv_usb.h": "c"
+        }
+    },
     "extensions": {}
 }

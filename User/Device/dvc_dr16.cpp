@@ -83,6 +83,7 @@ void Class_DR16::Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2)
     }
 }
 
+
 /**
  * @brief 判断拨动开关状态
  *

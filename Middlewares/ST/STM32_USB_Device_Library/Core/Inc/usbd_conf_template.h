@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                      www.st.com/SLA0044
   *
   ******************************************************************************
   */
@@ -48,7 +49,6 @@ extern "C" {
 #define USBD_MAX_STR_DESC_SIZ                       0x100U
 #define USBD_SELF_POWERED                           1U
 #define USBD_DEBUG_LEVEL                            2U
-/* #define USBD_USER_REGISTER_CALLBACK                 1U */
 
 /* ECM, RNDIS, DFU Class Config */
 #define USBD_SUPPORT_USER_STRING_DESC               1U
@@ -65,8 +65,6 @@ extern "C" {
 #define USBD_CDC_INTERVAL                           2000U
 
 /* DFU Class Config */
-/* #define USBD_DFU_VENDOR_CMD_ENABLED                 1U */
-/* #define USBD_DFU_VENDOR_EXIT_ENABLED                1U */
 #define USBD_DFU_MAX_ITF_NUM                        1U
 #define USBD_DFU_XFERS_IZE                          1024U
 
@@ -78,11 +76,6 @@ extern "C" {
 #define CUSTOM_HID_FS_BINTERVAL                     0x05U
 #define USBD_CUSTOMHID_OUTREPORT_BUF_SIZE           0x02U
 #define USBD_CUSTOM_HID_REPORT_DESC_SIZE            163U
-
-/* #define USBD_CUSTOMHID_CTRL_REQ_GET_REPORT_ENABLED */
-/* #define USBD_CUSTOMHID_OUT_PREPARE_RECEIVE_DISABLED */
-/* #define USBD_CUSTOMHID_EP0_OUT_PREPARE_RECEIVE_DISABLED */
-/* #define USBD_CUSTOMHID_CTRL_REQ_COMPLETE_CALLBACK_ENABLED */
 
 /* VIDEO Class Config */
 #define UVC_1_1 /* #define UVC_1_0 */
@@ -98,7 +91,7 @@ extern "C" {
 #define UVC_COLOR_PRIMARIE                          0x01U
 #define UVC_TFR_CHARACTERISTICS                     0x01U
 #define UVC_MATRIX_COEFFICIENTS                     0x04U
-#endif /* USBD_UVC_FORMAT_UNCOMPRESSED */
+#endif
 
 /* Video Stream frame width and height */
 #define UVC_WIDTH                                   176U
@@ -148,7 +141,7 @@ extern "C" {
                                } while (0)
 #else
 #define USBD_UsrLog(...) do {} while (0)
-#endif /* (USBD_DEBUG_LEVEL > 0U) */
+#endif
 
 #if (USBD_DEBUG_LEVEL > 1U)
 
@@ -159,7 +152,7 @@ extern "C" {
                              } while (0)
 #else
 #define USBD_ErrLog(...) do {} while (0)
-#endif /* (USBD_DEBUG_LEVEL > 1U) */
+#endif
 
 #if (USBD_DEBUG_LEVEL > 2U)
 #define  USBD_DbgLog(...)   do { \
@@ -169,7 +162,7 @@ extern "C" {
                                } while (0)
 #else
 #define USBD_DbgLog(...) do {} while (0)
-#endif /* (USBD_DEBUG_LEVEL > 2U) */
+#endif
 
 /**
   * @}
@@ -228,3 +221,4 @@ void USBD_static_free(void *p);
 /**
   * @}
   */
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

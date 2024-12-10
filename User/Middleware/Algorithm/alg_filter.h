@@ -157,7 +157,7 @@ float Class_Filter_Fourier::Get_Out()
 void Class_Filter_Fourier::Set_Now(float __Now)
 {
     //输入限幅
-    Math_Constrain(&__Now, Value_Constrain_Low, Value_Constrain_High);
+    Math_Constrain(__Now, Value_Constrain_Low, Value_Constrain_High);
 
     //将当前值放入被卷积的信号中
     Input_Signal[Signal_Flag] = __Now;

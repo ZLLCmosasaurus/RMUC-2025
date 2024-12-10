@@ -220,16 +220,17 @@ struct Pack_tx_t
  * @brief 接收数据包
  *
  */
-struct Pack_rx_t
+struct Pack_rx_t    // Jonit_1-5关节角度（°）均符合右手螺旋定则
 {
-	uint8_t header;
-	float target_yaw;
-	float target_pitch;
-	float target_x;
-	float target_y;
-	float target_z;	
-	uint8_t UP_flag;
-	uint16_t crc16;
+	uint8_t header;      // 帧头 0x5A
+    Enum_MiniPC_Status status; // uint8_t disable:0 enable:1
+    float Joint_Uplift_Angle;// 待测
+    float Jonit_1_Angle;    // 0-180 
+    float Jonit_2_Angle;    // 0-180
+    float Jonit_3_Angle;    // 0-180
+    float Jonit_4_Angle;    //roll 0-180
+    float Jonit_5_Angle;    //pitch 0-180
+	uint16_t crc16;         
 }__attribute__((packed));
 
 
@@ -242,6 +243,7 @@ class Class_MiniPC
 public:
     void Init(Struct_USB_Manage_Object* __MiniPC_USB_Manage_Object, uint8_t __frame_header = 0x5A, uint8_t __frame_rear = 0x01);
 
+    inline void Set_MiniPc_Status(Enum_MiniPC_Status __MiniPC_Status);
     inline Enum_MiniPC_Status Get_MiniPC_Status();
     inline float Get_Chassis_Target_Velocity_X();
     inline float Get_Chassis_Target_Velocity_Y();
@@ -280,13 +282,11 @@ public:
     uint16_t Get_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength, uint16_t wCRC);
 
     inline void Transform_Angle_Tx();
-    inline void Transform_Angle_Rx();
-
+    inline void Transform_Angle_Rx(float *Angle);
     float calc_yaw(float x, float y, float z);
     float calc_distance(float x, float y, float z) ;
     float calc_pitch(float x, float y, float z) ;
     void Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance);
-
     float meanFilter(float input);
 
     void USB_RxCpltCallback(uint8_t *Rx_Data);
@@ -357,6 +357,11 @@ protected:
 
 /* Exported function declarations --------------------------------------------*/
 
+
+void Class_MiniPC::Set_MiniPc_Status(Enum_MiniPC_Status __MiniPC_Status)
+{
+    MiniPC_Status = __MiniPC_Status;
+}
 /**
  * @brief 获取迷你主机状态
  *
@@ -674,10 +679,14 @@ void Class_MiniPC::Transform_Angle_Tx()
  * @brief 接收数据处理
  *
  */
-void Class_MiniPC::Transform_Angle_Rx()
+inline void Class_MiniPC::Transform_Angle_Rx(float *Angle)
 {
-    Rx_Angle_Pitch = Pack_Rx.target_pitch;
-    Rx_Angle_Yaw = Pack_Rx.target_yaw;
+    Angle[0] = Pack_Rx.Jonit_1_Angle;
+    Angle[1] = Pack_Rx.Jonit_2_Angle;
+    Angle[2] = Pack_Rx.Jonit_3_Angle;
+    Angle[3] = Pack_Rx.Jonit_4_Angle;
+    Angle[4] = Pack_Rx.Jonit_5_Angle;
+    Angle[5] = Pack_Rx.Joint_Uplift_Angle;
 }
 
 #endif

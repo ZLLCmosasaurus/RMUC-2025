@@ -111,8 +111,6 @@ uint8_t SPI_Send_Receive_Data(SPI_HandleTypeDef *hspi, GPIO_TypeDef* GPIOx, uint
         
         return (HAL_SPI_TransmitReceive_DMA(hspi, SPI3_Manage_Object.Tx_Buffer, SPI3_Manage_Object.Rx_Buffer, Tx_Length + Rx_Length));
     }
-    else
-	    return 0;
 //    else if (hspi->Instance == SPI4)
 //    {
 //        SPI4_Manage_Object.Now_GPIOx = GPIOx;

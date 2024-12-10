@@ -59,12 +59,12 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         DR16_Dead_Zone = __DR16_Dead_Zone;   
 
         //云台
-        Gimbal.Init();
-        Gimbal.MiniPC = &MiniPC;
+//        Gimbal.Init();
+//        Gimbal.MiniPC = &MiniPC;
 
         //发射机构
-        Booster.Referee = &Referee;
-        Booster.Init();
+//        Booster.Referee = &Referee;
+//        Booster.Init();
 				
         //上位机
         MiniPC.Init(&MiniPC_USB_Manage_Object);
@@ -72,6 +72,10 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         MiniPC.Referee = &Referee;
 
     #endif
+		#ifdef Manipulator
+		
+		#endif
+		
 }
 
 /**

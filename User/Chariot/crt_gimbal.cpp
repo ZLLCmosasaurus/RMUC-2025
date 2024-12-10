@@ -397,7 +397,7 @@ void Class_Gimbal::Output()
         }
     
         //pitch限位
-        Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
+        Math_Constrain(Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
 
         //设置目标角度
         Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);

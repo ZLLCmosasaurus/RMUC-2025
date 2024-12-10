@@ -113,7 +113,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     //积分限幅
     if (I_Out_Max != 0.0f)
     {
-        Math_Constrain(&Integral_Error, -I_Out_Max / K_I, I_Out_Max / K_I);
+        Math_Constrain(Integral_Error, -I_Out_Max / K_I, I_Out_Max / K_I);
     }
     if (I_Separate_Threshold == 0.0f)
     {
@@ -159,7 +159,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     //输出限幅
     if (Out_Max != 0.0f)
     {
-        Math_Constrain(&Out, -Out_Max, Out_Max);
+        Math_Constrain(Out, -Out_Max, Out_Max);
     }
 
     //善后工作

@@ -22,7 +22,6 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-//#include "tsk_config_and_callback.h"
 #include "drv_usb.h"
 /* USER CODE END INCLUDE */
 

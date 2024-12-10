@@ -24,10 +24,10 @@
 
 //RPM换算到rad/s
 #define RPM_TO_RADPS (2.0f * PI / 60.0f)
-
 //RPM换算到角度/s
 #define RPM_TO_DEG (360.0f / 60.0f)
-
+//rad换算到deg
+#define RAD_TO_DEG (180.0f / PI)
 //deg换算到rad
 #define DEG_TO_RAD (PI / 180.0f)
 //摄氏度换算到开氏度
@@ -55,7 +55,7 @@ float Math_Sinc(float x);
 
 int32_t Math_Float_To_Int(float x, float Float_Min, float Float_Max, int32_t Int_Min, int32_t Int_Max);
 float Math_Int_To_Float(int32_t x, int32_t Int_Min, int32_t Int_Max, float Float_Min, float Float_Max);
-
+float Math_Limit_func(float*input,float min,float max);
 /**
  * @brief 限幅函数
  *
@@ -65,15 +65,15 @@ float Math_Int_To_Float(int32_t x, int32_t Int_Min, int32_t Int_Max, float Float
  * @param Max 最大值
  */
 template <typename Type>
-void Math_Constrain(Type *x, Type Min, Type Max)
+void Math_Constrain(Type& x, Type Min, Type Max)
 {
-    if (*x < Min)
+    if (x < Min)
     {
-        *x = Min;
+        x = Min;
     }
-    else if (*x > Max)
+    else if (x > Max)
     {
-        *x = Max;
+        x = Max;
     }
 }
 

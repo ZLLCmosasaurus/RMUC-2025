@@ -100,15 +100,15 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             //底盘限速
             if (Velocity_X_Max != 0)
             {
-                Math_Constrain(&Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
+                Math_Constrain(Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
             }
             if (Velocity_Y_Max != 0)
             {
-                Math_Constrain(&Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
+                Math_Constrain(Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
             }
             if (Omega_Max != 0)
             {
-                Math_Constrain(&Target_Omega, -Omega_Max, Omega_Max);
+                Math_Constrain(Target_Omega, -Omega_Max, Omega_Max);
             }
 
             #ifdef SPEED_SLOPE

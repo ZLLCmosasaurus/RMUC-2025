@@ -265,6 +265,15 @@ void Class_Referee::Data_Process()
                         }
                 }
                 break;
+                case(Referee_Command_ID_INTERACTION_CUSTOM_CONTROLLER):
+                {
+                    if(buffer_index_max-buffer_index>=(sizeof(Struct_Referee_Tx_Data_Interaction_Custom_Controller)+7)&&
+                        Verify_CRC16_Check_Sum(&UART_Manage_Object->Rx_Buffer[buffer_index],sizeof(Struct_Referee_Tx_Data_Interaction_Custom_Controller)+7)==1)
+                        {
+                            memcpy(&Interaction_Custom_Controller, &UART_Manage_Object->Rx_Buffer[buffer_index+7], sizeof(Struct_Referee_Tx_Data_Interaction_Custom_Controller));
+                            buffer_index+=sizeof(Struct_Referee_Tx_Data_Interaction_Custom_Controller)+7;
+                        }
+                }
             }
         }
         buffer_index++;
