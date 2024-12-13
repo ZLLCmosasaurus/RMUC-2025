@@ -1,0 +1,14 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "drv_usb.h": "c",
+            "config.h": "c"
+        }
+    },
+    "extensions": {}
+}
