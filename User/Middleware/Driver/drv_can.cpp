@@ -35,6 +35,32 @@ uint8_t CAN1_0xxf6_Tx_Data[8];
 uint8_t CAN1_0xxf7_Tx_Data[8];
 uint8_t CAN1_0xxf8_Tx_Data[8];
 
+//AK电机can1缓冲区
+uint8_t CAN1_0xx01_Tx_Data[8];
+uint8_t CAN1_0xx02_Tx_Data[8];
+uint8_t CAN1_0xx03_Tx_Data[8];
+uint8_t CAN1_0xx04_Tx_Data[8];
+uint8_t CAN1_0xx05_Tx_Data[8];
+uint8_t CAN1_0xx06_Tx_Data[8];
+uint8_t CAN1_0xx07_Tx_Data[8];
+uint8_t CAN1_0xx08_Tx_Data[8];
+
+//机械臂给底盘通讯can1缓冲区
+uint8_t CAN1_0xx11_Tx_Data[8];
+uint8_t CAN1_0xx12_Tx_Data[8];
+uint8_t CAN1_0xx13_Tx_Data[8];
+uint8_t CAN1_0xx14_Tx_Data[8];
+uint8_t CAN1_0xx15_Tx_Data[8];
+uint8_t CAN1_0xx16_Tx_Data[8];
+
+//机械臂给底盘通讯can2缓冲区
+uint8_t CAN2_0xx11_Tx_Data[8];
+uint8_t CAN2_0xx12_Tx_Data[8];
+uint8_t CAN2_0xx13_Tx_Data[8];
+uint8_t CAN2_0xx14_Tx_Data[8];
+uint8_t CAN2_0xx15_Tx_Data[8];
+uint8_t CAN2_0xx16_Tx_Data[8];
+
 uint8_t CAN2_0x1ff_Tx_Data[8];
 uint8_t CAN2_0x200_Tx_Data[8];
 uint8_t CAN2_0x2ff_Tx_Data[8];
@@ -46,6 +72,16 @@ uint8_t CAN2_0xxf5_Tx_Data[8];
 uint8_t CAN2_0xxf6_Tx_Data[8];
 uint8_t CAN2_0xxf7_Tx_Data[8];
 uint8_t CAN2_0xxf8_Tx_Data[8];
+
+//AK电机can2缓冲区
+uint8_t CAN2_0xx01_Tx_Data[8];
+uint8_t CAN2_0xx02_Tx_Data[8];
+uint8_t CAN2_0xx03_Tx_Data[8];
+uint8_t CAN2_0xx04_Tx_Data[8];
+uint8_t CAN2_0xx05_Tx_Data[8];
+uint8_t CAN2_0xx06_Tx_Data[8];
+uint8_t CAN2_0xx07_Tx_Data[8];
+uint8_t CAN2_0xx08_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
 
@@ -162,7 +198,7 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
     {
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
-		can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
+	can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
 //	    can_filter_mask_config(hcan, CAN_FILTER(15) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0x200, 0x7F8);
     }
     /*离开初始模式*/
@@ -180,9 +216,10 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
  * @param ID ID
  * @param Data 被发送的数据指针
  * @param Length 长度
+ * @param __IDE 标准帧还是扩展帧
  * @return uint8_t 执行状态
  */
-uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length)
+uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length, uint32_t __IDE)
 {
     CAN_TxHeaderTypeDef tx_header;
     uint32_t used_mailbox;
@@ -190,12 +227,21 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
     //检测传参是否正确
     assert_param(hcan != NULL);
 
-    tx_header.StdId = ID;
-    tx_header.ExtId = 0;
-    tx_header.IDE = 0;
+	switch(__IDE)
+	{
+		case CAN_ID_STD:
+			tx_header.StdId = ID;
+			tx_header.ExtId = 0;
+		break;
+		case CAN_ID_EXT:
+			tx_header.StdId = 0;
+			tx_header.ExtId = ID;
+		break;
+	}
+    tx_header.IDE = __IDE;
     tx_header.RTR = 0;
     tx_header.DLC = Length;
-
+	
     return (HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &used_mailbox));
 }
 
@@ -203,36 +249,28 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
  * @brief CAN的TIM定时器中断发送回调函数
  *
  */
+uint8_t can_tx_status[10];
 void TIM_CAN_PeriodElapsedCallback()
-{
-    #ifdef CHASSIS
-    
-    static uint8_t mod10 = 0;
-    mod10++;
-    if (mod10 == 10)
-    {
-        mod10 = 0;
-        // CAN2超级电容
-        CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8);
-    }
+{    
+		static uint16_t cnt = 0;
+		cnt++;
+		if(cnt>=2000)
+			cnt = 0;
+		//if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
+		can_tx_status[0]=CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8, CAN_ID_STD);	
+		can_tx_status[1]=CAN_Send_Data(&hcan2, 0x200,  CAN2_0x200_Tx_Data, 8,CAN_ID_STD);
+	//	can_tx_status[3]=CAN_Send_Data(&hcan2, 0x1ff,  CAN2_0x1ff_Tx_Data, 8,CAN_ID_STD);
+		
+		if(cnt%10 == 0)
+			can_tx_status[2]=CAN_Send_Data(&hcan2, 0x088, CAN2_Gimbal_Tx_Chassis_Data, 8, CAN_ID_STD);
+		//send = 1;
 
-    // CAN1总线  四个底盘电机  
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
-    //上板
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
-
-    #elif defined (GIMBAL)
-
-    // CAN1 摩擦轮*2 pitch
-    //CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
-
-    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); //pitch-LK6010  按照0x141 ID 发送 一次只能控制一个电机
-    
-    // CAN2 yaw 下板
-    CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
-    #endif
+		// if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
+		// CAN_Send_Data(&hcan1, 0x12, CAN1_0xx02_Tx_Data, 8, CAN_ID_STD);
+		// if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
+		// CAN_Send_Data(&hcan1, 0x11, CAN1_0xx01_Tx_Data, 8, CAN_ID_STD);
+		// send = 0;
+	
 }
 
 /**

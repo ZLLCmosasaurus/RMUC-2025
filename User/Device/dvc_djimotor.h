@@ -17,7 +17,7 @@
 #include "alg_pid.h"
 #include "drv_can.h"
 #include "alg_power_limit.h"
-
+#include "alg_slope.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -91,6 +91,7 @@ struct Struct_DJI_Motor_Data
     float Now_Omega_Angle;  //输出轴角速度（角度制）
     float Now_Torque;
     float Now_Temperature;
+    float Now_Start_Angle;//上电后第一帧得到的角度值
     uint32_t Pre_Encoder;
     int32_t Total_Encoder;
     int32_t Total_Round;
@@ -213,8 +214,10 @@ public:
     Class_PID PID_Angle;
     // PID角速度环控制
     Class_PID PID_Omega;
+    // 斜坡函数控制
+    Class_Slope Slope;
 
-    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 36.0f, float __Torque_Max = 10000.0f);
+    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 72.0f, float __Torque_Max = 16000.0f);
 
     inline uint16_t Get_Output_Max();
     inline Enum_DJI_Motor_Status Get_DJI_Motor_Status();
@@ -254,7 +257,7 @@ protected:
     //发送缓存区
     uint8_t *CAN_Tx_Data;
     //减速比, 默认带减速箱
-    float Gearbox_Rate = 36.0f;
+    float Gearbox_Rate;
     //最大扭矩, 需根据不同负载测量后赋值, 也就开环和扭矩环输出用得到, 不过我感觉应该没有奇葩喜欢开环输出这玩意
     float Torque_Max;
 
@@ -320,7 +323,7 @@ public:
     //功率限制友元函数
     friend class Class_Power_Limit;
 
-    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 13.933f, float __Torque_Max = 16384.0f);
+    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 19.20321f, float __Torque_Max = 16384.0f);
 
     inline uint16_t Get_Output_Max();
     inline Enum_DJI_Motor_Status Get_DJI_Motor_Status();
@@ -330,6 +333,7 @@ public:
     inline float Get_Now_Omega_Radian();
     inline float Get_Now_Torque();
     inline uint8_t Get_Now_Temperature();
+    inline float Get_Now_Start_Angle();
     inline Enum_DJI_Motor_Control_Method Get_Control_Method();
     inline float Get_Target_Angle();
     inline float Get_Target_Radian();
@@ -804,6 +808,7 @@ void Class_DJI_Motor_C610::Set_DJI_Motor_Control_Method(Enum_DJI_Motor_Control_M
 void Class_DJI_Motor_C610::Set_Target_Angle(float __Target_Angle)
 {
     Target_Angle = __Target_Angle;
+    Target_Radian = __Target_Angle * DEG_TO_RAD;
 }
 
 /**
@@ -814,6 +819,7 @@ void Class_DJI_Motor_C610::Set_Target_Angle(float __Target_Angle)
 void Class_DJI_Motor_C610::Set_Target_Radian(float __Target_Radian)
 {
     Target_Radian = __Target_Radian;
+    Target_Angle = __Target_Radian * RAD_TO_DEG;
 }
 
 /**
@@ -824,6 +830,7 @@ void Class_DJI_Motor_C610::Set_Target_Radian(float __Target_Radian)
 void Class_DJI_Motor_C610::Set_Target_Omega_Radian(float __Target_Omega_Radian)
 {
     Target_Omega_Radian = __Target_Omega_Radian;
+    Target_Omega_Angle = __Target_Omega_Radian * RAD_TO_DEG;
 }
 
 /**
@@ -834,6 +841,7 @@ void Class_DJI_Motor_C610::Set_Target_Omega_Radian(float __Target_Omega_Radian)
 void Class_DJI_Motor_C610::Set_Target_Omega_Angle(float __Target_Omega_Angle)
 {
     Target_Omega_Angle = __Target_Omega_Angle;
+    Target_Omega_Radian = __Target_Omega_Angle * DEG_TO_RAD;
 }
 
 /**
@@ -886,6 +894,10 @@ float Class_DJI_Motor_C620::Get_Now_Angle()
     return (Data.Now_Angle);
 }
 
+float Class_DJI_Motor_C620::Get_Now_Start_Angle()
+{
+    return (Data.Now_Start_Angle);
+}
 /**
  * @brief 获取当前的角度, rad
  *

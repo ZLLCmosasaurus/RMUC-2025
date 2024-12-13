@@ -45,19 +45,18 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  */
 void Class_MiniPC::Data_Process()
 {
-    // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
+    if(!Verify_CRC16_Check_Sum(USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length)) return;
+
     memcpy(&Pack_Rx,(Pack_rx_t*)USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length);
 
-    float tmp_yaw,tmp_pitch;
+    Set_MiniPc_Status(Pack_Rx.status);
     
-    Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
-
-    // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = -tmp_pitch;
-    Rx_Angle_Yaw = tmp_yaw;
-    Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
-    // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
+    Math_Constrain(Pack_Rx.Joint_Uplift_Angle,0.0f,0.0f);
+    Math_Constrain(Pack_Rx.Jonit_1_Angle,0.0f,180.0f);
+    Math_Constrain(Pack_Rx.Jonit_2_Angle,0.0f,180.0f);
+    Math_Constrain(Pack_Rx.Jonit_3_Angle,0.0f,180.0f);
+    Math_Constrain(Pack_Rx.Jonit_4_Angle,0.0f,180.0f);
+    Math_Constrain(Pack_Rx.Jonit_5_Angle,0.0f,180.0f);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 }
@@ -292,5 +291,7 @@ float Class_MiniPC::meanFilter(float input)
     // Return the mean of the buffer's values
     return sum / 5.0;
 }
+
+
 
 /************************ copyright(c) ustc-robowalker **************************/

@@ -1,11 +1,11 @@
 /**
  * @file dvc_dmmotor.h
- * @author lez by yssickjgd
+ * @author yssickjgd (1345578933@qq.com)
  * @brief 达妙电机配置与操作
  * @version 0.1
- * @date 2024-07-1 0.1 24赛季定稿
+ * @date 2023-08-30 0.1 初稿
  *
- * @copyright ZLLC 2024
+ * @copyright USTC-RoboWalker (c) 2022
  *
  */
 
@@ -18,7 +18,7 @@
 #include "drv_can.h"
 
 /* Exported macros -----------------------------------------------------------*/
-
+extern uint16_t test_dm_id;
 /* Exported types ------------------------------------------------------------*/
 
 /**
@@ -77,7 +77,8 @@ enum Enum_DM_Motor_Control_Method
  */
 struct Struct_DM_Motor_CAN_Rx_Data
 {
-    Enum_DM_Motor_ID CAN_ID;
+    Enum_DM_Motor_ID CAN_ID :4;
+    uint8_t Err_Status :4;
     uint16_t Position_Reverse;
     uint8_t Omega_11_4;
     uint8_t Omega_3_0_Torque_11_8;
@@ -93,6 +94,7 @@ struct Struct_DM_Motor_CAN_Rx_Data
 struct Struct_DM_Motor_Rx_Data
 {
     Enum_DM_Motor_ID CAN_ID;
+    uint8_t Err_Status;
     float Now_Angle;
     float Now_Omega;
     float Now_Torque;
@@ -147,7 +149,7 @@ protected:
 
     //绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object;
-    //收数据绑定的CAN ID, 控制帧是0xxa1~0xxaf
+    //收数据绑定的CAN ID, 控制帧是0x0101~0x010f
     Enum_DM_Motor_ID CAN_ID;
     //发送缓存区
     uint8_t *CAN_Tx_Data;

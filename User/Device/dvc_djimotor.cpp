@@ -491,8 +491,8 @@ void Class_DJI_Motor_C610::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_OMEGA):
     {
-        PID_Omega.Set_Target(Target_Omega_Radian);
-        PID_Omega.Set_Now(Data.Now_Omega_Radian);
+        PID_Omega.Set_Target(Target_Omega_Angle);
+        PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Out = PID_Omega.Get_Out();
@@ -500,14 +500,18 @@ void Class_DJI_Motor_C610::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_ANGLE):
     {
-        PID_Angle.Set_Target(Target_Radian);
-        PID_Angle.Set_Now(Data.Now_Radian);
+        Slope.Set_Target(Target_Angle);
+        Slope.TIM_Calculate_PeriodElapsedCallback();
+
+        PID_Angle.Set_Target((Slope.Get_Out()));
+        PID_Angle.Set_Now(Data.Now_Angle);
         PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 
-        Target_Omega_Radian = PID_Angle.Get_Out();
+        Target_Omega_Angle = PID_Angle.Get_Out();
+        
 
-        PID_Omega.Set_Target(Target_Omega_Radian);
-        PID_Omega.Set_Now(Data.Now_Omega_Radian);
+        PID_Omega.Set_Target(Target_Omega_Angle);
+        PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Out = PID_Omega.Get_Out();
@@ -565,7 +569,10 @@ void Class_DJI_Motor_C620::Data_Process()
     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
-
+    if(Start_Falg == 0)
+    {
+        Data.Now_Start_Angle = tmp_encoder /(float)Encoder_Num_Per_Round * 360.f / Gearbox_Rate;
+    }
     //计算圈数与总编码器值
     if(Start_Falg==1)
     {
@@ -663,8 +670,8 @@ void Class_DJI_Motor_C620::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_OMEGA):
     {
-        PID_Omega.Set_Target(Target_Omega_Radian);
-        PID_Omega.Set_Now(Data.Now_Omega_Radian);
+        PID_Omega.Set_Target(Target_Omega_Angle);
+        PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Out = PID_Omega.Get_Out();
@@ -672,14 +679,14 @@ void Class_DJI_Motor_C620::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_ANGLE):
     {
-        PID_Angle.Set_Target(Target_Radian);
-        PID_Angle.Set_Now(Data.Now_Radian);
+        PID_Angle.Set_Target(Target_Angle);
+        PID_Angle.Set_Now(Data.Now_Angle);
         PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 
-        Target_Omega_Radian = PID_Angle.Get_Out();
+        Target_Omega_Angle = PID_Angle.Get_Out();
 
-        PID_Omega.Set_Target(Target_Omega_Radian);
-        PID_Omega.Set_Now(Data.Now_Omega_Radian);
+        PID_Omega.Set_Target(Target_Omega_Angle);
+        PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Out = PID_Omega.Get_Out();

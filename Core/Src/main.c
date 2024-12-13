@@ -94,19 +94,19 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_CAN1_Init();
-  MX_TIM1_Init();
-  MX_TIM3_Init();
-  MX_TIM4_Init();
-  MX_TIM5_Init();
-  MX_TIM10_Init();
   MX_CAN2_Init();
-  MX_I2C3_Init();
-  MX_SPI1_Init();
-  MX_USART1_UART_Init();
+  MX_TIM3_Init();
+  MX_CAN1_Init();
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
+  MX_I2C3_Init();
+  MX_SPI1_Init();
+  MX_TIM10_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
   MX_USB_DEVICE_Init();
+  MX_USART1_UART_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   Task_Init();
   /* USER CODE END 2 */
@@ -115,7 +115,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Task_Loop();
+    //Task_Loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

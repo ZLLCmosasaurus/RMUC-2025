@@ -89,6 +89,38 @@ extern uint8_t CAN1_0xxf6_Tx_Data[];
 extern uint8_t CAN1_0xxf7_Tx_Data[];
 extern uint8_t CAN1_0xxf8_Tx_Data[];
 
+extern uint8_t CAN1_0xx01_Tx_Data[8];
+extern uint8_t CAN1_0xx02_Tx_Data[8];
+extern uint8_t CAN1_0xx03_Tx_Data[8];
+extern uint8_t CAN1_0xx04_Tx_Data[8];
+extern uint8_t CAN1_0xx05_Tx_Data[8];
+extern uint8_t CAN1_0xx06_Tx_Data[8];
+extern uint8_t CAN1_0xx07_Tx_Data[8];
+extern uint8_t CAN1_0xx08_Tx_Data[8];
+
+extern uint8_t CAN1_0xx11_Tx_Data[8];
+extern uint8_t CAN1_0xx12_Tx_Data[8];
+extern uint8_t CAN1_0xx13_Tx_Data[8];
+extern uint8_t CAN1_0xx14_Tx_Data[8];
+extern uint8_t CAN1_0xx15_Tx_Data[8];
+extern uint8_t CAN1_0xx16_Tx_Data[8];
+
+extern uint8_t CAN2_0xx11_Tx_Data[8];
+extern uint8_t CAN2_0xx12_Tx_Data[8];
+extern uint8_t CAN2_0xx13_Tx_Data[8];
+extern uint8_t CAN2_0xx14_Tx_Data[8];
+extern uint8_t CAN2_0xx15_Tx_Data[8];
+extern uint8_t CAN2_0xx16_Tx_Data[8];
+
+extern uint8_t CAN2_0xx01_Tx_Data[8];
+extern uint8_t CAN2_0xx02_Tx_Data[8];
+extern uint8_t CAN2_0xx03_Tx_Data[8];
+extern uint8_t CAN2_0xx04_Tx_Data[8];
+extern uint8_t CAN2_0xx05_Tx_Data[8];
+extern uint8_t CAN2_0xx06_Tx_Data[8];
+extern uint8_t CAN2_0xx07_Tx_Data[8];
+extern uint8_t CAN2_0xx08_Tx_Data[8];
+
 extern uint8_t CAN2_0x1ff_Tx_Data[];
 extern uint8_t CAN2_0x200_Tx_Data[];
 extern uint8_t CAN2_0x2ff_Tx_Data[];
@@ -128,7 +160,7 @@ extern uint8_t CAN2_0x148_Tx_Data[8];
 
 void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function);
 
-uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length);
+uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length, uint32_t __IDE);
 
 void TIM_CAN_PeriodElapsedCallback();
 

@@ -251,13 +251,10 @@
             "path": "../User/Device/dvc_dwt.cpp"
           },
           {
-            "path": "../User/Device/CharSendTask.cpp"
+            "path": "../User/Device/dvc_AKmotor.cpp"
           },
           {
-            "path": "../User/Device/dvc_GraphicsSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/GraphicsSendTask.cpp"
+            "path": "../User/Device/dvc_message.cpp"
           }
         ],
         "folders": []
@@ -307,6 +304,9 @@
               },
               {
                 "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_fifo.cpp"
               }
             ],
             "folders": []
@@ -354,6 +354,12 @@
         "files": [
           {
             "path": "../User/Task/tsk_config_and_callback.cpp"
+          },
+          {
+            "path": "../User/Task/chassis_Communication.cpp"
+          },
+          {
+            "path": "../User/Task/robotarm_task.cpp"
           }
         ],
         "folders": []
@@ -419,7 +425,7 @@
       }
     ]
   },
-  "outDir": "..\\MDK-ARM",
+  "outDir": ".",
   "deviceName": "STM32F407IGHx",
   "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
   "miscInfo": {
@@ -586,8 +592,38 @@
           "USE_HAL_DRIVER",
           "STM32F407xx"
         ]
+      },
+      "builderOptions": {
+        "AC6": {
+          "version": 3,
+          "beforeBuildTasks": [],
+          "afterBuildTasks": [],
+          "global": {
+            "use-microLIB": false,
+            "output-debug-info": "enable"
+          },
+          "c/cpp-compiler": {
+            "optimization": "level-0",
+            "language-c": "c99",
+            "language-cpp": "c++11",
+            "link-time-optimization": false,
+            "one-elf-section-per-function": true,
+            "short-enums#wchar": true,
+            "warnings": "no-warnings"
+          },
+          "asm-compiler": {
+            "$use": "asm-auto"
+          },
+          "linker": {
+            "output-format": "elf",
+            "misc-controls": "--diag_suppress=L6329",
+            "xo-base": "",
+            "ro-base": "",
+            "rw-base": ""
+          }
+        }
       }
     }
   },
-  "version": "3.4"
+  "version": "3.5"
 }

@@ -19,7 +19,6 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 #include "stm32f4xx_hal.h"
-	#include "usart.h"
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -59,14 +58,14 @@ extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 //extern UART_HandleTypeDef huart7;
 
-extern struct Struct_UART_Manage_Object UART1_Manage_Object;
-extern struct Struct_UART_Manage_Object UART2_Manage_Object;
-extern struct Struct_UART_Manage_Object UART3_Manage_Object;
-extern struct Struct_UART_Manage_Object UART4_Manage_Object;
-extern struct Struct_UART_Manage_Object UART5_Manage_Object;
-extern struct Struct_UART_Manage_Object UART6_Manage_Object;
-extern struct Struct_UART_Manage_Object UART7_Manage_Object;
-extern struct Struct_UART_Manage_Object UART8_Manage_Object;
+extern Struct_UART_Manage_Object UART1_Manage_Object;
+extern Struct_UART_Manage_Object UART2_Manage_Object;
+extern Struct_UART_Manage_Object UART3_Manage_Object;
+extern Struct_UART_Manage_Object UART4_Manage_Object;
+extern Struct_UART_Manage_Object UART5_Manage_Object;
+extern Struct_UART_Manage_Object UART6_Manage_Object;
+extern Struct_UART_Manage_Object UART7_Manage_Object;
+extern Struct_UART_Manage_Object UART8_Manage_Object;
 
 /* Exported function declarations --------------------------------------------*/
 
