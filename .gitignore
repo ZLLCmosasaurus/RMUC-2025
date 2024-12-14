@@ -5,6 +5,8 @@ DebugConfig/
 
 RTE/
 
+build/
+
 * MDK-ARM.code-workspace
 *.eide.usr.ctx.json
 *.clang-format
@@ -25,10 +27,11 @@ RTE/
 *.scvd
 *.dbg*
 
-MDK-ARM/JLinkLog.txt
 *.jdebug
 *.jdebug.*
 
+*.bin
+*.hex
 *.axf
 *.exf
 *.elf
