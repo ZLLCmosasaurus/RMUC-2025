@@ -144,7 +144,7 @@ SECTIONS
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-  } >RAM AT> FLASH
+  } > RAM AT> FLASH
 
   _siccmram = LOADADDR(.ccmram);
 
