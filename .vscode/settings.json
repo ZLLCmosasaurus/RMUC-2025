@@ -1,4 +1,31 @@
 {
     "targetFileName": "M57-Dart.elf",
-    "targetChip": "cortex-M4"
+    "targetChip": "cortex-M4",
+    "files.associations": {
+        "cstdint": "cpp",
+        "compare": "cpp",
+        "main.h": "c",
+        "cmsis_os.h": "c",
+        "usart.h": "c",
+        "dma.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "stm32f4xx_hal_flash.h": "c",
+        "stm32f4xx_hal_def.h": "c",
+        "stm32f4xx.h": "c",
+        "stddef.h": "c",
+        "arm_math.h": "c",
+        "math.h": "c",
+        "tsk_config_and_callback.h": "c"
+    },
+    "custom-button.buttons": [
+        {
+            "name": "Dart_GO",
+            "position": "statusbar-left",
+            "priority": 0,
+            "command": "workbench.action.tasks.runTask",
+            "args": ["build task"]
+        }
+    ],
+    "makefile.makePath": "mingw32-make"
 }

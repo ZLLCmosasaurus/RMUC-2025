@@ -14,11 +14,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "stdint.h"
-#include "limits.h"
 #include "arm_math.h"
-#include "stdint.h"
-#include "float.h"
+#include "main.h"
 
 /* Exported macros -----------------------------------------------------------*/
 

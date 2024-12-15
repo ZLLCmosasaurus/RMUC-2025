@@ -47,6 +47,7 @@ extern "C" {
  
   void Task_Init();
   void Task_Loop(); 
+  void Control_Task_Callback();
  
 #ifdef __cplusplus
 }

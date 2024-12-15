@@ -17,9 +17,8 @@
 #include <string.h>
 #include "main.h"
 #include "drv_usb.h"
-#include "dvc_imu.h"
 #include "dvc_referee.h"
-#include "math.h"
+#include "drv_math.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -293,7 +292,6 @@ public:
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
 
-    Class_IMU *IMU;
     Class_Referee *Referee;
 
 protected:
@@ -665,9 +663,9 @@ void Class_MiniPC::Set_Outpost_Protect_Status(Enum_MiniPC_Data_Status __Outpost_
  */
 void Class_MiniPC::Transform_Angle_Tx()
 {
-    Tx_Angle_Pitch = -IMU->Get_Angle_Pitch();
-    Tx_Angle_Roll = IMU->Get_Angle_Roll();
-    Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
+    // Tx_Angle_Pitch = -IMU->Get_Angle_Pitch();
+    // Tx_Angle_Roll = IMU->Get_Angle_Roll();
+    // Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
 }
 
 /**

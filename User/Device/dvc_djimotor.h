@@ -16,7 +16,6 @@
 
 #include "alg_pid.h"
 #include "drv_can.h"
-#include "alg_power_limit.h"
 
 /* Exported macros -----------------------------------------------------------*/
 

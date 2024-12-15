@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-
+#include "main.h"
 #include "stdlib.h"
 #include "string.h"
 #include "stm32f4xx_hal.h"
