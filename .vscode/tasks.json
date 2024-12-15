@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run make -j24",
+            "label": "build task",
             "type": "shell",
             "command": "make -j24",
             "group": {
@@ -16,6 +16,20 @@
                 "panel": "shared"
             },
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "download task",
+            "type": "shell",
+            "command": "make download",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+            }
+        }    
     ]
 }

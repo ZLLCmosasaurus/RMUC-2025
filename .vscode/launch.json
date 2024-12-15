@@ -1,18 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "name": "JLink-debug",
-        //     "cwd": "${workspaceRoot}",
-        //     "executable": "${workspaceFolder}/build/${config:targetFileName}",
-        //     "request": "launch",
-        //     "type": "cortex-debug",
-        //     "servertype": "jlink",
-        //     "interface": "swd",
-        //     "device": "${config:targetChip}",
-        //     "runToEntryPoint": "main",
-        //     "svdFile": "${workspaceRoot}/STM32F427.svd"
-        // }
         // 使用j-link进行调试时的参考配置
         {
             "name": "Jlink",
@@ -27,9 +15,8 @@
             "interface": "swd",
             "svdFile": "STM32F427.svd",
             "rtos": "FreeRTOS",
-            // "preLaunchTask": "build task",//先运行Build任务,取消注释即可使用
-            //"preLaunchTask": "log", // 调试时同时开启RTT viewer窗口,若daplink使用jlinkGDBserver启动,需要先开始调试再打开log
-            // 若想要在调试前编译并且打开log,可只使用log的prelaunch task并为log任务添加depends on依赖
+            //"preLaunchTask": "build task",//先运行Build任务,取消注释即可使用
+            "preLaunchTask": "download task",//调试完成后运行download任务,取消注释即可使用
             "liveWatch": {
                 "enabled": true,
                 "samplesPerSecond": 4
