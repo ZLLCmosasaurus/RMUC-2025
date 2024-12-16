@@ -5,10 +5,10 @@
         {
             "name": "Jlink",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\build\\M57-Dart.elf",
+            "executable": "${workspaceRoot}\\build\\${config:targetFileName}",
             "request": "launch",
             "type": "cortex-debug",
-            "device": "STM32F427",
+            "device": "${config:targetChip}",
             "runToEntryPoint": "main",
             "showDevDebugOutput": "none",
             "servertype": "jlink",

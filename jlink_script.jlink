@@ -1,5 +1,5 @@
 h
-loadfile build/M57-Dart.hex
+loadfile build/M58-Dart.hex
 r
 g
 exit

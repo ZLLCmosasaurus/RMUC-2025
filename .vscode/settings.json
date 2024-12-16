@@ -1,5 +1,5 @@
 {
-    "targetFileName": "M57-Dart.elf",
+    "targetFileName": "M58-Dart.elf",
     "targetChip": "cortex-M4",
     "files.associations": {
         "cstdint": "cpp",
