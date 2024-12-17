@@ -170,7 +170,9 @@ void Pull_Measure_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    // 等待中断唤醒
+    ulTaskNotifyTake(pdTRUE,portMAX_DELAY);
+    Pull_Measure_Callback();
   }
   /* USER CODE END Pull_Measure_Task */
 }

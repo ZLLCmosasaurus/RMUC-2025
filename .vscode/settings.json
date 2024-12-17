@@ -22,7 +22,9 @@
         "bsp_uart.h": "c",
         "stdlib.h": "c",
         "drv_uart.h": "c",
-        "freertos.h": "c"
+        "freertos.h": "c",
+        "stdbool.h": "c",
+        "gpio.h": "c"
     },
     "custom-button.buttons": [
         {

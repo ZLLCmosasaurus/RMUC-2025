@@ -25,7 +25,7 @@ extern "C" {
 /** 
   * @brief  remote control information
   */
-typedef __packed struct
+typedef struct
 {
   /* rocker channel information */
   int16_t ch1;
@@ -36,7 +36,7 @@ typedef __packed struct
   /* left and right lever information */
   uint8_t sw1;
   uint8_t sw2;
-} rc_info_t;
+} __attribute__((packed))rc_info_t;
 
 int uart_receive_dma_no_it(UART_HandleTypeDef* huart, uint8_t* pData, uint32_t Size);
 uint16_t dma_current_data_counter(DMA_Stream_TypeDef *dma_stream);

@@ -88,12 +88,14 @@ User/Device/dvc_dr16.cpp \
 User/Device/dvc_dwt.cpp \
 User/Device/dvc_minipc.cpp \
 User/Device/dvc_referee.cpp \
+User/Device/dvc_TensionMeter.cpp  \
 User/Middleware/Algorithm/alg_fsm.cpp \
 User/Middleware/Algorithm/alg_pid.cpp \
 User/Middleware/Driver/drv_can.cpp \
 User/Middleware/Driver/drv_dwt.cpp \
 User/Middleware/Driver/drv_uart.cpp \
-User/Middleware/Driver/drv_math.cpp
+User/Middleware/Driver/drv_math.cpp \
+
 
 # ASM sources
 ASM_SOURCES =  \

@@ -19,6 +19,7 @@
 #include "dvc_referee.h"
 #include "dvc_djimotor.h"
 #include "dvc_minipc.h"
+#include "dvc_TensionMeter.h"
 #include "tsk_config_and_callback.h"
 
 /* Exported macros -----------------------------------------------------------*/
@@ -53,6 +54,8 @@ public:
 
         Class_DJI_Motor_C620 Motor_left;
         Class_DJI_Motor_C620 Motor_right;
+
+        Class_TensionMeter Tension_Meter;
 
         //裁判系统
         Class_Referee Referee;

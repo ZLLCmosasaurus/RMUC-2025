@@ -29,28 +29,31 @@
  */
 void Class_Chariot::Init(float __DR16_Dead_Zone)
 { 
-        //裁判系统
-        //Referee.Init(&huart6);
+    //裁判系统
+    //Referee.Init(&huart6);
 
-        //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
-        Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
+    //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
+    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
 
-        Motor_down.Init(&hcan1, DJI_Motor_ID_0x201);
-        Motor_up.Init(&hcan1, DJI_Motor_ID_0x202);
-        Motor_left.Init(&hcan1, DJI_Motor_ID_0x203);
-        Motor_right.Init(&hcan1, DJI_Motor_ID_0x204);
+    Motor_down.Init(&hcan1, DJI_Motor_ID_0x201);
+    Motor_up.Init(&hcan1, DJI_Motor_ID_0x202);
+    Motor_left.Init(&hcan1, DJI_Motor_ID_0x203);
+    Motor_right.Init(&hcan1, DJI_Motor_ID_0x204);
 
-        //遥控器离线控制 状态机
-        FSM_Alive_Control.Chariot = this;
-        FSM_Alive_Control.Init(5, 0);
+    //TensionMeter初始化
+    Tension_Meter.Init(GPIOF, GPIO_PIN_0, GPIOF, GPIO_PIN_1);
 
-        //遥控器
-        DR16.Init(&huart1,&huart6);
-        DR16_Dead_Zone = __DR16_Dead_Zone;   
-				
-        //上位机
-        // MiniPC.Init(&MiniPC_USB_Manage_Object);
-        // MiniPC.Referee = &Referee;
+    //遥控器离线控制 状态机
+    FSM_Alive_Control.Chariot = this;
+    FSM_Alive_Control.Init(5, 0);
+
+    //遥控器
+    DR16.Init(&huart1,&huart6);
+    DR16_Dead_Zone = __DR16_Dead_Zone;   
+            
+    //上位机
+    // MiniPC.Init(&MiniPC_USB_Manage_Object);
+    // MiniPC.Referee = &Referee;
 }
 
 /**

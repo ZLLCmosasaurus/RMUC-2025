@@ -122,6 +122,20 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 
 }
 
+// 外部中断回调函数
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == GPIO_PIN_1)
+    {
+        // 接收 0x201-4 ID的电机
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        vTaskNotifyGiveFromISR(pull_measure_taskHandle,&xHigherPriorityTaskWoken); // 唤醒任务 
+        if(xHigherPriorityTaskWoken == pdTRUE){
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        }       
+    }
+}
+
 /**
  * @brief UART3遥控器回调函数
  *
@@ -271,7 +285,7 @@ void Referee_Callback()
  */
 void Pull_Measure_Callback()
 {
-
+    chariot.Tension_Meter.TensionMeter_Cal();
 }
 
 
