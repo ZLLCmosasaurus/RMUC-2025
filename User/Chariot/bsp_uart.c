@@ -14,6 +14,7 @@
 #include "usart.h"
 #include "main.h"
 #include "drv_uart.h"
+#include "cmsis_os.h"
 uint8_t   dbus_buf[DBUS_BUFLEN];
 rc_info_t rc;
 
@@ -123,7 +124,14 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
 		if ((DBUS_MAX_LEN - dma_current_data_counter(huart->hdmarx->Instance)) == DBUS_BUFLEN)
 		{
 			//rc_callback_handler(&rc, dbus_buf);	
-      UART1_Manage_Object.Callback_Function(UART1_Manage_Object.Rx_Buffer, DBUS_BUFLEN);
+      // UART1_Manage_Object.Callback_Function(UART1_Manage_Object.Rx_Buffer, DBUS_BUFLEN);
+      extern osThreadId dr16_callback_taskHandle;
+      BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+      vTaskNotifyGiveFromISR(dr16_callback_taskHandle,&xHigherPriorityTaskWoken); // 通知任务
+      // 有必要就 切换任务上下文
+      if(xHigherPriorityTaskWoken == pdTRUE){
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+      }
 		}
 		
 		/* restart dma transmission */

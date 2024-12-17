@@ -150,6 +150,7 @@ void Control_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+    // 5ms周期执行
     Control_Task_Callback();
     osDelayUntil(&start_tick,5);
   }
@@ -190,7 +191,6 @@ void Motor_Callback_Task(void const * argument)
     // pdTRUE 每次收到通知就清零通知 portMAX_DELAY 阻塞等待通知
     ulTaskNotifyTake(pdTRUE,portMAX_DELAY);
     Motor_Callback();
-    osDelay(1);
   }
   /* USER CODE END Motor_Callback_Task */
 }
@@ -208,7 +208,10 @@ void DR16_Callback_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    // 等待中断唤醒
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    //遥控器数据接收完成
+    DR16_Callback();
   }
   /* USER CODE END DR16_Callback_Task */
 }

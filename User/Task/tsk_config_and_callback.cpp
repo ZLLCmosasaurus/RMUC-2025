@@ -103,6 +103,13 @@ void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 	}
 }
 
+
+void Device_UART1_Callback(uint8_t *Buffer, uint16_t Length)
+{
+
+}
+
+
 /**
  * @brief SPI1回调函数
  *
@@ -124,9 +131,7 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 uint16_t length;
 void DR16_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
-    //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
+    uart_receive_handler(UART1_Manage_Object.UART_Handler);
 }
 
 /**
@@ -242,7 +247,12 @@ void Motor_Callback()
  */
 void DR16_Callback()
 {
-    
+    // 取出数据
+    uint8_t *Buffer = UART1_Manage_Object.Rx_Buffer;
+    // 解包
+    chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
+    // 控制策略
+    chariot.TIM_Control_Callback(); 
 }
 
 
