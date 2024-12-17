@@ -21,12 +21,14 @@
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "tsk_config_and_callback.h"
+#include "bsp_uart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,8 +98,12 @@ int main(void)
   MX_USART1_UART_Init();
   MX_CAN2_Init();
   MX_USART6_UART_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
+  MX_UART7_Init();
   /* USER CODE BEGIN 2 */
-  Task_Init();
+ Task_Init();
+ dbus_uart_init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -112,7 +118,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Task_Loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -143,17 +148,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 180;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Activate the Over-Drive mode
-  */
-  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }

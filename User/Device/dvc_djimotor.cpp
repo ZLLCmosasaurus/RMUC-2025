@@ -32,7 +32,7 @@
  */
 uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
 {
-    uint8_t *tmp_tx_data_ptr;
+    uint8_t *tmp_tx_data_ptr = nullptr;
     if (hcan == &hcan1)
     {
         switch (__CAN_ID)

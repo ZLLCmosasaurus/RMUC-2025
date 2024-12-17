@@ -12,6 +12,7 @@
 #ifndef DRV_MATH_H
 #define DRV_MATH_H
 
+
 /* Includes ------------------------------------------------------------------*/
 
 #include "arm_math.h"
@@ -86,6 +87,7 @@ Type Math_Abs(Type x)
 {
     return ((x > 0) ? x : -x);
 }
+
 
 #endif
 

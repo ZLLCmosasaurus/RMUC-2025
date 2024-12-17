@@ -36,10 +36,13 @@ double DWT_GetDeltaT64(uint32_t *cnt_last)
 }
 
 
+
+
+void DWT_SysTimeUpdate(void){
+
     volatile uint32_t cnt_now = DWT->CYCCNT;
     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
 
-void DWT_SysTimeUpdate(void){
     DWT_CNT_Update();
 
     CYCCNT64 = (uint64_t)CYCCNT_RountCount * (uint64_t)uint32_max + (uint64_t)cnt_now;

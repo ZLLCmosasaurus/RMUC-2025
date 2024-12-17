@@ -155,14 +155,14 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
         CAN1_Manage_Object.Callback_Function = Callback_Function;					
 //         can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0x200 ,0x7F8);  //只接收0x200-0x207
 //         can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0x200, 0x7F8);
-			// can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
-			// can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
+			can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
+			can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
     }
     else if (hcan->Instance == CAN2)
     {
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
-		// can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
+		can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
 //	    can_filter_mask_config(hcan, CAN_FILTER(15) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0x200, 0x7F8);
     }
     /*离开初始模式*/
@@ -206,7 +206,7 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
 void TIM_CAN_PeriodElapsedCallback()
 {
     // CAN1总线  四个底盘电机  
-    CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
+    // CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
     // CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
 

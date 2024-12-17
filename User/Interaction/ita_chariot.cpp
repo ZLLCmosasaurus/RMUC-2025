@@ -45,7 +45,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         FSM_Alive_Control.Init(5, 0);
 
         //遥控器
-        DR16.Init(&huart6,&huart1);
+        DR16.Init(&huart1,&huart6);
         DR16_Dead_Zone = __DR16_Dead_Zone;   
 				
         //上位机
@@ -76,14 +76,15 @@ void Class_Chariot::TIM_Control_Callback()
  */
 void Class_Chariot::TIM5msMod10_Alive_PeriodElapsedCallback()
 {
-    static uint8_t mod50 = 0;
-    mod50++;
-    if (mod50 == 50)
+    static uint8_t mod10 = 0;
+    mod10++;
+    if (mod10 == 100)
     {
         //Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
+        DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
         Motor_Yaw.TIM_Alive_PeriodElapsedCallback();         
         //MiniPC.TIM1msMod50_Alive_PeriodElapsedCallback();
-        mod50 = 0;
+        mod10 = 0;
     }    
 }
 
@@ -101,11 +102,11 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
         case (0):
         {
             // 遥控器中途断联导致错误离线 跳转到 遥控器串口错误状态
-            // if (huart1.ErrorCode)
-            // {
-            //     Status[Now_Status_Serial].Time = 0;
-            //     Set_Status(4);
-            // }
+            if (huart1.ErrorCode)
+            {
+                Status[Now_Status_Serial].Time = 0;
+                Set_Status(4);
+            }
 
             //转移为 在线状态
             if(Chariot->DR16.Get_DR16_Status() == DR16_Status_ENABLE)
@@ -133,12 +134,12 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
                 Set_Status(2);
             }
 
-            // 遥控器中途断联导致错误离线 跳转到 遥控器串口错误状态
-            // if (huart1.ErrorCode)
-            // {
-            //     Status[Now_Status_Serial].Time = 0;
-            //     Set_Status(4);
-            // }
+            //遥控器中途断联导致错误离线 跳转到 遥控器串口错误状态
+            if (huart1.ErrorCode)
+            {
+                Status[Now_Status_Serial].Time = 0;
+                Set_Status(4);
+            }
             
         }
         break;

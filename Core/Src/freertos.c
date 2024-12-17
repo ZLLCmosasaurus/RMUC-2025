@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+//#include "tsk_config_and_callback.h"
+//#include "dvc_dwt.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,14 +48,22 @@
 /* USER CODE BEGIN Variables */
 
 /* USER CODE END Variables */
-osThreadId defaultTaskHandle;
+osThreadId control_taskHandle;
+osThreadId pull_measure_taskHandle;
+osThreadId motor_callback_taskHandle;
+osThreadId dr16_callback_taskHandle;
+osThreadId refree_callback_taskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void const * argument);
+void Control_Task(void const * argument);
+void Pull_Measure_Task(void const * argument);
+void Motor_Callback_Task(void const * argument);
+void DR16_Callback_Task(void const * argument);
+void Refree_Callback_Task(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -101,9 +110,25 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  /* definition and creation of control_task */
+  osThreadDef(control_task, Control_Task, osPriorityLow, 0, 128);
+  control_taskHandle = osThreadCreate(osThread(control_task), NULL);
+
+  /* definition and creation of pull_measure_task */
+  osThreadDef(pull_measure_task, Pull_Measure_Task, osPriorityAboveNormal, 0, 128);
+  pull_measure_taskHandle = osThreadCreate(osThread(pull_measure_task), NULL);
+
+  /* definition and creation of motor_callback_task */
+  osThreadDef(motor_callback_task, Motor_Callback_Task, osPriorityBelowNormal, 0, 128);
+  motor_callback_taskHandle = osThreadCreate(osThread(motor_callback_task), NULL);
+
+  /* definition and creation of dr16_callback_task */
+  osThreadDef(dr16_callback_task, DR16_Callback_Task, osPriorityNormal, 0, 128);
+  dr16_callback_taskHandle = osThreadCreate(osThread(dr16_callback_task), NULL);
+
+  /* definition and creation of refree_callback_task */
+  osThreadDef(refree_callback_task, Refree_Callback_Task, osPriorityNormal, 0, 128);
+  refree_callback_taskHandle = osThreadCreate(osThread(refree_callback_task), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -111,23 +136,94 @@ void MX_FREERTOS_Init(void) {
 
 }
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_Control_Task */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the control_task thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void const * argument)
+/* USER CODE END Header_Control_Task */
+void Control_Task(void const * argument)
 {
-  /* USER CODE BEGIN StartDefaultTask */
-  
+  /* USER CODE BEGIN Control_Task */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END StartDefaultTask */
+  /* USER CODE END Control_Task */
+}
+
+/* USER CODE BEGIN Header_Pull_Measure_Task */
+/**
+* @brief Function implementing the pull_measure_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Pull_Measure_Task */
+void Pull_Measure_Task(void const * argument)
+{
+  /* USER CODE BEGIN Pull_Measure_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Pull_Measure_Task */
+}
+
+/* USER CODE BEGIN Header_Motor_Callback_Task */
+/**
+* @brief Function implementing the motor_callback_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Motor_Callback_Task */
+void Motor_Callback_Task(void const * argument)
+{
+  /* USER CODE BEGIN Motor_Callback_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Motor_Callback_Task */
+}
+
+/* USER CODE BEGIN Header_DR16_Callback_Task */
+/**
+* @brief Function implementing the dr16_callback_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_DR16_Callback_Task */
+void DR16_Callback_Task(void const * argument)
+{
+  /* USER CODE BEGIN DR16_Callback_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END DR16_Callback_Task */
+}
+
+/* USER CODE BEGIN Header_Refree_Callback_Task */
+/**
+* @brief Function implementing the refree_callback_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Refree_Callback_Task */
+void Refree_Callback_Task(void const * argument)
+{
+  /* USER CODE BEGIN Refree_Callback_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END Refree_Callback_Task */
 }
 
 /* Private application code --------------------------------------------------*/

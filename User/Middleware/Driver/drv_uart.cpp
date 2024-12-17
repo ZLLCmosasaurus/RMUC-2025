@@ -13,7 +13,7 @@
 
 #include "drv_uart.h"
 #include "string.h"
-
+#include "bsp_uart.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -46,7 +46,16 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART1_Manage_Object.UART_Handler = huart;
         UART1_Manage_Object.Callback_Function = Callback_Function;
         UART1_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
-        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART1_Manage_Object.Rx_Buffer, UART1_Manage_Object.Rx_Buffer_Length);
+        // __HAL_UART_CLEAR_IDLEFLAG(huart);
+	    // __HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
+        // huart->pRxBuffPtr = UART1_Manage_Object.Rx_Buffer;
+		// huart->RxXferSize = 50;
+		// huart->ErrorCode  = HAL_UART_ERROR_NONE;
+		// /* Enable the DMA Stream */
+		// HAL_DMA_Start(huart->hdmarx, (uint32_t)&huart->Instance->DR, (uint32_t)UART1_Manage_Object.Rx_Buffer, 50);
+        // SET_BIT(huart->Instance->CR3, USART_CR3_DMAR);
+        // uart_receive_dma_no_it(huart, UART1_Manage_Object.Rx_Buffer, 50);
+        //HAL_UARTEx_ReceiveToIdle_DMA(huart, UART1_Manage_Object.Rx_Buffer, UART1_Manage_Object.Rx_Buffer_Length);
     }
     else if (huart->Instance == USART6)
     {

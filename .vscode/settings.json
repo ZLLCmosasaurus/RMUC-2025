@@ -16,7 +16,12 @@
         "stddef.h": "c",
         "arm_math.h": "c",
         "math.h": "c",
-        "tsk_config_and_callback.h": "c"
+        "tsk_config_and_callback.h": "c",
+        "dvc_dwt.h": "c",
+        "drv_dwt.h": "c",
+        "bsp_uart.h": "c",
+        "stdlib.h": "c",
+        "drv_uart.h": "c"
     },
     "custom-button.buttons": [
         {
@@ -27,5 +32,6 @@
             "args": ["build task"]
         }
     ],
-    "makefile.makePath": "mingw32-make"
+    "makefile.makePath": "mingw32-make",
+    "cortex-debug.variableUseNaturalFormat": false
 }

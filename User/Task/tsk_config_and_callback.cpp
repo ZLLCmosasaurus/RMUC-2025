@@ -38,6 +38,7 @@
 #include "tsk_config_and_callback.h"
 #include "ita_chariot.h"
 #include "drv_dwt.h"
+#include "bsp_uart.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -62,7 +63,7 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x2001):   
+    case (0x201):   
     {
         
     }
@@ -74,7 +75,7 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     break;
     case (0x203):
     {
-        
+        chariot.Motor_left.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x204):
@@ -125,15 +126,32 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
  * @param Buffer UART1收到的消息
  * @param Length 长度
  */
+uint16_t length;
 void DR16_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
+    // if (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE) && 
+	// 		__HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_IDLE))
+	// {
+    //     /* clear idle it flag avoid idle interrupt all the time */
+    //     __HAL_UART_CLEAR_IDLEFLAG(&huart1);
 
-    chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
+    //     /* clear DMA transfer complete flag */
+    //     __HAL_DMA_DISABLE(huart1.hdmarx);
+    //     length = (uint16_t)(huart1.hdmarx->Instance->NDTR);
+    //     /* handle dbus data dbus_buf from DMA */
+    //     if ((50 - (uint16_t)(huart1.hdmarx->Instance->NDTR)) == UART1_Manage_Object.Rx_Length)
+    //     {
+            chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
 
-    //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
-		
-	
+            //底盘 云台 发射机构 的控制策略
+            chariot.TIM_Control_Callback();
+    //     }
+        
+    //     /* restart dma transmission */
+    //     __HAL_DMA_SET_COUNTER(huart1.hdmarx, DBUS_MAX_LEN);
+    //     __HAL_DMA_ENABLE(huart1.hdmarx);
+	// }
+
 }
 
 /**
@@ -155,7 +173,7 @@ void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_L
  */
 void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.Referee.UART_RxCpltCallback(Buffer,Length);
+    //chariot.Referee.UART_RxCpltCallback(Buffer,Length);
 }
 
 
@@ -172,7 +190,6 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
     //chariot.MiniPC.USB_RxCpltCallback(Buffer);
 }
 
-
 /**
  * @brief TIM5任务回调函数
  *
@@ -180,7 +197,7 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
 extern "C" void Control_Task_Callback()
 {
     init_finished++;
-    if(init_finished>2000)
+    if(init_finished>400)
     start_flag=1;
 
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
@@ -190,9 +207,8 @@ extern "C" void Control_Task_Callback()
     /****************************** 交互层回调函数 1ms *****************************************/
     if(start_flag==1)
     {
-        #ifdef GIMBAL
+
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-        #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
@@ -223,7 +239,7 @@ extern "C" void Task_Init()
     /********************************** 驱动层初始化 **********************************/
 
     //裁判系统
-    // UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+    UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
 
     //遥控器接收
     UART_Init(&huart1, DR16_UART1_Callback, 18);
