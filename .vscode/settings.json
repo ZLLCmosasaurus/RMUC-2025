@@ -21,7 +21,8 @@
         "drv_dwt.h": "c",
         "bsp_uart.h": "c",
         "stdlib.h": "c",
-        "drv_uart.h": "c"
+        "drv_uart.h": "c",
+        "freertos.h": "c"
     },
     "custom-button.buttons": [
         {

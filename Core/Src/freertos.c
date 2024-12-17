@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "tsk_config_and_callback.h"
+#include "tsk_config_and_callback.h"
 //#include "dvc_dwt.h"
 /* USER CODE END Includes */
 
@@ -146,10 +146,12 @@ void MX_FREERTOS_Init(void) {
 void Control_Task(void const * argument)
 {
   /* USER CODE BEGIN Control_Task */
+  uint32_t start_tick = osKernelSysTick();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    Control_Task_Callback();
+    osDelayUntil(&start_tick,5);
   }
   /* USER CODE END Control_Task */
 }
@@ -185,6 +187,9 @@ void Motor_Callback_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+    // pdTRUE 每次收到通知就清零通知 portMAX_DELAY 阻塞等待通知
+    ulTaskNotifyTake(pdTRUE,portMAX_DELAY);
+    Motor_Callback();
     osDelay(1);
   }
   /* USER CODE END Motor_Callback_Task */

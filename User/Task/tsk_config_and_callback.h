@@ -48,6 +48,10 @@ extern "C" {
   void Task_Init();
   void Task_Loop(); 
   void Control_Task_Callback();
+  void Motor_Callback();
+  void DR16_Callback();
+  void Referee_Callback();
+  void Pull_Measure_Callback();
  
 #ifdef __cplusplus
 }

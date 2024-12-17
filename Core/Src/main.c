@@ -102,8 +102,8 @@ int main(void)
   MX_TIM5_Init();
   MX_UART7_Init();
   /* USER CODE BEGIN 2 */
- Task_Init();
- dbus_uart_init();
+  Task_Init();
+  dbus_uart_init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

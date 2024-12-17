@@ -78,7 +78,7 @@ void Class_Chariot::TIM5msMod10_Alive_PeriodElapsedCallback()
 {
     static uint8_t mod10 = 0;
     mod10++;
-    if (mod10 == 100)
+    if (mod10 == 10)
     {
         //Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
         DR16.TIM1msMod50_Alive_PeriodElapsedCallback();

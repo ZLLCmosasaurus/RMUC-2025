@@ -39,6 +39,7 @@
 #include "ita_chariot.h"
 #include "drv_dwt.h"
 #include "bsp_uart.h"
+#include "cmsis_os.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -49,6 +50,11 @@ uint32_t init_finished =0 ;
 bool start_flag=0;
 //机器人控制对象
 Class_Chariot chariot;
+extern osThreadId control_taskHandle;
+extern osThreadId pull_measure_taskHandle;
+extern osThreadId motor_callback_taskHandle;
+extern osThreadId dr16_callback_taskHandle;
+extern osThreadId refree_callback_taskHandle;
 
 /* Private function declarations ---------------------------------------------*/
 
@@ -62,32 +68,21 @@ Class_Chariot chariot;
 void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
-    {
-    case (0x201):   
-    {
-        
-    }
-    break;
-    case (0x202):   
-    {
-        
-    }
-    break;
-    case (0x203):
-    {
-        chariot.Motor_left.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x204):
-    {
-       
-    }
-    break;
-    case (0x206):
-    {
-        
-    }
-    break;
+    {   
+        case (0x201):   
+        case (0x202):   
+        case (0x203):
+        case (0x204):
+        {
+            // 接收 0x201-4 ID的电机
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+            vTaskNotifyGiveFromISR(motor_callback_taskHandle,&xHigherPriorityTaskWoken); // 唤醒任务
+            // 如果can解包优先级大于当前任务的优先级, 则需要通知内核修改isr返回地址和sp为内核，以便于isr结束cpu由内核接管，用于调度下一个任务
+            if(xHigherPriorityTaskWoken == pdTRUE){
+                portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+            }
+        }
+        break;
 	}
 }
 
@@ -129,29 +124,9 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 uint16_t length;
 void DR16_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    // if (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE) && 
-	// 		__HAL_UART_GET_IT_SOURCE(&huart1, UART_IT_IDLE))
-	// {
-    //     /* clear idle it flag avoid idle interrupt all the time */
-    //     __HAL_UART_CLEAR_IDLEFLAG(&huart1);
-
-    //     /* clear DMA transfer complete flag */
-    //     __HAL_DMA_DISABLE(huart1.hdmarx);
-    //     length = (uint16_t)(huart1.hdmarx->Instance->NDTR);
-    //     /* handle dbus data dbus_buf from DMA */
-    //     if ((50 - (uint16_t)(huart1.hdmarx->Instance->NDTR)) == UART1_Manage_Object.Rx_Length)
-    //     {
-            chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
-
-            //底盘 云台 发射机构 的控制策略
-            chariot.TIM_Control_Callback();
-    //     }
-        
-    //     /* restart dma transmission */
-    //     __HAL_DMA_SET_COUNTER(huart1.hdmarx, DBUS_MAX_LEN);
-    //     __HAL_DMA_ENABLE(huart1.hdmarx);
-	// }
-
+    chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
+    //底盘 云台 发射机构 的控制策略
+    chariot.TIM_Control_Callback();
 }
 
 /**
@@ -226,6 +201,69 @@ extern "C" void Control_Task_Callback()
         // }	        
     }
 }
+
+/**
+ * @brief CAN1 电机解包任务 回调函数
+ *  details: 触发方式 isr 触发
+ */
+void Motor_Callback()
+{
+    switch (CAN1_Manage_Object.Rx_Buffer.Header.StdId)
+    {   
+        case (0x201):   
+        {
+            chariot.Motor_up.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+        }
+        break;
+        case (0x202):  
+        {
+            chariot.Motor_down.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+        } 
+        break;
+        case (0x203):
+        {
+            chariot.Motor_left.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+        }
+        break;
+        case (0x204):
+        {
+            chariot.Motor_right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+        }
+        break;
+        default:
+        break;
+	}
+}
+
+
+/**
+ * @brief UART1 DR16解包任务 
+ * details: 触发方式 isr 触发
+ */
+void DR16_Callback()
+{
+    
+}
+
+
+/**
+ * @brief UART6 Referee解包任务 
+ * details: 触发方式 isr 触发
+ */
+void Referee_Callback()
+{
+
+}
+
+/**
+ * @brief EXIT 拉力计解包任务 
+ * details: 触发方式 isr 触发
+ */
+void Pull_Measure_Callback()
+{
+
+}
+
 
 /**
  * @brief 初始化任务
