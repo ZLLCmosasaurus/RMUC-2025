@@ -20,6 +20,7 @@
 #include "dvc_djimotor.h"
 #include "dvc_minipc.h"
 #include "dvc_TensionMeter.h"
+#include "dvc_servo.h"
 #include "tsk_config_and_callback.h"
 
 /* Exported macros -----------------------------------------------------------*/
@@ -47,15 +48,30 @@ class Class_Chariot
 {
 public:
 
+        // yaw电机
         Class_DJI_Motor_GM6020 Motor_Yaw;
 
+        // 下装填电机
         Class_DJI_Motor_C610 Motor_down;
+
+        // 上装填电机
         Class_DJI_Motor_C610 Motor_up;
 
+        // 左右装填电机
         Class_DJI_Motor_C620 Motor_left;
         Class_DJI_Motor_C620 Motor_right;
 
+        // 拉力计
         Class_TensionMeter Tension_Meter;
+
+        // 四个装填舵机
+        Class_Servo Servo_Load_1;
+        Class_Servo Servo_Load_2;
+        Class_Servo Servo_Load_3;
+        Class_Servo Servo_Load_4;
+
+        // 一个扳机舵机
+        Class_Servo Servo_Trigger;
 
         //裁判系统
         Class_Referee Referee;

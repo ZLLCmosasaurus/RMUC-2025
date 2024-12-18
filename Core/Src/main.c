@@ -106,13 +106,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Task_Init();
   dbus_uart_init();
-
-  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
-  HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
-  HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
-
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

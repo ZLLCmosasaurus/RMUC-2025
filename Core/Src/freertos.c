@@ -142,7 +142,6 @@ void MX_FREERTOS_Init(void) {
   * @param  argument: Not used
   * @retval None
   */
- uint32_t test_compare = 800;
 /* USER CODE END Header_Control_Task */
 void Control_Task(void const * argument)
 {
@@ -153,16 +152,6 @@ void Control_Task(void const * argument)
   {
     // 5ms周期执行
     Control_Task_Callback();
-    extern TIM_HandleTypeDef htim4;
-    extern TIM_HandleTypeDef htim5;
-    __HAL_TIM_SET_COMPARE(&htim4,TIM_CHANNEL_4,test_compare);
-    __HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_1,test_compare+200);
-    __HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_2,test_compare+400);
-    __HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_3,test_compare+600);
-
-    
-    __HAL_TIM_SET_COMPARE(&htim5,TIM_CHANNEL_4,test_compare+800);
-
     osDelayUntil(&start_tick,5);
   }
   /* USER CODE END Control_Task */

@@ -43,6 +43,13 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     //TensionMeter初始化
     Tension_Meter.Init(GPIOF, GPIO_PIN_1, GPIOF, GPIO_PIN_0);
 
+    Servo_Load_1.Init(&htim5,TIM_CHANNEL_1);
+    Servo_Load_2.Init(&htim5,TIM_CHANNEL_2);
+    Servo_Load_3.Init(&htim5,TIM_CHANNEL_3);
+    Servo_Load_4.Init(&htim5,TIM_CHANNEL_4);
+
+    Servo_Trigger.Init(&htim4,TIM_CHANNEL_4);
+
     //遥控器离线控制 状态机
     FSM_Alive_Control.Chariot = this;
     FSM_Alive_Control.Init(5, 0);
