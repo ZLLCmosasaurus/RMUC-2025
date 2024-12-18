@@ -113,7 +113,6 @@ void Class_TensionMeter::Cal_Actual_Weight(void)
 {
     float weight = 0.f;
     if(HX711.isTare == true) { /* 当该标志位复位 代表此时应计算净重 */
-        Read_Raw_Data();
         weight = (float)Raw_Data * HX711.k + HX711.b;
         HX711.actual = (weight - HX711.tare)/Data_To_Weigth;
         Measurement = HX711.actual;

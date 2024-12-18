@@ -41,7 +41,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Motor_right.Init(&hcan1, DJI_Motor_ID_0x204);
 
     //TensionMeter初始化
-    Tension_Meter.Init(GPIOF, GPIO_PIN_0, GPIOF, GPIO_PIN_1);
+    Tension_Meter.Init(GPIOF, GPIO_PIN_1, GPIOF, GPIO_PIN_0);
 
     //遥控器离线控制 状态机
     FSM_Alive_Control.Chariot = this;
