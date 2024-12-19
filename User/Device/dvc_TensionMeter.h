@@ -18,6 +18,13 @@
 
 /* Private types -------------------------------------------------------------*/
 
+enum Enum_Tension_Meter_Status
+{
+    Tension_Meter_Status_DISABLE = 0,
+    Tension_Meter_Status_ENABLE,
+};
+
+
 // 卡尔曼滤波器结构体
 typedef struct 
 {
@@ -59,12 +66,16 @@ public:
     inline float Get_Tare(void);
     inline uint32_t Get_Raw_Data(void);
 
+    void TIM_Alive_PeriodElapsedCallback();
+
 protected:
 
     GPIO_TypeDef *Gpio_Data;
     GPIO_TypeDef *Gpio_Clk;
     uint16_t Pin_Data;
     uint16_t Pin_Clk;
+
+    Enum_Tension_Meter_Status Tension_Meter_Status = Tension_Meter_Status_DISABLE;
 
     // 卡尔曼滤波参数
     float Q = 0.01f; // 过程噪声协方差
@@ -87,6 +98,8 @@ protected:
     float Tension_Value;
     // 原始数据
     uint32_t Raw_Data;
+    // 上一次的原始数据
+    uint32_t Pre_Raw_Data;
 
 
     uint32_t init_data_cal;

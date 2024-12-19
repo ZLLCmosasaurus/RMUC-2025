@@ -89,6 +89,7 @@ User/Device/dvc_dwt.cpp \
 User/Device/dvc_minipc.cpp \
 User/Device/dvc_referee.cpp \
 User/Device/dvc_TensionMeter.cpp  \
+User\Device\dvc_servo.cpp \
 User/Middleware/Algorithm/alg_fsm.cpp \
 User/Middleware/Algorithm/alg_pid.cpp \
 User/Middleware/Driver/drv_can.cpp \

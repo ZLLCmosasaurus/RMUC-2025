@@ -90,12 +90,42 @@ void Class_Chariot::TIM5msMod10_Alive_PeriodElapsedCallback()
     mod10++;
     if (mod10 == 10)
     {
-        //Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
         DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
-        Motor_Yaw.TIM_Alive_PeriodElapsedCallback();         
+        Motor_Yaw.TIM_Alive_PeriodElapsedCallback();  
+        Motor_up.TIM_Alive_PeriodElapsedCallback();       
+        Motor_down.TIM_Alive_PeriodElapsedCallback();
+        Motor_left.TIM_Alive_PeriodElapsedCallback();
+        Motor_right.TIM_Alive_PeriodElapsedCallback();
+        Tension_Meter.TIM_Alive_PeriodElapsedCallback();
         //MiniPC.TIM1msMod50_Alive_PeriodElapsedCallback();
+        //Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
         mod10 = 0;
     }    
+}
+
+
+void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
+{
+    Status[Now_Status_Serial].Time++;
+    switch (Now_Status_Serial)
+    {
+        case Dart_Init_Status:
+        {
+
+        }
+        break;
+        case 1:
+        {
+
+        }
+        break;
+        case 2:
+        {
+
+        }
+        default:
+            break;
+    }
 }
 
 /**
@@ -140,7 +170,6 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
 
             if(Chariot->DR16.Get_DR16_Status() == DR16_Status_ENABLE)
             {
-
                 Set_Status(2);
             }
 

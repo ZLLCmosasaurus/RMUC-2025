@@ -63,6 +63,9 @@ void Class_TensionMeter::Init(GPIO_TypeDef *_Gpio_Data, uint16_t _Pin_Data, GPIO
 
     init_cnt = 0;
 
+    Raw_Data = 0;
+    Pre_Raw_Data = 0;
+
     // 初始化卡尔曼滤波器
     kalman_init(0.0f); // 初始估计值为0.0
 }
@@ -117,6 +120,20 @@ void Class_TensionMeter::Cal_Actual_Weight(void)
         HX711.actual = (weight - HX711.tare)/Data_To_Weigth;
         Measurement = HX711.actual;
     }
+}
+
+// 50ms 20hz的检测频率 检测是否掉线
+void Class_TensionMeter::TIM_Alive_PeriodElapsedCallback()
+{
+    if(Pre_Raw_Data == Raw_Data)
+    {
+        Tension_Meter_Status  = Tension_Meter_Status_DISABLE;
+    }
+    else
+    {
+       Tension_Meter_Status = Tension_Meter_Status_ENABLE;
+    }
+    Pre_Raw_Data = Raw_Data;
 }
 
 // 读取数据引脚

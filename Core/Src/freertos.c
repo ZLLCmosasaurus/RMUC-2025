@@ -231,7 +231,10 @@ void Refree_Callback_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    // 等待中断唤醒
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    // 裁判系统数据接收完成
+    Referee_Callback();
   }
   /* USER CODE END Refree_Callback_Task */
 }

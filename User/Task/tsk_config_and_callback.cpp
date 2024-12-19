@@ -167,7 +167,11 @@ void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_L
  */
 void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    //chariot.Referee.UART_RxCpltCallback(Buffer,Length);
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    vTaskNotifyGiveFromISR(refree_callback_taskHandle,&xHigherPriorityTaskWoken); // 唤醒任务
+    if(xHigherPriorityTaskWoken == pdTRUE){
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
 }
 
 
@@ -190,35 +194,21 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
  */
 extern "C" void Control_Task_Callback()
 {
-    init_finished++;
-    if(init_finished>400)
-    start_flag=1;
-
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     
     chariot.TIM5msMod10_Alive_PeriodElapsedCallback();
 
     /****************************** 交互层回调函数 1ms *****************************************/
-    if(start_flag==1)
-    {
 
-        chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-        chariot.TIM_Calculate_PeriodElapsedCallback();
+    chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+    chariot.TIM_Calculate_PeriodElapsedCallback();
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
-        //统一打包发送
-        TIM_CAN_PeriodElapsedCallback();
+    //统一打包发送
+    TIM_CAN_PeriodElapsedCallback();
 
-        TIM_UART_PeriodElapsedCallback();
-        
-        // static int mod5 = 0;
-        // mod5++;
-        // if (mod5 == 5)
-        // {
-        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        // mod5 = 0;
-        // }	        
-    }
+    TIM_UART_PeriodElapsedCallback();
+	        
 }
 
 /**
@@ -276,7 +266,7 @@ void DR16_Callback()
  */
 void Referee_Callback()
 {
-
+    chariot.Referee.UART_RxCpltCallback(UART6_Manage_Object.Rx_Buffer,UART6_Manage_Object.Rx_Buffer_Length);
 }
 
 /**

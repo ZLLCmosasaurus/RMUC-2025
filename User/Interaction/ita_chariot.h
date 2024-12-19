@@ -27,6 +27,16 @@
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
 
+enum Enum_Dart_FSM_Control_Status
+{
+    Dart_Init_Status = 0,
+    Dart_Ready_Status,
+    Dart_First_Status,
+    Dart_Second_Status,
+    Dart_Third_Status,
+    Dart_Fourth_Status,
+    Dart_Disaable_Status
+};
 
 /**
  * @brief 机器人是否离线 控制模式有限自动机
@@ -36,6 +46,18 @@ class Class_FSM_Alive_Control : public Class_FSM
 {
 public:
     Class_Chariot *Chariot;
+
+    void Reload_TIM_Status_PeriodElapsedCallback();
+};
+
+class Class_FSM_Dart_Control : public Class_FSM
+{
+public:
+    Class_Chariot *Chariot;
+
+    // Enum_Dart_FSM_Control_Status Now_Status_Serial;
+
+    // void Init(uint8_t __Status_Number, Enum_Dart_FSM_Control_Status __Now_Status_Serial)
 
     void Reload_TIM_Status_PeriodElapsedCallback();
 };
@@ -86,11 +108,8 @@ public:
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
 
-        void Init(float __DR16_Dead_Zone = 0);
 
-        inline void DR16_Offline_Cnt_Plus();
-        inline uint16_t Get_DR16_Offline_Cnt();
-        inline void Clear_DR16_Offline_Cnt();
+        void Init(float __DR16_Dead_Zone = 0);
         
         void TIM_Control_Callback();
 
@@ -104,39 +123,9 @@ protected:
 
         //遥控器拨动的死区, 0~1
         float DR16_Dead_Zone;
-        //常量
-        //键鼠模式按住shift 最大速度缩放系数
-        float DR16_Mouse_Chassis_Shift = 2.0f;
-        //舵机占空比 默认关闭弹舱
-        uint16_t Compare =400;
-        //DR16底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-        float DR16_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
-        //DR16底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-        float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
-
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
-        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
-
-        //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float DR16_Yaw_Resolution = 0.003f * PI;
-        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Resolution = 0.003f * PI;
-
-        //DR16鼠标云台yaw灵敏度系数, 不同鼠标不同参数
-        float DR16_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
-        //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
-        float DR16_Mouse_Pitch_Angle_Resolution = 57.8f;
-        
-        //迷你主机云台pitch自瞄控制系数
-        float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
-        //迷你主机云台pitch自瞄控制系数
-        float MiniPC_Autoaiming_Pitch_Angle_Resolution = 0.003f;
-
         //内部变量
-        //遥控器离线计数
-        uint16_t DR16_Offline_Cnt = 0;
         //拨盘发射标志位
         uint16_t Shoot_Cnt = 0;
         //读变量
@@ -148,33 +137,6 @@ protected:
 /* Exported variables --------------------------------------------------------*/
 
 /* Exported function declarations --------------------------------------------*/
-    /**
-     * @brief DR16离线计数加一
-     */
-    void Class_Chariot::DR16_Offline_Cnt_Plus()
-    {
-        DR16_Offline_Cnt++;
-    }
-
-    /**
-     * @brief 获取DR16离线计数
-     * 
-     * @return uint16_t DR16离线计数
-     */
-    uint16_t Class_Chariot::Get_DR16_Offline_Cnt()
-    {
-        return (DR16_Offline_Cnt);
-    }
-
-    /**
-     * @brief DR16离线计数置0
-     * 
-     */
-    void Class_Chariot::Clear_DR16_Offline_Cnt()
-    {
-        DR16_Offline_Cnt = 0;
-
-    }
 
 #endif
 
