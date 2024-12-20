@@ -6,11 +6,11 @@
         {
             "name": "ST-Link",
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
+            "executable": "${workspaceRoot}\\${config:target_name}\\${config:target_name}.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
             "request": "launch",
             "type": "cortex-debug",
-            "device": "STM32F407IG",
-            "svdFile": "STM32F407.svd",
+            "device": "${config:device_name}",
+            "svdFile": "${config:svd_file}",
             "servertype": "openocd",
             "configFiles": [
                 "openocd_stlink.cfg", // 配置文件已经在根目录提供,若要修改以此类推,openocd的路径下的share/scripts中有各种写好的配置文件
@@ -29,15 +29,15 @@
         {
             "name": "DAPlink",
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
+            "executable": "${workspaceRoot}\\${config:target_name}\\${config:target_name}.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
             "request": "launch",
             "type": "cortex-debug",
             //使用J-link GDB Server时必须;其他GBD Server时可选（有可能帮助自动选择SVD文件）
             //支持的设备见 https://www.segger.com/downloads/supported-devices.php
-            "device": "STM32F407IG",
+            "device": "${config:device_name}",
             //svd文件，有这个文件才能查看寄存器的值，每个单片机都不同。可以在以下地址找到 https://github.com/posborne/cmsis-svd
             //该项目的根目录已经提供了C型开发板使用的外设svd文件
-            "svdFile": "STM32F407.svd",
+            "svdFile": "${config:svd_file}",
             "servertype": "openocd", //使用的GDB Server
             "configFiles": [
                 "openocd_dap.cfg", // 配置文件已经在根目录提供,若要修改以此类推,openocd的路径下的share/scripts中有各种写好的配置文件
@@ -56,15 +56,15 @@
         {
             "name": "Jlink",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf",
+            "executable": "${workspaceRoot}\\${config:target_name}\\${config:target_name}.elf",
             "request": "launch",
             "type": "cortex-debug",
-            "device": "STM32F407IG",
+            "device": "${config:device_name}",
             "runToEntryPoint": "main",
             "showDevDebugOutput": "none",
             "servertype": "jlink",
             "interface": "swd",
-            "svdFile": "STM32F407.svd",
+            "svdFile": "${config:svd_file}",
             "rtos": "FreeRTOS",
             // "preLaunchTask": "build task",//先运行Build任务,取消注释即可使用
             //"preLaunchTask": "log", // 调试时同时开启RTT viewer窗口,若daplink使用jlinkGDBserver启动,需要先开始调试再打开log
@@ -77,11 +77,11 @@
         {
             "name": "DAP-attach",
             "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
+            "executable": "${workspaceRoot}\\${config:target_name}\\${config:target_name}.elf", // 要下载到调试器的文件,花括号中的是vscode两个预定义的参数
             "request": "attach",
             "type": "cortex-debug",
-            "device": "STM32F407IG",
-            "svdFile": "STM32F407.svd",
+            "device": "${config:device_name}",
+            "svdFile": "${config:svd_file}",
             "servertype": "openocd",
             "configFiles": [
                 "openocd_dap.cfg",
@@ -94,14 +94,14 @@
         {
             "name": "Jlink-attach",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf",
+            "executable": "${workspaceRoot}\\${config:target_name}\\${config:target_name}.elf",
             "request": "attach",
             "type": "cortex-debug",
-            "device": "STM32F407IG",
+            "device": "${config:device_name}",
             "showDevDebugOutput": "none",
             "servertype": "jlink",
             "interface": "swd",
-            "svdFile": "STM32F407.svd",
+            "svdFile": "${config:svd_file}",
             "rtos": "FreeRTOS",
             "liveWatch": {
                 "enabled": true,

@@ -1,48 +1,13 @@
-# 输出文件
-infantry/
-# keil debug配置文件
-DebugConfig/
-
-RTE/
-
-* MDK-ARM.code-workspace
-*.eide.usr.ctx.json
-*.clang-format
-
-*.rar
-*.o
-*.d
-*.crf
-*.htm
-*.dep
-*.map
+MDK-ARM/DebugConfig/
+MDK-ARM/RTE/
+MDK-ARM/Sentry/
+MDK-ARM/*.uvguix.*
+/build/
+/.gitignore
+ # 忽略 Keil 工程编译生成的文件
 *.bak
-*.lnp
-*.lst
-*.ini
-*.iex
-*.sct
-*.scvd
-*.dbg*
-
-MDK-ARM/JLinkLog.txt
-*.jdebug
-*.jdebug.*
-
-*.axf
-*.exf
-*.elf
-
-#keil 工程配置文件
-*.uvoptx
-*.uvguix.*
-*.mxproject
-
-
-
-
-
-
-
-
-
+ *.hex
+ *.bin
+ *.out
+ # 忽略 VSCode 配置文件夹
+.vscode/
