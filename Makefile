@@ -246,8 +246,8 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 
 # build the application
 $(BUILD_DIR)/$(TARGET).axf: $(BUILD_DIR)/$(TARGET).elf
-	@echo "Generating $(BUILD_DIR)/$(TARGET).axf from $(BUILD_DIR)/$(TARGET).elf..."
 	cp $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).axf
+	@echo "Generate $(BUILD_DIR)/$(TARGET).axf from $(BUILD_DIR)/$(TARGET).elf Compeleted!"
 
 # add cpp
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(CPP_OBJECTS) Makefile

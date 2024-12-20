@@ -62,7 +62,7 @@ enum Enum_DJI_Motor_Control_Method
     DJI_Motor_Control_Method_OMEGA,
     DJI_Motor_Control_Method_ANGLE,
     DJI_Motor_Control_Method_IMU_OMEGA,
-    DJI_Motor_Control_Method_IMU_ANGLE,
+    DJI_Motor_Control_Method_IMU_ANGLE
 };
 
 /**
@@ -136,6 +136,8 @@ public:
     inline void Set_Target_Torque(float __Target_Torque);
     inline void Set_Out(float __Out);
 
+    inline void Set_Now_Angle(float __Now_Angle);
+
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_PID_PeriodElapsedCallback();
@@ -192,6 +194,16 @@ protected:
     float Target_Omega_Radian = 0.0f;
     //目标的扭矩, 直接采用反馈值
     float Target_Torque = 0.0f;
+
+    //当前的角度, °
+    float Now_Angle = 0.0f;
+    //当前的速度, °/s
+    float Now_Omega_Angle = 0.0f;
+    //当前的角度, rad
+    float Now_Radian = 0.0f;
+    //当前的速度, rad/s
+    float Now_Omega_Radian = 0.0f;
+
     //输出量
     float Out = 0.0f;
 
@@ -282,7 +294,6 @@ protected:
     //写变量
 
     //读写变量
-
     //电机控制方式
     Enum_DJI_Motor_Control_Method DJI_Motor_Control_Method = DJI_Motor_Control_Method_ANGLE;
     //目标的角度, °
@@ -633,6 +644,16 @@ void Class_DJI_Motor_GM6020::Set_Target_Torque(float __Target_Torque)
 void Class_DJI_Motor_GM6020::Set_Out(float __Out)
 {
     Out = __Out;
+}
+
+/**
+ * @brief 设定当前的角度, °
+ *
+ * @param __Now_Angle 当前的角度, °
+ */
+void Class_DJI_Motor_GM6020::Set_Now_Angle(float __Now_Angle)
+{
+    Now_Angle = __Now_Angle;
 }
 
 /**

@@ -92,6 +92,8 @@ uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
             tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[4]);
         }
         break;
+        default:
+            break;
         }
     }
     else if (hcan == &hcan2)
@@ -153,6 +155,8 @@ uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
             tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[4]);
         }
         break;
+        default:
+            break;
         }
     }
     return (tmp_tx_data_ptr);
@@ -293,7 +297,6 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环速度控制
-        Out = Target_Torque / Omega_Max * Output_Max;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
@@ -323,7 +326,7 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_ANGLE):
     {
         PID_Angle.Set_Target(Target_Angle);
-        PID_Angle.Set_Now(Data.Now_Angle);
+        PID_Angle.Set_Now(Now_Angle);
         PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 
         Target_Omega_Angle = PID_Angle.Get_Out();
@@ -480,7 +483,6 @@ void Class_DJI_Motor_C610::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环扭矩控制
-        Out = Target_Torque / Torque_Max * Output_Max;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
@@ -652,7 +654,6 @@ void Class_DJI_Motor_C620::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环扭矩控制
-        Out = Target_Torque / Torque_Max * Output_Max;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):

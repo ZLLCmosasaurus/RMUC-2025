@@ -201,7 +201,7 @@ extern "C" void Control_Task_Callback()
     /****************************** 交互层回调函数 1ms *****************************************/
 
     chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-    chariot.TIM_Calculate_PeriodElapsedCallback();
+    chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
     //统一打包发送
@@ -221,22 +221,22 @@ void Motor_Callback()
     {   
         case (0x201):   
         {
-            chariot.Motor_up.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+            chariot.Motor_Up.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
         case (0x202):  
         {
-            chariot.Motor_down.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+            chariot.Motor_Down.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         } 
         break;
         case (0x203):
         {
-            chariot.Motor_left.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+            chariot.Motor_Left.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
         case (0x204):
         {
-            chariot.Motor_right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+            chariot.Motor_Right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
         default:
