@@ -386,7 +386,7 @@ void TIM5_IRQHandler(void)
 void UART5_IRQHandler(void)
 {
   /* USER CODE BEGIN UART5_IRQn 0 */
-		UART_IDLEHandler();
+//		UART_IDLEHandler();
   /* USER CODE END UART5_IRQn 0 */
   HAL_UART_IRQHandler(&huart5);
   /* USER CODE BEGIN UART5_IRQn 1 */
@@ -496,16 +496,16 @@ void UART_IDLEHandler(void)
 	}
 }
 
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
-{
-	if (huart->Instance == UART5)
-    {
-      if(__HAL_UART_GET_FLAG(huart,UART_FLAG_ORE) != RESET) 
-			{
-        __HAL_UART_CLEAR_OREFLAG(huart);
-				HAL_UART_Receive_DMA(huart, RxBuff, 18);
-			}
-		}
-}
+//void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+//{
+//	if (huart->Instance == UART5)
+//    {
+//      if(__HAL_UART_GET_FLAG(huart,UART_FLAG_ORE) != RESET) 
+//			{
+//        __HAL_UART_CLEAR_OREFLAG(huart);
+//				HAL_UART_Receive_DMA(huart, RxBuff, 18);
+//			}
+//		}
+//}
 
 /* USER CODE END 1 */

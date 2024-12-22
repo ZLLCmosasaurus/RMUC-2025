@@ -213,13 +213,13 @@ public:
     /*后期yaw pitch这两个类要换成其父类，大疆电机类*/
 
     // yaw轴电机
-    Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw_A;
-    Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw_B;
-    Class_Gimbal_Yaw_Motor_GM6020 Motor_Main_Yaw;
+    Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw;
 
     // pitch轴电机
-    Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch_A;
-    Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch_B;
+    Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch;
+
+    // pithc轴电机
+    Class_Gimbal_Pitch_Motor_LK6010 Motor_Pitch_LK6010;
 
     void Init();
 

@@ -173,6 +173,56 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
     Motor_Steer[3].Yaw = car_yaw; //+ DEG_TO_RAD*13;
     Motor_Wheel[3].v = car_V;
 
+    // //线速度解算
+    // float Motor1_Tatget_Vr = Get_Target_Omega()*R_A; 
+    // float Motor2_Tatget_Vr = Get_Target_Omega()*R_B;
+    // float Motor3_Tatget_Vr = Get_Target_Omega()*R_C;
+    // float Motor4_Tatget_Vr = Get_Target_Omega()*R_C;
+    // //底盘坐标系解算
+    // float Vy_A = Get_Target_Velocity_Y() - Motor1_Tatget_Vr * cos(THETA_A);
+	// float Vx_A = Get_Target_Velocity_X() - Motor1_Tatget_Vr * sin(THETA_A);
+
+	// float Vy_B = Get_Target_Velocity_Y() + Motor2_Tatget_Vr * cos(THETA_B);
+	// float Vx_B = Get_Target_Velocity_X() - Motor2_Tatget_Vr * sin(THETA_B);
+
+	// float Vy_C = Get_Target_Velocity_Y() + Motor3_Tatget_Vr * cos(THETA_C);
+	// float Vx_C = Get_Target_Velocity_X() + Motor3_Tatget_Vr * sin(THETA_C);
+
+	// float Vy_D = Get_Target_Velocity_Y() - Motor4_Tatget_Vr * cos(THETA_D);
+	// float Vx_D = Get_Target_Velocity_X() + Motor4_Tatget_Vr * sin(THETA_D);
+    // //方向轮角度结算
+    // float Motor1_ChassisCoordinate_Angle = My_atan(Vy_A, Vx_A) * RAD_TO_8191;
+    // float Motor2_ChassisCoordinate_Angle = My_atan(Vy_B, Vx_B) * RAD_TO_8191;
+    // float Motor3_ChassisCoordinate_Angle = My_atan(Vy_C, Vx_C) * RAD_TO_8191;
+    // float Motor4_ChassisCoordinate_Angle = My_atan(Vy_D, Vx_D) * RAD_TO_8191;
+    // //
+    // float Motor1_linear_vel = sqrt(Square(Vy_A) + Square(Vx_A));
+	// float Motor2_linear_vel = sqrt(Square(Vy_B) + Square(Vx_B));
+	// float Motor3_linear_vel = sqrt(Square(Vy_C) + Square(Vx_C));
+	// float Motor4_linear_vel = sqrt(Square(Vy_D) + Square(Vx_D));
+    // //方向角度解算
+    // float Motor1_Target_Angle = Motor1_ChassisCoordinate_Angle - PI / 2 / (2 * PI) * 8191;//8192制
+	// float Motor2_Target_Angle = Motor2_ChassisCoordinate_Angle - PI / 2 / (2 * PI) * 8191;
+	// float Motor3_Target_Angle = Motor3_ChassisCoordinate_Angle - PI / 2 / (2 * PI) * 8191;
+	// float Motor4_Target_Angle = Motor4_ChassisCoordinate_Angle - PI / 2 / (2 * PI) * 8191;
+    // //限幅
+    // if (Motor1_Target_Angle > 8191)
+	// 	Motor1_Target_Angle -= 8191;
+	// if (Motor1_Target_Angle < 0)
+	// 	Motor1_Target_Angle += 8191;
+	// if (Motor2_Target_Angle > 8191)
+	// 	Motor2_Target_Angle -= 8191;
+	// if (Motor2_Target_Angle < 0)
+	// 	Motor2_Target_Angle += 8191;
+	// if (Motor3_Target_Angle > 8191)
+	// 	Motor3_Target_Angle -= 8191;
+	// if (Motor3_Target_Angle < 0)
+	// 	Motor3_Target_Angle += 8191;
+	// if (Motor4_Target_Angle > 8191)
+	// 	Motor4_Target_Angle -= 8191;
+	// if (Motor4_Target_Angle < 0)
+	// 	Motor4_Target_Angle += 8191;
+
     //运动模式
     switch (Chassis_Control_Type)
     {
@@ -235,7 +285,19 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
                 Motor_Wheel[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
                 Motor_Steer[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_AGV_MODE);
             }
-           
+            // //底盘限速
+            // if (Velocity_X_Max != 0)
+            // {
+            //     Math_Constrain(&Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
+            // }
+            // if (Velocity_Y_Max != 0)
+            // {
+            //     Math_Constrain(&Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
+            // }
+            // if (Omega_Max != 0)
+            // {
+            //     Math_Constrain(&Target_Omega, -Omega_Max, Omega_Max);
+            // }
             
             // Motor_Steer[0].init_Yaw = 0 + -PI/4;
             // Motor_Steer[1].init_Yaw = 0 + PI/4;
@@ -293,7 +355,20 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
                 Motor_Steer[i].Set_Target_Angle(Motor_Steer[i].Yaw*360/2/PI);//电机坐标系逆时针为正 编码器左手坐标系
                 Motor_Wheel[i].Set_Target_Omega_Radian(Motor_Wheel[i].v*10.0f); //rad/s
             }
-            
+            // Motor_Wheel[0].Set_Target_Omega_Radian(- Motor1_linear_vel * VEL2RPM);
+            // Motor_Wheel[1].Set_Target_Omega_Radian(- Motor2_linear_vel * VEL2RPM);
+            // Motor_Wheel[2].Set_Target_Omega_Radian(- Motor3_linear_vel * VEL2RPM);
+            // Motor_Wheel[3].Set_Target_Omega_Radian(- Motor4_linear_vel * VEL2RPM);
+
+            // Motor_Steer[0].Set_Target_Angle(Motor1_Target_Angle / RAD_TO_8191 / PI * 180.0f);//8192转角度制
+            // Motor_Steer[1].Set_Target_Angle(Motor2_Target_Angle / RAD_TO_8191 / PI * 180.0f);
+            // Motor_Steer[2].Set_Target_Angle(Motor3_Target_Angle / RAD_TO_8191 / PI * 180.0f);
+            // Motor_Steer[3].Set_Target_Angle(Motor4_Target_Angle / RAD_TO_8191 / PI * 180.0f);
+            // #ifdef SPEED_SLOPE
+            // //速度换算，正运动学分解
+            // #else
+
+
             //各个电机具体PID
             for (int i = 0; i < 4; i++){
                 Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
