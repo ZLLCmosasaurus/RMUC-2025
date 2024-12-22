@@ -251,7 +251,8 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
  */
 uint8_t can_tx_status[10];
 void TIM_CAN_PeriodElapsedCallback()
-{    
+{   
+	#ifdef gimbal_task
 		static uint16_t cnt = 0;
 		cnt++;
 		if(cnt>=2000)
@@ -270,7 +271,10 @@ void TIM_CAN_PeriodElapsedCallback()
 		// if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
 		// CAN_Send_Data(&hcan1, 0x11, CAN1_0xx01_Tx_Data, 8, CAN_ID_STD);
 		// send = 0;
-	
+		#endif
+		#ifdef chassis_task
+		    can_tx_status[3]=CAN_Send_Data(&hcan1,0x200,CAN1_0x200_Tx_Data,8,CAN_ID_STD);
+		#endif
 }
 
 /**

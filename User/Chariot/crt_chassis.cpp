@@ -9,6 +9,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function declarations ---------------------------------------------*/
+//#define SPEED_SLOPE
+//#define Tricycle_Chassis
 #define SPEED_SLOPE
 /* Function prototypes -------------------------------------------------------*/
 
@@ -32,11 +34,11 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 //    //斜坡函数加减速角速度
 //    Slope_Omega.Init(0.02f, 0.025f);
     //斜坡函数加减速速度X  控制周期1ms
-    Slope_Velocity_X.Init(0.006f,0.012f);
+    Slope_Velocity_X.Init(0.003f,0.010f);
     //斜坡函数加减速速度Y  控制周期1ms
-    Slope_Velocity_Y.Init(0.006f,0.012f);
+    Slope_Velocity_Y.Init(0.003f,0.010f);
     //斜坡函数加减速角速度
-    Slope_Omega.Init(0.015f, 0.025f);
+    Slope_Omega.Init(0.010f, 0.025f);
 
     #ifdef POWER_LIMIT
     //超级电容初始化
@@ -47,15 +49,15 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     //电机PID批量初始化
     for (int i = 0; i < 4; i++)
     {
-        Motor_Wheel[i].PID_Omega.Init(800.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
+        Motor_Wheel[i].PID_Omega.Init(1200.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
     }
 
     //轮向电机ID初始化
-    Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x205,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
+    Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x201,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
     Motor_Wheel[1].Init(&hcan1, DJI_Motor_ID_0x202,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
-    Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x206,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
+    Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x203,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
     Motor_Wheel[3].Init(&hcan1, DJI_Motor_ID_0x204,DJI_Motor_Control_Method_OMEGA,3591.0f/187.0f);
-    
+//    
 }
 
 
@@ -103,10 +105,10 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
 
             #ifdef SPEED_SLOPE 
             //速度换算，正运动学分解
-            float motor1_temp_linear_vel = +Slope_Velocity_Y.Get_Out() - Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
-            float motor2_temp_linear_vel = +Slope_Velocity_Y.Get_Out() + Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
-            float motor3_temp_linear_vel = +Slope_Velocity_Y.Get_Out() + Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
-            float motor4_temp_linear_vel = +Slope_Velocity_Y.Get_Out() - Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
+            float motor1_temp_linear_vel = +Slope_Velocity_Y.Get_Out() + Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
+            float motor2_temp_linear_vel = +Slope_Velocity_Y.Get_Out() +Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
+            float motor3_temp_linear_vel = +Slope_Velocity_Y.Get_Out() - Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
+            float motor4_temp_linear_vel = +Slope_Velocity_Y.Get_Out() -Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out()*(HALF_WIDTH+HALF_LENGTH);
             #endif
             //速度换算，正运动学分解
             #ifdef Tricycle_Chassis
@@ -130,6 +132,10 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             Math_Constrain(motor3_temp_rad,-Max_Omega,Max_Omega);
             Math_Constrain(motor4_temp_rad,-Max_Omega,Max_Omega);
              //角速度*减速比  设定目标 直接给到电机输出轴
+						temp_test_1 = motor1_temp_rad;
+						temp_test_2 = motor2_temp_rad;
+						temp_test_3 = motor3_temp_rad;
+						temp_test_4 = motor4_temp_rad;
             Motor_Wheel[0].Set_Target_Omega_Radian(  -motor2_temp_rad);
             Motor_Wheel[1].Set_Target_Omega_Radian(  motor1_temp_rad);
             Motor_Wheel[2].Set_Target_Omega_Radian(  motor3_temp_rad);
@@ -159,6 +165,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Slope_Omega.TIM_Calculate_PeriodElapsedCallback();
 
 #endif
+	
     // 速度解算
     Speed_Resolution();
     // 各个电机具体PID
