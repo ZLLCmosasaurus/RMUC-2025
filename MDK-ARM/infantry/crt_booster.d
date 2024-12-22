@@ -212,4 +212,5 @@ infantry/crt_booster.o: ..\User\Chariot\crt_booster.cpp \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Device\dvc_djimotor.h ..\User\Middleware\Algorithm\alg_pid.h \
   ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
-  ..\Core\Inc\main.h ..\User\Task\config.h
+  ..\Core\Inc\main.h ..\User\Task\config.h \
+  ..\User\Middleware\Algorithm\kalman_filter.h

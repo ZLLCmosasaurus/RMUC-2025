@@ -213,18 +213,19 @@ infantry/ita_chariot.o: ..\User\Interaction\ita_chariot.cpp \
   D:\Keil_v5\ARM\ARMCLANG\include\libcxx\float.h \
   D:\Keil_v5\ARM\ARMCLANG\include\float.h \
   ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
-  ..\Core\Inc\main.h ..\User\Task\config.h ..\User\Device\dvc_witahrs.h \
-  ..\User\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_minipc.h \
+  ..\Core\Inc\main.h ..\User\Task\config.h \
+  ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_witahrs.h ..\User\Middleware\Algorithm\alg_filter.h \
+  ..\User\Device\dvc_lkmotor.h ..\User\Device\dvc_minipc.h \
   ..\User\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
   ..\User\Device\dvc_dwt.h ..\User\Middleware\Driver\drv_dwt.h \
   ..\User\Device\dvc_boardc_bmi088.h ..\User\Middleware\Driver\drv_spi.h \
   ..\Core\Inc\tim.h ..\User\Middleware\Algorithm\QuaternionEKF.h \
-  ..\User\Middleware\Algorithm\kalman_filter.h \
   ..\User\Device\dvc_boardc_ist8310.h \
   ..\User\Middleware\Driver\drv_i2c.h \
   ..\User\Middleware\Algorithm\alg_MahonyAHRS.h \
-  ..\User\Device\dvc_referee.h ..\User\Device\dvc_lkmotor.h \
-  ..\User\Chariot\crt_booster.h ..\User\Middleware\Algorithm\alg_fsm.h \
+  ..\User\Device\dvc_referee.h ..\User\Chariot\crt_booster.h \
+  ..\User\Middleware\Algorithm\alg_fsm.h \
   ..\User\Task\tsk_config_and_callback.h ..\User\Device\dvc_supercap.h \
   ..\User\Chariot\crt_chassis.h ..\User\Middleware\Algorithm\alg_slope.h \
   ..\User\Device\dvc_sampler.h ..\User\Device\dvc_GraphicsSendTask.h

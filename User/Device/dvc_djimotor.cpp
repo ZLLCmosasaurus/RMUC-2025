@@ -184,6 +184,8 @@ void Class_DJI_Motor_GM6020::Init(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __C
 		Gearbox_Rate = __Gearbox_Rate;
     Omega_Max = __Omega_Max;
     CAN_Tx_Data = allocate_tx_data(hcan, __CAN_ID);
+
+    kalman_init(&Kf_Omega,0.0f);
 }
 
 /**
@@ -227,9 +229,10 @@ void Class_DJI_Motor_GM6020::Data_Process()
     Data.Now_Angle = (float)tmp_encoder / (float)Encoder_Num_Per_Round * 360.0f/Gearbox_Rate;
     Data.Now_Radian = (float)tmp_encoder / (float)Encoder_Num_Per_Round * 2.0f * PI/Gearbox_Rate;
     // Data.Now_Omega_Angle = (float)(Data.Total_Encoder - Data.Pre_Total_Encoder)/8191.0f*60.0f*1000.0f;  //rpm
-    Data.Now_Omega_Rpm = tmp_omega;
-    Data.Now_Omega_Radian = (float)tmp_omega * RPM_TO_RADPS/Gearbox_Rate;
-    Data.Now_Omega_Angle = (float)tmp_omega * RPM_TO_DEG/Gearbox_Rate;  
+    kalman_update(&Kf_Omega,(float)tmp_omega);
+    Data.Now_Omega_Rpm = (int16_t)Kf_Omega.x;
+    Data.Now_Omega_Radian = (float)Kf_Omega.x * RPM_TO_RADPS/Gearbox_Rate;
+    Data.Now_Omega_Angle = (float)Kf_Omega.x * RPM_TO_DEG/Gearbox_Rate;  
     Data.Now_Torque = tmp_torque;
     Data.Now_Temperature = tmp_temperature + CELSIUS_TO_KELVIN;
 

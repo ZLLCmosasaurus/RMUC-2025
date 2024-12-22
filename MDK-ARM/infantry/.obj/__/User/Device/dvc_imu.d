@@ -31,12 +31,14 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\User\Device\dvc_dwt.h ..\Middleware\Driver\drv_dwt.h \
-  ..\User\Device\dvc_boardc_bmi088.h ..\Middleware\Driver\drv_spi.h \
-  ..\Core\Inc\tim.h ..\Middleware\Algorithm\QuaternionEKF.h \
-  ..\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_dwt.h ..\User\Middleware\Driver\drv_dwt.h \
+  ..\User\Device\dvc_boardc_bmi088.h ..\User\Middleware\Driver\drv_spi.h \
+  ..\Core\Inc\tim.h ..\User\Middleware\Algorithm\QuaternionEKF.h \
+  ..\User\Middleware\Algorithm\kalman_filter.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h \
-  ..\User\Device\dvc_boardc_ist8310.h ..\Middleware\Driver\drv_i2c.h \
-  ..\Middleware\Algorithm\alg_MahonyAHRS.h \
-  ..\Middleware\Algorithm\alg_pid.h ..\Middleware\Driver\drv_math.h
+  ..\User\Device\dvc_boardc_ist8310.h \
+  ..\User\Middleware\Driver\drv_i2c.h \
+  ..\User\Middleware\Algorithm\alg_MahonyAHRS.h \
+  ..\User\Middleware\Algorithm\alg_pid.h \
+  ..\User\Middleware\Driver\drv_math.h

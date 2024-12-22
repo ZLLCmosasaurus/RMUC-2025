@@ -156,13 +156,13 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 
     // 获取云台坐标系和底盘坐标系的夹角（弧度制）
     //    Chassis_Angle = Motor_Yaw.Get_Now_Radian();
-    Chassis_Angle = Gimbal_To_Chassis_Angle;
+    Chassis_Angle = Gimbal_Follow_Yaw_Angle;
     derta_angle = -(Chassis_Angle - Reference_Angle + Offset_Angle);
 
-    if (derta_angle <= 0.f)
-    {
-        derta_angle += PI * 2.f;
-    }
+    // if (derta_angle <= 0.f)
+    // {
+    //     derta_angle += PI * 2.f;
+    // }
     // 测试：
 
     // 云台坐标系的目标速度转为底盘坐标系的目标速度
@@ -414,14 +414,15 @@ void Class_Chariot::Transform_Mouse_Axis(){
  *
  */
 #ifdef GIMBAL
-float K_Yaw = 0.0f,Zero_Angle = 40.0f;
+#define Remote_K  0.005f * PI * 57.29577951308232
 void Class_Chariot::Control_Gimbal()
 {
     // 角度目标值
     float tmp_gimbal_yaw, tmp_gimbal_pitch;
     // 遥控器摇杆值
     float dr16_y, dr16_r_y;
-
+    static uint8_t Switch_Mode_Flag = 0;
+    static float tmp_yaw_offest = 0.0f;
     /************************************遥控器控制逻辑*********************************************/
     if (Get_DR16_Control_Type() == DR16_Control_Type_REMOTE)
     {
@@ -435,24 +436,30 @@ void Class_Chariot::Control_Gimbal()
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
         
         // yaw赋值逻辑
+        tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
+        tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
+        // 设定当前IMU角度值
+         Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
+
         switch (Gimbal.Get_Launch_Mode()) // 吊射模式
         {
         case Launch_Disable:
         {
-            // 获取当前角度值
-            tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-            tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
-            Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
+            Switch_Mode_Flag = 0;
+            DR16_Yaw_Angle_Resolution = Remote_K * 0.5f;
         }
         break;
         case Launch_Enable:
         {
             // tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Encoder_Angle();
             // tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
-            // Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw);//编码器角度值
-            tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-            tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution * 0.25f;
-            Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
+            if(!Switch_Mode_Flag)
+            {
+                Switch_Mode_Flag = 1;
+                tmp_yaw_offest = Gimbal.Motor_Yaw.Get_True_Angle_Yaw_From_Encoder()-Gimbal.Motor_Yaw.Get_True_Angle_Yaw();
+                DR16_Yaw_Angle_Resolution = Remote_K * 0.3f;
+            }
+            Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw+tmp_yaw_offest);//编码器角度值
         }
         break;
         default:

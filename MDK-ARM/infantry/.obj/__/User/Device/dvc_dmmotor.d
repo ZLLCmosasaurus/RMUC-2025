@@ -1,10 +1,10 @@
 ./infantry/.obj/__/User/Device/dvc_dmmotor.o: \
   ..\User\Device\dvc_dmmotor.cpp ..\User\Device\dvc_dmmotor.h \
-  ..\Middleware\Driver\drv_math.h \
+  ..\User\Middleware\Driver\drv_math.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h \
   ..\Drivers\CMSIS\Include\cmsis_armclang.h \
-  ..\Middleware\Driver\drv_can.h \
+  ..\User\Middleware\Driver\drv_can.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \

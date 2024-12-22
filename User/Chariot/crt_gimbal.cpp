@@ -24,7 +24,7 @@
 /* Function prototypes -------------------------------------------------------*/
 
 float Test_Pitch,Target_Pitch;
-float Yaw_IMU_Angle;
+float Yaw_IMU_Angle,Pitch_IMU_Angle;
 float Tmp_Target_Yaw_omega = 0.0f;
 float Tmp_Ture_Yaw_omega = 0.0f;
 float Test_Output_Yaw = 0.0f;
@@ -104,10 +104,6 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         }
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
         Test_Output_Yaw = PID_Omega.Get_Out();//jscope曲线观测
-        //Target_Torque = PID_Omega.Get_Out();
-        // PID_Torque.Set_Target(Target_Torque);
-        // PID_Torque.Set_Now(Data.Now_Torque);
-        // PID_Torque.TIM_Adjust_PeriodElapsedCallback();
         
         Set_Out(PID_Omega.Get_Out());
     }
@@ -117,13 +113,15 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Yaw_Encoder_Angle.Set_Target(Target_Angle);
         PID_Yaw_Encoder_Angle.Set_Now(Get_True_Angle_Yaw_From_Encoder());
         PID_Yaw_Encoder_Angle.TIM_Adjust_PeriodElapsedCallback();
-
         Target_Omega_Angle = PID_Yaw_Encoder_Angle.Get_Out();
 
         PID_Yaw_Encoder_Omega.Set_Target(Target_Omega_Angle);
         PID_Yaw_Encoder_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Yaw_Encoder_Omega.TIM_Adjust_PeriodElapsedCallback();
         Out = PID_Yaw_Encoder_Omega.Get_Out();
+
+        Tmp_Target_Yaw_omega = Target_Omega_Angle;//jscope曲线观测
+        Tmp_Ture_Yaw_omega = Data.Now_Omega_Angle;//jscope曲线观测
     }
     break;
     default:
@@ -447,6 +445,7 @@ void Class_Gimbal_Pitch_Motor_M2006::Transform_Angle()
 
     Target_Pitch = Target_Angle;
     Test_Pitch = True_Angle_Pitch;
+		Pitch_IMU_Angle = True_Angle_Pitch;
 }
 
 #define YAW_IMU
@@ -465,8 +464,8 @@ void Class_Gimbal::Init()
     Motor_Yaw.PID_Omega.Init(300.0f, 0.3f, 0.01f, 0.001f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //编码器PID初始化
-    Motor_Yaw.PID_Yaw_Encoder_Angle.Init(100.0f, 10.0f, 0.05f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
-    Motor_Yaw.PID_Yaw_Encoder_Omega.Init(50.0f, 0.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    Motor_Yaw.PID_Yaw_Encoder_Angle.Init(90.0f, 0.1f, 0.3f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f,0.005f);
+    Motor_Yaw.PID_Yaw_Encoder_Omega.Init(85.0f, 0.1f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Yaw.IMU = &Boardc_BMI;
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205,  DJI_Motor_Control_Method_IMU_ANGLE, 2);
 
@@ -538,12 +537,12 @@ void Class_Gimbal::Output()
         break;
         case Launch_Enable:
         {
-            // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-            // Tmp_Target_Yaw_Angle = Target_Yaw_Encoder_Angle;
-            // Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw_From_Encoder();//编码器获取的真实角度
-            Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-            Tmp_Target_Yaw_Angle = Target_Yaw_Angle;
-            Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw();//IMU获取的真实角度
+            Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+            Tmp_Target_Yaw_Angle = Target_Yaw_Encoder_Angle;
+            Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw_From_Encoder();//编码器获取的真实角度
+            // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
+            // Tmp_Target_Yaw_Angle = Target_Yaw_Angle;
+            // Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw();//IMU获取的真实角度
         }
             break;
         }

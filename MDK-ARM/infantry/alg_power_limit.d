@@ -212,4 +212,4 @@ infantry/alg_power_limit.o: \
   ..\User\Middleware\Algorithm\alg_pid.h \
   ..\User\Middleware\Driver\drv_math.h \
   ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
-  ..\User\Task\config.h
+  ..\User\Middleware\Algorithm\kalman_filter.h ..\User\Task\config.h

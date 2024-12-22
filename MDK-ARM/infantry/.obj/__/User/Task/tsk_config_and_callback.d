@@ -40,25 +40,27 @@
   ..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc\usbd_ctlreq.h \
   ..\USB_DEVICE\App\usbd_cdc_if.h ..\User\Task\config.h \
   ..\User\Device\dvc_GraphicsSendTask.h ..\User\Chariot\crt_chassis.h \
-  ..\Middleware\Algorithm\alg_slope.h ..\Middleware\Driver\drv_math.h \
+  ..\User\Middleware\Algorithm\alg_slope.h \
+  ..\User\Middleware\Driver\drv_math.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h ..\User\Device\dvc_sampler.h \
-  ..\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_referee.h \
-  ..\Middleware\Driver\drv_uart.h ..\User\Device\dvc_djimotor.h \
-  ..\Middleware\Algorithm\alg_pid.h ..\Middleware\Driver\drv_can.h \
-  ..\User\Device\alg_power_limit.h \
-  ..\Middleware\Algorithm\alg_power_limit.h \
-  ..\User\Device\dvc_supercap.h ..\Middleware\Algorithm\alg_fsm.h \
-  ..\Middleware\Driver\drv_tim.h ..\User\Device\dvc_boardc_bmi088.h \
-  ..\Middleware\Driver\drv_spi.h ..\Core\Inc\tim.h \
-  ..\Middleware\Algorithm\QuaternionEKF.h \
-  ..\Middleware\Algorithm\kalman_filter.h ..\User\Device\dvc_dmmotor.h \
-  ..\User\Device\dvc_serialplot.h ..\User\Interaction\ita_chariot.h \
-  ..\User\Device\dvc_dr16.h ..\User\Chariot\crt_gimbal.h \
-  ..\User\Device\dvc_witahrs.h ..\User\Device\dvc_minipc.h \
-  ..\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
-  ..\User\Device\dvc_dwt.h ..\Middleware\Driver\drv_dwt.h \
-  ..\User\Device\dvc_boardc_ist8310.h ..\Middleware\Driver\drv_i2c.h \
-  ..\Middleware\Algorithm\alg_MahonyAHRS.h ..\User\Device\dvc_lkmotor.h \
+  ..\User\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_referee.h \
+  ..\User\Middleware\Driver\drv_uart.h ..\User\Device\dvc_djimotor.h \
+  ..\User\Middleware\Algorithm\alg_pid.h \
+  ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
+  ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_supercap.h ..\User\Middleware\Algorithm\alg_fsm.h \
+  ..\User\Middleware\Driver\drv_tim.h ..\User\Device\dvc_boardc_bmi088.h \
+  ..\User\Middleware\Driver\drv_spi.h ..\Core\Inc\tim.h \
+  ..\User\Middleware\Algorithm\QuaternionEKF.h \
+  ..\User\Device\dvc_dmmotor.h ..\User\Device\dvc_serialplot.h \
+  ..\User\Interaction\ita_chariot.h ..\User\Device\dvc_dr16.h \
+  ..\User\Chariot\crt_gimbal.h ..\User\Device\dvc_witahrs.h \
+  ..\User\Device\dvc_lkmotor.h ..\User\Device\dvc_minipc.h \
+  ..\User\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
+  ..\User\Device\dvc_dwt.h ..\User\Middleware\Driver\drv_dwt.h \
+  ..\User\Device\dvc_boardc_ist8310.h \
+  ..\User\Middleware\Driver\drv_i2c.h \
+  ..\User\Middleware\Algorithm\alg_MahonyAHRS.h \
   ..\User\Chariot\crt_booster.h ..\User\Device\CharSendTask.h \
   ..\User\Device\GraphicsSendTask.h ..\User\Device\dvc_buzzer.h

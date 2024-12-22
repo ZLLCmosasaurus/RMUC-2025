@@ -1,10 +1,10 @@
 ./infantry/.obj/__/User/Device/dvc_manifold.o: \
   ..\User\Device\dvc_manifold.cpp ..\User\Device\dvc_manifold.h \
-  ..\Middleware\Driver\drv_math.h \
+  ..\User\Middleware\Driver\drv_math.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h \
   ..\Drivers\CMSIS\Include\cmsis_armclang.h \
-  ..\Middleware\Driver\drv_uart.h \
+  ..\User\Middleware\Driver\drv_uart.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
