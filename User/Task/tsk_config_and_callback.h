@@ -37,7 +37,6 @@
 
 /* Exported variables --------------------------------------------------------*/
 
-extern uint16_t pwmVal;
 /* Exported function declarations --------------------------------------------*/
 
 

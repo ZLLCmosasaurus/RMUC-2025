@@ -61,6 +61,66 @@ extern osThreadId refree_callback_taskHandle;
 /* Function prototypes -------------------------------------------------------*/
 
 /**
+ * @brief CAN2回调函数
+ *
+ * @param CAN_RxMessage CAN2收到的消息
+ */
+void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
+{
+    switch (CAN_RxMessage->Header.StdId)
+    {
+    case (0x88):   
+    {
+        
+    }
+    break;
+	}
+}
+
+
+void Device_UART6_Callback(uint8_t *Buffer, uint16_t Length)
+{
+
+}
+
+/**
+ * @brief IIC磁力计回调函数
+ *
+ * @param Buffer IIC收到的消息
+ * @param Length 长度
+ */
+void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_Length, uint16_t Rx_Length)
+{
+    
+}
+
+/**
+ * @brief SPI1回调函数
+ *
+ * @param Tx_Buffer SPI1发送的消息
+ * @param Rx_Buffer SPI1接收的消息
+ * @param Length 长度
+ */
+void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Length)
+{
+
+}
+
+
+/**
+ * @brief USB MiniPC回调函数
+ *
+ * @param Buffer USB收到的消息
+ *
+ * @param Length 长度
+ */
+
+void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
+{
+    //chariot.MiniPC.USB_RxCpltCallback(Buffer);
+}
+
+/**
  * @brief CAN1回调函数
  *
  * @param CAN_RxMessage CAN1收到的消息
@@ -84,42 +144,6 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         }
         break;
 	}
-}
-
-/**
- * @brief CAN2回调函数
- *
- * @param CAN_RxMessage CAN2收到的消息
- */
-void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
-{
-    switch (CAN_RxMessage->Header.StdId)
-    {
-    case (0x88):   
-    {
-        
-    }
-    break;
-	}
-}
-
-
-void Device_UART1_Callback(uint8_t *Buffer, uint16_t Length)
-{
-
-}
-
-
-/**
- * @brief SPI1回调函数
- *
- * @param Tx_Buffer SPI1发送的消息
- * @param Rx_Buffer SPI1接收的消息
- * @param Length 长度
- */
-void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Length)
-{
-
 }
 
 // 外部中断回调函数
@@ -149,14 +173,14 @@ void DR16_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 }
 
 /**
- * @brief IIC磁力计回调函数
+ * @brief UART7调试控制回调函数
  *
- * @param Buffer IIC收到的消息
+ * @param Buffer UART7收到的消息
  * @param Length 长度
  */
-void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_Length, uint16_t Rx_Length)
+void DebugControl_UART7_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    
+    chariot.DebugControl.DebugControl_Rx_Callback(Buffer, Length);
 }
 
 /**
@@ -172,20 +196,6 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
     if(xHigherPriorityTaskWoken == pdTRUE){
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
-}
-
-
-/**
- * @brief USB MiniPC回调函数
- *
- * @param Buffer USB收到的消息
- *
- * @param Length 长度
- */
-
-void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
-{
-    //chariot.MiniPC.USB_RxCpltCallback(Buffer);
 }
 
 /**

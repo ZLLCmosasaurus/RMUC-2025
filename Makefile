@@ -89,7 +89,8 @@ User/Device/dvc_dwt.cpp \
 User/Device/dvc_minipc.cpp \
 User/Device/dvc_referee.cpp \
 User/Device/dvc_TensionMeter.cpp  \
-User\Device\dvc_servo.cpp \
+User/Device/dvc_servo.cpp \
+User/Device/dvc_DebugControl.cpp \
 User/Middleware/Algorithm/alg_fsm.cpp \
 User/Middleware/Algorithm/alg_pid.cpp \
 User/Middleware/Driver/drv_can.cpp \
@@ -247,12 +248,13 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 # build the application
 $(BUILD_DIR)/$(TARGET).axf: $(BUILD_DIR)/$(TARGET).elf
 	cp $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).axf
-	@echo "Generate $(BUILD_DIR)/$(TARGET).axf from $(BUILD_DIR)/$(TARGET).elf Compeleted!"
+# @echo "Generate $(BUILD_DIR)/$(TARGET).axf from $(BUILD_DIR)/$(TARGET).elf Compeleted!"
 
 # add cpp
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) $(CPP_OBJECTS) Makefile
 	$(CXX) $(OBJECTS) $(CPP_OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
+	@echo "Generate $(BUILD_DIR)/$(TARGET).elf Compeleted!"
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
@@ -268,7 +270,9 @@ $(BUILD_DIR):
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
+.PHONY: clean  
+
 #######################################
 # dependencies
 #######################################

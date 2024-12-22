@@ -21,6 +21,7 @@
 #include "dvc_minipc.h"
 #include "dvc_TensionMeter.h"
 #include "dvc_servo.h"
+#include "dvc_DebugControl.h"
 #include "tsk_config_and_callback.h"
 
 /* Exported macros -----------------------------------------------------------*/
@@ -96,6 +97,9 @@ public:
         
         //遥控器
         Class_DR16 DR16;
+
+        //调试控制
+        Class_DebugControl DebugControl;
 
         //上位机
         //Class_MiniPC MiniPC;

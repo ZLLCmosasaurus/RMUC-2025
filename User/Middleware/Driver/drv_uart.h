@@ -55,9 +55,9 @@ struct Struct_UART_Manage_Object
 
 extern UART_HandleTypeDef huart1;
 //extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
+// extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
-//extern UART_HandleTypeDef huart7;
+extern UART_HandleTypeDef huart7;
 
 extern struct Struct_UART_Manage_Object UART1_Manage_Object;
 extern struct Struct_UART_Manage_Object UART2_Manage_Object;

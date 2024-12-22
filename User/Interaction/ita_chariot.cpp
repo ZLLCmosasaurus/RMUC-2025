@@ -74,6 +74,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
     //裁判系统
     Referee.Init(&huart6,0xA5);
+
+    //调试控制
+    DebugControl.Init(&huart7);
             
     //上位机
     // MiniPC.Init(&MiniPC_USB_Manage_Object);
