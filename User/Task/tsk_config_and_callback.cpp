@@ -515,6 +515,7 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
 
 float Motor_Target_Speed;
 uint8_t mod50_cnt = 0;
+//循环任务
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
