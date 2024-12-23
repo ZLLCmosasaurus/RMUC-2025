@@ -200,31 +200,46 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.Identifier)
     {
-    case (0x203):
-    {
-        chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x201):
-    {
-        chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x202):
-    {
-        chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x205):
-    {
-        chariot.Gimbal.Motor_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x141):
-    {
-        chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
+        // case (0x203):
+        // {
+        //     chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        // }
+        // break;
+        // case (0x201):
+        // {
+        //     chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        // }
+        // break;
+        // case (0x202):
+        // {
+        //     chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        // }
+        // break;
+        case (0x205):
+        {
+            chariot.Gimbal.Motor_Pitch_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x206):
+        {
+            chariot.Gimbal.Motor_Pitch_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x207):
+        {
+            chariot.Gimbal.Motor_Yaw_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x208):
+        {
+            chariot.Gimbal.Motor_Yaw_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x141):
+        {
+            
+        }
+        break;
     }
 		
 }
@@ -239,31 +254,30 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.Identifier)
     {
-    case (0x88):   //留给下板通讯
-    {
-        chariot.CAN_Gimbal_Rx_Chassis_Callback();
-    }
-    break;
-    case (0x208):   //保留can2对6020编码器的接口
-    {
-        chariot.Gimbal.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x204):
-    {
-        
-    }
-    break;
-    case (0x205):
-    {
-       
-    }
-    break;
-    case (0x206):
-    {
-        
-    }
-    break;
+        case (0x88):   //留给下板通讯
+        {
+            chariot.CAN_Gimbal_Rx_Chassis_Callback();
+        }
+        break;
+        case (0x201):
+        {
+            chariot.Booster_A.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x202):
+        {
+            chariot.Booster_A.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x203):
+        {
+            chariot.Booster_B.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x204):
+        {
+            chariot.Booster_B.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
 	}
 }
 #endif
@@ -419,10 +433,6 @@ void Task1ms_TIM5_Callback()
         #ifdef GIMBAL
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
         #endif
-        // chariot.Chassis.Motor_Steer[0].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        // // chariot.Chassis.Motor_Steer[0].Set_Target_Angle();//电机坐标系逆时针为正 编码器左手坐标系
-        // chariot.Chassis.Motor_Steer[0].Set_Target_Omega_Angle(test_omega_angle);
-        // chariot.Chassis.Motor_Steer[0].TIM_PID_PeriodElapsedCallback();
 
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
@@ -462,7 +472,7 @@ extern "C" void Task_Init()
         //裁判系统
         //UART_Init(&huart7, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
         //遥控器
-        UART_Init(&huart5, DR16_UART5_Callback, 36);
+        UART_Init(&huart5, DR16_UART5_Callback, 18);
 
         #ifdef POWER_LIMIT
         //旧版超电

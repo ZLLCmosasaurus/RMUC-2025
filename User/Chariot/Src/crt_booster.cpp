@@ -161,7 +161,7 @@ void Class_FSM_Antijamming::Reload_TIM_Status_PeriodElapsedCallback()
  * @brief 发射机构初始化
  *
  */
-void Class_Booster::Init()
+void Class_Booster::Init(Enum_Booster_Type __Booster_Type)
 {
     //正常状态, 发射嫌疑状态, 发射完成状态, 停机状态
     FSM_Heat_Detect.Booster = this;
@@ -170,19 +170,26 @@ void Class_Booster::Init()
     //正常状态, 卡弹嫌疑状态, 卡弹反应状态, 卡弹处理状态
     FSM_Antijamming.Booster = this;
     FSM_Antijamming.Init(4, 0);
+    switch(__Booster_Type){
+        case(Booster_Type_A):{
+            //拨弹盘电机
+            Motor_Driver.PID_Angle.Init(20.0f, 0.1f, 0.0f, 0.0f, 5.0f * PI, 5.0f * PI);
+            Motor_Driver.PID_Omega.Init(3000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
+            Motor_Driver.Init(&hfdcan1, DJI_Motor_ID_0x203, DJI_Motor_Control_Method_OMEGA);
 
-    //拨弹盘电机
-    Motor_Driver.PID_Angle.Init(20.0f, 0.1f, 0.0f, 0.0f, 5.0f * PI, 5.0f * PI);
-    Motor_Driver.PID_Omega.Init(3000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
-    Motor_Driver.Init(&hfdcan1, DJI_Motor_ID_0x203, DJI_Motor_Control_Method_OMEGA);
+            //摩擦轮电机左
+            Motor_Friction_Left.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Left.Get_Output_Max());
+            Motor_Friction_Left.Init(&hfdcan1, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 1.0f);
 
-    //摩擦轮电机左
-    Motor_Friction_Left.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Left.Get_Output_Max());
-    Motor_Friction_Left.Init(&hfdcan1, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 1.0f);
-
-    //摩擦轮电机右
-    Motor_Friction_Right.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Right.Get_Output_Max());
-    Motor_Friction_Right.Init(&hfdcan1, DJI_Motor_ID_0x202, DJI_Motor_Control_Method_OMEGA, 1.0f);
+            //摩擦轮电机右
+            Motor_Friction_Right.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Right.Get_Output_Max());
+            Motor_Friction_Right.Init(&hfdcan1, DJI_Motor_ID_0x202, DJI_Motor_Control_Method_OMEGA, 1.0f);
+        }
+        break;
+        case(Booster_Type_B):{
+            //拨弹盘电机
+        }    
+    }
 }
 
 /**

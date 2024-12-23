@@ -52,6 +52,15 @@ enum Enum_Friction_Control_Type
     Friction_Control_Type_ENABLE,
 };
 
+/**
+ * @brief 
+ *
+ */
+enum Enum_Booster_Type
+{
+    Booster_Type_A = 0,
+    Booster_Type_B,
+};  
 
 /**
  * @brief Specialized, 热量检测有限自动机
@@ -105,19 +114,22 @@ public:
     //摩擦轮电机右
     Class_DJI_Motor_C620 Motor_Friction_Right;
 
-    void Init();
+    void Init(Enum_Booster_Type __Booster_Type);
 
     inline float Get_Default_Driver_Omega();
     inline float Get_Friction_Omega();
     inline float Get_Friction_Omega_Threshold();
+    
 
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
     inline Enum_Friction_Control_Type Get_Friction_Control_Type();
+    inline Enum_Booster_Type Get_Booster_Type();
 
     inline void Set_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
     inline void Set_Friction_Control_Type(Enum_Friction_Control_Type __Friction_Control_Type);
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
+    inline void Set_Booster_Type(Enum_Booster_Type __Booster_Type);
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
@@ -146,6 +158,7 @@ protected:
     //发射机构状态
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
+    Enum_Booster_Type Booster_Type ;
     //摩擦轮角速度
     float Friction_Omega = 800.0f;
 		
@@ -164,6 +177,10 @@ protected:
 
 /* Exported function declarations --------------------------------------------*/
 
+Enum_Booster_Type Class_Booster::Get_Booster_Type()
+{
+    return (Booster_Type);
+}
 /**
  * @brief 获取拨弹盘默认速度, 一圈八发子弹, 此速度下与冷却均衡
  *
@@ -214,6 +231,11 @@ void Class_Booster::Set_Friction_Control_Type(Enum_Friction_Control_Type __Frict
     Friction_Control_Type = __Friction_Control_Type;
 }
 
+
+void Class_Booster::Set_Booster_Type(Enum_Booster_Type __Booster_Type)
+{
+    Booster_Type = __Booster_Type;
+}
 /**
  * @brief 获得发射机构状态
  *

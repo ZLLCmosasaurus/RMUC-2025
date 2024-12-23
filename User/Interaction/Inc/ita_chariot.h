@@ -128,7 +128,7 @@ public:
         //底盘
         Class_Tricycle_Chassis Chassis;
 
-        Class_DR16 DR16;
+        
     #ifdef GIMBAL
         //遥控器
         Class_DR16 DR16;
@@ -137,7 +137,8 @@ public:
         //云台
         Class_Gimbal Gimbal;
         //发射机构
-        Class_Booster Booster;
+        Class_Booster Booster_A;
+        Class_Booster Booster_B;
 
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;

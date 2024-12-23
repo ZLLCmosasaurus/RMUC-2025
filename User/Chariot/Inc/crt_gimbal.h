@@ -213,22 +213,24 @@ public:
     /*后期yaw pitch这两个类要换成其父类，大疆电机类*/
 
     // yaw轴电机
-    Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw;
+    Class_DJI_Motor_GM6020 Motor_Yaw_A;
+    Class_DJI_Motor_GM6020 Motor_Yaw_B;
+    Class_LK_Motor Motor_Main_Yaw;
 
     // pitch轴电机
-    Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch;
-
-    // pithc轴电机
-    Class_Gimbal_Pitch_Motor_LK6010 Motor_Pitch_LK6010;
+    Class_DJI_Motor_GM6020 Motor_Pitch_A;
+    Class_DJI_Motor_GM6020 Motor_Pitch_B;
 
     void Init();
 
     inline float Get_Target_Yaw_Angle();
+    inline float Get_Target_Yaw_Angle_A();
     inline float Get_Target_Pitch_Angle();
     inline Enum_Gimbal_Control_Type Get_Gimbal_Control_Type();
 
     inline void Set_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
     inline void Set_Target_Yaw_Angle(float __Target_Yaw_Angle);
+    inline void Set_Target_Yaw_Angle_A(float __Target_Yaw_Angle_A);
     inline void Set_Target_Pitch_Angle(float __Target_Pitch_Angle);
 
     void TIM_Calculate_PeriodElapsedCallback();
@@ -264,6 +266,8 @@ protected:
 
     // yaw轴角度
     float Target_Yaw_Angle = 0.0f;
+    float Target_Yaw_Angle_A = 0.0f;
+    float Target_Yaw_Angle_B = 0.0f;
     // pitch轴角度
     float Target_Pitch_Angle = 0.0f;
 
@@ -277,6 +281,16 @@ protected:
 /* Exported function declarations --------------------------------------------*/
 
 
+
+/**
+ * @brief 获取yaw轴角度
+ *
+ * @return float yaw轴角度
+ */
+float Class_Gimbal::Get_Target_Yaw_Angle_A()
+{
+    return (Target_Yaw_Angle_A);
+}
 
 /**
  * @brief 获取yaw轴角度
@@ -316,6 +330,15 @@ Enum_Gimbal_Control_Type Class_Gimbal::Get_Gimbal_Control_Type()
 void Class_Gimbal::Set_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type)
 {
     Gimbal_Control_Type = __Gimbal_Control_Type;
+}
+
+/**
+ * @brief 设定yaw轴角度
+ *
+ */
+void Class_Gimbal::Set_Target_Yaw_Angle_A(float __Target_Yaw_Angle_A)
+{
+    Target_Yaw_Angle_A = __Target_Yaw_Angle_A;
 }
 
 /**

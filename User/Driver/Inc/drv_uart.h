@@ -31,7 +31,7 @@ extern "C" {
 /* Exported macros -----------------------------------------------------------*/
 
 // 缓冲区字节长度
-#define UART_BUFFER_SIZE 256
+#define UART_BUFFER_SIZE 128
 
 /* Exported types ------------------------------------------------------------*/
 

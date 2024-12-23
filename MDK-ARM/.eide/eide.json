@@ -371,7 +371,7 @@
         "name": "::CMSIS",
         "files": [
           {
-            "path": ".cmsis/libdsp/arm/arm_cortexM7l_math.lib"
+            "path": "../Src/arm_cortexM7l_math.lib"
           }
         ],
         "folders": []
@@ -432,7 +432,7 @@
                 "startAddr": "0x20000000",
                 "size": "0x20000"
               },
-              "isChecked": false,
+              "isChecked": true,
               "noInit": false
             },
             {
@@ -533,12 +533,11 @@
           "../User/Device/Inc",
           "../User/Driver/Inc",
           "../User/Algorithm/Inc",
-          "../Drivers/CMSIS/Include",
           "RTE/_Sentry",
-          ".cmsis/include",
-          ".cmsis/libdsp/arm",
           ".cmsis/driver/VIO/Include",
-          "../Middlewares/ST/ARM/DSP/Inc"
+          ".cmsis/include",
+          "../DSP/Include",
+          ".cmsis/libdsp/arm"
         ],
         "libList": [
           ".cmsis/libdsp",
