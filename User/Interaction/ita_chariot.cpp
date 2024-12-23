@@ -30,7 +30,7 @@
 void Class_Chariot::Init(float __DR16_Dead_Zone)
 { 
     //yaw电机canid初始化
-    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x201);
+    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
     //拉力电机canid初始化
     Motor_Down.Init(&hcan1, DJI_Motor_ID_0x201);
     Motor_Up.Init(&hcan1, DJI_Motor_ID_0x202);

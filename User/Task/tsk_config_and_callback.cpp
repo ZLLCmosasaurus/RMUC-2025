@@ -60,23 +60,6 @@ extern osThreadId refree_callback_taskHandle;
 
 /* Function prototypes -------------------------------------------------------*/
 
-/**
- * @brief CAN2回调函数
- *
- * @param CAN_RxMessage CAN2收到的消息
- */
-void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
-{
-    switch (CAN_RxMessage->Header.StdId)
-    {
-    case (0x88):   
-    {
-        
-    }
-    break;
-	}
-}
-
 
 void Device_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
@@ -135,6 +118,28 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         case (0x204):
         {
             // 接收 0x201-4 ID的电机
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+            vTaskNotifyGiveFromISR(motor_callback_taskHandle,&xHigherPriorityTaskWoken); // 唤醒任务
+            // 如果can解包优先级大于当前任务的优先级, 则需要通知内核修改isr返回地址和sp为内核，以便于isr结束cpu由内核接管，用于调度下一个任务
+            if(xHigherPriorityTaskWoken == pdTRUE){
+                portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+            }
+        }
+        break;
+	}
+}
+
+/**
+ * @brief CAN2回调函数
+ *
+ * @param CAN_RxMessage CAN2收到的消息
+ */
+void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
+{
+    switch (CAN_RxMessage->Header.StdId)
+    {
+        case (0x205):   
+        {
             BaseType_t xHigherPriorityTaskWoken = pdFALSE;
             vTaskNotifyGiveFromISR(motor_callback_taskHandle,&xHigherPriorityTaskWoken); // 唤醒任务
             // 如果can解包优先级大于当前任务的优先级, 则需要通知内核修改isr返回地址和sp为内核，以便于isr结束cpu由内核接管，用于调度下一个任务
@@ -266,6 +271,11 @@ void Motor_Callback()
         case (0x204):
         {
             chariot.Motor_Right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
+        }
+        break;
+        case (0x205):
+        {
+            chariot.Motor_Yaw.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
         default:
