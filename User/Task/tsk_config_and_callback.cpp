@@ -52,9 +52,9 @@
 #include "ita_chariot.h"
 #include "drv_can.h"
 #include "crt_chassis.h"
-//#define gimbal
+//#define gimbal_task
 #define chassis_task
-#ifdef gimbal
+#ifdef gimbal_task
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -457,14 +457,11 @@ extern "C" void Task_Loop()
 Class_Chariot chariot;
 uint32_t init_finished = 0;
 uint8_t start_flag = 0;
-uint32_t Alive_flag;
-uint32_t Pre_Alive_flag;
-uint8_t Stop[8]={0,0,0,0,0,0,0,0};
 void Chariot_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x205):
+    case (0x201):
     {
         chariot.chassis.Motor_Wheel[0].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
@@ -474,7 +471,7 @@ void Chariot_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.chassis.Motor_Wheel[1].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x206):
+    case (0x203):
     {
         chariot.chassis.Motor_Wheel[2].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
@@ -497,7 +494,6 @@ void Chariot_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     case (0x088):
     {
         chariot.CAN_Chassis_Rx_Gimbal_Callback();
-			Alive_flag++;
 			
     }
     break;
@@ -506,45 +502,33 @@ void Chariot_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 }
 void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
 {
-    static uint8_t mod50 = 0;
-    static uint8_t mod50_mod3 = 0;
-    mod50++;
-//    if (mod50 == 50)
-//    {
-        mod50_mod3++;
-        if(mod50_mod3%3==0)
-        {
-            mod50_mod3 = 0;
-        }
         for (auto i = 0; i < 4; i++)
         {
             chassis.Motor_Wheel[i].TIM_Alive_PeriodElapsedCallback();
         }
         TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
-//        mod50 = 0;
-//    }    
+				if(chariot.Gimbal_Status == Gimbal_Status_DISABLE)
+				{
+					chariot.chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+				}
 }
+
+float Motor_Target_Speed;
+uint8_t mod50_cnt = 0;
+//循环任务
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
+		mod50_cnt++;
     if(init_finished>2000)
-        start_flag=1;
-        
-    chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
-    if(start_flag==1)
-    {
-			if(Alive_flag>Pre_Alive_flag)
-				{
-        Pre_Alive_flag=Alive_flag;
-        chariot.TIM_Chariot_PeriodElapsedCallback();
-        //CAN发送
-        TIM_CAN_PeriodElapsedCallback();
-				}
-				else{
-				CAN_Send_Data(&hcan1,0x200,Stop,8,CAN_ID_STD);
-				CAN_Send_Data(&hcan1,0x1ff,Stop,8,CAN_ID_STD);
-				}
-    }
+    start_flag=1;
+		if(mod50_cnt%50==0)
+		{
+		 chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
+		 mod50_cnt = 0;
+		}
+		chariot.TIM_Chariot_PeriodElapsedCallback();
+		TIM_CAN_PeriodElapsedCallback();
 }
 extern "C" void Task_Init()
 {
@@ -556,7 +540,7 @@ extern "C" void Task_Init()
     //交互层
     chariot.Init();
 	
-	HAL_TIM_Base_Start_IT(&htim5);
+		HAL_TIM_Base_Start_IT(&htim5);
 	
 }
 #endif

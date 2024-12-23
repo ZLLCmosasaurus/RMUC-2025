@@ -19,7 +19,8 @@
 //#define CHASSIS
 //#define GIMBAL
 #define Manipulator
-
+#define chassis_task
+//#define gimbal_task
 #ifdef CHASSIS 	
 
     #define POWER_LIMIT
