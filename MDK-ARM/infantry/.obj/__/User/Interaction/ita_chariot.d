@@ -1,6 +1,6 @@
 ./infantry/.obj/__/User/Interaction/ita_chariot.o: \
   ..\User\Interaction\ita_chariot.cpp ..\User\Interaction\ita_chariot.h \
-  ..\User\Device\dvc_dr16.h ..\Middleware\Driver\drv_uart.h \
+  ..\User\Device\dvc_dr16.h ..\User\Middleware\Driver\drv_uart.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -33,22 +33,24 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Chariot\crt_gimbal.h ..\User\Device\dvc_djimotor.h \
-  ..\Middleware\Algorithm\alg_pid.h ..\Middleware\Driver\drv_math.h \
+  ..\User\Middleware\Algorithm\alg_pid.h \
+  ..\User\Middleware\Driver\drv_math.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h \
-  ..\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
-  ..\Core\Inc\main.h ..\User\Task\config.h ..\User\Device\dvc_witahrs.h \
-  ..\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_minipc.h \
-  ..\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
-  ..\User\Device\dvc_dwt.h ..\Middleware\Driver\drv_dwt.h \
-  ..\User\Device\dvc_boardc_bmi088.h ..\Middleware\Driver\drv_spi.h \
-  ..\Core\Inc\tim.h ..\Middleware\Algorithm\QuaternionEKF.h \
-  ..\Middleware\Algorithm\kalman_filter.h \
-  ..\User\Device\dvc_boardc_ist8310.h ..\Middleware\Driver\drv_i2c.h \
-  ..\Middleware\Algorithm\alg_MahonyAHRS.h ..\User\Device\dvc_referee.h \
-  ..\User\Device\dvc_lkmotor.h ..\User\Chariot\crt_booster.h \
-  ..\Middleware\Algorithm\alg_fsm.h \
+  ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
+  ..\Core\Inc\main.h ..\User\Task\config.h \
+  ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_witahrs.h ..\User\Middleware\Algorithm\alg_filter.h \
+  ..\User\Device\dvc_lkmotor.h ..\User\Device\dvc_minipc.h \
+  ..\User\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
+  ..\User\Device\dvc_dwt.h ..\User\Middleware\Driver\drv_dwt.h \
+  ..\User\Device\dvc_boardc_bmi088.h ..\User\Middleware\Driver\drv_spi.h \
+  ..\Core\Inc\tim.h ..\User\Middleware\Algorithm\QuaternionEKF.h \
+  ..\User\Device\dvc_boardc_ist8310.h \
+  ..\User\Middleware\Driver\drv_i2c.h \
+  ..\User\Middleware\Algorithm\alg_MahonyAHRS.h \
+  ..\User\Device\dvc_referee.h ..\User\Chariot\crt_booster.h \
+  ..\User\Middleware\Algorithm\alg_fsm.h \
   ..\User\Task\tsk_config_and_callback.h ..\User\Device\dvc_supercap.h \
-  ..\User\Chariot\crt_chassis.h ..\Middleware\Algorithm\alg_slope.h \
-  ..\User\Device\dvc_sampler.h ..\Middleware\Algorithm\alg_power_limit.h \
-  ..\User\Device\dvc_GraphicsSendTask.h
+  ..\User\Chariot\crt_chassis.h ..\User\Middleware\Algorithm\alg_slope.h \
+  ..\User\Device\dvc_sampler.h ..\User\Device\dvc_GraphicsSendTask.h

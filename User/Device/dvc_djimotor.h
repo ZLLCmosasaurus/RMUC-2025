@@ -18,6 +18,7 @@
 #include "drv_can.h"
 #include "alg_power_limit.h"
 #include "drv_math.h"
+#include "kalman_filter.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -111,7 +112,9 @@ public:
     Class_PID PID_Omega;
     // PID扭矩环控制
     Class_PID PID_Torque;
-
+    //对反馈的GM6020角速度卡尔曼滤波
+    KalmanFilter Kf_Omega;
+    
     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_ANGLE,float __Gearbox_Rate = 1, int32_t __Encoder_Offset = 0, float __Omega_Max = 320.0f * RPM_TO_RADPS);
 
     inline uint16_t Get_Output_Max();

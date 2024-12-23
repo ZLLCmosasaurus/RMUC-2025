@@ -211,4 +211,4 @@ infantry/dvc_djimotor.o: ..\User\Device\dvc_djimotor.cpp \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Device\alg_power_limit.h ..\Core\Inc\main.h \
-  ..\User\Task\config.h
+  ..\User\Task\config.h ..\User\Middleware\Algorithm\kalman_filter.h

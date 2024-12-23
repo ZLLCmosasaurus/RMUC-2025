@@ -33,4 +33,4 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\Core\Inc\usart.h ..\Core\Inc\main.h ..\User\Device\dvc_referee.h \
-  ..\Middleware\Driver\drv_uart.h
+  ..\User\Middleware\Driver\drv_uart.h

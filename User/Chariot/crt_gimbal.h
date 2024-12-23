@@ -16,9 +16,9 @@
 
 #include "dvc_djimotor.h"
 #include "dvc_witahrs.h"
+#include "dvc_lkmotor.h"
 #include "dvc_minipc.h"
 #include "dvc_imu.h"
-#include "dvc_lkmotor.h"
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -340,7 +340,7 @@ protected:
 
     // yaw轴角度
     float Target_Yaw_Angle = 0.0f;//IMU获取的欧拉角
-    float Target_Yaw_Encoder_Angle = 40.0f;//编码器获取的相对角度值
+    float Target_Yaw_Encoder_Angle = 0.0f;//编码器获取的相对角度值
     // pitch轴角度
     float Target_Pitch_Angle = 0.0f;
 

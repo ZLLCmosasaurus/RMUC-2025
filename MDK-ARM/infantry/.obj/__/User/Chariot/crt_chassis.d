@@ -1,11 +1,12 @@
 ./infantry/.obj/__/User/Chariot/crt_chassis.o: \
   ..\User\Chariot\crt_chassis.cpp ..\User\Chariot\crt_chassis.h \
-  ..\Middleware\Algorithm\alg_slope.h ..\Middleware\Driver\drv_math.h \
+  ..\User\Middleware\Algorithm\alg_slope.h \
+  ..\User\Middleware\Driver\drv_math.h \
   ..\Middlewares\ST\ARM\DSP\Inc\arm_math.h \
   ..\Drivers\CMSIS\Include\cmsis_compiler.h \
   ..\Drivers\CMSIS\Include\cmsis_armclang.h ..\User\Device\dvc_sampler.h \
-  ..\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_referee.h \
-  ..\Middleware\Driver\drv_uart.h \
+  ..\User\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_referee.h \
+  ..\User\Middleware\Driver\drv_uart.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -37,8 +38,8 @@
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
-  ..\User\Device\dvc_djimotor.h ..\Middleware\Algorithm\alg_pid.h \
-  ..\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
+  ..\User\Device\dvc_djimotor.h ..\User\Middleware\Algorithm\alg_pid.h \
+  ..\User\Middleware\Driver\drv_can.h ..\User\Device\alg_power_limit.h \
   ..\Core\Inc\main.h ..\User\Task\config.h \
-  ..\Middleware\Algorithm\alg_power_limit.h \
-  ..\User\Device\dvc_supercap.h ..\Middleware\Algorithm\alg_fsm.h
+  ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_supercap.h ..\User\Middleware\Algorithm\alg_fsm.h

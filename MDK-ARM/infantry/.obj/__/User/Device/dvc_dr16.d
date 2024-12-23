@@ -1,5 +1,5 @@
 ./infantry/.obj/__/User/Device/dvc_dr16.o: ..\User\Device\dvc_dr16.cpp \
-  ..\User\Device\dvc_dr16.h ..\Middleware\Driver\drv_uart.h \
+  ..\User\Device\dvc_dr16.h ..\User\Middleware\Driver\drv_uart.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \

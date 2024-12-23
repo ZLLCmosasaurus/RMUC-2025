@@ -353,7 +353,7 @@ void Task1ms_TIM5_Callback()
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
 
-        //TIM_UART_PeriodElapsedCallback();
+        TIM_UART_PeriodElapsedCallback();
         
         // static int mod5 = 0;
         // mod5++;

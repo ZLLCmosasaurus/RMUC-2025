@@ -189,64 +189,73 @@
             "name": "Algorithm",
             "files": [
               {
-                "path": "../Middleware/Algorithm/alg_pid.cpp"
+                "path": "../User/Middleware/Algorithm/alg_pid.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/alg_filter.cpp"
+                "path": "../User/Middleware/Algorithm/alg_filter.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/alg_fsm.cpp"
+                "path": "../User/Middleware/Algorithm/alg_fsm.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/alg_MahonyAHRS.cpp"
+                "path": "../User/Middleware/Algorithm/alg_MahonyAHRS.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/alg_slope.cpp"
+                "path": "../User/Middleware/Algorithm/alg_slope.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/user_lib.cpp"
+                "path": "../User/Middleware/Algorithm/user_lib.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/QuaternionEKF.cpp"
+                "path": "../User/Middleware/Algorithm/QuaternionEKF.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/kalman_filter.cpp"
+                "path": "../User/Middleware/Algorithm/kalman_filter.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/PID.cpp"
+                "path": "../User/Middleware/Algorithm/PID.cpp"
               },
               {
-                "path": "../Middleware/Algorithm/alg_power_limit.cpp"
+                "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
               }
             ],
             "folders": []
-          },
+          }
+        ]
+      },
+      {
+        "name": "Middeware",
+        "files": [],
+        "folders": [
           {
-            "name": "Drive",
+            "name": "Driver",
             "files": [
               {
-                "path": "../Middleware/Driver/drv_math.cpp"
+                "path": "../User/Middleware/Driver/drv_can.cpp"
               },
               {
-                "path": "../Middleware/Driver/drv_can.cpp"
+                "path": "../User/Middleware/Driver/drv_dwt.cpp"
               },
               {
-                "path": "../Middleware/Driver/brv_spi.cpp"
+                "path": "../User/Middleware/Driver/drv_i2c.cpp"
               },
               {
-                "path": "../Middleware/Driver/brv_tim.cpp"
+                "path": "../User/Middleware/Driver/drv_math.cpp"
               },
               {
-                "path": "../Middleware/Driver/drv_dwt.cpp"
+                "path": "../User/Middleware/Driver/drv_uart.cpp"
               },
               {
-                "path": "../Middleware/Driver/drv_i2c.cpp"
+                "path": "../User/Middleware/Driver/drv_usb.cpp"
               },
               {
-                "path": "../Middleware/Driver/drv_uart.cpp"
+                "path": "../User/Middleware/Driver/brv_math.cpp"
               },
               {
-                "path": "../Middleware/Driver/drv_usb.cpp"
+                "path": "../User/Middleware/Driver/brv_spi.cpp"
+              },
+              {
+                "path": "../User/Middleware/Driver/brv_tim.cpp"
               }
             ],
             "folders": []
@@ -269,6 +278,15 @@
         "name": "Drivers",
         "files": [],
         "folders": [
+          {
+            "name": "CMSIS",
+            "files": [
+              {
+                "path": "../Core/Src/system_stm32f4xx.c"
+              }
+            ],
+            "folders": []
+          },
           {
             "name": "STM32F4xx_HAL_Driver",
             "files": [
@@ -340,15 +358,6 @@
               },
               {
                 "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c"
-              }
-            ],
-            "folders": []
-          },
-          {
-            "name": "CMSIS",
-            "files": [
-              {
-                "path": "../Core/Src/system_stm32f4xx.c"
               }
             ],
             "folders": []
@@ -555,15 +564,13 @@
           "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc",
           "../Drivers/CMSIS/Device/ST/STM32F4xx/Include",
           "../Drivers/CMSIS/Include",
-          "../Middlewares/Driver",
-          "../Middlewares/Algorithm",
-          "../Middleware/Driver",
-          "../Middleware/Algorithm",
           "../User/Chariot",
           "../User/Device",
           "../User/Interaction",
           "../User/Task",
           "../Middlewares/ST/ARM/DSP/Inc",
+          "../User/Middleware/Algorithm",
+          "../User/Middleware/Driver",
           "RTE/_infantry"
         ],
         "libList": [],
@@ -582,7 +589,7 @@
             "output-debug-info": "enable"
           },
           "c/cpp-compiler": {
-            "optimization": "level-balanced",
+            "optimization": "level-0",
             "language-c": "c99",
             "language-cpp": "c++11",
             "link-time-optimization": false,

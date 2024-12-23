@@ -212,15 +212,15 @@ infantry/crt_gimbal.o: ..\User\Chariot\crt_gimbal.cpp \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h \
   ..\User\Device\alg_power_limit.h ..\Core\Inc\main.h \
-  ..\User\Task\config.h ..\User\Device\dvc_witahrs.h \
-  ..\User\Middleware\Driver\drv_uart.h \
-  ..\User\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_minipc.h \
-  ..\User\Middleware\Driver\drv_usb.h ..\User\Device\dvc_imu.h \
-  ..\User\Device\dvc_dwt.h ..\User\Middleware\Driver\drv_dwt.h \
-  ..\User\Device\dvc_boardc_bmi088.h ..\User\Middleware\Driver\drv_spi.h \
-  ..\Core\Inc\tim.h ..\User\Middleware\Algorithm\QuaternionEKF.h \
-  ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Task\config.h ..\User\Middleware\Algorithm\kalman_filter.h \
+  ..\User\Device\dvc_witahrs.h ..\User\Middleware\Driver\drv_uart.h \
+  ..\User\Middleware\Algorithm\alg_filter.h ..\User\Device\dvc_lkmotor.h \
+  ..\User\Device\dvc_minipc.h ..\User\Middleware\Driver\drv_usb.h \
+  ..\User\Device\dvc_imu.h ..\User\Device\dvc_dwt.h \
+  ..\User\Middleware\Driver\drv_dwt.h ..\User\Device\dvc_boardc_bmi088.h \
+  ..\User\Middleware\Driver\drv_spi.h ..\Core\Inc\tim.h \
+  ..\User\Middleware\Algorithm\QuaternionEKF.h \
   ..\User\Device\dvc_boardc_ist8310.h \
   ..\User\Middleware\Driver\drv_i2c.h \
   ..\User\Middleware\Algorithm\alg_MahonyAHRS.h \
-  ..\User\Device\dvc_referee.h ..\User\Device\dvc_lkmotor.h
+  ..\User\Device\dvc_referee.h
