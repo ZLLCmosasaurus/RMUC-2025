@@ -29,53 +29,52 @@
  */
 void Class_Chariot::Init(float __DR16_Dead_Zone)
 { 
-    //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
-    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
-
+    //yaw电机canid初始化
+    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x201);
+    //拉力电机canid初始化
     Motor_Down.Init(&hcan1, DJI_Motor_ID_0x201);
     Motor_Up.Init(&hcan1, DJI_Motor_ID_0x202);
     Motor_Left.Init(&hcan1, DJI_Motor_ID_0x203);
     Motor_Right.Init(&hcan1, DJI_Motor_ID_0x204);
 
     // PID 初始化
-    //拉力计
+    //拉力环 速度环
     PID_Tension.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Motor_Down.PID_Omega.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    // 上膛电机
+    // 上膛电机 速度环即可
     Motor_Left.PID_Omega.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    // yaw
+    Motor_Right.PID_Omega.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    // yaw电机 角度环 速度环
     Motor_Yaw.PID_Omega.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
     Motor_Yaw.PID_Angle.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    // 推镖电机
+    // 推镖电机 速度环即可
     Motor_Up.PID_Omega.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    Motor_Up.PID_Angle.Init(0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
 
     //TensionMeter初始化
     Tension_Meter.Init(GPIOF, GPIO_PIN_1, GPIOF, GPIO_PIN_0);
-
+    //舵机初始化
     Servo_Load_1.Init(&htim5,TIM_CHANNEL_1);
     Servo_Load_2.Init(&htim5,TIM_CHANNEL_2);
     Servo_Load_3.Init(&htim5,TIM_CHANNEL_3);
     Servo_Load_4.Init(&htim5,TIM_CHANNEL_4);
-
+    //扳机舵机初始化
     Servo_Trigger.Init(&htim4,TIM_CHANNEL_4);
 
     //遥控器离线控制 状态机
     FSM_Alive_Control.Chariot = this;
     FSM_Alive_Control.Init(5, 0);
-
+    // Dart 控制 状态机
     FSM_Dart_Control.Chariot = this;
     FSM_Dart_Control.Init(7, 0);
 
-    //遥控器
+    //遥控器 初始化
     DR16.Init(&huart1,&huart6);
     DR16_Dead_Zone = __DR16_Dead_Zone;   
 
-    //裁判系统
+    //裁判系统 初始化
     Referee.Init(&huart6,0xA5);
 
-    //调试控制
+    //调试控制 初始化
     DebugControl.Init(&huart7);
             
     //上位机
@@ -211,11 +210,18 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
         break;
         case Dart_Ready_Status:
         {
-            
+
+            // debubg模式
+            if(Chariot->DebugControl.Debug_Start_Flag)
+            {
+                Status[Now_Status_Serial].Time = 0;
+                Set_Status(Dart_Debug_Status);
+            }
         }
         break;
         case Dart_First_Status:
         {
+            Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
             // 3508上膛
             Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
             Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
@@ -295,6 +301,50 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
             Chariot->Motor_Down.Set_Out(0);
             // 扳机舵机发射
             Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+        }
+        break;
+        case Dart_Debug_Status:
+        {
+            // 调试模式
+            Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+            Chariot->Motor_Yaw.PID_Angle.Set_Target(Chariot->DebugControl.Get_Target_Yaw());
+            Chariot->Motor_Yaw.PID_Angle.TIM_Adjust_PeriodElapsedCallback();
+            Chariot->Motor_Yaw.PID_Omega.Set_Target(Chariot->Motor_Yaw.PID_Angle.Get_Out());
+            Chariot->Motor_Yaw.PID_Omega.TIM_Adjust_PeriodElapsedCallback();
+            Chariot->Motor_Yaw.Set_Out(Chariot->Motor_Yaw.PID_Omega.Get_Out());
+
+            // 根据按下的按键进行不同的操作
+            switch (Chariot->DebugControl.Get_DebugControl_Status())
+            {
+                case DebugControl_Control_Status_RELOAD:
+                {
+                    Chariot->Servo_Reload();
+                    // 如果触发了微动开关或者延时时间到了
+                    Chariot->Servo_Init();                    
+                }break;
+                case DebugControl_Control_Status_SHOOT:
+                {
+                    Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+                }break;
+                case DebugControl_Control_Status_TENSION:
+                {
+                    // 3508上膛
+                    Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
+                    Chariot->Motor_Right.Set_Target_Radian(Chariot->Target_Speed_Motor_Right);
+                    // 失能3508 恢复舵机位置
+                    Chariot->Servo_Init();
+                    Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                    Chariot->Motor_Left.Set_Out(0);
+                    // 2006电机控制拉力
+                    Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                    Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
+                    // 达到目标拉力 2006失能无力
+                    Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                    Chariot->Motor_Down.Set_Out(0);
+                }break;
+                default:
+                break;
+            }
         }
         break;
         case Dart_Disable_Status:

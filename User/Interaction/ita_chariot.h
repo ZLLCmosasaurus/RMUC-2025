@@ -36,6 +36,7 @@ enum Enum_Dart_FSM_Control_Status : uint8_t
     Dart_Second_Status,
     Dart_Third_Status,
     Dart_Fourth_Status,
+    Dart_Debug_Status,
     Dart_Disable_Status
 };
 
@@ -52,14 +53,6 @@ public:
 };
 
 class Class_FSM_Dart_Control : public Class_FSM
-{
-public:
-    Class_Chariot *Chariot;
-
-    void Reload_TIM_Status_PeriodElapsedCallback();
-};
-
-class Class_FSM_Dart_Debug_Control : public Class_FSM
 {
 public:
     Class_Chariot *Chariot;
@@ -143,6 +136,9 @@ protected:
         float Radian_To_Diatance = 0.0f;
         // yaw电机减速比系数
         float Reduction_Ratio = 0.0f; 
+        // 扳机舵机角度
+        float Shoot_Angle_Trigger; //按下角度
+        float Close_Angle_Trigger; //松开角度
 
         // 推镖电机distance
         float Now_Distance_Motor_Up;   
@@ -154,13 +150,10 @@ protected:
 
         // 拉皮筋速度
         float Target_Speed_Motor_Left;
+        float Target_Speed_Motor_Right;
 
         // 目标拉力
         float Target_Tension;
-
-        // 扳机舵机角度
-        float Shoot_Angle_Trigger; //发射角度
-        float Close_Angle_Trigger; //关闭角度
 
         //读变量
         

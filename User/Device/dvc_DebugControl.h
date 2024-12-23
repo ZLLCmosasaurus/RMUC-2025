@@ -62,7 +62,13 @@ class Class_DebugControl
         void DebugControl_Data_Process(uint8_t *Buffer, uint16_t Length);
         
         uint8_t Debug_Start_Flag = 0;
-        
+
+        inline void Set_Now_Yaw(float _now_yaw);
+        inline void Set_Now_Tension(float _now_tension);
+        inline float Get_Target_Yaw();
+        inline float Get_Target_Tension();
+        inline Enum_DebugControl_Control_Status Get_DebugControl_Status();
+
     private:
         Struct_UART_Manage_Object *UART_Manage_Object;
 
@@ -77,6 +83,32 @@ class Class_DebugControl
         
 };
 /* Private function declarations ---------------------------------------------*/
+
+
+void Class_DebugControl::Set_Now_Yaw(float _now_yaw)
+{
+    DebugControl_TxData.now_yaw = _now_yaw;
+}
+
+void Class_DebugControl::Set_Now_Tension(float _now_tension)
+{
+    DebugControl_TxData.now_tension = _now_tension;
+}
+
+float Class_DebugControl::Get_Target_Yaw()
+{
+    return (DebugControl_RxData.target_yaw);
+}
+
+float Class_DebugControl::Get_Target_Tension()
+{
+    return (DebugControl_RxData.target_tension);
+}
+
+Enum_DebugControl_Control_Status Class_DebugControl::Get_DebugControl_Status()
+{
+    return (DebugControl_RxData.status);
+}
 
 /* Function prototypes -------------------------------------------------------*/
 
