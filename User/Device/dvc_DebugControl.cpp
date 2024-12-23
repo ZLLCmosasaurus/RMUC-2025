@@ -62,7 +62,7 @@ void Class_DebugControl::Init(UART_HandleTypeDef * __huart)
 
 void Class_DebugControl::DebugControl_Rx_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    DebugControl_Data_Process(Buffer, Length);
+    this->DebugControl_Data_Process(Buffer, Length);
 }
 
 void Class_DebugControl::DebugControl_Tx_Callback(float _now_yaw, float _now_tension)
@@ -86,8 +86,12 @@ void Class_DebugControl::DebugControl_Data_Process(uint8_t *Buffer, uint16_t Len
     if (_rx_data->head == 0xA5 && _rx_data->tear == 0x5A)
     {
         DebugControl_Flag++;
+        if(_rx_data->status == DebugControl_Control_Status_CONNECT)
+        {
+            Debug_Start_Flag = 1;
+        }
         memcpy(&DebugControl_RxData, UART_Manage_Object->Rx_Buffer, sizeof(Struct_DebugControl_RxData));
-    }
+    }        
 }
 
 /* Function prototypes -------------------------------------------------------*/

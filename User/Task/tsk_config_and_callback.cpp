@@ -202,8 +202,11 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
  * @brief TIM5任务回调函数
  *
  */
+float test_yaw,test_tension;
 extern "C" void Control_Task_Callback()
 {
+    static uint8_t tx_cnt = 0;
+    tx_cnt++;
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     
     chariot.TIM5msMod10_Alive_PeriodElapsedCallback();
@@ -212,12 +215,28 @@ extern "C" void Control_Task_Callback()
 
     chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
     chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
+    
+    if(chariot.DR16.Get_DR16_Status() == DR16_Status_DISABLE)
+    {
+        // 遥控器控制
         
+    }
+ 
     /****************************** 驱动层回调函数 1ms *****************************************/ 
     //统一打包发送
     TIM_CAN_PeriodElapsedCallback();
 
-    TIM_UART_PeriodElapsedCallback();
+    // debug 发送
+    if(tx_cnt=100)
+    {   
+        if(chariot.DebugControl.Debug_Start_Flag)
+        {
+            //20hz
+            chariot.DebugControl.DebugControl_Tx_Callback(test_yaw,test_tension);
+            TIM_UART_PeriodElapsedCallback();
+            tx_cnt = 0;            
+        }
+    } 
 	        
 }
 
@@ -305,6 +324,9 @@ extern "C" void Task_Init()
 
     //遥控器接收
     UART_Init(&huart1, DR16_UART1_Callback, 18);
+
+    //调试控制串口
+    UART_Init(&huart7, DebugControl_UART7_Callback, sizeof(Struct_DebugControl_RxData));
 
     //集中总线can1/can2
     CAN_Init(&hcan1, Device_CAN1_Callback);

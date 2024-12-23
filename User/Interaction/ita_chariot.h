@@ -59,6 +59,14 @@ public:
     void Reload_TIM_Status_PeriodElapsedCallback();
 };
 
+class Class_FSM_Dart_Debug_Control : public Class_FSM
+{
+public:
+    Class_Chariot *Chariot;
+
+    void Reload_TIM_Status_PeriodElapsedCallback();
+};
+
 /**
  * @brief 控制对象
  *
@@ -169,7 +177,6 @@ protected:
         // 电机校准编码器角度
         float Calibration_Motor_Yaw_Angle_Offset = 0;  // 角度制
         float Calibration_Motor_Up_Radian_Offset = 0;  // 弧度制
-
 
         // 四个舵机装弹
         void Servo_Reload();
