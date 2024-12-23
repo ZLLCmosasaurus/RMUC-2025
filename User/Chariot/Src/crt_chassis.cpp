@@ -206,19 +206,6 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
                 Motor_Wheel[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
                 Motor_Steer[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_AGV_MODE);
             }
-            //底盘限速
-            if (Velocity_X_Max != 0)
-            {
-                Math_Constrain(&Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
-            }
-            if (Velocity_Y_Max != 0)
-            {
-                Math_Constrain(&Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
-            }
-            if (Omega_Max != 0)
-            {
-                Math_Constrain(&Target_Omega, -Omega_Max, Omega_Max);
-            }
 
             for (int i = 0; i < 4; i++){
                 Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();

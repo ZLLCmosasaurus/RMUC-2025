@@ -320,32 +320,27 @@ void Class_Gimbal::Init()
     Motor_Yaw_A.PID_Angle.Init(0.65f, 0.0f, 0.0f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
     Motor_Yaw_A.PID_Omega.Init(6000.0f, 10.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw_A.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw_A.Get_Output_Max(), Motor_Yaw_A.Get_Output_Max());
-    Motor_Yaw_A.IMU = &Boardc_BMI;
     Motor_Yaw_A.Init(&hfdcan2, DJI_Motor_ID_0x208, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     Motor_Yaw_B.PID_Angle.Init(0.65f, 0.0f, 0.0f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
     Motor_Yaw_B.PID_Omega.Init(6000.0f, 10.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw_B.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw_B.Get_Output_Max(), Motor_Yaw_B.Get_Output_Max());
-    Motor_Yaw_B.IMU = &Boardc_BMI;
     Motor_Yaw_B.Init(&hfdcan2, DJI_Motor_ID_0x209, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
     
     Motor_Main_Yaw.PID_Angle.Init(0.65f, 0.0f, 0.0f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
     Motor_Main_Yaw.PID_Omega.Init(6000.0f, 10.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Main_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Main_Yaw.Get_Output_Max(), Motor_Main_Yaw.Get_Output_Max());
-    Motor_Main_Yaw.IMU = &Boardc_BMI;
-    Motor_Main_Yaw.Init(&hfdcan2, DJI_Motor_ID_0x20A, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
+    Motor_Main_Yaw.Init(&hfdcan2, LK_Motor_ID_0x141, LK_Motor_Control_Method_ANGLE, 2048);
 
     //pitch轴电机
     Motor_Pitch_A.PID_Angle.Init(1.2f, 0.0f, 0.1f, 0.0f, 6.0f * PI, 6.0f * PI);
     Motor_Pitch_A.PID_Omega.Init(400.0f, 50.0f, 0.0f, 0, Motor_Pitch_A.Get_Output_Max(), Motor_Pitch_A.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
     Motor_Pitch_A.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch_A.Get_Output_Max(), Motor_Pitch_A.Get_Output_Max());
-    Motor_Pitch_A.IMU = &Boardc_BMI;
     Motor_Pitch_A.Init(&hfdcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
 
     Motor_Pitch_B.PID_Angle.Init(1.2f, 0.0f, 0.1f, 0.0f, 6.0f * PI, 6.0f * PI);
     Motor_Pitch_B.PID_Omega.Init(400.0f, 50.0f, 0.0f, 0, Motor_Pitch_B.Get_Output_Max(), Motor_Pitch_B.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
     Motor_Pitch_B.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch_B.Get_Output_Max(), Motor_Pitch_B.Get_Output_Max());
-    Motor_Pitch_B.IMU = &Boardc_BMI;
     Motor_Pitch_B.Init(&hfdcan1, DJI_Motor_ID_0x207, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
 
 }
@@ -361,7 +356,7 @@ void Class_Gimbal::Output()
         //云台失能
         Motor_Yaw_A.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
         Motor_Yaw_B.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
-        Motor_Main_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
+        //Motor_Main_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
         Motor_Pitch_A.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
         Motor_Pitch_B.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_TORQUE);
 
@@ -392,15 +387,18 @@ void Class_Gimbal::Output()
     {   
         // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
         // Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        // Motor_Pitch_LK6010.Set_LK_Motor_Control_Method(LK_Motor_Control_Method_IMU_ANGLE);
         
-        // if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
-        // {
-        //     //设置目标角度
-        //     Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
-        //     Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-        //     Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle);           
-        // }
+        
+        if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
+        {
+            //设置目标角度
+            Motor_Yaw_A.Set_Target_Angle(Target_Yaw_Angle_A);
+            Motor_Yaw_B.Set_Target_Angle(Target_Yaw_Angle_B);
+
+
+            Motor_Pitch_A.Set_Target_Angle(Target_Pitch_Angle);
+                       
+        }
         // else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
         // {   
         //     Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
@@ -444,7 +442,7 @@ void Class_Gimbal::TIM_Calculate_PeriodElapsedCallback()
 
     Motor_Yaw_A.TIM_PID_PeriodElapsedCallback();
     Motor_Yaw_B.TIM_PID_PeriodElapsedCallback();
-    Motor_Main_Yaw.TIM_PID_PeriodElapsedCallback();
+    Motor_Main_Yaw.TIM_Process_PeriodElapsedCallback();
     Motor_Pitch_A.TIM_PID_PeriodElapsedCallback();
     Motor_Pitch_B.TIM_PID_PeriodElapsedCallback();
 }
