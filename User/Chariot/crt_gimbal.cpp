@@ -445,7 +445,7 @@ void Class_Gimbal_Pitch_Motor_M2006::Transform_Angle()
 
     Target_Pitch = Target_Angle;
     Test_Pitch = True_Angle_Pitch;
-		Pitch_IMU_Angle = True_Angle_Pitch;
+	Pitch_IMU_Angle = True_Angle_Pitch;
 }
 
 #define YAW_IMU
@@ -513,18 +513,19 @@ void Class_Gimbal::Output()
     else // 非失能模式
     {   
         
-        // if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
-        // {
-        //     //设置目标角度
-        //     Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
-        //     Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-        //     //Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle);           
-        // }
-        // else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
-        // {   
-        //     Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
-        //     Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();          
-        // }
+        if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
+        {
+            //设置目标角度
+            Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
+            Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
+            //Motor_Pitch.Set_Target_Yaw_Encoder_Angle(Target_Yaw_Encoder_Angle);
+        }
+        else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
+        {   
+            Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
+            Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();          
+        }
+
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
         switch (Get_Launch_Mode())//吊射模式
         {
@@ -540,11 +541,8 @@ void Class_Gimbal::Output()
             Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
             Tmp_Target_Yaw_Angle = Target_Yaw_Encoder_Angle;
             Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw_From_Encoder();//编码器获取的真实角度
-            // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-            // Tmp_Target_Yaw_Angle = Target_Yaw_Angle;
-            // Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw();//IMU获取的真实角度
         }
-            break;
+        break;
         }
 
         //限制角度范围 处理yaw轴180度问题

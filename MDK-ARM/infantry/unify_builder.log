@@ -893,3 +893,54 @@ These source files will be recompiled
 [2024-12-21 21:03:29]	[done]
 	build successfully !
 
+[2024-12-22 22:14:36]	[info] incremental build: 10 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_booster.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2024-12-22 22:14:36]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_gimbal.o -MMD ./../User/Chariot/crt_gimbal.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+../User/Device\dvc_minipc.h:670:41: error: expected ';' after expression
+  670 |     Tx_Angle_Yaw = -IMU->Get_Angle_Yaw()
+      |                                         ^
+      |                                         ;
+1 error generated.
+
+[2024-12-22 22:14:48]	[info] incremental build: 7 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2024-12-22 22:14:57]	[done]
+	build successfully !
+
+[2024-12-23 23:23:09]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-23 23:23:11]	[done]
+	build successfully !
+

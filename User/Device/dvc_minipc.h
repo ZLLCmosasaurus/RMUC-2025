@@ -664,9 +664,10 @@ void Class_MiniPC::Set_Outpost_Protect_Status(Enum_MiniPC_Data_Status __Outpost_
  */
 void Class_MiniPC::Transform_Angle_Tx()
 {
-    Tx_Angle_Pitch = -IMU->Get_Angle_Pitch();
-    Tx_Angle_Roll = IMU->Get_Angle_Roll();
-    Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
+    //由于c板放置位置不同，所以转换了坐标系
+    Tx_Angle_Pitch = -IMU->Get_Angle_Roll();
+    Tx_Angle_Roll = IMU->Get_Angle_Pitch();
+    Tx_Angle_Yaw = -IMU->Get_Angle_Yaw();
 }
 
 /**

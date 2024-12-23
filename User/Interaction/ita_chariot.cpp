@@ -311,17 +311,17 @@ void Class_Chariot::Control_Chassis()
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
-        {
-            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
-            chassis_omega = -Chassis.Get_Spin_Omega();
-            if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
-            {
-                chassis_omega = Chassis.Get_Spin_Omega();
-            }
-        }
+        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
+        // {
+        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
+        //     chassis_omega = -Chassis.Get_Spin_Omega();
+        //     // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
+        //     // {
+        //     //     chassis_omega = Chassis.Get_Spin_Omega();
+        //     // }
+        // }
 
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下 狙击模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
         {
             // 底盘锁死 云台可动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
@@ -429,17 +429,15 @@ void Class_Chariot::Control_Gimbal()
         // 排除遥控器死区
         dr16_y = (Math_Abs(DR16.Get_Right_X()) > DR16_Dead_Zone) ? DR16.Get_Right_X() : 0;
         dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > DR16_Dead_Zone) ? DR16.Get_Right_Y() : 0;
-        Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
         // pitch赋值逻辑
         tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
         tmp_gimbal_pitch -= dr16_r_y * DR16_Pitch_Angle_Resolution * 0.5f;
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
-        
         // yaw赋值逻辑
         tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
         tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
         // 设定当前IMU角度值
-         Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
+        Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
 
         switch (Gimbal.Get_Launch_Mode()) // 吊射模式
         {
@@ -451,8 +449,6 @@ void Class_Chariot::Control_Gimbal()
         break;
         case Launch_Enable:
         {
-            // tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Encoder_Angle();
-            // tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
             if(!Switch_Mode_Flag)
             {
                 Switch_Mode_Flag = 1;
@@ -465,24 +461,21 @@ void Class_Chariot::Control_Gimbal()
         default:
             break;
         }
-        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
-        // {
-        //     Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
 
-        //     //两次开启自瞄分别切换四点五点
-        //     if(Gimbal.MiniPC->Get_MiniPC_Type()==MiniPC_Type_Nomal)
-        //         Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill); //五点
-        //     else 
-        //         Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
-        // }
-    
-        // else  // 非自瞄模式
-        // {
-            // Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+        //自瞄模式逻辑
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
+        {
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
+            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
+        }
+        else  // 非自瞄模式
+        {
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
             // //遥控器操作逻辑
             // tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
             // tmp_gimbal_pitch -= dr16_r_y * DR16_Pitch_Angle_Resolution;
-        // }
+        }
+
     #ifdef  SERVO
         if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW &&
            DR16.Get_Right_Switch() == DR16_Switch_Status_TRIG_MIDDLE_DOWN)  // 随动才能开舵机 右拨中-下 打开舵机
@@ -733,7 +726,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         Gimbal.TIM_Calculate_PeriodElapsedCallback();
         Booster.TIM_Calculate_PeriodElapsedCallback();
         //传输数据给上位机
-        //MiniPC.TIM_Write_PeriodElapsedCallback();
+        MiniPC.TIM_Write_PeriodElapsedCallback();
         //给下板发送数据
         CAN_Gimbal_Tx_Chassis_Callback();
         //弹舱舵机控制
