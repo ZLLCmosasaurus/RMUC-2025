@@ -300,13 +300,14 @@ void Class_Chariot::Transform_Mouse_Axis(){
 void Class_Chariot::Control_Gimbal()
 {
     //角度目标值
-    float tmp_gimbal_yaw, tmp_gimbal_pitch;
+    float tmp_gimbal_yaw, tmp_gimbal_pitch_a, tmp_gimbal_pitch_b;
     //遥控器摇杆值
     float dr16_y, dr16_r_y;
     //获取当前角度值
     tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-    // tmp_gimbal_yaw = Gimbal.Boardc_BMI.Get_Angle_Yaw();
-    tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
+    
+    tmp_gimbal_pitch_a = Gimbal.Get_Target_Pitch_Angle_A();
+    tmp_gimbal_pitch_b = Gimbal.Get_Target_Pitch_Angle_B();
 
     /************************************遥控器控制逻辑*********************************************/
         dr16_y = (Math_Abs(DR16.Get_Right_X()) > DR16_Dead_Zone) ? DR16.Get_Right_X() : 0;
@@ -316,14 +317,16 @@ void Class_Chariot::Control_Gimbal()
         Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
         //遥控器操作逻辑
         tmp_gimbal_yaw -= dr16_y * DR16_Yaw_Angle_Resolution;
-        tmp_gimbal_pitch += dr16_r_y * DR16_Pitch_Angle_Resolution;
+        tmp_gimbal_pitch_a += dr16_r_y * DR16_Pitch_Angle_Resolution;
+        tmp_gimbal_pitch_b += dr16_r_y * DR16_Pitch_Angle_Resolution;
         
         
     
 
     // 设定角度
     Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);
-    Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
+    Gimbal.Set_Target_Pitch_Angle_A(tmp_gimbal_pitch_a);
+    Gimbal.Set_Target_Pitch_Angle_B(tmp_gimbal_pitch_b);
 }
 #endif
 /**
