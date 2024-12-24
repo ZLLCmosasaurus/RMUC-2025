@@ -225,13 +225,17 @@ public:
 
     inline float Get_Target_Yaw_Angle();
     inline float Get_Target_Yaw_Angle_A();
-    inline float Get_Target_Pitch_Angle();
+    inline float Get_Target_Yaw_Angle_B();  
+    inline float Get_Target_Pitch_Angle_A();
+    inline float Get_Target_Pitch_Angle_B();
     inline Enum_Gimbal_Control_Type Get_Gimbal_Control_Type();
 
     inline void Set_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
     inline void Set_Target_Yaw_Angle(float __Target_Yaw_Angle);
     inline void Set_Target_Yaw_Angle_A(float __Target_Yaw_Angle_A);
-    inline void Set_Target_Pitch_Angle(float __Target_Pitch_Angle);
+    inline void Set_Target_Yaw_Angle_B(float __Target_Yaw_Angle_B);
+    inline void Set_Target_Pitch_Angle_A(float __Target_Pitch_Angle_A);
+    inline void Set_Target_Pitch_Angle_B(float __Target_Pitch_Angle_B);
 
     void TIM_Calculate_PeriodElapsedCallback();
 
@@ -269,7 +273,8 @@ protected:
     float Target_Yaw_Angle_A = 0.0f;
     float Target_Yaw_Angle_B = 0.0f;
     // pitch轴角度
-    float Target_Pitch_Angle = 0.0f;
+    float Target_Pitch_Angle_A = 0.0f;
+    float Target_Pitch_Angle_B = 0.0f;
 
     //内部函数
 
@@ -302,14 +307,24 @@ float Class_Gimbal::Get_Target_Yaw_Angle()
     return (Target_Yaw_Angle);
 }
 
+float Class_Gimbal::Get_Target_Yaw_Angle_B()
+{
+    return (Target_Yaw_Angle_B);
+}
+
 /**
  * @brief 获取pitch轴角度
  *
  * @return float pitch轴角度
  */
-float Class_Gimbal::Get_Target_Pitch_Angle()
+float Class_Gimbal::Get_Target_Pitch_Angle_A()
 {
-    return (Target_Pitch_Angle);
+    return (Target_Pitch_Angle_A);
+}
+
+float Class_Gimbal::Get_Target_Pitch_Angle_B()
+{
+    return (Target_Pitch_Angle_B);
 }
 
 /**
@@ -341,6 +356,11 @@ void Class_Gimbal::Set_Target_Yaw_Angle_A(float __Target_Yaw_Angle_A)
     Target_Yaw_Angle_A = __Target_Yaw_Angle_A;
 }
 
+void Class_Gimbal::Set_Target_Yaw_Angle_B(float __Target_Yaw_Angle_B)
+{
+    Target_Yaw_Angle_B = __Target_Yaw_Angle_B;
+}   
+
 /**
  * @brief 设定yaw轴角度
  *
@@ -354,12 +374,15 @@ void Class_Gimbal::Set_Target_Yaw_Angle(float __Target_Yaw_Angle)
  * @brief 设定pitch轴角度
  *
  */
-void Class_Gimbal::Set_Target_Pitch_Angle(float __Target_Pitch_Angle)
+void Class_Gimbal::Set_Target_Pitch_Angle_A(float __Target_Pitch_Angle_A)
 {
-    Target_Pitch_Angle = __Target_Pitch_Angle;
+    Target_Pitch_Angle_A = __Target_Pitch_Angle_A;
 }
 
-
+void Class_Gimbal::Set_Target_Pitch_Angle_B(float __Target_Pitch_Angle_B)
+{
+    Target_Pitch_Angle_B = __Target_Pitch_Angle_B;
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

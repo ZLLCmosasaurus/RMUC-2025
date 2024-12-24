@@ -396,7 +396,8 @@ void Class_Gimbal::Output()
             Motor_Yaw_B.Set_Target_Angle(Target_Yaw_Angle_B);
 
 
-            Motor_Pitch_A.Set_Target_Angle(Target_Pitch_Angle);
+            Motor_Pitch_A.Set_Target_Angle(Target_Pitch_Angle_A);
+            Motor_Pitch_B.Set_Target_Angle(Target_Pitch_Angle_B);
                        
         }
         // else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
