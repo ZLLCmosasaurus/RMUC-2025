@@ -42,38 +42,38 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
         //底盘随动PID环初始化
 	
-        PID_Chassis_Fllow.Init(35.0f, 1.5f, 1.0f, 0.5f, 1.0f, 3.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
+        PID_Chassis_Fllow.Init(15.0f, 0.0f, 0.5f, 0.0f, 1.0f, 3.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
 
         //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
         Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205,  DJI_Motor_Control_Method_ANGLE, 2);
 
     #elif defined(GIMBAL)
-        
-        Chassis.Set_Velocity_X_Max(4.0f);
-        Chassis.Set_Velocity_Y_Max(4.0f);
-        
-        //遥控器离线控制 状态机
-        FSM_Alive_Control.Chariot = this;
-        FSM_Alive_Control.Init(5, 0);
 
-        //遥控器
-        DR16.Init(&huart3,&huart1);
-        DR16_Dead_Zone = __DR16_Dead_Zone;   
+    Chassis.Set_Velocity_X_Max(4.0f);
+    Chassis.Set_Velocity_Y_Max(4.0f);
 
-        //云台
-        Gimbal.Init();
-        Gimbal.MiniPC = &MiniPC;
+    // 遥控器离线控制 状态机
+    FSM_Alive_Control.Chariot = this;
+    FSM_Alive_Control.Init(5, 0);
 
-        //发射机构
-        Booster.Referee = &Referee;
-        Booster.Init();
-				
-        //上位机
-//        MiniPC.Init(&MiniPC_USB_Manage_Object);
-//        MiniPC.IMU = &Gimbal.Boardc_BMI;
-//        MiniPC.Referee = &Referee;
+    // 遥控器
+    DR16.Init(&huart3, &huart1);
+    DR16_Dead_Zone = __DR16_Dead_Zone;
 
-    #endif
+    // 云台
+    Gimbal.Init();
+    Gimbal.MiniPC = &MiniPC;
+
+    // 发射机构
+    Booster.Referee = &Referee;
+    Booster.Init();
+
+    // 上位机
+    MiniPC.Init(&MiniPC_USB_Manage_Object);
+    MiniPC.IMU = &Gimbal.Boardc_BMI;
+    MiniPC.Referee = &Referee;
+
+#endif
 }
 
 #ifdef CHASSIS
@@ -306,7 +306,7 @@ void Class_Chariot::Control_Chassis()
         chassis_velocity_y = dr16_l_y * sqrt(1.0f - dr16_l_x * dr16_l_x / 2.0f) * Chassis.Get_Velocity_Y_Max();
 
         // 键盘遥控器操作逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中 随动模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE || DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左中或者左下 随动模式
         {
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
@@ -458,8 +458,6 @@ void Class_Chariot::Control_Gimbal()
             Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw+tmp_yaw_offest);//编码器角度值
         }
         break;
-        default:
-            break;
         }
 
         //自瞄模式逻辑
@@ -468,12 +466,9 @@ void Class_Chariot::Control_Gimbal()
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
         }
-        else  // 非自瞄模式
+        else// 非自瞄模式
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-            // //遥控器操作逻辑
-            // tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
-            // tmp_gimbal_pitch -= dr16_r_y * DR16_Pitch_Angle_Resolution;
         }
 
     #ifdef  SERVO

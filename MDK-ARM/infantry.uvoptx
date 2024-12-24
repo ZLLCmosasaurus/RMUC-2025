@@ -180,12 +180,14 @@
           <WinNumber>1</WinNumber>
           <ItemText>can_tx_status</ItemText>
         </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\infantry\../User/Task/tsk_config_and_callback.cpp\chariot.Booster.Friction_Omega_Threshold</ItemText>
-        </Ww>
       </WatchWindow1>
+      <WatchWindow2>
+        <Ww>
+          <count>0</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>yaw_offset</ItemText>
+        </Ww>
+      </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -752,7 +754,7 @@
 
   <Group>
     <GroupName>Middleware/Algorithm</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

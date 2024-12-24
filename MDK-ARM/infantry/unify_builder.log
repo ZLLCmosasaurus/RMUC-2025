@@ -944,3 +944,34 @@ These source files will be recompiled
 [2024-12-23 23:23:11]	[done]
 	build successfully !
 
+[2024-12-24 20:01:03]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+
+[2024-12-24 20:01:11]	[done]
+	build successfully !
+
+[2024-12-24 20:10:25]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-24 20:10:26]	[done]
+	build successfully !
+
+[2024-12-24 20:12:02]	[done]
+	build successfully !
+
+[2024-12-24 20:57:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+
+[2024-12-24 20:57:28]	[done]
+	build successfully !
+
