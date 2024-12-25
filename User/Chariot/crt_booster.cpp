@@ -364,25 +364,25 @@ void Class_Booster::Output()
 int16_t Test_Torque = 0;float Test_Target_Driver_Angle = 0.0f;float Test_Actual_Driver_Angle = 0.0f;
 int16_t Test_Fric1_output,Test_Fric2_output,Test_Fric3_output,Test_Fric4_output;
 void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
-{     
-    
-    //无需裁判系统的热量控制计算
-    //FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
-    //卡弹处理
+{
+
+    // 无需裁判系统的热量控制计算
+    // FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
+    // 卡弹处理
     FSM_Antijamming.Reload_TIM_Status_PeriodElapsedCallback();
-    //Output();
+    // Output();
     Motor_Driver.TIM_PID_PeriodElapsedCallback();
     for (auto i = 0; i < 4; i++)
     {
         Fric[i].TIM_PID_PeriodElapsedCallback();
     }
     Test_Torque = Motor_Driver.Get_Now_Torque();
-    Test_Target_Driver_Angle = Get_Drvier_Angle()*180.0f/PI;
+    Test_Target_Driver_Angle = Get_Drvier_Angle() * 180.0f / PI;
     Test_Actual_Driver_Angle = Motor_Driver.Get_Now_Angle();
-		Test_Fric1_output = -Fric[0].Get_Out();
-		Test_Fric2_output = -Fric[1].Get_Out();
-		Test_Fric3_output = Fric[2].Get_Out();
-		Test_Fric4_output = Fric[3].Get_Out();
+    Test_Fric1_output = -Fric[0].Get_Out();
+    Test_Fric2_output = -Fric[1].Get_Out();
+    Test_Fric3_output = Fric[2].Get_Out();
+    Test_Fric4_output = Fric[3].Get_Out();
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
