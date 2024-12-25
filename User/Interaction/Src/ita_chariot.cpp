@@ -305,6 +305,8 @@ void Class_Chariot::Control_Gimbal()
     float dr16_y, dr16_r_y;
     //获取当前角度值
     tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
+    tmp_gimbal_pitch_a = Gimbal.Get_Target_Pitch_Angle_A();
+    tmp_gimbal_pitch_b = Gimbal.Get_Target_Pitch_Angle_B();
     
     tmp_gimbal_pitch_a = Gimbal.Get_Target_Pitch_Angle_A();
     tmp_gimbal_pitch_b = Gimbal.Get_Target_Pitch_Angle_B();
@@ -325,6 +327,8 @@ void Class_Chariot::Control_Gimbal()
 
     // 设定角度
     Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);
+    Gimbal.Set_Target_Pitch_Angle_A(tmp_gimbal_pitch_a);
+    Gimbal.Set_Target_Pitch_Angle_B(tmp_gimbal_pitch_b);
     Gimbal.Set_Target_Pitch_Angle_A(tmp_gimbal_pitch_a);
     Gimbal.Set_Target_Pitch_Angle_B(tmp_gimbal_pitch_b);
 }
