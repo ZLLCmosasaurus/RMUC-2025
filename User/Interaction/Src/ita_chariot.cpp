@@ -312,18 +312,15 @@ void Class_Chariot::Control_Gimbal()
     tmp_gimbal_pitch_b = Gimbal.Get_Target_Pitch_Angle_B();
 
     /************************************遥控器控制逻辑*********************************************/
-        dr16_y = (Math_Abs(DR16.Get_Right_X()) > DR16_Dead_Zone) ? DR16.Get_Right_X() : 0;
-        dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > DR16_Dead_Zone) ? DR16.Get_Right_Y() : 0;
+    dr16_y = (Math_Abs(DR16.Get_Right_X()) > DR16_Dead_Zone) ? DR16.Get_Right_X() : 0;
+    dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > DR16_Dead_Zone) ? DR16.Get_Right_Y() : 0;
 
-    
-        Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-        //遥控器操作逻辑
-        tmp_gimbal_yaw -= dr16_y * DR16_Yaw_Angle_Resolution;
-        tmp_gimbal_pitch_a += dr16_r_y * DR16_Pitch_Angle_Resolution;
-        tmp_gimbal_pitch_b += dr16_r_y * DR16_Pitch_Angle_Resolution;
-        
-        
-    
+
+    Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+    //遥控器操作逻辑
+    tmp_gimbal_yaw -= dr16_y * DR16_Yaw_Angle_Resolution;
+    tmp_gimbal_pitch_a += dr16_r_y * DR16_Pitch_Angle_Resolution;
+    tmp_gimbal_pitch_b += dr16_r_y * DR16_Pitch_Angle_Resolution;
 
     // 设定角度
     Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);
@@ -505,8 +502,9 @@ void Class_Chariot::TIM_Unline_Protect_PeriodElapsedCallback()
             //Pre_Gimbal_Control_Type = Gimbal.Get_Gimbal_Control_Type();
             Pre_Chassis_Control_Type = Chassis.Get_Chassis_Control_Type();
             //控制模块禁用
-            //Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
-            //Booster.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
+            Booster_A.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
+            Booster_B.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
 
             // 遥控器中途断联导致错误，重启 DMA
