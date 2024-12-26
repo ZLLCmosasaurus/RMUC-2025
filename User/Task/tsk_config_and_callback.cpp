@@ -353,15 +353,15 @@ void Task1ms_TIM5_Callback()
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
 
-        TIM_UART_PeriodElapsedCallback();
-        
-        // static int mod5 = 0;
-        // mod5++;
-        // if (mod5 == 5)
-        // {
-        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        // mod5 = 0;
-        // }	        
+        //TIM_UART_PeriodElapsedCallback();
+
+        static int mod5 = 0;
+        mod5++;
+        if (mod5 == 5)
+        {
+            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+            mod5 = 0;
+        }
     }
 }
 

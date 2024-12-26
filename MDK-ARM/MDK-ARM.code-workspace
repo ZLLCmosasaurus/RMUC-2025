@@ -4,10 +4,6 @@
             "path": "."
         }
     ],
-    "settings": {
-        "files.associations": {
-            "config.h": "c"
-        }
-    },
+    "settings": {},
     "extensions": {}
 }
