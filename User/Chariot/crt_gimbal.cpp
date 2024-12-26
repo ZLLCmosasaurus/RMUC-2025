@@ -460,9 +460,8 @@ void Class_Gimbal::Init()
     Boardc_BMI.Init(); 
 	//yaw轴电机 初始化
     //IMU初始化
-    Motor_Yaw.PID_Angle.Init(20.0f, 0.004f, 0.01f, 0.0005f, 20.0f, 60.0f,0.0f, 0.0f, 0.0f, 0.001f);
-    Motor_Yaw.PID_Omega.Init(300.0f, 0.3f, 0.01f, 0.001f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
-    //Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    Motor_Yaw.PID_Angle.Init(80.0f, 0.016f, 0.04f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    Motor_Yaw.PID_Omega.Init(150.0f, 0.15f, 0.0075f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //编码器PID初始化
     Motor_Yaw.PID_Yaw_Encoder_Angle.Init(90.0f, 0.1f, 0.3f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f,0.005f);
     Motor_Yaw.PID_Yaw_Encoder_Omega.Init(85.0f, 0.1f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
@@ -470,12 +469,6 @@ void Class_Gimbal::Init()
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205,  DJI_Motor_Control_Method_IMU_ANGLE, 2);
 
     #endif
-		#ifdef YAW_ENCODER
-    Motor_Yaw.PID_Angle.Init(10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
-    Motor_Yaw.PID_Omega.Init(50.0f, 0.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
-    //Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
-    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x209,  DJI_Motor_Control_Method_ANGLE, 2.0f);
-		#endif
     //pitch轴电机
     Motor_Pitch.PID_Angle.Init(50.0f, 1.5f, 2.0f, 0.0f, 0.0f, 150.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Pitch.PID_Omega.Init(150.0f, 0.5f, 0.0f, 0.0f, 3000.0f, 10000.0f,0.0f, 0.0f, 0.0f, 0.001f);
@@ -518,7 +511,6 @@ void Class_Gimbal::Output()
             //设置目标角度
             Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
             Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-            //Motor_Pitch.Set_Target_Yaw_Encoder_Angle(Target_Yaw_Encoder_Angle);
         }
         else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
         {   

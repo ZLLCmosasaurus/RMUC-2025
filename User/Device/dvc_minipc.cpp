@@ -267,8 +267,8 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
  */
 void Class_MiniPC::Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance)
 {
-    *yaw = calc_yaw(x, y, z);
-    *pitch = calc_pitch(x, y, z);
+    *yaw = -calc_yaw(x, y, z);//向左为负，向右为正
+    *pitch = -calc_pitch(x, y, z);//向上为下，向下为负
     *distance = calc_distance(x, y, z);
 }
 

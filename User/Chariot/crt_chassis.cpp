@@ -242,7 +242,6 @@ void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 
 void Class_Streeing_Chassis::Speed_Resolution()
 {
-    // 获取当前速度值，用于速度解算初始值获取
     switch (Chassis_Control_Type)
     {
     case (Chassis_Control_Type_DISABLE):
@@ -252,7 +251,6 @@ void Class_Streeing_Chassis::Speed_Resolution()
     break;
     case (Chassis_Control_Type_SPIN):
     case (Chassis_Control_Type_FLLOW):
-    case (Classis_Control_Type_Shoot):
     {
         // 底盘限速
         if (Velocity_X_Max != 0)

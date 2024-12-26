@@ -944,3 +944,127 @@ These source files will be recompiled
 [2024-12-23 23:23:11]	[done]
 	build successfully !
 
+[2024-12-24 20:01:03]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+
+[2024-12-24 20:01:11]	[done]
+	build successfully !
+
+[2024-12-24 20:10:25]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-24 20:10:26]	[done]
+	build successfully !
+
+[2024-12-24 20:12:02]	[done]
+	build successfully !
+
+[2024-12-24 20:57:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+
+[2024-12-24 20:57:28]	[done]
+	build successfully !
+
+[2024-12-25 22:55:34]	[info] incremental build: 86 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\can.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\dma.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\gpio.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\i2c.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\spi.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_hal_msp.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\system_stm32f4xx.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\tim.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_exti.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usb_device.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_cdc_if.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_desc.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\USB_DEVICE\Target\usbd_conf.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_ist8310.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_buzzer.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dwt.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_sampler.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_servo.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\PID.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\QuaternionEKF.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_MahonyAHRS.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\kalman_filter.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\user_lib.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\brv_math.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\brv_spi.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\brv_tim.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_dwt.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_i2c.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_usb.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Task\config.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': object (.o) file not exist
+
+[2024-12-25 22:55:52]	[done]
+	build successfully !
+
