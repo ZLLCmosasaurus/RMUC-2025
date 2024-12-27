@@ -706,15 +706,18 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         CAN_Chassis_Tx_Streeing_Wheel_Callback();
 
         //云台，随动掉线保护
-        // if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
-        // {
-        //     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
-        // }
-        // else
-        // {
-            
-        // }
-		Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+        if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
+        {
+            Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+        }
+        else
+        {
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        }
+
+        //画UI
+        Referee.UART_Tx_Referee_UI();
+
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
