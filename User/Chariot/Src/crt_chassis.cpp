@@ -235,26 +235,26 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
 
             Vector_Plus();           
 
-            // for (int i = 0; i < 4; i++) {
-            //     // if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
-            //     // {
-            //     //     if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
-            //     //         Motor_Steer[i].Yaw += PI;
-            //     //     }
-            //     //     else { 
-            //     //         Motor_Steer[i].Yaw -= PI;
-            //     //     }
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
-            //     // }
-            //     // if(Motor_Steer[i].Yaw > PI/2) {
-            //     //     Motor_Steer[i].Yaw = Motor_Steer[i].Yaw - PI;
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
-            //     // }
-            //     // else if(Motor_Steer[i].Yaw < -PI/2){
-            //     //     Motor_Steer[i].Yaw = Motor_Steer[i].Yaw + PI;
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
-            //     }		
-	        // }
+            for (int i = 0; i < 4; i++) {
+                if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
+                {
+                    if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
+                        Motor_Steer[i].Yaw += PI;
+                    }
+                    else { 
+                        Motor_Steer[i].Yaw -= PI;
+                    }
+                    Motor_Wheel[i].v = -Motor_Wheel[i].v;
+                }
+                if(Motor_Steer[i].Yaw > PI/2) {
+                    Motor_Steer[i].Yaw = Motor_Steer[i].Yaw - PI;
+                    Motor_Wheel[i].v = -Motor_Wheel[i].v;
+                }
+                else if(Motor_Steer[i].Yaw < -PI/2){
+                    Motor_Steer[i].Yaw = Motor_Steer[i].Yaw + PI;
+                    Motor_Wheel[i].v = -Motor_Wheel[i].v;
+                }		
+	        }
 
 
             for (int i = 0; i < 4; i++) {
