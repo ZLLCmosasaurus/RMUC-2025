@@ -178,7 +178,6 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 底盘控制方案
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
     {
-        
         chassis_omega = (float)tmp_omega;
     }
     else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
@@ -306,22 +305,22 @@ void Class_Chariot::Control_Chassis()
         chassis_velocity_y = dr16_l_y * sqrt(1.0f - dr16_l_x * dr16_l_x / 2.0f) * Chassis.Get_Velocity_Y_Max();
 
         // 键盘遥控器操作逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE || DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左中或者左下 随动模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中 随动模式
         {
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
-        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
-        // {
-        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
-        //     chassis_omega = -Chassis.Get_Spin_Omega();
-        //     // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
-        //     // {
-        //     //     chassis_omega = Chassis.Get_Spin_Omega();
-        //     // }
-        // }
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
+        {
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
+            chassis_omega = -Chassis.Get_Spin_Omega();
+            // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
+            // {
+            //     chassis_omega = Chassis.Get_Spin_Omega();
+            // }
+        }
 
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下 狙击模式
         {
             // 底盘锁死 云台可动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
@@ -459,17 +458,17 @@ void Class_Chariot::Control_Gimbal()
         }
         break;
         }
-
-        //自瞄模式逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
-        {
-            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
-            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
-        }
-        else// 非自瞄模式
-        {
-            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-        }
+        Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+        // //自瞄模式逻辑
+        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
+        // {
+        //     Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
+        //     Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
+        // }
+        // else// 非自瞄模式
+        // {
+        //     Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+        // }
 
     #ifdef  SERVO
         if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW &&
