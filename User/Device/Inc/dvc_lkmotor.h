@@ -191,6 +191,7 @@ protected:
 
     
     uint32_t Position_Max = 16383;
+    float zero_position = 0.0f;
 
 
     //����ϵ��һ֡��־λ

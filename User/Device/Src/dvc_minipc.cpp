@@ -34,57 +34,55 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
 	  USB_Manage_Object = __USB_Manage_Object;
     Frame_Header = __frame_header;
     Frame_Rear = __frame_rear;
-    Pack_Tx.target_type = MiniPC_Type_Nomal;
-    Pack_Tx.windmill_type = Windmill_Type_Small;
-    Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
-
+Struct_MiniPC_Tx_Data_B MiniPC_Tx_Data_B;
+Struct_MiniPC_Rx_Data_B MiniPC_Rx_Data_B;
 /**
  * @brief 数据处理过程
  *
  */
 void Class_MiniPC::Data_Process()
 {
-    // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
-    memcpy(&Pack_Rx,(Pack_rx_t*)USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length);
-
-    float tmp_yaw,tmp_pitch;
-    
-    Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
-
-    // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = -tmp_pitch;
-    Rx_Angle_Yaw = tmp_yaw;
-    Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
-    // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
-
-    memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
+    if(!Verify_CRC16_Check_Sum(USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length)) return;
+    memcpy(&Data_NUC_To_MCU, USB_Manage_Object->Rx_Buffer, sizeof(Struct_MiniPC_Rx_Data));
+    Auto_aim(Data_NUC_To_MCU.Gimbal_Target_X_A, Data_NUC_To_MCU.Gimbal_Target_Y_A, Data_NUC_To_MCU.Gimbal_Target_Z_A, &Rx_Angle_Yaw_A, &Rx_Angle_Pitch_B, &Distance_A);
+    Auto_aim(MiniPC_Rx_Data_B.Gimbal_Target_X_B, MiniPC_Rx_Data_B.Gimbal_Target_Y_B, MiniPC_Rx_Data_B.Gimbal_Target_Z_B, &Rx_Angle_Yaw_B, &Rx_Angle_Pitch_B, &Distance_B);
+    Error_A = Calc_Error(Data_NUC_To_MCU.Gimbal_Target_X_A, Data_NUC_To_MCU.Gimbal_Target_Y_A, Data_NUC_To_MCU.Gimbal_Target_Z_A,Now_Angle_Yaw_A, Now_Angle_Pitch_A);
+    Error_B = Calc_Error(MiniPC_Rx_Data_B.Gimbal_Target_X_B, MiniPC_Rx_Data_B.Gimbal_Target_Y_B, MiniPC_Rx_Data_B.Gimbal_Target_Z_B,Now_Angle_Yaw_B, Now_Angle_Pitch_B);//这里的z为上位机直接发的z，不是弹道解算后的z1，判断时存在一定误差（瞄准误差允许范围为5cm时，不影响10m内打弹）
 }
 
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区
  *
  */
+extern can_rx1_t can_rx1;
+extern can_rx2_t can_rx2;
+
+
 void Class_MiniPC::Output()
 {
-	Pack_Tx.header       = Frame_Header;
+	Data_MCU_To_NUC.header                         = Frame_Header;
+  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_A       = Now_Angle_Pitch_A;
+  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_A         = Now_Angle_Yaw_A;
+  Data_MCU_To_NUC.Gimbal_Now_Roll_Angle_A        = Now_Angle_Roll_A;
+  //Data_MCU_To_NUC.Chassis_Now_yaw_Angle          = Now_Angle_Yaw + Now_Angle_Relative;//relative is negative in Counter Clockwise,so plus rather minus
+  Data_MCU_To_NUC.Game_process                   = can_rx1.game_process;
+  Data_MCU_To_NUC.Self_blood                     = can_rx1.self_blood;
+  Data_MCU_To_NUC.Self_Outpost_HP                = can_rx1.self_outpost_HP;
+  Data_MCU_To_NUC.Remaining_Time                 = can_rx1.time;
+  Data_MCU_To_NUC.Oppo_Outpost_HP                = can_rx2.oppo_outpost_HP;
+  Data_MCU_To_NUC.Self_Base_HP                   = can_rx2.self_base_HP;   
+  Data_MCU_To_NUC.Color_Invincible_State         = ( can_rx2.color<<7 ) | can_rx2.invincible_state;
+  Data_MCU_To_NUC.crc16                          = 0xffff;
 
-  // 根据referee判断红蓝方
-  if(Referee->Get_ID()>=101)
-	  Pack_Tx.detect_color = 101;
-  else
-    Pack_Tx.detect_color = 0;
+  MiniPC_Tx_Data_B.Gimbal_Now_Pitch_Angle_B       = Now_Angle_Pitch_B;
+  MiniPC_Tx_Data_B.Gimbal_Now_Yaw_Angle_B         = Now_Angle_Yaw_B;
+  MiniPC_Tx_Data_B.Gimbal_Now_Roll_Angle_B        = Now_Angle_Roll_B;
 
-	Pack_Tx.target_id    = 0x08;
-	Pack_Tx.roll         = Tx_Angle_Roll;
-	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
-	Pack_Tx.yaw          = Tx_Angle_Yaw;
-	Pack_Tx.crc16        = 0xffff;
-  Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
-	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx,sizeof(Pack_Tx));
-	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx));
-  USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
+	memcpy(USB_Manage_Object->Tx_Buffer, &Data_MCU_To_NUC, sizeof(Struct_MiniPC_Tx_Data));
+  USB_Manage_Object->Tx_Buffer_Length = sizeof(Struct_MiniPC_Tx_Data);
+  //crc16 校验
+  Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer, sizeof(Struct_MiniPC_Tx_Data));
 }
 
 /**
@@ -93,7 +91,7 @@ void Class_MiniPC::Output()
  */
 void Class_MiniPC::TIM_Write_PeriodElapsedCallback()
 {
-  Transform_Angle_Tx();
+  //Transform_Angle_Tx();
   Output();
 }
 
@@ -257,6 +255,27 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
 
   return pitch;
 }
+
+/**
+ * 计算当前瞄准点与目标点的偏差 (映射到同一球面的弦长)
+ * 
+ * @param x 向量的x分量
+ * @param y 向量的y分量
+ * @param z 向量的z分量
+ * @param now_yaw   实际yaw轴角度（弧度制）
+ * @param now_pitch 实际pitch轴角度（弧度制）
+ * @return 偏差值
+ */
+float Class_MiniPC::Calc_Error(float x, float y, float z, float now_yaw, float now_pitch)
+{
+    float dis = sqrtf(x*x + y*y + z*z);
+    float x0 = dis*cos(now_pitch)*cos(now_yaw);
+    float y0 = dis*cos(now_pitch)*sin(now_yaw);
+    float z0 = dis*sin(now_pitch);
+    float err = sqrtf(pow(x-x0,2) + pow(y-y0,2) + pow(z-z0,2));
+    return err;
+}
+
 /**
  * 计算计算yaw，pitch
  * 
@@ -265,11 +284,17 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
  * @param z 向量的z分量
  * @return 计算得到的目标角（以角度制表示）
  */
-void Class_MiniPC::Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance)
+uint8_t Auto_aim_flag = 1;
+void Class_MiniPC::Auto_aim(float x, float y, float z, float *yaw, float *pitch, float *distance)
 {
-    *yaw = calc_yaw(x, y, z);
-    *pitch = calc_pitch(x, y, z);
+    if(x == 0 && y == 0 && z == 0)
+        Auto_aim_flag = 1;
+    else
+        Auto_aim_flag = 0;
+    *yaw = calc_yaw(x, y, z);//第一次标- 现改为正
+    *pitch = calc_pitch(x, y, z);//第一次标- 现改为正
     *distance = calc_distance(x, y, z);
+     //这里的z为上位机直接发的z，不是弹道解算后的z1，判断时存在一定误差（瞄准误差允许范围为5cm时，不影响10m内打弹）
 }
 
 float Class_MiniPC::meanFilter(float input) 

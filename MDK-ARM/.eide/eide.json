@@ -535,9 +535,9 @@
           "../User/Algorithm/Inc",
           "RTE/_Sentry",
           ".cmsis/driver/VIO/Include",
-          ".cmsis/include",
           "../DSP/Include",
-          ".cmsis/libdsp/arm"
+          ".cmsis/libdsp/arm",
+          ".cmsis/include"
         ],
         "libList": [
           ".cmsis/libdsp",

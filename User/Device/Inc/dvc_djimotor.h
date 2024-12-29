@@ -176,7 +176,7 @@ protected:
     uint16_t Output_Max = 16000;
 
     //内部变量
-    
+    float zero_position = 0.0f;
     //当前时刻的电机接收flag
     uint32_t Flag = 0;
     //前一时刻的电机接收flag
