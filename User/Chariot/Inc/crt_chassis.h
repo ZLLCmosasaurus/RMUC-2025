@@ -75,6 +75,8 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
     Chassis_Control_Type_SPIN,
+    Chassis_Control_Mode_NORMAL_SPIN,  // 不随动+受击打小陀螺
+    Chassis_Control_Mode_FOLLOW_SPIN   // 随动+受击打小陀螺
 };
 
 /**
@@ -108,6 +110,9 @@ public:
     Class_DJI_Motor_C620 Motor_Wheel[4];
     Class_DJI_Motor_GM6020 Motor_Steer[4];
 
+    //随动环
+    Class_PID Chassis_Follow_PID_Angle;
+
     void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
 
     inline Enum_Chassis_Control_Type Get_Chassis_Control_Type();
@@ -123,6 +128,7 @@ public:
     inline float Get_Target_Velocity_Y();
     inline float Get_Target_Omega();
     inline float Get_Spin_Omega();
+    inline float Get_Relative_Angle();
 
     inline void Set_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
     inline void Set_Target_Velocity_X(float __Target_Velocity_X);
@@ -131,6 +137,7 @@ public:
     inline void Set_Now_Velocity_X(float __Now_Velocity_X);
     inline void Set_Now_Velocity_Y(float __Now_Velocity_Y);
     inline void Set_Now_Omega(float __Now_Omega);
+    inline void Set_Relative_Angle(float __Relative_Angle);
 
     inline void Set_Velocity_Y_Max(float __Velocity_Y_Max);
     inline void Set_Velocity_X_Max(float __Velocity_X_Max);
@@ -160,6 +167,7 @@ protected:
     float Wheel_Max_Output = 16384.0f;
 
     //内部变量
+    float Relative_Angle = 0.0f;
 
     //舵向电机目标值
     float Target_Steer_Angle[3];
@@ -369,6 +377,10 @@ float Class_Tricycle_Chassis::Get_Target_Wheel_Power()
     return (Target_Wheel_Power);
 }
 
+float Class_Tricycle_Chassis::Get_Relative_Angle()
+{
+    return (Relative_Angle);
+}
 /**
  * @brief 设定底盘控制方法
  *
@@ -459,6 +471,10 @@ void Class_Tricycle_Chassis::Set_Velocity_X_Max(float __Velocity_X_Max)
     Velocity_X_Max = __Velocity_X_Max;
 }
 
+void Class_Tricycle_Chassis::Set_Relative_Angle(float __Relative_Angle)
+{
+    Relative_Angle = __Relative_Angle;
+}
 
 #endif
 

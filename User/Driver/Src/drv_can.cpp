@@ -202,6 +202,11 @@ void CAN_Init(FDCAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
     }
+    else if (hcan->Instance == FDCAN3)
+    {
+        CAN3_Manage_Object.CAN_Handler = hcan;
+        CAN3_Manage_Object.Callback_Function = Callback_Function;
+    }
     can_filter_init(hcan);
     HAL_FDCAN_ActivateNotification(hcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
     HAL_FDCAN_Start(hcan); //开启FDCAN
@@ -278,11 +283,11 @@ void TIM_CAN_PeriodElapsedCallback()
 
     #elif defined (GIMBAL)
 
-    //  摩擦轮*4 + 拨弹轮*2   
-    CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮 按照0x200 ID 发送 可控制多个电机
-    CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
-    //  yaw*2 + pitch*2
-    CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+    // //  摩擦轮*4 + 拨弹轮*2   
+    // CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮 按照0x200 ID 发送 可控制多个电机
+    // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+    // //  yaw*2 + pitch*2
+    // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
     //  CAN3  下板 大yaw
     CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
     CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
