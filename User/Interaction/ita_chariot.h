@@ -157,6 +157,7 @@ public:
         void CAN_Chassis_Tx_Gimbal_Callback();
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
         void CAN_Chassis_Tx_Streeing_Wheel_Callback();
+        void CAN_Chassis_Tx_Max_Power_Callback();
     #elif defined(GIMBAL)
 
         inline void DR16_Offline_Cnt_Plus();

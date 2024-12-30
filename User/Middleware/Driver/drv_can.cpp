@@ -54,11 +54,22 @@ uint8_t CAN_Supercap_Tx_Data[8];
 uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
 
-//底盘分别给四个舵轮发送消息
+//底盘分别给四个舵轮发送角度与速度数据
 uint8_t CAN1_0x1a_Tx_Streeing_Wheel_A_data[8];
 uint8_t CAN1_0x1b_Tx_Streeing_Wheel_B_data[8];
 uint8_t CAN1_0x1c_Tx_Streeing_Wheel_C_data[8];
 uint8_t CAN1_0x1d_Tx_Streeing_Wheel_D_data[8];
+
+CAN_Massage_Unit Massage_queue[4] = 
+{
+    {&hcan1, 0x01a, CAN1_0x1a_Tx_Streeing_Wheel_A_data, 8},
+    {&hcan1, 0x01b, CAN1_0x1b_Tx_Streeing_Wheel_B_data, 8},
+    {&hcan1, 0x01c, CAN1_0x1b_Tx_Streeing_Wheel_B_data, 8},
+    {&hcan1, 0x01d, CAN1_0x1d_Tx_Streeing_Wheel_D_data, 8},
+};
+static int8_t CAN1_Tx_Index = 0;
+//底盘给舵小板发送功率数据
+uint8_t CAN1_0x01E_Tx_Data[8];
 /*********LK电机 控制缓冲区***********/
 uint8_t CAN1_0x141_Tx_Data[8];
 uint8_t CAN1_0x142_Tx_Data[8];
@@ -265,7 +276,7 @@ void TIM_CAN_PeriodElapsedCallback()
     //     // CAN2超级电容
     //     CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8);
     // }
-
+    #ifdef Forward_Code
     // CAN1 发送报文给舵小板
     if (mod10 % 12 == 0)
         can_tx_status[0] = CAN_Send_EXT_Data(&hcan1, EXT_ID_Set(0x1a, 0, 0x03), CAN1_0x1a_Tx_Streeing_Wheel_A_data, 8);
@@ -275,9 +286,25 @@ void TIM_CAN_PeriodElapsedCallback()
         can_tx_status[2] = CAN_Send_EXT_Data(&hcan1, EXT_ID_Set(0x1c, 0, 0x03), CAN1_0x1c_Tx_Streeing_Wheel_C_data, 8);
     if (mod10 % 12 == 9)
         can_tx_status[3] = CAN_Send_EXT_Data(&hcan1, EXT_ID_Set(0x1d, 0, 0x03), CAN1_0x1d_Tx_Streeing_Wheel_D_data, 8);
-
+    #endif
         // CAN2 发送报文给上板
         // CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
+        
+    static uint8_t mod5 = 0;
+    mod5++;
+    if (mod5 == 5)
+    {
+        CAN_Send_Data(&hcan1, 0x01e, CAN1_0x01E_Tx_Data, 8);
+        mod5 = 0;
+    }
+    else
+    {
+        while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1))
+        {
+            CAN1_Tx_Index = (CAN1_Tx_Index + 1) % 4;
+            CAN_Send_Data(Massage_queue[CAN1_Tx_Index].hcan, Massage_queue[CAN1_Tx_Index].ID, Massage_queue[CAN1_Tx_Index].Data, Massage_queue[CAN1_Tx_Index].Length);
+        }
+    }
 
 #elif defined(GIMBAL)
     static uint8_t mod10 = 0;

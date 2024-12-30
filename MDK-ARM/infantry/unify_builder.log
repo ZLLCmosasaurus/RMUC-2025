@@ -1228,3 +1228,182 @@ These source files will be recompiled
 [2024-12-28 20:01:06]	[done]
 	build successfully !
 
+[2024-12-30 22:22:12]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-30 22:22:20]	[done]
+	build successfully !
+
+[2024-12-30 22:22:32]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2024-12-30 22:22:34]	[done]
+	build successfully !
+
+[2024-12-30 22:33:08]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-30 22:33:08]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_chassis.o -MMD ./../User/Chariot/crt_chassis.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_chassis.cpp:690:30: error: out-of-line definition of 'AGV_DirectiveMotor_TargetStatus_To_MotorAngle_In_ChassisCoordinate' does not match any declaration in 'Class_Tricycle_Chassis'
+  690 | void Class_Tricycle_Chassis::AGV_DirectiveMotor_TargetStatus_To_MotorAngle_In_ChassisCoordinate()
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_chassis.cpp:740:32: error: use of undeclared identifier 'Target_Steer_Angle_Rad'; did you mean 'Target_Steer_Angle'?
+  740 |     float actual_angle_A_rad = Target_Steer_Angle_Rad[0] - (PI / 2.0f);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+      |                                Target_Steer_Angle
+./../User/Chariot/crt_chassis.h:138:11: note: 'Target_Steer_Angle' declared here
+  138 |     float Target_Steer_Angle[3];
+      |           ^
+./../User/Chariot/crt_chassis.cpp:741:32: error: use of undeclared identifier 'Target_Steer_Angle_Rad'; did you mean 'Target_Steer_Angle'?
+  741 |     float actual_angle_B_rad = Target_Steer_Angle_Rad[1] - (PI / 2.0f);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+      |                                Target_Steer_Angle
+./../User/Chariot/crt_chassis.h:138:11: note: 'Target_Steer_Angle' declared here
+  138 |     float Target_Steer_Angle[3];
+      |           ^
+./../User/Chariot/crt_chassis.cpp:742:32: error: use of undeclared identifier 'Target_Steer_Angle_Rad'; did you mean 'Target_Steer_Angle'?
+  742 |     float actual_angle_C_rad = Target_Steer_Angle_Rad[2] - (PI / 2.0f);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+      |                                Target_Steer_Angle
+./../User/Chariot/crt_chassis.h:138:11: note: 'Target_Steer_Angle' declared here
+  138 |     float Target_Steer_Angle[3];
+      |           ^
+./../User/Chariot/crt_chassis.cpp:743:32: error: use of undeclared identifier 'Target_Steer_Angle_Rad'; did you mean 'Target_Steer_Angle'?
+  743 |     float actual_angle_D_rad = Target_Steer_Angle_Rad[3] - (PI / 2.0f);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~
+      |                                Target_Steer_Angle
+./../User/Chariot/crt_chassis.h:138:11: note: 'Target_Steer_Angle' declared here
+  138 |     float Target_Steer_Angle[3];
+      |           ^
+./../User/Chariot/crt_chassis.cpp:762:12: error: use of undeclared identifier 'Float_Abs'
+  762 |     temp = Float_Abs(speed_A);
+      |            ^
+./../User/Chariot/crt_chassis.cpp:763:9: error: use of undeclared identifier 'Float_Abs'
+  763 |     if (Float_Abs(speed_B) > temp)
+      |         ^
+./../User/Chariot/crt_chassis.cpp:764:16: error: use of undeclared identifier 'Float_Abs'
+  764 |         temp = Float_Abs(speed_B);
+      |                ^
+./../User/Chariot/crt_chassis.cpp:765:9: error: use of undeclared identifier 'Float_Abs'
+  765 |     if (Float_Abs(speed_C) > temp)
+      |         ^
+./../User/Chariot/crt_chassis.cpp:766:16: error: use of undeclared identifier 'Float_Abs'
+  766 |         temp = Float_Abs(speed_C);
+      |                ^
+./../User/Chariot/crt_chassis.cpp:767:9: error: use of undeclared identifier 'Float_Abs'
+  767 |     if (Float_Abs(speed_D) > temp)
+      |         ^
+./../User/Chariot/crt_chassis.cpp:768:16: error: use of undeclared identifier 'Float_Abs'
+  768 |         temp = Float_Abs(speed_D);
+      |                ^
+./../User/Chariot/crt_chassis.cpp:814:5: error: use of undeclared identifier 'Agv_Board'
+  814 |     Agv_Board[0].Set_Target_Velocity_X(vx_A);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:815:5: error: use of undeclared identifier 'Agv_Board'
+  815 |     Agv_Board[0].Set_Target_Velocity_Y(vy_A);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:817:5: error: use of undeclared identifier 'Agv_Board'
+  817 |     Agv_Board[1].Set_Target_Velocity_X(vx_B);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:818:5: error: use of undeclared identifier 'Agv_Board'
+  818 |     Agv_Board[1].Set_Target_Velocity_Y(vy_B);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:820:5: error: use of undeclared identifier 'Agv_Board'
+  820 |     Agv_Board[2].Set_Target_Velocity_X(vx_C);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:821:5: error: use of undeclared identifier 'Agv_Board'
+  821 |     Agv_Board[2].Set_Target_Velocity_Y(vy_C);
+      |     ^
+./../User/Chariot/crt_chassis.cpp:823:5: error: use of undeclared identifier 'Agv_Board'
+  823 |     Agv_Board[3].Set_Target_Velocity_X(vx_D);
+      |     ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2024-12-30 23:03:27]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+
+[2024-12-30 23:03:29]	[done]
+	build successfully !
+
+[2024-12-30 23:03:47]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-30 23:03:48]	[done]
+	build successfully !
+
+[2024-12-30 23:28:42]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_can.h' has been changed.
+
+[2024-12-30 23:28:44]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Interaction/ita_chariot.cpp:14:
+./../User/Interaction/ita_chariot.h:160:9: error: a type specifier is required for all declarations
+  160 |         CAN_Chassis_Tx_Max_Power_Callback();
+      |         ^
+1 error generated.
+In file included from ./../User/Task/tsk_config_and_callback.cpp:53:
+../User/Interaction\ita_chariot.h:160:9: error: a type specifier is required for all declarations
+  160 |         CAN_Chassis_Tx_Max_Power_Callback();
+      |         ^
+1 error generated.
+
+[2024-12-30 23:28:59]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2024-12-30 23:29:00]	[done]
+	build successfully !
+
+[2024-12-30 23:30:06]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2024-12-30 23:30:07]	[done]
+	build successfully !
+

@@ -295,8 +295,7 @@ void Class_Streeing_Chassis::Speed_Resolution()
         float Wheel_D_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_D * sin(THETA_D);
         float Wheel_D_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_D * cos(THETA_D);
         #endif
-
-
+        
         wheel[0].ChassisCoordinate_Angle = My_atan(Wheel_A_Vy, Wheel_A_Vx) * RAD_TO_8191;
         wheel[1].ChassisCoordinate_Angle = My_atan(Wheel_B_Vy, Wheel_B_Vx) * RAD_TO_8191;
         wheel[2].ChassisCoordinate_Angle = My_atan(Wheel_C_Vy, Wheel_C_Vx) * RAD_TO_8191;
@@ -311,6 +310,7 @@ void Class_Streeing_Chassis::Speed_Resolution()
         {
             wheel[i].streeing_wheel_omega = wheel[i].streeing_wheel_speed * VEL2RPM;
         }
+        
     }
     break;
     }
@@ -427,3 +427,4 @@ void Class_Streeing_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
+

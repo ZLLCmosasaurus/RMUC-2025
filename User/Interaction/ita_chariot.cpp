@@ -305,22 +305,22 @@ void Class_Chariot::Control_Chassis()
         chassis_velocity_y = dr16_l_y * sqrt(1.0f - dr16_l_x * dr16_l_x / 2.0f) * Chassis.Get_Velocity_Y_Max();
 
         // 键盘遥控器操作逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中 随动模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE || DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左中或者左下 随动模式
         {
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
-        {
-            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
-            chassis_omega = -Chassis.Get_Spin_Omega();
-            // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
-            // {
-            //     chassis_omega = Chassis.Get_Spin_Omega();
-            // }
-        }
+        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
+        // {
+        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
+        //     chassis_omega = -Chassis.Get_Spin_Omega();
+        //     // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
+        //     // {
+        //     //     chassis_omega = Chassis.Get_Spin_Omega();
+        //     // }
+        // }
 
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下 狙击模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
         {
             // 底盘锁死 云台可动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
@@ -458,17 +458,16 @@ void Class_Chariot::Control_Gimbal()
         }
         break;
         }
-        Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-        // //自瞄模式逻辑
-        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
-        // {
-        //     Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
-        //     Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
-        // }
-        // else// 非自瞄模式
-        // {
-        //     Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-        // }
+        //自瞄模式逻辑
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
+        {
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
+            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); 
+        }
+        else// 非自瞄模式
+        {
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+        }
 
     #ifdef  SERVO
         if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW &&
@@ -660,6 +659,7 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
 #ifdef CHASSIS
 void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
 {
+    //与舵小板通信有效数据为：角度、角速度
     uint16_t tmp_angle = 0;
     int16_t tmp_omega = 0;
     uint8_t chassis_status = (uint8_t)(Chassis.Get_Chassis_Control_Type());
@@ -687,9 +687,20 @@ void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[0], &tmp_angle, 2);
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[2], &tmp_omega, 2);
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[4], &chassis_status, 1);
+
 }
 #endif
+#ifdef CHASSIS
+void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
+{
+    uint16_t Chassis_Power_Max = 60;
 
+    //Chassis_Power_Max = Referee.Get_Chassis_Power_Max();
+
+
+    memcpy(CAN1_0x01E_Tx_Data, &Chassis_Power_Max, sizeof(uint16_t));
+}
+#endif
 /**
  * @brief 计算回调函数
  *
@@ -703,7 +714,8 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         CAN_Chassis_Tx_Gimbal_Callback();
         //底盘给分别给四个舵轮发消息
         CAN_Chassis_Tx_Streeing_Wheel_Callback();
-
+        //底盘给舵小板发送最大功率
+        CAN_Chassis_Tx_Max_Power_Callback();
         //云台，随动掉线保护
         if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
         {
