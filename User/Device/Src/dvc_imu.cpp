@@ -31,7 +31,7 @@ void Class_IMU::Init()
     INS.AccelLPF = 0.0085;
 
     //初始化温控pid参数 积分和输出限幅是一周期满占空比的计数240M/24/10000=1000
-    PID_IMU_Tempture.Init(200, 300, 0, 0.0, 1000, 1000);
+    PID_IMU_Tempture.Init(200, 300, 0, 0.0, 250, 500);
     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
 
 }
@@ -81,6 +81,8 @@ void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
         PID_IMU_Tempture.Set_Now(BMI088_Raw_Data.Temperature);
         PID_IMU_Tempture.Set_Target(40.);
         PID_IMU_Tempture.TIM_Adjust_PeriodElapsedCallback();
+        if(PID_IMU_Tempture.Get_Out() <= 0)TIM_Set_PWM(&htim3, TIM_CHANNEL_4, 0);
+        else
         TIM_Set_PWM(&htim3, TIM_CHANNEL_4, (uint16_t)PID_IMU_Tempture.Get_Out());
     }
 

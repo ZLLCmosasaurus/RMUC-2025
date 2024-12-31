@@ -213,7 +213,7 @@ protected:
     
     Enum_LK_Motor_Control_Status LK_Motor_Control_Status = LK_Motor_Control_Status_DISABLE;
     
-    Enum_LK_Motor_Control_Method LK_Motor_Control_Method = LK_Motor_Control_Method_IMU_ANGLE;
+    Enum_LK_Motor_Control_Method LK_Motor_Control_Method = LK_Motor_Control_Method_ANGLE;
     
     float IMU_K_P = 0.0f;
     

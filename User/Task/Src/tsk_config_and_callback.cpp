@@ -181,56 +181,6 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.Identifier)
     {
-        // case (0x203):
-        // {
-        //     chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        // }
-        // break;
-        // case (0x201):
-        // {
-        //     chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        // }
-        // break;
-        // case (0x202):
-        // {
-        //     chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        // }
-        // break;
-        case (0x205):
-        {
-            chariot.Gimbal.Motor_Pitch_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case (0x206):
-        {
-            chariot.Gimbal.Motor_Pitch_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case (0x207):
-        {
-            chariot.Gimbal.Motor_Yaw_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case (0x208):
-        {
-            chariot.Gimbal.Motor_Yaw_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        
-    }
-		
-}
-#endif
-/**
- * @brief Gimbal_CAN1回调函数
- *
- * @param CAN_RxMessage CAN2收到的消息
- */
-#ifdef GIMBAL
-void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
-{
-    switch (CAN_RxMessage->Header.Identifier)
-    {
         case (0x88):   //留给下板通讯
         {
             chariot.CAN_Gimbal_Rx_Chassis_Callback();
@@ -259,6 +209,42 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 }
 #endif
 
+/**
+ * @brief Gimbal_CAN2回调函数
+ *
+ * @param CAN_RxMessage CAN2收到的消息
+ */
+#ifdef GIMBAL
+void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
+{
+    switch (CAN_RxMessage->Header.Identifier)
+    {
+        case (0x205):
+        {
+            chariot.Gimbal.Motor_Yaw_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x206):
+        {
+            chariot.Gimbal.Motor_Pitch_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x207):
+        {
+            chariot.Gimbal.Motor_Yaw_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x208):
+        {
+            chariot.Gimbal.Motor_Pitch_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        
+    }
+		
+}
+#endif
+
 #ifdef GIMBAL
 void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
     switch (CAN_RxMessage->Header.Identifier)
@@ -273,10 +259,6 @@ void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
             chariot.Gimbal.Motor_Main_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
-        case (0x142):
-        {
-            chariot.Gimbal.Motor_Main_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
 	}
 }
 #endif
