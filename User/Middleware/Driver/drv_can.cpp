@@ -64,7 +64,7 @@ CAN_Massage_Unit Massage_queue[4] =
 {
     {&hcan1, 0x01a, CAN1_0x1a_Tx_Streeing_Wheel_A_data, 8},
     {&hcan1, 0x01b, CAN1_0x1b_Tx_Streeing_Wheel_B_data, 8},
-    {&hcan1, 0x01c, CAN1_0x1b_Tx_Streeing_Wheel_B_data, 8},
+    {&hcan1, 0x01c, CAN1_0x1c_Tx_Streeing_Wheel_C_data, 8},
     {&hcan1, 0x01d, CAN1_0x1d_Tx_Streeing_Wheel_D_data, 8},
 };
 static int8_t CAN1_Tx_Index = 0;
@@ -305,7 +305,15 @@ void TIM_CAN_PeriodElapsedCallback()
             CAN_Send_Data(Massage_queue[CAN1_Tx_Index].hcan, Massage_queue[CAN1_Tx_Index].ID, Massage_queue[CAN1_Tx_Index].Data, Massage_queue[CAN1_Tx_Index].Length);
         }
     }
-
+    // CAN1 发送报文给舵小板
+    // if (mod10 % 12 == 0)
+    //     can_tx_status[0] = CAN_Send_Data(&hcan1, 0x1a, CAN1_0x1a_Tx_Streeing_Wheel_A_data, 8);
+    // if (mod10 % 12 == 3)
+    //     can_tx_status[1] = CAN_Send_Data(&hcan1, 0x1b, CAN1_0x1b_Tx_Streeing_Wheel_B_data, 8);
+    // if (mod10 % 12 == 6)
+    //     can_tx_status[2] = CAN_Send_Data(&hcan1, 0x1c, CAN1_0x1c_Tx_Streeing_Wheel_C_data, 8);
+    // if (mod10 % 12 == 9)
+    //     can_tx_status[3] = CAN_Send_Data(&hcan1, 0x1d, CAN1_0x1d_Tx_Streeing_Wheel_D_data, 8);
 #elif defined(GIMBAL)
     static uint8_t mod10 = 0;
     mod10++;
