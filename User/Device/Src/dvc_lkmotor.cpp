@@ -134,6 +134,31 @@ uint8_t *allocate_tx_data(FDCAN_HandleTypeDef *hcan, Enum_LK_Motor_ID __CAN_ID)
         break;
         }
     }
+    else if( hcan == &hfdcan3){
+        switch (__CAN_ID)
+        {
+            case (LK_Motor_ID_0x141):
+            {
+                tmp_tx_data_ptr = CAN3_0x141_Tx_Data;
+            }
+            break;
+            case (LK_Motor_ID_0x142):
+            {
+                tmp_tx_data_ptr = CAN3_0x142_Tx_Data;
+            }
+            break;
+            case (LK_Motor_ID_0x143):
+            {
+                tmp_tx_data_ptr = CAN3_0x143_Tx_Data;
+            }
+            break;
+            case (LK_Motor_ID_0x144):
+            {
+                tmp_tx_data_ptr = CAN3_0x144_Tx_Data;
+            }
+            break;
+        }
+    }
     return (tmp_tx_data_ptr);
 }
 

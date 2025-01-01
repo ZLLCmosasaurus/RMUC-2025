@@ -103,8 +103,8 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     //轮向电机ID初始化
     Motor_Wheel[0].Init(&hfdcan1, DJI_Motor_ID_0x202);
     Motor_Wheel[1].Init(&hfdcan1, DJI_Motor_ID_0x201);
-    Motor_Wheel[2].Init(&hfdcan1, DJI_Motor_ID_0x203);
-    Motor_Wheel[3].Init(&hfdcan1, DJI_Motor_ID_0x204);
+    Motor_Wheel[2].Init(&hfdcan1, DJI_Motor_ID_0x204);
+    Motor_Wheel[3].Init(&hfdcan1, DJI_Motor_ID_0x203);
 
     //舵向电机PID初始化
     for (int i = 0; i < 4; i++)
@@ -117,13 +117,13 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     //舵向电机ID初始化
     Motor_Steer[0].Init(&hfdcan2, DJI_Motor_ID_0x206);
     Motor_Steer[1].Init(&hfdcan2, DJI_Motor_ID_0x208);
-    Motor_Steer[2].Init(&hfdcan2, DJI_Motor_ID_0x205);
-    Motor_Steer[3].Init(&hfdcan2, DJI_Motor_ID_0x207);
+    Motor_Steer[2].Init(&hfdcan2, DJI_Motor_ID_0x207);
+    Motor_Steer[3].Init(&hfdcan2, DJI_Motor_ID_0x205);
     //舵向电机零点位置初始化
     Motor_Steer[0].Set_Zero_Position(0.5261);
     Motor_Steer[1].Set_Zero_Position(2.8739);
-    Motor_Steer[2].Set_Zero_Position(1.6260);
-    Motor_Steer[3].Set_Zero_Position(5.7485);
+    Motor_Steer[2].Set_Zero_Position(5.7485);
+    Motor_Steer[3].Set_Zero_Position(1.6260);
 
     Motor_Steer[0].init_Yaw = -PI/4;
     Motor_Steer[1].init_Yaw = PI/4;
@@ -200,6 +200,27 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             Motor_Wheel[2].init_v = Get_Target_Omega();
             Motor_Wheel[3].init_v = - Get_Target_Omega();
 
+            Vector_Plus(); 
+
+            for (int i = 0; i < 4; i++) {
+                if(Motor_Steer[i].Yaw-Motor_Steer[i].t_yaw>= PI) 
+                {
+                    Motor_Steer[i].Yaw-= 2*PI;
+                }
+                if(Motor_Steer[i].Yaw-Motor_Steer[i].t_yaw<= -PI) 
+                {
+                    Motor_Steer[i].Yaw+= 2*PI;
+                }
+                Motor_Steer[i].Set_Target_Angle(Motor_Steer[i].Yaw*360/2/PI);//电机坐标系逆时针为正 编码器左手坐标系
+                Motor_Wheel[i].Set_Target_Omega_Radian(Motor_Wheel[i].v*10.0f); //rad/s
+            }
+            
+            //各个电机具体PID
+            for (int i = 0; i < 4; i++){
+                Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
+                Motor_Steer[i].TIM_PID_PeriodElapsedCallback();
+            }
+
 			//底盘四电机模式配置
             for (int i = 0; i < 4; i++)
             {
@@ -223,36 +244,31 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
                 Motor_Steer[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_AGV_MODE);
             }
            
-            
-            // Motor_Steer[0].init_Yaw = 0 + -PI/4;
-            // Motor_Steer[1].init_Yaw = 0 + PI/4;
-            // Motor_Steer[2].init_Yaw = 0 + PI/4;
-            // Motor_Steer[3].init_Yaw = 0 + -PI/4;
-
-            // for (int i = 0; i < 4; i++) {
-			// 	Motor_Steer[i].Yaw += 0;
-			// }
+            Motor_Wheel[0].init_v = Get_Target_Omega();
+            Motor_Wheel[1].init_v = - Get_Target_Omega();
+            Motor_Wheel[2].init_v = Get_Target_Omega();
+            Motor_Wheel[3].init_v = - Get_Target_Omega();
 
             Vector_Plus();           
 
             // for (int i = 0; i < 4; i++) {
-            //     // if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
-            //     // {
-            //     //     if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
-            //     //         Motor_Steer[i].Yaw += PI;
-            //     //     }
-            //     //     else { 
-            //     //         Motor_Steer[i].Yaw -= PI;
-            //     //     }
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
-            //     // }
-            //     // if(Motor_Steer[i].Yaw > PI/2) {
-            //     //     Motor_Steer[i].Yaw = Motor_Steer[i].Yaw - PI;
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
-            //     // }
-            //     // else if(Motor_Steer[i].Yaw < -PI/2){
-            //     //     Motor_Steer[i].Yaw = Motor_Steer[i].Yaw + PI;
-            //     //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
+            //     if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
+            //     {
+            //         if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
+            //             Motor_Steer[i].Yaw += PI;
+            //         }
+            //         else { 
+            //             Motor_Steer[i].Yaw -= PI;
+            //         }
+            //         Motor_Wheel[i].v = -Motor_Wheel[i].v;
+            //     }
+            //     if(Motor_Steer[i].Yaw > PI/2) {
+            //         Motor_Steer[i].Yaw = Motor_Steer[i].Yaw - PI;
+            //         Motor_Wheel[i].v = -Motor_Wheel[i].v;
+            //     }
+            //     else if(Motor_Steer[i].Yaw < -PI/2){
+            //         Motor_Steer[i].Yaw = Motor_Steer[i].Yaw + PI;
+            //         Motor_Wheel[i].v = -Motor_Wheel[i].v;
             //     }		
 	        // }
 
@@ -267,16 +283,16 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
                 {
                     Motor_Steer[i].Yaw+= 2*PI;
                 }
-                if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
-                {
-                    if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
-                        Motor_Steer[i].Yaw += PI;
-                    }
-                    else { 
-                        Motor_Steer[i].Yaw -= PI;
-                    }
-                    Motor_Wheel[i].v = -Motor_Wheel[i].v;
-                }
+                // if (abs(Motor_Steer[i].Pre_Yaw - Motor_Steer[i].Yaw) > PI/2 )//如果变换角度大于90° 
+                // {
+                //     if (Motor_Steer[i].Yaw < Motor_Steer[i].Pre_Yaw) {
+                //         Motor_Steer[i].Yaw += PI;
+                //     }
+                //     else { 
+                //         Motor_Steer[i].Yaw -= PI;
+                //     }
+                //     Motor_Wheel[i].v = -Motor_Wheel[i].v;
+                // }
                 Motor_Steer[i].Set_Target_Angle(Motor_Steer[i].Yaw*360/2/PI);//电机坐标系逆时针为正 编码器左手坐标系
                 Motor_Wheel[i].Set_Target_Omega_Radian(Motor_Wheel[i].v*10.0f); //rad/s
             }

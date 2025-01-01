@@ -130,6 +130,9 @@ public:
     inline float Get_Target_Omega_Angle();
     inline float Get_Target_Torque();
     inline float Get_Out();
+    inline float Get_Transform_Angle();
+    inline float Get_Transform_Omega();
+    inline float Get_Transform_Torque();
 
     inline void Set_DJI_Motor_Control_Method(Enum_DJI_Motor_Control_Method __DJI_Motor_Control_Method);
     inline void Set_Target_Angle(float __Target_Angle);
@@ -139,6 +142,9 @@ public:
     inline void Set_Target_Torque(float __Target_Torque);
     inline void Set_Out(float __Out);
     inline void Set_Zero_Position(float __Zero_Position);
+    inline void Set_Transform_Angle(float __Transform_Angle);
+    inline void Set_Transform_Omega(float __Transform_Omega);
+    inline void Set_Transform_Torque(float __Transform_Torque);
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM_Alive_PeriodElapsedCallback();
@@ -176,7 +182,10 @@ protected:
     uint16_t Output_Max = 16000;
 
     //内部变量
-    
+    float zero_position = 0.0f;
+    float Transform_Angle = 0.0f;
+    float Transform_Omega = 0.0f;
+    float Transform_Torque = 0.0f;
     //当前时刻的电机接收flag
     uint32_t Flag = 0;
     //前一时刻的电机接收flag
@@ -592,6 +601,21 @@ float Class_DJI_Motor_GM6020::Get_Zero_Position()
     return (Zero_Position);
 }
 
+float Class_DJI_Motor_GM6020::Get_Transform_Angle()
+{
+    return (Transform_Angle);
+}
+
+float Class_DJI_Motor_GM6020::Get_Transform_Omega()
+{
+    return (Transform_Omega);
+}
+
+float Class_DJI_Motor_GM6020::Get_Transform_Torque()
+{
+    return (Transform_Torque);
+}
+
 /**
  * @brief 设定电机控制方式
  *
@@ -670,6 +694,21 @@ void Class_DJI_Motor_GM6020::Set_Out(float __Out)
 void Class_DJI_Motor_GM6020::Set_Zero_Position(float __Zero_Position)
 {
     Zero_Position = __Zero_Position;
+}
+
+void Class_DJI_Motor_GM6020::Set_Transform_Angle(float __Transform_Angle)
+{
+    Transform_Angle = __Transform_Angle;
+}
+
+void Class_DJI_Motor_GM6020::Set_Transform_Omega(float __Transform_Omega)
+{
+    Transform_Omega = __Transform_Omega;
+}
+
+void Class_DJI_Motor_GM6020::Set_Transform_Torque(float __Transform_Torque)
+{
+    Transform_Torque = __Transform_Torque;
 }
 
 /**

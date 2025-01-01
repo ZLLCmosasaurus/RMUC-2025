@@ -151,6 +151,7 @@ public:
     inline float Get_Target_Omega_Angle();
     inline float Get_Target_Omega_Radian();
     inline float Get_Target_Torque();
+    inline float Get_Zero_Position();
     
     inline void Set_LK_Control_Status(Enum_LK_Motor_Control_Status __DM_Motor_Control_Status);
     inline void Set_LK_Motor_Control_Method(Enum_LK_Motor_Control_Method __DM_Motor_Control_Method);
@@ -162,6 +163,7 @@ public:
     inline void Set_Target_Omega_Radian(float __Target_Omega_Radian);
     inline void Set_Target_Current(float __Target_Current);
     inline void Set_Target_Torque(float __Target_Torque);
+    inline void Set_Zero_Position(float __Zero_Position);
     inline void Set_Out(float __Out);
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
@@ -191,6 +193,7 @@ protected:
 
     
     uint32_t Position_Max = 16383;
+    float Zero_Position = 0.0f;
 
 
     //����ϵ��һ֡��־λ
@@ -210,7 +213,7 @@ protected:
     
     Enum_LK_Motor_Control_Status LK_Motor_Control_Status = LK_Motor_Control_Status_DISABLE;
     
-    Enum_LK_Motor_Control_Method LK_Motor_Control_Method = LK_Motor_Control_Method_IMU_ANGLE;
+    Enum_LK_Motor_Control_Method LK_Motor_Control_Method = LK_Motor_Control_Method_ANGLE;
     
     float IMU_K_P = 0.0f;
     
@@ -396,6 +399,9 @@ float Class_LK_Motor::Get_Target_Torque()
     return (Target_Current);
 }
 
+float Class_LK_Motor::Get_Zero_Position(){
+    return (Zero_Position);
+}
 /**
  * @brief ?څ?????????
  *
@@ -506,6 +512,9 @@ void Class_LK_Motor::Set_Out(float __Out)
     {
         __Out = -Current_Max_Cmd;
     }
+}
+void Class_LK_Motor::Set_Zero_Position(float __Zero_Position){
+    Zero_Position = __Zero_Position;
 }
 
 float Class_LK_Motor::Get_Output_Max()

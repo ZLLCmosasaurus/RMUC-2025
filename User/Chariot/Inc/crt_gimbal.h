@@ -166,12 +166,12 @@ protected:
     //常量
 
     // 重力补偿
-float Gravity_Compensate = 0.0f;
+    float Gravity_Compensate = 0.0f;
 
     //内部变量 
-   float True_Rad_Pitch = 0.0f;
-   float True_Angle_Pitch = 0.0f;
-   float True_Gyro_Pitch = 0.0f;
+    float True_Rad_Pitch = 0.0f;
+    float True_Angle_Pitch = 0.0f;
+    float True_Gyro_Pitch = 0.0f;
     //读变量
 
     //写变量
@@ -228,6 +228,11 @@ public:
     inline float Get_Target_Yaw_Angle_B();  
     inline float Get_Target_Pitch_Angle_A();
     inline float Get_Target_Pitch_Angle_B();
+    inline float Get_True_Angle_Yaw_A();
+    inline float Get_True_Angle_Yaw_B();
+    inline float Get_True_Angle_Pitch_A();
+    inline float Get_True_Angle_Pitch_B();
+    inline float Get_True_Angle_Yaw_Main();
     inline Enum_Gimbal_Control_Type Get_Gimbal_Control_Type();
 
     inline void Set_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
@@ -236,8 +241,18 @@ public:
     inline void Set_Target_Yaw_Angle_B(float __Target_Yaw_Angle_B);
     inline void Set_Target_Pitch_Angle_A(float __Target_Pitch_Angle_A);
     inline void Set_Target_Pitch_Angle_B(float __Target_Pitch_Angle_B);
+    inline void Set_True_Angle_Yaw_A(float __True_Angle_Yaw_A);
+    inline void Set_True_Angle_Yaw_B(float __True_Angle_Yaw_B);
+    inline void Set_True_Angle_Pitch_A(float __True_Angle_Pitch_A);
+    inline void Set_True_Angle_Pitch_B(float __True_Angle_Pitch_B);
+    inline void Set_True_Angle_Yaw_Main(float __True_Angle_Yaw_Main);
 
     void TIM_Calculate_PeriodElapsedCallback();
+    void Yaw_Angle_Transform_A();
+    void Yaw_Angle_Transform_B();
+    void Pitch_Angle_Transform_A();
+    void Pitch_Angle_Transform_B();
+    void Yaw_Angle_Transform_Main();
 
 protected:
     //初始化相关常量
@@ -258,6 +273,11 @@ protected:
     float Max_Pitch_Angle = 35.0f ; //多10°
 
     //内部变量 
+    float True_Angle_Yaw_A = 0.0f;
+    float True_Angle_Yaw_B = 0.0f;
+    float True_Angle_Pitch_A = 0.0f;
+    float True_Angle_Pitch_B = 0.0f;
+    float True_Angle_Yaw_Main = 0.0f;
 
     //读变量
 
@@ -327,6 +347,31 @@ float Class_Gimbal::Get_Target_Pitch_Angle_B()
     return (Target_Pitch_Angle_B);
 }
 
+float Class_Gimbal::Get_True_Angle_Yaw_A()
+{
+    return (True_Angle_Yaw_A);
+}
+
+float Class_Gimbal::Get_True_Angle_Yaw_B()
+{
+    return (True_Angle_Yaw_B);
+}
+
+float Class_Gimbal::Get_True_Angle_Pitch_A()
+{
+    return (True_Angle_Pitch_A);
+}
+
+float Class_Gimbal::Get_True_Angle_Pitch_B()
+{
+    return (True_Angle_Pitch_B);
+}
+
+float Class_Gimbal::Get_True_Angle_Yaw_Main()
+{
+    return (True_Angle_Yaw_Main);
+}
+
 /**
  * @brief 获取云台控制类型
  *
@@ -382,6 +427,31 @@ void Class_Gimbal::Set_Target_Pitch_Angle_A(float __Target_Pitch_Angle_A)
 void Class_Gimbal::Set_Target_Pitch_Angle_B(float __Target_Pitch_Angle_B)
 {
     Target_Pitch_Angle_B = __Target_Pitch_Angle_B;
+}
+
+void Class_Gimbal::Set_True_Angle_Yaw_Main(float __True_Angle_Yaw_Main)
+{
+    True_Angle_Yaw_Main = __True_Angle_Yaw_Main;
+}
+
+void Class_Gimbal::Set_True_Angle_Yaw_A(float __True_Angle_Yaw_A)
+{
+    True_Angle_Yaw_A = __True_Angle_Yaw_A;
+}
+
+void Class_Gimbal::Set_True_Angle_Yaw_B(float __True_Angle_Yaw_B)   
+{
+    True_Angle_Yaw_B = __True_Angle_Yaw_B;
+}
+
+void Class_Gimbal::Set_True_Angle_Pitch_A(float __True_Angle_Pitch_A)
+{
+    True_Angle_Pitch_A = __True_Angle_Pitch_A;
+}
+
+void Class_Gimbal::Set_True_Angle_Pitch_B(float __True_Angle_Pitch_B)
+{
+    True_Angle_Pitch_B = __True_Angle_Pitch_B;
 }
 #endif
 

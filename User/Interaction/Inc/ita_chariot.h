@@ -148,13 +148,15 @@ public:
 
     void Init(float __DR16_Dead_Zone = 0);
     
-    //#ifdef CHASSIS
+    #ifdef CHASSIS
 
         void CAN_Chassis_Rx_Gimbal_Callback();
         void CAN_Chassis_Tx_Gimbal_Callback();
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+        inline void Set_Gimbal_Status(Enum_Gimbal_Status __Gimbal_Status);
+        inline Enum_Gimbal_Status Get_Gimbal_Status();
 
-    //#elif defined(GIMBAL)
+    #elif defined(GIMBAL)
 
         inline void DR16_Offline_Cnt_Plus();
 
@@ -178,7 +180,7 @@ public:
         void TIM_Control_Callback();
 
         void TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
-    //#endif
+    #endif
 
     void TIM_Calculate_PeriodElapsedCallback();
     void TIM_Unline_Protect_PeriodElapsedCallback();
@@ -228,7 +230,7 @@ protected:
         Enum_Gimbal_Status Gimbal_Status =  Gimbal_Status_DISABLE;
     #endif
 
-    // #ifdef GIMBAL
+    #ifdef GIMBAL
         //遥控器拨动的死区, 0~1
         float DR16_Dead_Zone;
         //常量
@@ -294,7 +296,7 @@ protected:
         void Control_Booster();
 
         void Transform_Mouse_Axis();
-    //#endif
+    #endif
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -417,6 +419,16 @@ protected:
 
 #endif
 
+#ifdef CHASSIS
+    void Class_Chariot::Set_Gimbal_Status(Enum_Gimbal_Status __Gimbal_Status){
+        Gimbal_Status = __Gimbal_Status;
+    }
+
+    Enum_Gimbal_Status Class_Chariot::Get_Gimbal_Status(){
+        return Gimbal_Status;
+    }   
+
+#endif
 
 #endif
 

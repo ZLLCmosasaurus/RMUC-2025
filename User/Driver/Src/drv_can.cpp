@@ -25,6 +25,7 @@ Struct_CAN_Manage_Object CAN3_Manage_Object = {0};
 
 // CAN通信发送缓冲区
 uint8_t CAN1_0x1ff_Tx_Data[8];
+uint8_t CAN1_0x1fe_Tx_Data[8];
 uint8_t CAN1_0x200_Tx_Data[8];
 uint8_t CAN1_0x2ff_Tx_Data[8];
 uint8_t CAN1_0xxf1_Tx_Data[8];
@@ -51,8 +52,11 @@ uint8_t CAN2_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
 
-uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
-uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
+// uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
+// uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
+
+uint8_t CAN3_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
 uint8_t CAN1_0x141_Tx_Data[8];
@@ -72,6 +76,15 @@ uint8_t CAN2_0x145_Tx_Data[8];
 uint8_t CAN2_0x146_Tx_Data[8];
 uint8_t CAN2_0x147_Tx_Data[8];
 uint8_t CAN2_0x148_Tx_Data[8];
+
+uint8_t CAN3_0x141_Tx_Data[8];
+uint8_t CAN3_0x142_Tx_Data[8];
+uint8_t CAN3_0x143_Tx_Data[8];
+uint8_t CAN3_0x144_Tx_Data[8];
+uint8_t CAN3_0x145_Tx_Data[8];
+uint8_t CAN3_0x146_Tx_Data[8];
+uint8_t CAN3_0x147_Tx_Data[8];
+uint8_t CAN3_0x148_Tx_Data[8];
 
 /* Private function declarations ---------------------------------------------*/
 
@@ -189,6 +202,11 @@ void CAN_Init(FDCAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
     }
+    else if (hcan->Instance == FDCAN3)
+    {
+        CAN3_Manage_Object.CAN_Handler = hcan;
+        CAN3_Manage_Object.Callback_Function = Callback_Function;
+    }
     can_filter_init(hcan);
     HAL_FDCAN_ActivateNotification(hcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
     HAL_FDCAN_Start(hcan); //开启FDCAN
@@ -255,34 +273,24 @@ void TIM_CAN_PeriodElapsedCallback()
     }
 
     //CAN1总线  四个底盘电机
-   //3508    
-     CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);   
-   //6020
-    
-    // CAN2_0x1fe_Tx_Data[0] = 0;
-    // CAN2_0x1fe_Tx_Data[1] = 0;
-    // // CAN2_0x1fe_Tx_Data[2] = 0;
-    // // CAN2_0x1fe_Tx_Data[3] = 0;
-    // CAN2_0x1fe_Tx_Data[4] = 0;
-    // CAN2_0x1fe_Tx_Data[5] = 0;
-    // CAN2_0x1fe_Tx_Data[6] = 0;
-    // CAN2_0x1fe_Tx_Data[7] = 0;
-    CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
+    // //3508    
+    // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);   
+    // //6020
+    // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
 
     //上板
     // CAN_Send_Data(&hfdcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
 
     #elif defined (GIMBAL)
 
-    // CAN1 摩擦轮*2 pitch
-    //CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
-
-    CAN_Send_Data(&hfdcan1, 0x141, CAN1_0x141_Tx_Data, 8); //pitch-LK6010  按照0x141 ID 发送 一次只能控制一个电机
-    
-    // CAN2 yaw 下板
-    CAN_Send_Data(&hfdcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
-    CAN_Send_Data(&hfdcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+    //  摩擦轮*4 + 拨弹轮*2   
+    // CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮 按照0x200 ID 发送 可控制多个电机
+    // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+    //  yaw*2 + pitch*2
+    // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+    //  CAN3  下板 大yaw
+    CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
+    //CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
     #endif
 }
 
@@ -304,6 +312,11 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hcan, uint32_t RxFifo0ITs)
         HAL_FDCAN_GetRxMessage(hcan, FDCAN_RX_FIFO0, &CAN2_Manage_Object.Rx_Buffer.Header, CAN2_Manage_Object.Rx_Buffer.Data);
         CAN2_Manage_Object.Callback_Function(&CAN2_Manage_Object.Rx_Buffer);
     }
+    else if (hcan->Instance == FDCAN3)
+    {
+        HAL_FDCAN_GetRxMessage(hcan, FDCAN_RX_FIFO0, &CAN3_Manage_Object.Rx_Buffer.Header, CAN3_Manage_Object.Rx_Buffer.Data);
+        CAN3_Manage_Object.Callback_Function(&CAN3_Manage_Object.Rx_Buffer);
+    }
 }
 
 /**
@@ -323,6 +336,11 @@ void HAL_CAN_RxFifo1MsgPendingCallback(FDCAN_HandleTypeDef *hcan)
     {
         //HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN2_Manage_Object.Rx_Buffer.Header, CAN2_Manage_Object.Rx_Buffer.Data);
         CAN2_Manage_Object.Callback_Function(&CAN2_Manage_Object.Rx_Buffer);
+    }
+    else if (hcan->Instance == FDCAN3)
+    {
+        //HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN3_Manage_Object.Rx_Buffer.Header, CAN3_Manage_Object.Rx_Buffer.Data);
+        CAN3_Manage_Object.Callback_Function(&CAN3_Manage_Object.Rx_Buffer);
     }
 }
 int ppp=0;
