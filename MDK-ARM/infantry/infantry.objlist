@@ -72,13 +72,12 @@
 ./infantry/.obj/__/User/Middleware/Algorithm/alg_slope.o
 ./infantry/.obj/__/User/Middleware/Algorithm/kalman_filter.o
 ./infantry/.obj/__/User/Middleware/Algorithm/user_lib.o
-./infantry/.obj/__/User/Middleware/Driver/brv_math.o
-./infantry/.obj/__/User/Middleware/Driver/brv_spi.o
-./infantry/.obj/__/User/Middleware/Driver/brv_tim.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_can.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_dwt.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_i2c.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_math.o
+./infantry/.obj/__/User/Middleware/Driver/drv_spi.o
+./infantry/.obj/__/User/Middleware/Driver/drv_tim.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_uart.o
 ./infantry/.obj/__/User/Middleware/Driver/drv_usb.o
 ./infantry/.obj/__/User/Task/config.o

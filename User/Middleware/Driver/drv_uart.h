@@ -15,7 +15,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "stm32f4xx_hal.h"
-
+#include "usart.h"
 /* Exported macros -----------------------------------------------------------*/
 
 // 缓冲区字节长度
@@ -48,10 +48,10 @@ typedef struct
 
 
 
-extern UART_HandleTypeDef huart1;
+//extern UART_HandleTypeDef huart1;
 //extern UART_HandleTypeDef huart2;
-extern UART_HandleTypeDef huart3;
-extern UART_HandleTypeDef huart6;
+//extern UART_HandleTypeDef huart3;
+//extern UART_HandleTypeDef huart6;
 //extern UART_HandleTypeDef huart7;
 
 extern Struct_UART_Manage_Object UART1_Manage_Object;

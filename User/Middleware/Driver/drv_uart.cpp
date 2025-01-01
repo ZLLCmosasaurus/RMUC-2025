@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "drv_uart.h"
-
+#include "string.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -60,6 +60,7 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART3_Manage_Object.Callback_Function = Callback_Function;
         UART3_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
+        __HAL_DMA_DISABLE_IT(&hdma_usart3_rx, DMA_IT_HT);
     }
     else if (huart->Instance == UART4)
     {
@@ -81,6 +82,7 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART6_Manage_Object.Callback_Function = Callback_Function;
         UART6_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
+        __HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
     }
 }
 
@@ -134,9 +136,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
     {
         UART3_Manage_Object.Rx_Length = Size;
         UART3_Manage_Object.Callback_Function(UART3_Manage_Object.Rx_Buffer, Size);
+        memset(UART3_Manage_Object.Rx_Buffer, 0, Size);
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
-				
-	}
+        __HAL_DMA_DISABLE_IT(&hdma_usart3_rx, DMA_IT_HT);
+    }
     else if (huart->Instance == UART4)
     {
         UART4_Manage_Object.Rx_Length = Size;
@@ -154,6 +157,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         UART6_Manage_Object.Rx_Length = Size;
         UART6_Manage_Object.Callback_Function(UART6_Manage_Object.Rx_Buffer, Size);
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
+        __HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
+        memset(&UART6_Manage_Object.Rx_Buffer, 0, UART6_Manage_Object.Rx_Buffer_Length);
     }
 }
 

@@ -117,8 +117,8 @@ class Class_Chariot
 public:
     #ifdef CHASSIS
         //参数
-				float Gimbal_Follow_Yaw_Angle;
-				float	Gimbal_To_Chassis_Angle;
+		float Gimbal_Follow_Yaw_Angle;
+		float Gimbal_To_Chassis_Angle;
         //获取yaw电机编码器值 用于底盘和云台坐标系的转换
         //底盘随动PID环
         Class_DJI_Motor_GM6020 Motor_Yaw;
@@ -152,11 +152,12 @@ public:
     #ifdef CHASSIS
         
         void Get_Gimbal_Follow_Yaw_Angle();
-				void Get_Gimbal_To_Chassis_Angle();
+		void Get_Gimbal_To_Chassis_Angle();
         void CAN_Chassis_Rx_Gimbal_Callback();
         void CAN_Chassis_Tx_Gimbal_Callback();
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
         void CAN_Chassis_Tx_Streeing_Wheel_Callback();
+        void CAN_Chassis_Tx_Max_Power_Callback();
     #elif defined(GIMBAL)
 
         inline void DR16_Offline_Cnt_Plus();

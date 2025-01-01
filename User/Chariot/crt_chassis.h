@@ -467,7 +467,6 @@ class Class_Streeing_Chassis
 {
 public:
     Struct_Streeing_wheel wheel[4];
-
 //		 Class_FSM_Chassis_Stop FSM_Chassis_Stop;
 //    friend class Class_FSM_Chassis_Stop;
     //斜坡函数加减速速度X

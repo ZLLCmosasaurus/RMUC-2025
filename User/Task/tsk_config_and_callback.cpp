@@ -352,16 +352,17 @@ void Task1ms_TIM5_Callback()
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
-
-        TIM_UART_PeriodElapsedCallback();
-        
-        // static int mod5 = 0;
-        // mod5++;
-        // if (mod5 == 5)
-        // {
-        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        // mod5 = 0;
-        // }	        
+        //超电通信
+        //TIM_UART_PeriodElapsedCallback();
+        #ifdef GIMBAL
+        static int mod5 = 0;
+        mod5++;
+        if (mod5 == 5)
+        {
+            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+            mod5 = 0;
+        }
+        #endif
     }
 }
 

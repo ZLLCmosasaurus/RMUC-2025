@@ -220,6 +220,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 }
 #endif
 #define SPEED_SLOPE
+//#define NO_SPEED_SLOPE
 void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
     Velocity_X_Max = __Velocity_X_Max;
@@ -228,9 +229,9 @@ void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Steer_Power_Ratio = __Steer_Power_Ratio;
 
     //斜坡函数加减速速度X  控制周期1ms
-    Slope_Velocity_X.Init(0.004f,0.008f);
+    Slope_Velocity_X.Init(0.04f,0.08f);
     //斜坡函数加减速速度Y  控制周期1ms
-    Slope_Velocity_Y.Init(0.004f,0.008f);
+    Slope_Velocity_Y.Init(0.04f,0.08f);
     //斜坡函数加减速角速度
     Slope_Omega.Init(0.05f, 0.05f);
 
@@ -295,8 +296,7 @@ void Class_Streeing_Chassis::Speed_Resolution()
         float Wheel_D_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_D * sin(THETA_D);
         float Wheel_D_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_D * cos(THETA_D);
         #endif
-
-
+        
         wheel[0].ChassisCoordinate_Angle = My_atan(Wheel_A_Vy, Wheel_A_Vx) * RAD_TO_8191;
         wheel[1].ChassisCoordinate_Angle = My_atan(Wheel_B_Vy, Wheel_B_Vx) * RAD_TO_8191;
         wheel[2].ChassisCoordinate_Angle = My_atan(Wheel_C_Vy, Wheel_C_Vx) * RAD_TO_8191;
@@ -311,6 +311,7 @@ void Class_Streeing_Chassis::Speed_Resolution()
         {
             wheel[i].streeing_wheel_omega = wheel[i].streeing_wheel_speed * VEL2RPM;
         }
+        
     }
     break;
     }
@@ -427,3 +428,4 @@ void Class_Streeing_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
+

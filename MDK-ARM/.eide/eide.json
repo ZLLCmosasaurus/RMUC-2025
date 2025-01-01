@@ -249,13 +249,10 @@
                 "path": "../User/Middleware/Driver/drv_usb.cpp"
               },
               {
-                "path": "../User/Middleware/Driver/brv_math.cpp"
+                "path": "../User/Middleware/Driver/drv_spi.cpp"
               },
               {
-                "path": "../User/Middleware/Driver/brv_spi.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/brv_tim.cpp"
+                "path": "../User/Middleware/Driver/drv_tim.cpp"
               }
             ],
             "folders": []

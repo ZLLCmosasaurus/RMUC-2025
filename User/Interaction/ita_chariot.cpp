@@ -178,7 +178,6 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 底盘控制方案
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
     {
-        
         chassis_omega = (float)tmp_omega;
     }
     else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
@@ -459,7 +458,6 @@ void Class_Chariot::Control_Gimbal()
         }
         break;
         }
-
         //自瞄模式逻辑
         if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) //左下自瞄
         {
@@ -661,6 +659,7 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
 #ifdef CHASSIS
 void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
 {
+    //与舵小板通信有效数据为：角度、角速度
     uint16_t tmp_angle = 0;
     int16_t tmp_omega = 0;
     uint8_t chassis_status = (uint8_t)(Chassis.Get_Chassis_Control_Type());
@@ -688,9 +687,22 @@ void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[0], &tmp_angle, 2);
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[2], &tmp_omega, 2);
     memcpy(&CAN1_0x1d_Tx_Streeing_Wheel_D_data[4], &chassis_status, 1);
+
 }
 #endif
-
+#ifdef CHASSIS
+void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
+{
+        uint16_t Chassis_Power_Max;
+	float Chassis_Actual_Power;
+    Chassis_Power_Max = Referee.Get_Chassis_Power_Max();
+	
+	Chassis_Power_Max=40;
+    Chassis_Actual_Power=Referee.Get_Chassis_Power();
+    memcpy(CAN1_0x01E_Tx_Data, &Chassis_Power_Max, sizeof(uint16_t));
+	memcpy(CAN1_0x01E_Tx_Data+2,&Chassis_Actual_Power,sizeof(float));
+}
+#endif
 /**
  * @brief 计算回调函数
  *
@@ -704,17 +716,21 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         CAN_Chassis_Tx_Gimbal_Callback();
         //底盘给分别给四个舵轮发消息
         CAN_Chassis_Tx_Streeing_Wheel_Callback();
-
+        //底盘给舵小板发送最大功率
+        CAN_Chassis_Tx_Max_Power_Callback();
         //云台，随动掉线保护
-        // if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
-        // {
-        //     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
-        // }
-        // else
-        // {
-            
-        // }
-		Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+        if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
+        {
+            Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+        }
+        else
+        {
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        }
+
+        //画UI
+        Referee.UART_Tx_Referee_UI();
+
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
