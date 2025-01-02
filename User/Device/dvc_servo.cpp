@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 
- #include "dvc_servo.h"
+#include "dvc_servo.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -39,11 +39,13 @@
  * @param __Angle_Offset 舵机角度偏移量, 默认0
  * @param __Max_Angle 舵机双边可动范围, 默认270角度舵机, 记得除以二, 也就是对应两侧可动范围都是3/4 PI
  */
-void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle)
+void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel,uint32_t __Compare_Min ,uint32_t __Compare_Max , float __Max_Angle)
 {
     Driver_PWM_TIM = __Driver_PWM_TIM;
     Driver_PWM_TIM_Channel = __Driver_PWM_TIM_Channel;
     Max_Angle = __Max_Angle;
+    Compare_Min = __Compare_Min;
+    Compare_Max = __Compare_Max;
 
     HAL_TIM_PWM_Start(__Driver_PWM_TIM, __Driver_PWM_TIM_Channel);
 }
@@ -54,11 +56,14 @@ void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM
  */
 void Class_Servo::Output()
 {
-    uint16_t out;
 
-    out = 150.0f + (Target_Angle - Max_Angle / 2.0f) / (Max_Angle / 2.0f) * 100.0f;
+    uint32_t Compare_Limit = Driver_PWM_TIM->Init.Period;  //限制比较值范围
 
-    __HAL_TIM_SetCompare(Driver_PWM_TIM, Driver_PWM_TIM_Channel, out);
+    Comapre_out = Target_Angle / Max_Angle *(Compare_Max - Compare_Min) + Compare_Min ;
+
+    Math_Constrain(&Comapre_out, (uint32_t)0, Compare_Limit);
+
+    __HAL_TIM_SetCompare(Driver_PWM_TIM, Driver_PWM_TIM_Channel, Comapre_out);
 }
 
 /************************ COPYRIGHT(C) ZLLC **************************/

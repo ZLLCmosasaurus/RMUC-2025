@@ -14,8 +14,8 @@
 |        I2         |         PF0        |    XH711_SCK     |    无          |
 |         +         |         VCC        |    XH711_VCC     |    5.0V       |
 |         G         |         GND        |    XH711_GND     |   GND        |
-|        A          |         PI0         |    PWM_1      |   装填舵机    |
-|        B         |         PH12        |    PWM_2     |   装填舵机    |
-|         C         |        PH11        |    PWM_3     |   装填舵机    |
-|         D         |        PH10        |    PWM_4     |   装填舵机    |
-|         E         |        PD15        |    PWM_5     |   扳机舵机    |
+|        A          |         PI0         |    TIM5_CH4      |   装填舵机_4    |
+|        B         |         PH12        |    TIM5_CH3     |   装填舵机_3    |
+|         C         |        PH11        |    TIM5_CH2     |   装填舵机_2    |
+|         D         |        PH10        |    TIM5_CH1     |   装填舵机_1    |
+|         E         |        PD15        |    TIM4_CH4     |   扳机舵机    |

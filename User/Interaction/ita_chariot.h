@@ -1,6 +1,6 @@
 /**
  * @file ita_chariot.h
- * @author yssickjgd (yssickjgd@mail.ustc.edu.cn)
+ * @author lez by yssickjgd
  * @brief 人机交互控制逻辑
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿

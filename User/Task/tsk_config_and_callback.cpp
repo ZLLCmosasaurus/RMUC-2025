@@ -207,7 +207,7 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
  * @brief TIM5任务回调函数
  *
  */
-float test_yaw,test_tension;
+float test_yaw,test_tension,test_angle;
 extern "C" void Control_Task_Callback()
 {
     static uint8_t tx_cnt = 0;
@@ -220,7 +220,7 @@ extern "C" void Control_Task_Callback()
 
     chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
     chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
-    
+
     if(chariot.DR16.Get_DR16_Status() == DR16_Status_DISABLE)
     {
         // 遥控器控制

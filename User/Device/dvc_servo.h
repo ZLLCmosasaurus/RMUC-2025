@@ -37,7 +37,7 @@
 class Class_Servo
 {
 public:
-    void Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle = 3.0f / 2.0f * PI);
+    void Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel,uint32_t __Compare_Min = 500 ,uint32_t __Compare_Max = 2500, float __Max_Angle = 180.0f);
 
     inline void Set_Target_Angle(float __Target_Angle);
 
@@ -54,11 +54,12 @@ protected:
     //常量
 
     //内部变量
-
+    uint32_t Compare_Min;
+    uint32_t Compare_Max;
     //读变量
 
     //写变量
-
+    uint32_t Comapre_out;
     //舵机角度目标值
     float Target_Angle = 0.0f;
 

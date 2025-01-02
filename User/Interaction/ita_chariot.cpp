@@ -1,6 +1,6 @@
 /**
  * @file ita_chariot.cpp
- * @author yssickjgd (yssickjgd@mail.ustc.edu.cn)
+ * @author lez by yssickjgd
  * @brief 人机交互控制逻辑
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -56,9 +56,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Servo_Load_1.Init(&htim5,TIM_CHANNEL_1);
     Servo_Load_2.Init(&htim5,TIM_CHANNEL_2);
     Servo_Load_3.Init(&htim5,TIM_CHANNEL_3);
-    Servo_Load_4.Init(&htim5,TIM_CHANNEL_4);
+    Servo_Load_4.Init(&htim5,TIM_CHANNEL_4,500,1722);
     //扳机舵机初始化
-    Servo_Trigger.Init(&htim4,TIM_CHANNEL_4);
+    Servo_Trigger.Init(&htim4,TIM_CHANNEL_4,500,1833);
 
     //遥控器离线控制 状态机
     FSM_Alive_Control.Chariot = this;
