@@ -419,7 +419,7 @@
       }
     ]
   },
-  "outDir": "..\\MDK-ARM",
+  "outDir": ".",
   "deviceName": "STM32F407IGHx",
   "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
   "miscInfo": {
@@ -558,7 +558,6 @@
       "custom_dep": {
         "name": "default",
         "incList": [
-          ".",
           "../Core/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
@@ -586,8 +585,38 @@
           "USE_HAL_DRIVER",
           "STM32F407xx"
         ]
+      },
+      "builderOptions": {
+        "AC6": {
+          "version": 3,
+          "beforeBuildTasks": [],
+          "afterBuildTasks": [],
+          "global": {
+            "use-microLIB": false,
+            "output-debug-info": "enable"
+          },
+          "c/cpp-compiler": {
+            "optimization": "level-balanced",
+            "language-c": "c99",
+            "language-cpp": "c++11",
+            "link-time-optimization": false,
+            "one-elf-section-per-function": true,
+            "short-enums#wchar": true,
+            "warnings": "no-warnings"
+          },
+          "asm-compiler": {
+            "$use": "asm-auto"
+          },
+          "linker": {
+            "output-format": "elf",
+            "misc-controls": "--diag_suppress=L6329",
+            "xo-base": "",
+            "ro-base": "",
+            "rw-base": ""
+          }
+        }
       }
     }
   },
-  "version": "3.4"
+  "version": "3.5"
 }
