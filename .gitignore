@@ -33,6 +33,9 @@ MDK-ARM/JLinkLog.txt
 *.exf
 *.elf
 
+# 编译生成的文件
+build/
+
 #keil 工程配置文件
 *.uvoptx
 *.uvguix.*
