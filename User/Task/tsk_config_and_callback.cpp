@@ -105,7 +105,7 @@ void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         break;
         case (0x206):  
         {
-            
+          
         }
         break;
         case (0x207):
@@ -121,12 +121,13 @@ void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
  *
  * @param CAN_RxMessage CAN2收到的消息
  */
+ uint8_t test_yaw;
 #ifdef CHASSIS
 void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x208):  //留给yaw电机编码器回传 用于底盘随动
+    case (0x206):  //留给yaw电机编码器回传 用于底盘随动
     {
         chariot.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
@@ -141,14 +142,9 @@ void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x205):
+    case (0x201):
     {
-        
-    }
-    break;
-    case (0x206):
-    {
-        
+        test_yaw++;
     }
     break;
 	}
@@ -166,7 +162,7 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     {
     case (0x203):
     {
-        chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        
     }
     break;
     case (0x201):
@@ -186,7 +182,7 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     break;
     case (0x141):
     {
-        chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        //chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
 	}
@@ -208,24 +204,19 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.CAN_Gimbal_Rx_Chassis_Callback();
     }
     break;
-    case (0x208):   //保留can2对6020编码器的接口
+    case (0x206):   //保留can2对6020编码器的接口
     {
         chariot.Gimbal.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x204):
+    case (0x201):
     {
-        
+        chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x205):
     {
        
-    }
-    break;
-    case (0x206):
-    {
-        
     }
     break;
 	}
@@ -385,19 +376,28 @@ void Task1ms_TIM5_Callback()
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
         #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
-        
+
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
 
         TIM_UART_PeriodElapsedCallback();
         
+        //给上位机发数据
+        TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+
         static int mod5 = 0;
         mod5++;
-        if (mod5 == 5)
+        if (mod5 == 10)  //上下板通信 100hz
         {
-            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        mod5 = 0;
+            #ifdef GIMBAL
+            //给下板发送数据 
+            chariot.CAN_Gimbal_Tx_Chassis_Callback();
+            #elif defined(CHASSIS)
+            // 底盘给云台发消息
+            chariot.CAN_Chassis_Tx_Gimbal_Callback();
+            #endif
+            mod5 = 0;
         }	        
     }
 }

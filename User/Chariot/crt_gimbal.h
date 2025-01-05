@@ -51,7 +51,7 @@ public:
     inline float Get_True_Angle_Yaw();
 
     void Transform_Angle();
-
+    void Disable();
     void TIM_PID_PeriodElapsedCallback();
 
 protected:
@@ -103,7 +103,7 @@ public:
     inline float Get_True_Angle_Pitch();
 
     void Transform_Angle();
-
+    void Disable();
     void TIM_PID_PeriodElapsedCallback();
 
 protected:
@@ -216,7 +216,7 @@ public:
     // yaw轴电机
     Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw;
 
-    // pitch轴电机
+    // pitch轴电机 2900-4000 俯仰角编码器值
     Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch;
 
     // pithc轴电机
@@ -248,9 +248,9 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -21.0f;
+    float Min_Pitch_Angle = -20.0f;
     // pitch轴最大值
-    float Max_Pitch_Angle = 35.0f ; //多10°
+    float Max_Pitch_Angle = 30.0f ; //多10°
 
     //内部变量 
 

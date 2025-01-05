@@ -79,13 +79,10 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
     {
         case (Chassis_Control_Type_DISABLE):
         {
-            //底盘失能 四轮子自锁
+            //底盘失能 四轮子无力
             for (int i = 0; i < 4; i++)
             {
-                Motor_Wheel[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                Motor_Wheel[i].PID_Angle.Set_Integral_Error(0.0f);
-                Motor_Wheel[i].Set_Target_Omega_Radian(0.0f);
-                Motor_Wheel[i].Set_Out(0.0f);
+                Motor_Wheel[i].Disable();
             }            
         }
         break;
@@ -138,19 +135,6 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             for (int i = 0; i < 4; i++){
                 Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
             }
-            //            Motor_Wheel[0].Set_Target_Omega_Radian(  temp_test_1);
-            //            Motor_Wheel[1].Set_Target_Omega_Radian( temp_test_2);
-            //            Motor_Wheel[2].Set_Target_Omega_Radian( temp_test_3);
-            //            Motor_Wheel[3].Set_Target_Omega_Radian(  temp_test_4);
-
-            // max=find_max();
-            // if(max>MAX_MOTOR_SPEED)
-            // {
-            //     Motor_Wheel[0].Set_Target_Omega(chassis_motor1.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor2.target_speed=(int)(chassis_motor2.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor3.target_speed=(int)(chassis_motor3.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            //     chassis_motor4.target_speed=(int)(chassis_motor4.target_speed*MAX_MOTOR_SPEED*1.0/max);
-            // }
         }
         break;
     }   

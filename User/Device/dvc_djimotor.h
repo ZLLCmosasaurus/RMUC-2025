@@ -346,6 +346,8 @@ public:
     inline void Set_Target_Torque(float __Target_Torque);
     inline void Set_Out(float __Out);
 
+    void Disable(void);
+
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_PID_PeriodElapsedCallback();

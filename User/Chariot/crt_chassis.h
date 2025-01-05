@@ -124,7 +124,7 @@ protected:
     //舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     //底盘小陀螺模式角速度
-    float Spin_Omega = 4.0f;
+    float Spin_Omega = 1.5f;
     //常量
 
     //电机理论上最大输出
@@ -132,11 +132,6 @@ protected:
     float Wheel_Max_Output = 16384.0f;
 
     //内部变量
-
-    //舵向电机目标值
-    float Target_Steer_Angle[3];
-    //转动电机目标值
-    float Target_Wheel_Omega[4];
 
     //读变量
 
@@ -197,13 +192,13 @@ const float FRONT_TO_FRONT_CENTER_DISTANCE = 0.176f;
 const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE), atan2f(FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE)};
 
 //轮子直径 单位m
-const float WHELL_DIAMETER = 0.13f;	
+const float WHELL_DIAMETER = 0.154f;	
 
 //底盘半宽 单位m
-const float HALF_WIDTH = 0.15f;		
+const float HALF_WIDTH = 0.18466f;		
 
 //底盘半长 单位m
-const float HALF_LENGTH = 0.15f;	
+const float HALF_LENGTH = 0.18466f;	
 
 //转速转角速度	1 rpm = 2pi/60 rad/s 
 const float RPM2RAD = 0.104720f;				
@@ -216,9 +211,7 @@ const float VEL2RPM = 1.240168f;
 
 //线速度转角速度 rad/s
 const float VEL2RAD = 1.0f/(WHELL_DIAMETER/2.0f);
-
-//齿轮箱减速比;	
-const float M3508_REDUCTION_RATIO = 13.733f;	
+	
 /* Exported function declarations --------------------------------------------*/
 
 /**

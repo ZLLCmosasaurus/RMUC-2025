@@ -79,9 +79,11 @@ void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
     if(Tempture_Cnt_mod50 % 50 == 0)
     {
         PID_IMU_Tempture.Set_Now(BMI088_Raw_Data.Temperature);
-        PID_IMU_Tempture.Set_Target(50.0f);
+        PID_IMU_Tempture.Set_Target(44.0f);
         PID_IMU_Tempture.TIM_Adjust_PeriodElapsedCallback();
-        TIM_Set_PWM(&htim10, TIM_CHANNEL_1, (uint16_t)PID_IMU_Tempture.Get_Out());
+        int16_t Compare = PID_IMU_Tempture.Get_Out();
+        Math_Constrain(&Compare,(int16_t)0,(int16_t)5000);
+        TIM_Set_PWM(&htim10, TIM_CHANNEL_1, Compare);
     }
 
     imu_start_flag = 1;

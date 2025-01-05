@@ -43,7 +43,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         PID_Chassis_Fllow.Init(6.0f, 0.0f, 0.1f, 0.0f, 10.0f, 10.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
 
         //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
-        Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
+        Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206);
 
     #elif defined(GIMBAL)
         
@@ -61,7 +61,6 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         //云台
         Gimbal.Init();
         Gimbal.MiniPC = &MiniPC;
-
         //发射机构
         Booster.Referee = &Referee;
         Booster.Init();
@@ -81,7 +80,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 #ifdef CHASSIS    
     //控制类型字节
     uint8_t control_type;
-
+    //底盘和云台夹角（弧度制）
+    float derta_angle;
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 {   
     Gimbal_Alive_Flag++;
@@ -93,10 +93,11 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     float chassis_omega;
     //底盘控制类型
     Enum_Chassis_Control_Type chassis_control_type;
-    //底盘和云台夹角（弧度制）
-    float derta_angle;
+//    //底盘和云台夹角（弧度制）
+//    float derta_angle;
     //float映射到int16之后的速度
-    uint16_t tmp_velocity_x, tmp_velocity_y, tmp_omega, tmp_gimbal_pitch;
+    uint16_t tmp_velocity_x, tmp_velocity_y, tmp_gimbal_pitch;
+    uint8_t tmp_omega;
 
 
     memcpy(&tmp_velocity_x,&CAN_Manage_Object->Rx_Buffer.Data[0],sizeof(uint16_t));
@@ -119,7 +120,8 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 
    //获取云台坐标系和底盘坐标系的夹角（弧度制）
    Chassis_Angle = Motor_Yaw.Get_Now_Radian();
-   derta_angle = Chassis_Angle - Reference_Angle + Offset_Angle;  
+   derta_angle = Reference_Angle - Chassis_Angle + Offset_Angle;
+   derta_angle = derta_angle<0?(derta_angle+2*PI):derta_angle;  
 
    //云台坐标系的目标速度转为底盘坐标系的目标速度
    chassis_velocity_x = (float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle));
@@ -131,7 +133,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     //底盘控制方案
     if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
     {
-        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * Chassis.Get_Omega_Max(),Chassis.Get_Omega_Max());
+        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 8.0f,8.0f);
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
@@ -145,7 +147,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
         PID_Chassis_Fllow.Set_Target(Reference_Angle);
         PID_Chassis_Fllow.Set_Now(Chassis_Angle);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
-        chassis_omega = -PID_Chassis_Fllow.Get_Out();
+        chassis_omega = PID_Chassis_Fllow.Get_Out();
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
     {
@@ -578,20 +580,9 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
     #ifdef CHASSIS
 
-        // 底盘给云台发消息
-        CAN_Chassis_Tx_Gimbal_Callback();
+    // 底盘解算任务
+    Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
 
-        //云台，随动掉线保护
-        if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
-        {
-            Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
-        }
-        else
-        {
-            for(auto i = 0; i < 4; i++)
-                Chassis.Motor_Wheel[i].Set_Out(0.0f);
-        }
-				
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
@@ -599,10 +590,6 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         Booster.TIM_Calculate_PeriodElapsedCallback();
         //传输数据给上位机
         MiniPC.TIM_Write_PeriodElapsedCallback();
-        //给下板发送数据
-        CAN_Gimbal_Tx_Chassis_Callback();
-        //弹舱舵机控制
-        __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, Compare);
 
     #endif   
 }
@@ -672,6 +659,11 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             {
                 TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
                 mod50_mod3 = 0;
+            }
+            //云台，随动掉线保护
+            if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_DISABLE || Gimbal_Status == Gimbal_Status_DISABLE)
+            {
+                Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);          
             }
         #elif defined(GIMBAL)
 

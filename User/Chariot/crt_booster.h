@@ -139,7 +139,7 @@ protected:
     //读变量
 
     //拨弹盘默认速度, 一圈八发子弹, 此速度下与冷却均衡
-    float Default_Driver_Omega = -2.0f * PI;
+    float Default_Driver_Omega = 2.0f * PI;
 
     //写变量
 
@@ -150,7 +150,7 @@ protected:
     float Friction_Omega = 800.0f;
 		
     //拨弹盘实际的目标速度, 一圈八发子弹
-    float Driver_Omega = -2.0f * PI;
+    float Driver_Omega = 2.0f * PI;
     //拨弹轮目标绝对角度 加圈数
     float Drvier_Angle = 0.0f;
     //读写变量

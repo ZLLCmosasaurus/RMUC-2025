@@ -36,7 +36,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环速度控制
-        Set_Out(Target_Omega_Angle / Omega_Max * Output_Max);
+        Out = Out;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
@@ -99,7 +99,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Target_Torque = PID_Omega.Get_Out();
-        Set_Out(PID_Omega.Get_Out());
+        Set_Out(-PID_Omega.Get_Out());
     }
     break;
     default:
@@ -108,6 +108,14 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     }
     break;
     }
+    Output();
+}
+
+
+void Class_Gimbal_Yaw_Motor_GM6020::Disable()
+{
+    Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+    Set_Out(0.0f);
     Output();
 }
 
@@ -133,8 +141,8 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     {
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
-        //默认开环速度控制
-        Set_Out(Target_Omega_Angle / Omega_Max * Output_Max);
+        //默认开环
+        Out = Out;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
@@ -171,16 +179,15 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 
         if (IMU->Get_IMU_Status()!=IMU_Status_DISABLE)
         {
-
             //角度环
-            PID_Angle.Set_Now(True_Rad_Pitch);
+            PID_Angle.Set_Now(True_Angle_Pitch);
             PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 
             Target_Omega_Angle = PID_Angle.Get_Out();
 
             //速度环
             PID_Omega.Set_Target(Target_Omega_Angle);
-            PID_Omega.Set_Now(True_Gyro_Pitch*180.f/PI);
+            PID_Omega.Set_Now(True_Gyro_Pitch);
 
         }
         else
@@ -199,7 +206,7 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
         Target_Torque = PID_Omega.Get_Out();
-        Set_Out(PID_Omega.Get_Out() + Gravity_Compensate);
+        Set_Out(-PID_Omega.Get_Out() + Gravity_Compensate);
     }
     break;
     default:
@@ -211,15 +218,23 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     Output();
 }
 
+
+void Class_Gimbal_Pitch_Motor_GM6020::Disable()
+{
+    Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+    Set_Out(0.0f);
+    Output();
+}
+
 /**
  * @brief 根据不同c板的放置方式来修改这个函数
  *
  */
 void Class_Gimbal_Pitch_Motor_GM6020::Transform_Angle()
 {
-    True_Rad_Pitch = -1 * IMU->Get_Rad_Pitch();
-    True_Gyro_Pitch = -1 * IMU->Get_Gyro_Pitch(); 
-    True_Angle_Pitch = -1 * IMU->Get_Angle_Pitch();   
+    True_Rad_Pitch = IMU->Get_Rad_Roll();
+    True_Gyro_Pitch = IMU->Get_Gyro_Roll(); 
+    True_Angle_Pitch = IMU->Get_Angle_Roll();   
 }
 
 /**
@@ -316,28 +331,20 @@ void Class_Gimbal::Init()
     //imu初始化
     Boardc_BMI.Init(); 
 
-    //yaw轴电机
-    Motor_Yaw.PID_Angle.Init(0.65f, 0.0f, 0.0f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
+    //yaw轴电机 
     //250 300
-    Motor_Yaw.PID_Omega.Init(6000.0f, 10.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
+    Motor_Yaw.PID_Angle.Init(2.65f, 0.0f, 0.1f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
+    Motor_Yaw.PID_Omega.Init(6000.0f, 400.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;
-    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x208, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
+    Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     //pitch轴电机
-    Motor_Pitch.PID_Angle.Init(1.2f, 0.0f, 0.1f, 0.0f, 6.0f * PI, 6.0f * PI);
-    Motor_Pitch.PID_Omega.Init(400.0f, 50.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
+    Motor_Pitch.PID_Angle.Init(2.8f, 0.0f, 0.0f, 0.0f, 6.0f * PI, 6.0f * PI);
+    Motor_Pitch.PID_Omega.Init(1200.0f, 200.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
     Motor_Pitch.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
     Motor_Pitch.IMU = &Boardc_BMI;
-    Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
-
-    //pitch轴电机 LK6010
-    Motor_Pitch_LK6010.PID_Angle.Init(60.0f, 0.1f, 0.0f, 0.0f, 80.0f ,250.0f);
-    //Motor_Pitch_LK6010.PID_Omega.Init(100.0f, 0.1f, 0.0f, 0, Motor_Pitch_LK6010.Get_Output_Max()/2.0f, Motor_Pitch_LK6010.Get_Output_Max(),0.0f,0.0f);
-	Motor_Pitch_LK6010.PID_Omega.Init(1.0f, 0.0f, 0.0f, 0, Motor_Pitch_LK6010.Get_Output_Max()/2.0f, Motor_Pitch_LK6010.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.0f);
-    Motor_Pitch_LK6010.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max());
-    Motor_Pitch_LK6010.IMU = &Boardc_BMI;
-    Motor_Pitch_LK6010.Init(&hcan1, LK_Motor_ID_0x141, DJI_Motor_Control_Method_IMU_ANGLE);
+    Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
 }
 
 /**
@@ -349,9 +356,8 @@ void Class_Gimbal::Output()
     if (Gimbal_Control_Type == Gimbal_Control_Type_DISABLE)
     {
         //云台失能
-        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-        Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-        Motor_Pitch_LK6010.Set_LK_Motor_Control_Method(LK_Motor_Control_Method_TORQUE);
+        Motor_Pitch.Disable();
+        Motor_Yaw.Disable();
 
         Motor_Yaw.PID_Angle.Set_Integral_Error(0.0f);
         Motor_Yaw.PID_Omega.Set_Integral_Error(0.0f);
@@ -359,26 +365,17 @@ void Class_Gimbal::Output()
         Motor_Pitch.PID_Angle.Set_Integral_Error(0.0f);
         Motor_Pitch.PID_Omega.Set_Integral_Error(0.0f);
         Motor_Pitch.PID_Torque.Set_Integral_Error(0.0f);
-        Motor_Pitch_LK6010.PID_Angle.Set_Integral_Error(0.0f);
-        Motor_Pitch_LK6010.PID_Omega.Set_Integral_Error(0.0f);
-        Motor_Pitch_LK6010.PID_Torque.Set_Integral_Error(0.0f);
-
-        Motor_Yaw.Set_Target_Omega_Angle(0.0f);
-        Motor_Pitch.Set_Target_Omega_Angle(0.0f);
-        Motor_Pitch_LK6010.Set_Target_Omega_Angle(0.0f);
     }
     else // 非失能模式
     {   
         Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        Motor_Pitch_LK6010.Set_LK_Motor_Control_Method(LK_Motor_Control_Method_IMU_ANGLE);
         
         if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
         {
             //设置目标角度
             Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
-            Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-            Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle);           
+            Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);          
         }
         else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
         {   
@@ -402,7 +399,6 @@ void Class_Gimbal::Output()
         //设置目标角度
         Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
         Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-        Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle); 
     }
 }
 
@@ -418,12 +414,9 @@ void Class_Gimbal::TIM_Calculate_PeriodElapsedCallback()
     //根据不同c板的放置方式来修改这几个函数
     Motor_Yaw.Transform_Angle();
     Motor_Pitch.Transform_Angle();
-    Motor_Pitch_LK6010.Transform_Angle();
-
 
     Motor_Yaw.TIM_PID_PeriodElapsedCallback();
     Motor_Pitch.TIM_PID_PeriodElapsedCallback();
-    Motor_Pitch_LK6010.TIM_PID_PeriodElapsedCallback();
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

@@ -480,7 +480,7 @@ void Class_DJI_Motor_C610::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环扭矩控制
-        Out = Target_Torque / Torque_Max * Output_Max;
+        Out = Out;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
@@ -596,6 +596,14 @@ void Class_DJI_Motor_C620::Data_Process()
     if(Start_Falg==0)  Start_Falg = 1;
 }
 
+
+void Class_DJI_Motor_C620::Disable()
+{
+    Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+    Set_Out(0.0f);
+    Output();
+}
+
 /**
  * @brief 电机数据输出到CAN总线发送缓冲区
  *
@@ -652,7 +660,7 @@ void Class_DJI_Motor_C620::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_OPENLOOP):
     {
         //默认开环扭矩控制
-        Out = Target_Torque / Torque_Max * Output_Max;
+        Out = Out;
     }
     break;
     case (DJI_Motor_Control_Method_TORQUE):
