@@ -519,7 +519,7 @@ void Class_Gimbal::Output()
         }
 
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        switch (Get_Launch_Mode())//吊射模式
+        switch (Get_Launch_Mode())//吊射模式 拨杆左上 不影响自瞄
         {
         case Launch_Disable:
         {

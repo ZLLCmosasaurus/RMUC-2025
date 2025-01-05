@@ -204,8 +204,8 @@ struct Pack_tx_t
 {
 	uint8_t header;
     Enum_MiniPC_Game_Stage game_stage;
-    Enum_MiniPC_Type target_type;
-    Enum_Windmill_Type windmill_type;
+    //Enum_MiniPC_Type target_type;
+    //Enum_Windmill_Type windmill_type;
 	uint8_t detect_color;
 	uint8_t target_id;
 	float roll;
@@ -335,7 +335,7 @@ protected:
 
 
     const float g = 9.8; // 重力加速度
-    const float bullet_v = 28.0; // 子弹速度  
+    const float bullet_v = 15.6;//28.0; // 子弹速度  
 
     // 距离
     float Distance;
@@ -473,7 +473,7 @@ float Class_MiniPC::Get_Distance()
  */
 Enum_MiniPC_Type Class_MiniPC::Get_MiniPC_Type()
 {
-    return (Pack_Tx.target_type);
+    //return (Pack_Tx.target_type);
 }
 
 /**
@@ -624,7 +624,7 @@ void Class_MiniPC::Set_Armor_Attacked_Ammo_Status(Enum_MiniPC_Data_Status __Armo
  */
 void Class_MiniPC::Set_MiniPC_Type(Enum_MiniPC_Type __MiniPC_Type)
 {
-    Pack_Tx.target_type = __MiniPC_Type;
+    //Pack_Tx.target_type = __MiniPC_Type;
 }
 
 /**

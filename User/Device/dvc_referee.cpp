@@ -74,9 +74,9 @@ void Class_Referee::Data_Process()
     while(buffer_index<buffer_index_max)
     {
         //通过校验和帧头
-        // if ((UART_Manage_Object->Rx_Buffer[buffer_index]==0xA5) && 
-        //     (Verify_CRC8_Check_Sum(&UART_Manage_Object->Rx_Buffer[buffer_index],5)==1))
-        // {
+        if ((UART_Manage_Object->Rx_Buffer[buffer_index]==0xA5) && 
+            (Verify_CRC8_Check_Sum(&UART_Manage_Object->Rx_Buffer[buffer_index],5)==1))
+        {
             //数据处理过程
             cmd_id=(UART_Manage_Object->Rx_Buffer[buffer_index+6])&0xff;
             cmd_id=(cmd_id<<8)|UART_Manage_Object->Rx_Buffer[buffer_index+5];  
@@ -265,7 +265,7 @@ void Class_Referee::Data_Process()
                         }
                 }
                 break;
-            // }
+             }
         }
         buffer_index++;
     }

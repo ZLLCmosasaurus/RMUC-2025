@@ -34,9 +34,9 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
 	  USB_Manage_Object = __USB_Manage_Object;
     Frame_Header = __frame_header;
     Frame_Rear = __frame_rear;
-    Pack_Tx.target_type = MiniPC_Type_Nomal;
-    Pack_Tx.windmill_type = Windmill_Type_Small;
-    Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
+    //Pack_Tx.target_type = MiniPC_Type_Nomal;
+    //Pack_Tx.windmill_type = Windmill_Type_Small;
+    //Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
 
 /**
@@ -54,9 +54,9 @@ void Class_MiniPC::Data_Process()
 
     // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
     // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = -tmp_pitch;
-    Rx_Angle_Yaw = tmp_yaw;
-    Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
+    Rx_Angle_Pitch = -tmp_pitch;//转换正方向为下位机控制逻辑：从左往右做增量
+    Rx_Angle_Yaw = -tmp_yaw;//目前上位机控制逻辑：从左往右做减量，但是下位机控制逻辑与之相反：故改为从左往右做增量（加负号）
+    Math_Constrain(&Rx_Angle_Pitch,-10.0f,34.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
@@ -71,10 +71,10 @@ void Class_MiniPC::Output()
 	Pack_Tx.header       = Frame_Header;
 
   // 根据referee判断红蓝方
-  if(Referee->Get_ID()>=101)
-	  Pack_Tx.detect_color = 101;
-  else
-    Pack_Tx.detect_color = 0;
+  // if(Referee->Get_ID()>=101)
+	//   Pack_Tx.detect_color = 101;
+  // else
+  Pack_Tx.detect_color = 0;
 
 	Pack_Tx.target_id    = 0x08;
 	Pack_Tx.roll         = Tx_Angle_Roll;
@@ -267,8 +267,8 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
  */
 void Class_MiniPC::Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance)
 {
-    *yaw = -calc_yaw(x, y, z);//向左为负，向右为正
-    *pitch = -calc_pitch(x, y, z);//向上为下，向下为负
+    *yaw = calc_yaw(x, y, z);
+    *pitch = calc_pitch(x, y, z);
     *distance = calc_distance(x, y, z);
 }
 

@@ -1674,3 +1674,1457 @@ These source files will be recompiled
 [2024-12-31 22:17:36]	[done]
 	build successfully !
 
+[2025-01-01 12:34:48]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+
+[2025-01-01 12:34:49]	[done]
+	build successfully !
+
+[2025-01-01 12:40:31]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-01 12:40:31]	[done]
+	build successfully !
+
+[2025-01-01 19:52:31]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-01 19:52:33]	[done]
+	build successfully !
+
+[2025-01-01 20:19:06]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-01 20:19:08]	[done]
+	build successfully !
+
+[2025-01-01 21:52:48]	[info] incremental build: 10 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-01 21:52:50]	[done]
+	build successfully !
+
+[2025-01-01 23:41:50]	[info] incremental build: 10 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-01 23:41:52]	[done]
+	build successfully !
+
+[2025-01-01 23:44:33]	[done]
+	build successfully !
+
+[2025-01-01 23:45:58]	[done]
+	build successfully !
+
+[2025-01-02 08:27:13]	[info] incremental build: 21 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\can.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\dma.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\tim.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:27:14]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../Core/Src/stm32f4xx_it.c:509:5: error: use of undeclared identifier 'chariot'
+  509 |     chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,128);
+      |     ^
+./../Core/Src/stm32f4xx_it.c:509:51: error: use of undeclared identifier 'UART1_Manage_Object'
+  509 |     chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,128);
+      |                                                   ^
+./../Core/Src/stm32f4xx_it.c:510:45: error: use of undeclared identifier 'UART1_Manage_Object'
+  510 |     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART1_Manage_Object.Rx_Buffer, 128);
+      |                                             ^
+3 errors generated.
+
+[2025-01-02 08:27:37]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:27:38]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../Core/Src/stm32f4xx_it.c:510:5: error: use of undeclared identifier 'chariot'
+  510 |     chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,128);
+      |     ^
+1 error generated.
+In file included from ./../User/Device/dvc_dr16.cpp:15:
+../User/Task\tsk_config_and_callback.h:30:8: error: unknown type name 'Class_Chariot'
+   30 | extern Class_Chariot chariot;
+      |        ^
+1 error generated.
+
+[2025-01-02 08:28:10]	[info] incremental build: 13 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\tsk_config_and_callback.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:28:11]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Device/dvc_dr16.cpp:15:
+../User/Task\tsk_config_and_callback.h:47:8: error: unknown type name 'Class_Chariot'
+   47 | extern Class_Chariot chariot;
+      |        ^
+1 error generated.
+In file included from ./../Core/Src/main.c:32:
+../User/Task\tsk_config_and_callback.h:47:8: error: unknown type name 'Class_Chariot'
+   47 | extern Class_Chariot chariot;
+      |        ^
+1 error generated.
+In file included from ./../Core/Src/stm32f4xx_it.c:25:
+../User/Task\tsk_config_and_callback.h:47:8: error: unknown type name 'Class_Chariot'
+   47 | extern Class_Chariot chariot;
+      |        ^
+1 error generated.
+
+[2025-01-02 08:29:47]	[info] incremental build: 12 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:29:48]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../Core/Src/stm32f4xx_it.c:510:5: error: use of undeclared identifier 'chariot'
+  510 |     chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,128);
+      |     ^
+1 error generated.
+
+[2025-01-02 08:30:24]	[info] incremental build: 7 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:30:25]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:25:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:6: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:45:6: note: previous declaration is here
+   45 | void Math_Endian_Reverse_16(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:48:6: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:47:6: note: previous declaration is here
+   47 | void Math_Endian_Reverse_32(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:25:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:25:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:31:52]	[info] incremental build: 7 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\usart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-02 08:31:55]	[done]
+	build successfully !
+
+[2025-01-02 08:34:15]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:34:16]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:109:9: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  109 |         chariot.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
+      |         ^~~~~~~
+      |         Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:114:9: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  114 |         chariot.CAN_Chassis_Rx_Gimbal_Callback();
+      |         ^~~~~~~
+      |         Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:119:9: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  119 |         chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
+      |         ^~~~~~~
+      |         Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:278:5: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  278 |     chariot.Referee.UART_RxCpltCallback(Buffer,Length);
+      |     ^~~~~~~
+      |     Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:339:5: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  339 |     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
+      |     ^~~~~~~
+      |     Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:348:9: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  348 |         chariot.TIM_Calculate_PeriodElapsedCallback();
+      |         ^~~~~~~
+      |         Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+./../User/Task/tsk_config_and_callback.cpp:427:5: error: use of undeclared identifier 'chariot'; did you mean 'Chariot'?
+  427 |     chariot.Init();
+      |     ^~~~~~~
+      |     Chariot
+../User/Interaction\ita_chariot.h:29:22: note: 'Chariot' declared here
+   29 | extern Class_Chariot Chariot;
+      |                      ^
+7 errors generated.
+
+[2025-01-02 08:34:34]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-01-02 08:34:35]	[done]
+	build successfully !
+
+[2025-01-02 08:35:04]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+
+[2025-01-02 08:35:04]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:26:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:6: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:45:6: note: previous declaration is here
+   45 | void Math_Endian_Reverse_16(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:48:6: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:47:6: note: previous declaration is here
+   47 | void Math_Endian_Reverse_32(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:26:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:26:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:35:47]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+
+[2025-01-02 08:35:47]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:23:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:6: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:45:6: note: previous declaration is here
+   45 | void Math_Endian_Reverse_16(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:48:6: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:47:6: note: previous declaration is here
+   47 | void Math_Endian_Reverse_32(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:23:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:23:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:35:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+
+[2025-01-02 08:35:59]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:6: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:45:6: note: previous declaration is here
+   45 | void Math_Endian_Reverse_16(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:48:6: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:47:6: note: previous declaration is here
+   47 | void Math_Endian_Reverse_32(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:36:49]	[info] incremental build: 21 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_sampler.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+
+[2025-01-02 08:36:50]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:13: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | extern void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |             ^
+../User/Middleware/Driver\drv_math.h:45:13: note: previous declaration is here
+   45 | extern void Math_Endian_Reverse_16(void *Address);
+      |             ^
+../User/Middleware/Driver\drv_math.h:48:13: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | extern void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |             ^
+../User/Middleware/Driver\drv_math.h:47:13: note: previous declaration is here
+   47 | extern void Math_Endian_Reverse_32(void *Address);
+      |             ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:37:33]	[info] incremental build: 21 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_sampler.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+
+[2025-01-02 08:37:35]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_lkmotor.o -MMD ./../User/Device/dvc_lkmotor.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+../User/Device\dvc_witahrs.h:312:1: error: must use 'enum' tag to refer to type 'Enum_WIT_Status'
+  312 | Enum_WIT_Status Class_WIT::Get_WIT_Status()
+      | ^
+      | enum 
+../User/Device\dvc_witahrs.h:312:26: error: expected ';' after top level declarator
+  312 | Enum_WIT_Status Class_WIT::Get_WIT_Status()
+      |                          ^
+      |                          ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+./../User/Device/dvc_djimotor.cpp:204:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  204 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, (void *)&tmp_encoder);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:205:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  205 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:206:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  206 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:207:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  207 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:398:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  398 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, (void *)&tmp_encoder);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:399:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  399 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:400:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  400 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:401:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  401 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:570:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  570 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, (void *)&tmp_encoder);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:571:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  571 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:572:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  572 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
+      |     ^
+./../User/Device/dvc_djimotor.cpp:573:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  573 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
+      |     ^
+12 errors generated.
+./../User/Device/dvc_dmmotor.cpp:180:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  180 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Position_Reverse, &tmp_position);
+      |     ^
+./../User/Device/dvc_dmmotor.cpp:330:9: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  330 |         Math_Endian_Reverse_16(&tmp_position);
+      |         ^
+./../User/Device/dvc_dmmotor.cpp:362:9: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  362 |         Math_Endian_Reverse_16(&tmp_position);
+      |         ^
+./../User/Device/dvc_dmmotor.cpp:394:9: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  394 |         Math_Endian_Reverse_16(&tmp_position);
+      |         ^
+4 errors generated.
+./../User/Device/dvc_lkmotor.cpp:180:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  180 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, &tmp_encoder);
+      |     ^
+./../User/Device/dvc_lkmotor.cpp:181:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  181 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, &tmp_omega);
+      |     ^
+./../User/Device/dvc_lkmotor.cpp:182:5: error: use of undeclared identifier 'Math_Endian_Reverse_16'
+  182 |     Math_Endian_Reverse_16((void *)&tmp_buffer->Current_Reverse, &tmp_current);
+      |     ^
+3 errors generated.
+
+[2025-01-02 08:38:19]	[info] incremental build: 21 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_sampler.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+
+[2025-01-02 08:38:20]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+In file included from ../User/Middleware/Algorithm\alg_filter.h:18:
+../User/Middleware/Driver\drv_math.h:46:6: error: conflicting types for 'Math_Endian_Reverse_16'
+   46 | void Math_Endian_Reverse_16(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:45:6: note: previous declaration is here
+   45 | void Math_Endian_Reverse_16(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:48:6: error: conflicting types for 'Math_Endian_Reverse_32'
+   48 | void Math_Endian_Reverse_32(void *Source, void *Destination);
+      |      ^
+../User/Middleware/Driver\drv_math.h:47:6: note: previous declaration is here
+   47 | void Math_Endian_Reverse_32(void *Address);
+      |      ^
+../User/Middleware/Driver\drv_math.h:69:1: error: unknown type name 'template'
+   69 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:69:10: error: expected identifier or '('
+   69 | template <typename Type>
+      |          ^
+../User/Middleware/Driver\drv_math.h:89:1: error: unknown type name 'template'
+   89 | template <typename Type>
+      | ^
+../User/Middleware/Driver\drv_math.h:89:10: error: expected identifier or '('
+   89 | template <typename Type>
+      |          ^
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+In file included from ../User/Device\dvc_witahrs.h:19:
+../User/Middleware/Algorithm\alg_filter.h:45:1: error: unknown type name 'class'
+   45 | class Class_Filter_Fourier
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:45:27: error: expected ';' after top level declarator
+   45 | class Class_Filter_Fourier
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:100:1: error: unknown type name 'class'
+  100 | class Class_Filter_Kalman
+      | ^
+../User/Middleware/Algorithm\alg_filter.h:100:26: error: expected ';' after top level declarator
+  100 | class Class_Filter_Kalman
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:148:27: error: expected ';' after top level declarator
+  148 | float Class_Filter_Fourier::Get_Out()
+      |                           ^
+      |                           ;
+../User/Middleware/Algorithm\alg_filter.h:158:6: error: variable has incomplete type 'void'
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:158:26: error: expected ';' after top level declarator
+  158 | void Class_Filter_Fourier::Set_Now(float __Now)
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:179:26: error: expected ';' after top level declarator
+  179 | float Class_Filter_Kalman::Get_Out()
+      |                          ^
+      |                          ;
+../User/Middleware/Algorithm\alg_filter.h:189:6: error: variable has incomplete type 'void'
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |      ^
+../User/Middleware/Algorithm\alg_filter.h:189:25: error: expected ';' after top level declarator
+  189 | void Class_Filter_Kalman::Set_Now(float __Now)
+      |                         ^
+      |                         ;
+In file included from ./../Core/Src/stm32f4xx_it.c:22:
+In file included from ../Core/Inc\stm32f4xx_it.h:30:
+In file included from ../User/Interaction\ita_chariot.h:19:
+In file included from ../User/Chariot\crt_gimbal.h:18:
+../User/Device\dvc_witahrs.h:62:5: error: must use 'enum' tag to refer to type 'Enum_WIT_Data_Type'
+   62 |     Enum_WIT_Data_Type Data_Type;
+      |     ^
+      |     enum 
+../User/Device\dvc_witahrs.h:204:1: error: unknown type name 'class'
+  204 | class Class_WIT
+      | ^
+../User/Device\dvc_witahrs.h:204:16: error: expected ';' after top level declarator
+  204 | class Class_WIT
+      |                ^
+      |                ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+[2025-01-02 08:38:47]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_math.h' has been changed.
+
+[2025-01-02 08:38:50]	[done]
+	build successfully !
+
+[2025-01-02 08:40:32]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:40:33]	[done]
+	build successfully !
+
+[2025-01-02 08:43:06]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:43:07]	[done]
+	build successfully !
+
+[2025-01-02 08:44:44]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:44:45]	[done]
+	build successfully !
+
+[2025-01-02 08:46:48]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:46:49]	[done]
+	build successfully !
+
+[2025-01-02 08:56:00]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:56:01]	[done]
+	build successfully !
+
+[2025-01-02 08:57:07]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:57:08]	[done]
+	build successfully !
+
+[2025-01-02 08:59:40]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 08:59:41]	[done]
+	build successfully !
+
+[2025-01-02 09:06:34]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-01-02 09:06:35]	[done]
+	build successfully !
+
+[2025-01-02 09:08:02]	[info] incremental build: 5 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\tsk_config_and_callback.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\tsk_config_and_callback.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\tsk_config_and_callback.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\tsk_config_and_callback.h' has been changed.
+
+[2025-01-02 09:08:04]	[done]
+	build successfully !
+
+[2025-01-04 20:09:39]	[info] incremental build: 6 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\can.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-01-04 20:09:41]	[done]
+	build successfully !
+
+[2025-01-04 20:21:57]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-04 20:21:59]	[done]
+	build successfully !
+
+[2025-01-04 21:13:52]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-01-04 21:13:52]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_gimbal.o -MMD ./../User/Chariot/crt_gimbal.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+../User/Device\dvc_minipc.h:476:21: error: no member named 'target_type' in 'Pack_tx_t'
+  476 |     return (Pack_Tx.target_type);
+      |             ~~~~~~~ ^
+../User/Device\dvc_minipc.h:627:13: error: no member named 'target_type' in 'Pack_tx_t'
+  627 |     Pack_Tx.target_type = __MiniPC_Type;
+      |     ~~~~~~~ ^
+2 errors generated.
+
+[2025-01-04 21:14:13]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-01-04 21:14:15]	[done]
+	build successfully !
+
+[2025-01-04 21:19:52]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-01-04 21:19:53]	[done]
+	build successfully !
+
+[2025-01-04 21:21:21]	[done]
+	build successfully !
+
+[2025-01-04 22:40:36]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 22:40:37]	[done]
+	build successfully !
+
+[2025-01-04 22:58:22]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 22:58:22]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:567:1: error: extraneous closing brace ('}')
+  567 | }
+      | ^
+1 error generated.
+
+[2025-01-04 22:59:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-01-04 22:59:27]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:567:1: error: extraneous closing brace ('}')
+  567 | }
+      | ^
+1 error generated.
+
+[2025-01-04 22:59:50]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-01-04 22:59:51]	[done]
+	build successfully !
+
+[2025-01-04 23:04:15]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 23:04:17]	[done]
+	build successfully !
+
+[2025-01-04 23:16:20]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 23:16:20]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:574:1: error: function definition is not allowed here
+  574 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:719:1: error: function definition is not allowed here
+  719 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:762:1: error: function definition is not allowed here
+  762 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:788:1: error: function definition is not allowed here
+  788 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:802:1: error: function definition is not allowed here
+  802 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:855:1: error: function definition is not allowed here
+  855 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:898:1: error: function definition is not allowed here
+  898 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:931:1: error: function definition is not allowed here
+  931 | {
+      | ^
+./../User/Interaction/ita_chariot.cpp:1025:83: error: expected '}'
+ 1025 | /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
+      |                                                                                   ^
+./../User/Interaction/ita_chariot.cpp:421:1: note: to match this '{'
+  421 | {
+      | ^
+9 errors generated.
+
+[2025-01-04 23:16:51]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-01-04 23:16:52]	[done]
+	build successfully !
+
+[2025-01-04 23:17:15]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 23:17:16]	[done]
+	build successfully !
+
+[2025-01-04 23:18:08]	[done]
+	build successfully !
+
+[2025-01-04 23:22:11]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-01-04 23:22:12]	[done]
+	build successfully !
+
+[2025-01-04 23:41:07]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-04 23:41:08]	[done]
+	build successfully !
+
+[2025-01-04 23:46:41]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-01-04 23:46:42]	[done]
+	build successfully !
+
+[2025-01-05 02:38:33]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-01-05 02:38:35]	[done]
+	build successfully !
+

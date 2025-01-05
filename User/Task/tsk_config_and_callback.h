@@ -39,7 +39,7 @@
     extern "C" {
 #endif
 void Task_Init();
-//void Task_Loop();
+void Task_Loop();
 
 #ifdef  __cplusplus
 }  

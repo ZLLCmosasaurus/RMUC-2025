@@ -26,6 +26,7 @@
 
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
+extern Class_Chariot chariot;
 /* Exported types ------------------------------------------------------------*/
 
 /**
@@ -118,7 +119,9 @@ public:
     #ifdef CHASSIS
         //参数
 		float Gimbal_Follow_Yaw_Angle;
-		float Gimbal_To_Chassis_Angle;
+			float Gimbal_Follow_Yaw_Angle_Deg;
+		float Gimbal_To_Chassis_Angle;//弧度
+		float Gimbal_To_Chassis_Angle_Deg;//度
         //获取yaw电机编码器值 用于底盘和云台坐标系的转换
         //底盘随动PID环
         Class_DJI_Motor_GM6020 Motor_Yaw;
@@ -216,7 +219,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 2.13721871;
+        float Reference_Angle = 2.24333715;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //7.5°
         //底盘转换后的角度（数据来源yaw电机）
