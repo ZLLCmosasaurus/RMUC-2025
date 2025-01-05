@@ -66,8 +66,6 @@
 
 uint32_t init_finished =0 ;
 bool start_flag=0;
-//机器人控制对象
-Class_Chariot chariot;
 
 //串口裁判系统对象
 Class_Serialplot serialplot;
@@ -365,7 +363,6 @@ void Task1ms_TIM5_Callback()
         #endif
     }
 }
-
 /**
  * @brief 初始化任务
  *
@@ -383,8 +380,9 @@ extern "C" void Task_Init()
         CAN_Init(&hcan2, Chassis_Device_CAN2_Callback);
 
         //裁判系统
-        UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
-
+        //UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+        __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+	    HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
         #ifdef POWER_LIMIT
         //旧版超电
         //UART_Init(&huart1, SuperCAP_UART1_Callback, 128);
@@ -432,6 +430,10 @@ extern "C" void Task_Init()
     HAL_TIM_Base_Start_IT(&htim4);
     HAL_TIM_Base_Start_IT(&htim5);
 
+}
+extern "C" void Task_Loop()
+{
+    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,128);
 }
 
 /**

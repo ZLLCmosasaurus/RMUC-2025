@@ -294,7 +294,7 @@ void TIM_CAN_PeriodElapsedCallback()
     mod5++;
     if (mod5 == 5)
     {
-        CAN_Send_Data(&hcan1, 0x01e, CAN1_0x01E_Tx_Data, 8);
+        can_tx_status[0]  = CAN_Send_Data(&hcan1, 0x01e, CAN1_0x01E_Tx_Data, 8);
         mod5 = 0;
     }
     else
@@ -302,7 +302,7 @@ void TIM_CAN_PeriodElapsedCallback()
         while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1))
         {
             CAN1_Tx_Index = (CAN1_Tx_Index + 1) % 4;
-            CAN_Send_Data(Massage_queue[CAN1_Tx_Index].hcan, Massage_queue[CAN1_Tx_Index].ID, Massage_queue[CAN1_Tx_Index].Data, Massage_queue[CAN1_Tx_Index].Length);
+            can_tx_status[1] = CAN_Send_Data(Massage_queue[CAN1_Tx_Index].hcan, Massage_queue[CAN1_Tx_Index].ID, Massage_queue[CAN1_Tx_Index].Data, Massage_queue[CAN1_Tx_Index].Length);
         }
     }
     // CAN1 发送报文给舵小板

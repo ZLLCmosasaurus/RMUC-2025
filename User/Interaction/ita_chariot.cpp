@@ -16,7 +16,8 @@
 #include "dvc_GraphicsSendTask.h"
 #include "config.h"
 /* Private macros ------------------------------------------------------------*/
-
+//机器人控制对象
+Class_Chariot chariot;
 /* Private types -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -94,6 +95,7 @@ void Class_Chariot::Get_Gimbal_Follow_Yaw_Angle()
 			Yaw_Now_Angle = Yaw_Now_Rad/PI*180;
 		}
 		Gimbal_Follow_Yaw_Angle = Yaw_Now_Rad;
+		Gimbal_Follow_Yaw_Angle_Deg = Gimbal_Follow_Yaw_Angle / PI *360.0f;
 }
 
 void Class_Chariot::Get_Gimbal_To_Chassis_Angle()
@@ -109,6 +111,7 @@ void Class_Chariot::Get_Gimbal_To_Chassis_Angle()
 			
 		}
 		Gimbal_To_Chassis_Angle = Yaw_Now_Rad;
+		Gimbal_To_Chassis_Angle_Deg = Gimbal_To_Chassis_Angle / PI *180.0f;
 }
 #endif
 
@@ -693,11 +696,11 @@ void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
 #ifdef CHASSIS
 void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
 {
-        uint16_t Chassis_Power_Max;
+    uint16_t Chassis_Power_Max;
 	float Chassis_Actual_Power;
     Chassis_Power_Max = Referee.Get_Chassis_Power_Max();
 	
-	Chassis_Power_Max=40;
+	Chassis_Power_Max = 50;
     Chassis_Actual_Power=Referee.Get_Chassis_Power();
     memcpy(CAN1_0x01E_Tx_Data, &Chassis_Power_Max, sizeof(uint16_t));
 	memcpy(CAN1_0x01E_Tx_Data+2,&Chassis_Actual_Power,sizeof(float));
@@ -832,7 +835,7 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             }
             
 						
-			//MiniPC.TIM1msMod50_Alive_PeriodElapsedCallback();
+			MiniPC.TIM1msMod50_Alive_PeriodElapsedCallback();
 
         #endif
 
