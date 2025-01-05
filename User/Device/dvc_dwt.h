@@ -15,6 +15,7 @@
 #include "drv_dwt.h"
 
 #define uint32_max 4294967295u
+#define uint16_max 65535u
 
 float DWT_GetDeltaT(uint32_t *cnt_last);
 double DWT_GetDeltaT64(uint32_t *cnt_last);

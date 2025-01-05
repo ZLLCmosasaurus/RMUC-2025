@@ -112,7 +112,7 @@ protected:
     //常量
 
     // 重力补偿
-    float Gravity_Compensate = 0.0f;
+    float Gravity_Compensate = 3200.0f;
 
     //内部变量
     float True_Rad_Pitch = 0.0f;

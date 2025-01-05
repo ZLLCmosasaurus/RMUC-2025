@@ -164,29 +164,15 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x203):
-    {
-        chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x201):
-    {
-        chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x202):
-    {
-        chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
+   
     case (0x205):
     {
-        chariot.Gimbal.Motor_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
+         chariot.Gimbal.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x141):
+    case (0x206):
     {
-        chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
+         chariot.Gimbal.Motor_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
 	}
@@ -203,6 +189,21 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
+         case (0x203):
+    {
+        chariot.Booster.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
+    case (0x201):
+    {
+        chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
+    case (0x202):
+    {
+        chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
     case (0x88):   //留给下板通讯
     {
         chariot.CAN_Gimbal_Rx_Chassis_Callback();
@@ -382,7 +383,7 @@ void Task1ms_TIM5_Callback()
     if(start_flag==1)
     {
         #ifdef GIMBAL
-        chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+        //  chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
         #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
@@ -390,15 +391,15 @@ void Task1ms_TIM5_Callback()
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
 
-        TIM_UART_PeriodElapsedCallback();
+        // TIM_UART_PeriodElapsedCallback();
         
-        static int mod5 = 0;
-        mod5++;
-        if (mod5 == 5)
-        {
-            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        mod5 = 0;
-        }	        
+        // static int mod5 = 0;
+        // mod5++;
+        // if (mod5 == 5)
+        // {
+        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+        // mod5 = 0;
+        // }	        
     }
 }
 

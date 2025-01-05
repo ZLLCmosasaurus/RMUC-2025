@@ -602,7 +602,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //给下板发送数据
         CAN_Gimbal_Tx_Chassis_Callback();
         //弹舱舵机控制
-        __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, Compare);
+        // __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, Compare);
 
     #endif   
 }

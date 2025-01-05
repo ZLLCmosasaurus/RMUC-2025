@@ -96,7 +96,7 @@ void IMU_QuaternionEKF_Init(float process_noise1, float process_noise2, float me
  * @param[in]       accel x y z in m/s²
  * @param[in]       update period in s
  */
-float yaw_offset = -0.00599999959;
+float yaw_offset = 0;
 void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, float az, float dt, QEKF_INS_t *QEKF_INS)
 {
     // 0.5(Ohm-Ohm^bias)*deltaT,用于更新工作点处的状态转移F矩阵
@@ -120,7 +120,7 @@ void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, 
     QEKF_INS->Gyro[0] = gx - QEKF_INS->GyroBias[0];
     QEKF_INS->Gyro[1] = gy - QEKF_INS->GyroBias[1];
     QEKF_INS->Gyro[2] = gz - QEKF_INS->GyroBias[2];
-
+    yaw_offset+= QEKF_INS->Gyro[2];
     // set F
     halfgxdt = 0.5f * QEKF_INS->Gyro[0] * dt;
     halfgydt = 0.5f * QEKF_INS->Gyro[1] * dt;
@@ -203,7 +203,7 @@ void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, 
     QEKF_INS->q[3] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[3];
     QEKF_INS->GyroBias[0] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[4];
     QEKF_INS->GyroBias[1] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[5];
-    QEKF_INS->GyroBias[2] = yaw_offset; // 大部分时候z轴通天,无法观测yaw的漂移
+    QEKF_INS->GyroBias[2] = -0.000045234381626762; // 大部分时候z轴通天,无法观测yaw的漂移
 
     // 利用四元数反解欧拉角
     QEKF_INS->Yaw = atan2f(2.0f * (QEKF_INS->q[0] * QEKF_INS->q[3] + QEKF_INS->q[1] * QEKF_INS->q[2]), 2.0f * (QEKF_INS->q[0] * QEKF_INS->q[0] + QEKF_INS->q[1] * QEKF_INS->q[1]) - 1.0f) * 57.295779513f;
