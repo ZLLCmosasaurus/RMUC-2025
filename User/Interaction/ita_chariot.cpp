@@ -171,10 +171,10 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 云台坐标系的目标速度转为底盘坐标系的目标速度
     chassis_velocity_x = (float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle));
     chassis_velocity_y = (float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle));
-    if (fabs(chassis_velocity_x) < 0.0001f)
-        chassis_velocity_x = 0;
-    if (fabs(chassis_velocity_y) < 0.0001f)
-        chassis_velocity_y = 0;
+    // if (fabs(chassis_velocity_x) < 0.0001f)
+    //     chassis_velocity_x = 0;
+    // if (fabs(chassis_velocity_y) < 0.0001f)
+    //     chassis_velocity_y = 0;
     // 设定底盘控制类型
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
 
@@ -308,7 +308,7 @@ void Class_Chariot::Control_Chassis()
         chassis_velocity_y = dr16_l_y * sqrt(1.0f - dr16_l_x * dr16_l_x / 2.0f) * Chassis.Get_Velocity_Y_Max();
 
         // 键盘遥控器操作逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE || DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左中或者左下 随动模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中或者左下 随动模式
         {
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
@@ -322,6 +322,11 @@ void Class_Chariot::Control_Chassis()
         //     //     chassis_omega = Chassis.Get_Spin_Omega();
         //     // }
         // }
+        if(DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
+        {
+            // 底盘随动
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        }
 
         if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
         {
@@ -433,11 +438,11 @@ void Class_Chariot::Control_Gimbal()
         dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > DR16_Dead_Zone) ? DR16.Get_Right_Y() : 0;
         // pitch赋值逻辑
         tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
-        tmp_gimbal_pitch -= dr16_r_y * DR16_Pitch_Angle_Resolution * 0.5f;
+        tmp_gimbal_pitch += dr16_r_y * DR16_Pitch_Angle_Resolution * 0.5f;
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
         // yaw赋值逻辑
         tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-        tmp_gimbal_yaw += dr16_y * DR16_Yaw_Angle_Resolution;
+        tmp_gimbal_yaw -= dr16_y * DR16_Yaw_Angle_Resolution;
         // 设定当前IMU角度值
         Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);//IMU角度值
 
