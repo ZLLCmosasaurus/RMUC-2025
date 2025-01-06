@@ -150,7 +150,7 @@ public:
     
     #ifdef CHASSIS
 
-        void CAN_Chassis_Rx_Gimbal_Callback();
+        void CAN_Chassis_Rx_Gimbal_Callback(uint8_t *Rx_Data);
         void CAN_Chassis_Tx_Gimbal_Callback();
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
         inline void Set_Gimbal_Status(Enum_Gimbal_Status __Gimbal_Status);
@@ -214,7 +214,7 @@ protected:
     //初始化相关常量
 
     //绑定的CAN
-    Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
+    Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN3_Manage_Object;
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)

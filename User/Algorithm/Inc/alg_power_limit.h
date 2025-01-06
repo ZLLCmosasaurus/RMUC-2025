@@ -1,11 +1,11 @@
 /**
  * @file alg_power_limit.h
- * @author lez 
- * @brief 功率限制算法
- * @version 1.1
- * @date 2024-07-1 0.1 24赛季定稿
+ * @author qyx
+ * @brief 自适应功率限制算法
+ * @version 1.2
+ * @date
  *
- * @copyright ZLLC 2024
+ * @copyright ZLLC 2025
  *
  */
 
@@ -13,142 +13,145 @@
 #define ALG_POWER_LIMIT_H
 
 /* Includes ------------------------------------------------------------------*/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "arm_math.h"
-
-#ifdef __cplusplus
-}
-#endif
-
 #include "main.h"
+#include "arm_math.h"
 #include "dvc_djimotor.h"
 #include "config.h"
+#include "RLS.hpp"
 
 /* Exported macros -----------------------------------------------------------*/
+#define RAD_TO_RPM 9.5493f
+#define PI 3.14159265354f
 
-#define RAD_TO_RPM              9.5493f
-#define CMD_CURRENT_TO_TORQUE   ((20.f/16384.f)*0.3f)   //计算出3508直驱输出轴转子和cmd电流的关系
-#define REDUATION               (3591.f/187.f)         //减速比
- 
-class Class_DJI_Motor_C620;
+/*3508参数*/
+#define M3508_REDUATION (3591.f / 187.f)                                                      // 3508标准减速比
+#define M3508_TORQUE_CONSTANT 0.3                                                             // 3508带标准减速箱的转矩常数
+#define M3508_CMD_CURRENT_TO_TORQUE_CURRENT (20.f / 16384.f)                                  // Icmd映射到Itorque
+#define M3508_Kt (M3508_TORQUE_CONSTANT / M3508_REDUATION)                                    // 3508转子的转矩常数
+#define M3508_CMD_CURRENT_TO_TORQUE (M3508_CMD_CURRENT_TO_TORQUE_CURRENT * M3508_Kt)          // 发送的电流控制值（16384）映射到转子扭矩
+#define M3508_TORQUE_TO_CMD_CURRENT (1.0f / (M3508_CMD_CURRENT_TO_TORQUE_CURRENT * M3508_Kt)) // 转子扭矩映射到电流控制值（16384）
+/*------------------------------------------------------------------------*/
+
+/*6020参数*/
+#define GM6020_CMD_CURRENT_TO_TORQUE_CURRENT (3.0f / 16384.f)                                    // Icmd映射到Itorque
+#define GM6020_Kt (741.0f * 1000.f)                                                              // 6020转子的转矩常数
+#define GM6020_CMD_CURRENT_TO_TORQUE (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)          // 发送的电流控制值（16384）映射到转子扭矩
+#define GM6020_TORQUE_TO_CMD_CURRENT (1.0f / (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)) // 转子扭矩映射到电流控制值（16384）
+
+/*----------------------------------------------------------------------------*/
+
+#ifdef AGV
+
+#ifdef INFANTRY || HERO
+// 转向电机参数选择
+#define DIR_CMD_CURRENT_TO_TORQUE M3508_CMD_CURRENT_TO_TORQUE
+#define DIR_TORQUE_TO_CMD_CURRENT M3508_TORQUE_TO_CMD_CURRENT
+
+// 动力电机参数选择
+#define MOT_CMD_CURRENT_TO_TORQUE M3508_CMD_CURRENT_TO_TORQUE
+#define MOT_TORQUE_TO_CMD_CURRENT M3508_TORQUE_TO_CMD_CURRENT
+
+#endif
+
+#ifdef SENTRY
+// 转向电机参数选择
+#define DIR_CMD_CURRENT_TO_TORQUE GM6020_CMD_CURRENT_TO_TORQUE
+#define DIR_TORQUE_TO_CMD_CURRENT GM6020_TORQUE_TO_CMD_CURRENT
+
+// 动力电机参数选择
+#define MOT_CMD_CURRENT_TO_TORQUE M3508_CMD_CURRENT_TO_TORQUE
+#define MOT_TORQUE_TO_CMD_CURRENT M3508_TORQUE_TO_CMD_CURRENT
+
+#endif
+
+// 根据电机索引选择对应的转换系数
+#define GET_CMD_CURRENT_TO_TORQUE(motor_index) ((motor_index % 2 == 0) ? DIR_CMD_CURRENT_TO_TORQUE : MOT_CMD_CURRENT_TO_TORQUE)
+#define GET_TORQUE_TO_CMD_CURRENT(motor_index) ((motor_index % 2 == 0) ? DIR_TORQUE_TO_CMD_CURRENT : MOT_TORQUE_TO_CMD_CURRENT)
+
+#endif
+/*---------------------------------------------------------------------------------*/
+
+typedef struct
+{
+    __fp16 feedback_omega;  // 反馈的转子转速,rpm
+    __fp16 feedback_torque; // 反馈的转子转矩,Nm
+
+    __fp16 torque;           // pid输出的转子转矩,Nm
+    float theoretical_power; // 理论功率
+    float scaled_power;      // 功率（收缩后）
+
+    int16_t pid_output; // pid输出的扭矩电流控制值（16384）
+    int16_t output;     // 最终输出扭矩电流控制值（16384）
+} Struct_Power_Motor_Data;
+
+typedef struct
+{
+    uint16_t Max_Power;            // 最大功率限制
+    float Scale_Conffient;         // 功率收缩系数
+    float Theoretical_Total_Power; // 理论总功率
+    float Scaled_Total_Power;      // 收缩后总功率
+    float Actual_Power;            // 实际总功率
+
+    Struct_Power_Motor_Data Motor_Data[8]; // 舵轮底盘八个电机，分为四组，默认偶数索引值的电机为转向电机，奇数索引值的电机为动力电机
+
+} Struct_Power_Management;
 
 class Class_Power_Limit
 {
-    public:
+public:
+    float Calculate_Theoretical_Power(float omega, float torque, uint8_t motor_index);
+    float Calculate_Toque(float omega, float power, float torque, uint8_t motor_index);
+    void Calculate_Power_Coefficient(float actual_power, const Struct_Power_Motor_Data *motor_data);
+    void Power_Task(Struct_Power_Management &power_management);
+    void Init();
 
-    inline void Set_Power_Limit(float __total_power_limit);
-    inline void Set_Chassis_Buffer(float __buffer);
-    inline void Set_Supercap_Enegry(float __energy);
-    inline void Set_Supercap_Voltage(float __voltage);
-    inline void Set_Supercap_Print_Flag(uint8_t __flag);
+#ifdef AGV
+    // AGV模式下的getter/setter
+    inline float Get_K1_Mot() const { return k1_mot; }
+    inline float Get_K2_Mot() const { return k2_mot; }
+    inline float Get_K1_Dir() const { return k1_dir; }
+    inline float Get_K2_Dir() const { return k2_dir; }
+    inline float Get_K3_Mot() const { return k3_mot; }
+    inline float Get_K3_Dir() const { return k3_dir; }
 
-    float Get_Torque_Current(uint8_t num);
+    inline void Set_K1_Mot(float _k1) { k1_mot = _k1; }
+    inline void Set_K2_Mot(float _k2) { k2_mot = _k2; }
+    inline void Set_K1_Dir(float _k1) { k1_dir = _k1; }
+    inline void Set_K2_Dir(float _k2) { k2_dir = _k2; }
+    inline void Set_K3_Mot(float _k3) { k3_mot = _k3; }
+    inline void Set_K3_Dir(float _k3) { k3_dir = _k3; }
+#else
+    // 普通模式下的getter/setter
+    inline float Get_K1() const { return k1; }
+    inline float Get_K2() const { return k2; }
+    inline float Get_K3() const { return k3; }
 
-    void Set_Motor(Class_DJI_Motor_C620 (&Motor)[4]);
-    //输出功率限制之后的电流到电机缓冲区
-    void Output(Class_DJI_Motor_C620 (&Motor)[4]);
-
-    void TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&Motor)[4]);
-    
-    protected:
-
-    float Limit_K = 1.0f;
-    float Chassis_Buffer;
-    const float Min_Buffer = 10.0f; 
-    const float Protected_Buffer = 30.0f;
-
-    //转矩系数 rad转rpm系数
-	float Toque_Coefficient = 1.99688994e-6f * (3591/187) / 13.93f;  // (20/16384)*(0.3)*(187/3591)/9.55
-
-    //电机模型参数
-	float k1 = 1.3;		// k1 
-	float k2 = 0.015;		// k2 
-	float Alpha = 0.0f;
-    float Tansfer_Coefficient = 9.55f;  //转化系数 w*t/Tansfer_Coefficient
-
-    //超电电量
-    float Supercap_Energy;
-    //超电电压
-    float Supercap_Voltage;
-    //超电冲刺标志
-    uint8_t Supercap_Print_Flag = 0;
-
-    //过程变量
-    float equation_a;
-    float equation_b;
-    float equation_c;
-
-    //四电机输入目标力矩电流
-    float Input_Torque_Current[4];  
-    //四电机输出目标力矩电流
-    float Output_Torque_Current[4];  
-    //四电机当前电流值
-    float Torque_Torque_Current_Now[4];  
-    //四电机当前角速度
-    float Omega[4];	 
-    //底盘总功率限制
-    float Total_Power_Limit;  
-    //底盘总预测功率
-    float Total_Predict_Power = 0;  
-    //预测功率
-    float Predict_Power[4]; 
-    //功率伸缩系数
-	float Power_Scale;  
-    //伸缩之后的功率限制
-	float Scaled_Give_Power[4];  
-};
-
-/**
- * @brief 设定总功率限制
- *
- */
-void Class_Power_Limit::Set_Power_Limit(float __total_power_limit)
-{
-    Total_Power_Limit = __total_power_limit;
-}
-
-/**
- * @brief 设定底盘当前剩余缓冲能量
- *
- */
-void Class_Power_Limit::Set_Chassis_Buffer(float __buffer)
-{
-    Chassis_Buffer = __buffer;
-}
-
-/**
- * @brief 设定超级电容当前剩余能量
- *
- */
-void Class_Power_Limit::Set_Supercap_Enegry(float __energy)
-{
-   Supercap_Energy = __energy;
-}
-
-/**
- * @brief 设定超级电容当前电压
- *
- */
-void Class_Power_Limit::Set_Supercap_Voltage(float __voltage)
-{
-    Supercap_Voltage = __voltage;
-}
-
-/**
- * @brief 设定超级电容冲刺标志
- *
- */
-void Class_Power_Limit::Set_Supercap_Print_Flag(uint8_t __flag)
-{
-    Supercap_Print_Flag = __flag;
-}
-
-/* Exported types ------------------------------------------------------------*/
-
+    inline void Set_K1(float _k1) { k1 = _k1; }
+    inline void Set_K2(float _k2) { k2 = _k2; }
+    inline void Set_K3(float _k3) { k3 = _k3; }
 #endif
 
-/************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
+protected:
+#ifdef AGV
+    // 参数
+    float k1_mot = 0.024246;     // 动力电机k1
+    float k2_mot = 1.183594;     // 动力电机k2
+    float k3_mot = 9.28f / 8.0f; // 动力电机k3
+
+    float k1_dir = 0.024246;     // 转向电机k1
+    float k2_dir = 1.183594;     // 转向电机k2
+    float k3_dir = 9.28f / 8.0f; // 转向电机k3
+
+    RLS<2> rls_mot{1e-5f, 0.9999f}; // 动力电机RLS
+    RLS<2> rls_dir{1e-5f, 0.9999f}; // 转向电机RLS
+#else
+    // 普通四电机底盘参数
+    float k1 = 0.024246;
+    float k2 = 1.183594;
+    float k3 = 9.28f / 8.0f;
+    RLS<2> rls{1e-5f, 0.9999f};
+#endif
+};
+
+#endif
+    
