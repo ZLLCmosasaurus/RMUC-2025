@@ -133,7 +133,7 @@ void Class_Supercap::Output_UART()
 void Class_Supercap::Data_Process_UART()
 {
     //数据处理过程
-    if(UART_Manage_Object->Rx_Buffer[0]!='*' && UART_Manage_Object->Rx_Buffer[1]!=12 && UART_Manage_Object->Rx_Buffer[10]!=';') return;
+    if(UART_Manage_Object->Rx_Buffer[0]!='*' || UART_Manage_Object->Rx_Buffer[1]!=12 || UART_Manage_Object->Rx_Buffer[10]!=';') return;
     else
     {
         Supercap_Data.Stored_Energy = (float)(UART_Manage_Object->Rx_Buffer[4]/10.0f);

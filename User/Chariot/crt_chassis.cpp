@@ -51,7 +51,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 
     #ifdef POWER_LIMIT
     //超级电容初始化
-    Supercap.Init(&hcan2,45);
+    Supercap.Init(&hcan1,45);
     #endif
 
     //电机PID批量初始化
