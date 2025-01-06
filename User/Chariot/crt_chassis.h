@@ -102,7 +102,7 @@ public:
 
     Joint_Motor_T Joint_Motor[4];
     Wheel_Motor_T Wheel_Motor[2];
-
+	Class_DJI_Motor_GM6020 Yaw_Motor;
 
     Class_PID left_leg_length_pid;
     Class_PID right_leg_length_pid;

@@ -30,129 +30,297 @@
  * @param __CAN_ID CAN ID
  * @return uint8_t* 缓冲区指针
  */
-uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
+uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID )
+{
+    uint8_t *tmp_tx_data_ptr;
+    if (hcan == &hcan1)
+    {       
+                switch (__CAN_ID)
+                {
+                    case (DJI_Motor_ID_0x201):
+                    {
+                         tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[0]);
+                    }
+                    break;
+                     case (DJI_Motor_ID_0x202):
+                    {           
+                        tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x203):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x204):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[4]);
+                    }
+                    break;
+                }
+          
+    }
+    else if (hcan == &hcan2)
+    {
+                switch (__CAN_ID)
+                {
+
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[4]);
+                    }
+                    break;
+                }
+        
+    }
+    return (tmp_tx_data_ptr);
+}
+
+uint8_t *allocate_GM6020_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Mode DJI_Motor_Control_Mode)
 {
     uint8_t *tmp_tx_data_ptr;
     if (hcan == &hcan1)
     {
-        switch (__CAN_ID)
+        switch(DJI_Motor_Control_Mode)
         {
-        case (DJI_Motor_ID_0x201):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x202):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x203):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[4]);
-        }
-        break;
-        case (DJI_Motor_ID_0x204):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x200_Tx_Data[6]);
-        }
-        break;
-        case (DJI_Motor_ID_0x205):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x206):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x207):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[4]);
-        }
-        break;
-        case (DJI_Motor_ID_0x208):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[6]);
-        }
-        break;
-        case (DJI_Motor_ID_0x209):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x20A):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x20B):
-        {
-            tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[4]);
-        }
-        break;
+            case (DJI_Motor_Control_Mode_VOLTAGE):
+            {
+                switch (__CAN_ID)
+                {
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1ff_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2ff_Tx_Data[4]);
+                    }
+                    break;
+                }
+            }
+            break;
+           case (DJI_Motor_Control_Mode_CURRENT):
+            {
+                switch (__CAN_ID)
+                {
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1fe_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1fe_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1fe_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x1fe_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2fe_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2fe_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN1_0x2fe_Tx_Data[4]);
+                    }
+                    break;
+                }
+            }
+            break;
         }
     }
     else if (hcan == &hcan2)
     {
-        switch (__CAN_ID)
+      switch(DJI_Motor_Control_Mode)
         {
-        case (DJI_Motor_ID_0x201):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x200_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x202):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x200_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x203):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x200_Tx_Data[4]);
-        }
-        break;
-        case (DJI_Motor_ID_0x204):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x200_Tx_Data[6]);
-        }
-        break;
-        case (DJI_Motor_ID_0x205):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x206):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x207):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[4]);
-        }
-        break;
-        case (DJI_Motor_ID_0x208):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[6]);
-        }
-        break;
-        case (DJI_Motor_ID_0x209):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[0]);
-        }
-        break;
-        case (DJI_Motor_ID_0x20A):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[2]);
-        }
-        break;
-        case (DJI_Motor_ID_0x20B):
-        {
-            tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[4]);
-        }
-        break;
+            case (DJI_Motor_Control_Mode_VOLTAGE):
+            {
+                switch (__CAN_ID)
+                {
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1ff_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2ff_Tx_Data[4]);
+                    }
+                    break;
+                }
+            }
+            break;
+           case (DJI_Motor_Control_Mode_CURRENT):
+            {
+                switch (__CAN_ID)
+                {
+                    case (DJI_Motor_ID_0x205):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1fe_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x206):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1fe_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x207):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1fe_Tx_Data[4]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x208):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x1fe_Tx_Data[6]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x209):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2fe_Tx_Data[0]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20A):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2fe_Tx_Data[2]);
+                    }
+                    break;
+                    case (DJI_Motor_ID_0x20B):
+                    {
+                        tmp_tx_data_ptr = &(CAN2_0x2fe_Tx_Data[4]);
+                    }
+                    break;
+                }
+            }
         }
     }
     return (tmp_tx_data_ptr);
@@ -167,7 +335,7 @@ uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
  * @param __Encoder_Offset 编码器偏移, 默认0
  * @param __Omega_Max 最大速度, 需根据不同负载测量后赋值, 也就开环输出用得到, 不过我感觉应该没有奇葩喜欢开环输出这玩意
  */
-void Class_DJI_Motor_GM6020::Init(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __DJI_Motor_Control_Method, int32_t __Encoder_Offset, float __Omega_Max)
+void Class_DJI_Motor_GM6020::Init(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __DJI_Motor_Control_Method,Enum_DJI_Motor_Control_Mode __Enum_DJI_Motor_Control_Mode, int32_t __Encoder_Offset, float __Omega_Max)
 {
     if (hcan->Instance == CAN1)
     {
@@ -179,9 +347,15 @@ void Class_DJI_Motor_GM6020::Init(CAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __C
     }
     CAN_ID = __CAN_ID;
     DJI_Motor_Control_Method = __DJI_Motor_Control_Method;
+		DJI_Motor_Control_Mode	=	__Enum_DJI_Motor_Control_Mode;
     Encoder_Offset = __Encoder_Offset;
+		
+		if(DJI_Motor_Control_Mode	==	DJI_Motor_Control_Mode_CURRENT)
+			Output_Max	=	16384;
+		else
+			Output_Max	=	25000;
     Omega_Max = __Omega_Max;
-    CAN_Tx_Data = allocate_tx_data(hcan, __CAN_ID);
+    CAN_Tx_Data = allocate_GM6020_tx_data(hcan, __CAN_ID,DJI_Motor_Control_Mode);
 }
 
 /**
@@ -333,11 +507,11 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 
         Target_Torque = PID_Omega.Get_Out();
 
-        PID_Torque.Set_Target(Target_Torque);
-        PID_Torque.Set_Now(Data.Now_Torque);
-        PID_Torque.TIM_Adjust_PeriodElapsedCallback();
+//        PID_Torque.Set_Target(Target_Torque);
+//        PID_Torque.Set_Now(Data.Now_Torque);
+//        PID_Torque.TIM_Adjust_PeriodElapsedCallback();
 
-        Out = PID_Torque.Get_Out();
+        Out = Target_Torque;
     }
     break;
     default:

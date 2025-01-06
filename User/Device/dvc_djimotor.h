@@ -33,6 +33,16 @@ enum Enum_DJI_Motor_Status
 };
 
 /**
+ * @brief 大疆电机控制方式
+ *
+ */
+enum Enum_DJI_Motor_Control_Mode
+{
+    DJI_Motor_Control_Mode_CURRENT = 0,
+    DJI_Motor_Control_Mode_VOLTAGE
+};
+
+/**
  * @brief 大疆电机的ID枚举类型
  *
  */
@@ -111,9 +121,10 @@ public:
     // PID扭矩环控制
     Class_PID PID_Torque;
 
-    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_ANGLE, int32_t __Encoder_Offset = 0, float __Omega_Max = 320.0f * RPM_TO_RADPS);
+    void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_ANGLE,Enum_DJI_Motor_Control_Mode	=	DJI_Motor_Control_Mode_CURRENT, int32_t __Encoder_Offset = 0, float __Omega_Max = 320.0f * RPM_TO_RADPS);
 
     inline uint16_t Get_Output_Max();
+		inline uint16_t Set_Output_Max();
     inline Enum_DJI_Motor_Status Get_DJI_Motor_Status();
     inline float Get_Now_Angle();
     inline float Get_Now_Radian();
@@ -183,6 +194,8 @@ protected:
 
     //电机控制方式
     Enum_DJI_Motor_Control_Method DJI_Motor_Control_Method = DJI_Motor_Control_Method_IMU_ANGLE;
+		
+		Enum_DJI_Motor_Control_Mode DJI_Motor_Control_Mode	=	DJI_Motor_Control_Mode_CURRENT;
     //目标的角度, °
     float Target_Angle = 0.0f;
     //目标的速度, °/s
@@ -422,6 +435,16 @@ protected:
  * @return uint16_t 最大输出电压
  */
 uint16_t Class_DJI_Motor_GM6020::Get_Output_Max()
+{
+    return (Output_Max);
+}
+
+/**
+ * @brief 设置最大输出电压
+ *
+ * @return uint16_t 最大输出电压
+ */
+uint16_t Class_DJI_Motor_GM6020::Set_Output_Max()
 {
     return (Output_Max);
 }

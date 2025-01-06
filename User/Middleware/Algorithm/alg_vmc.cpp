@@ -25,7 +25,7 @@ void Class_VMC::VMC_calc_1(float dt) {
     A0 = 2 * l2 * (X_D - X_B);
     B0 = 2 * l2 * (Y_D - Y_B);
     C0 = l2 * l2 + L_BD * L_BD - l3 * l3;
-    phi2 = 2 * atan2f((B0 + sqrt(A0 * A0 + B0 * B0 - C0 * C0)), A0 + C0);
+    phi2 = 2 * atan2f((B0 + sqrt(A0 * A0 + B0 * B0 - C0 * C0)), (A0 + C0));
     phi3 = atan2f(Y_B - Y_D + l2 * arm_sin_f32(phi2), X_B - X_D + l2 * arm_cos_f32(phi2));
     // C点直角坐标
     X_C = l1 * arm_cos_f32(phi1) + l2 * arm_cos_f32(phi2);
@@ -34,10 +34,17 @@ void Class_VMC::VMC_calc_1(float dt) {
     L0 = sqrt((X_C - l5 / 2.0f) * (X_C - l5 / 2.0f) + Y_C * Y_C);
 
     phi0 = atan2f(Y_C, (X_C - l5 / 2.0f)); // phi0用于计算lqr需要的theta
-    alpha = PI / 2.0f - phi0;
-
+    if(phi0<=PI/2.0f)
+    {
+        alpha = PI / 2.0f - phi0;
+    }
+    else if(phi0>PI/2.0f)
+    {
+        alpha = PI / 2.0f * 5.0f - phi0;
+    }
+    
     if (first_flag == 0)
-     {
+    {
         last_phi0 = phi0;
         first_flag = 1;
     }

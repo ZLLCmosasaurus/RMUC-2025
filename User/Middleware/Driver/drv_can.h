@@ -85,7 +85,10 @@ extern uint8_t CAN1_0xx05_Tx_Data[8];
 extern uint8_t CAN1_0xx06_Tx_Data[8];
 extern uint8_t CAN1_0xx07_Tx_Data[8];
 extern uint8_t CAN1_0xx08_Tx_Data[8];
-
+extern uint8_t CAN1_0x1fe_Tx_Data[8];
+extern uint8_t CAN1_0x2fe_Tx_Data[8];
+extern uint8_t CAN2_0x1fe_Tx_Data[8];
+extern uint8_t CAN2_0x2fe_Tx_Data[8];
 extern uint8_t CAN2_0xx01_Tx_Data[8];
 extern uint8_t CAN2_0xx02_Tx_Data[8];
 extern uint8_t CAN2_0xx03_Tx_Data[8];

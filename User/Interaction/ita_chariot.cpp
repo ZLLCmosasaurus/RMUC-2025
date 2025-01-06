@@ -815,14 +815,9 @@ void Class_Chariot::Control_Booster()
 void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
     #ifdef CHASSIS
-        //云台掉线保护
 
-           
-        
-  
-			Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+		Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
 				
-
     #endif
         
     #ifdef REFEREE
@@ -899,12 +894,19 @@ void Class_Chariot::TIM_Control_Callback()
  */
 void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
 {
-    static uint8_t mod50 = 0;
-    static uint8_t mod50_mod3 = 0;
-    mod50++;
-    if (mod50 == 50)
+    static uint8_t mod10 = 0;
+    static uint8_t mod10_mod3 = 0;
+    static uint8_t DM_Enable_Control_Index = 0;
+    mod10++;
+
+    //轮流发使能帧 各自500hz
+    DM_Enable_Control_Index = (DM_Enable_Control_Index == 0) ? 1 : 0;           
+    Chassis.Joint_Motor[DM_Enable_Control_Index].motor.TIM_Alive_PeriodElapsedCallback();
+    Chassis.Joint_Motor[DM_Enable_Control_Index+2].motor.TIM_Alive_PeriodElapsedCallback();
+
+    if (mod10 == 10)
     {
-        mod50_mod3++;
+        mod10_mod3++;
     #ifdef CHASSIS
         
          #ifdef SUPERCAP
@@ -913,14 +915,10 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         //  for (auto& wheel : Chassis.Motor_Wheel) {
         //         wheel.TIM_Alive_PeriodElapsedCallback();
         //     }
-        for (auto& Joint_motor : Chassis.Joint_Motor) {
-            Joint_motor.motor.TIM_Alive_PeriodElapsedCallback();
-							DWT_Delay(0.0001);
-        }
-//        for (auto& Wheel_Motor : Chassis.Wheel_Motor) {
-//            
-//            Wheel_Motor.motor.Task_Alive_PeriodElapsedCallback();
-//        }
+        // for (auto& Joint_motor : Chassis.Joint_Motor) {
+        //     Joint_motor.motor.TIM_Alive_PeriodElapsedCallback();
+		// 	DWT_Delay(0.0001);
+        // }
       
     #endif
         
@@ -953,24 +951,18 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         Booster.Motor_Friction_Left.TIM_Alive_PeriodElapsedCallback();
         Booster.Motor_Friction_Right.TIM_Alive_PeriodElapsedCallback();
     #endif
-
-   
-
        
-            if(mod50_mod3%3 == 0)
+            if(mod10_mod3%3 == 0)
             {
                  #ifdef INFORMATION_PLATFORM
                  Information_Platform.Platform_Alive_PeriodElapsedCallback();
                  #endif
                  DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
        
-                mod50_mod3 = 0;
+                mod10_mod3 = 0;
             }
-        
-       
-        
             
-        mod50 = 0;
+        mod10 = 0;
     }    
 }
 

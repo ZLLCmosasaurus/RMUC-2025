@@ -34,7 +34,8 @@ uint8_t CAN1_0xxf5_Tx_Data[8];
 uint8_t CAN1_0xxf6_Tx_Data[8];
 uint8_t CAN1_0xxf7_Tx_Data[8];
 uint8_t CAN1_0xxf8_Tx_Data[8];
-
+uint8_t CAN1_0x1fe_Tx_Data[8];
+uint8_t CAN1_0x2fe_Tx_Data[8];
  uint8_t CAN1_0xx01_Tx_Data[8];
  uint8_t CAN1_0xx02_Tx_Data[8];
  uint8_t CAN1_0xx03_Tx_Data[8];
@@ -52,7 +53,8 @@ uint8_t CAN1_0xxf8_Tx_Data[8];
  uint8_t CAN2_0xx06_Tx_Data[8];
  uint8_t CAN2_0xx07_Tx_Data[8];
  uint8_t CAN2_0xx08_Tx_Data[8];
-
+uint8_t CAN2_0x1fe_Tx_Data[8];
+uint8_t CAN2_0x2fe_Tx_Data[8];
 uint8_t CAN2_0x1ff_Tx_Data[8];
 uint8_t CAN2_0x200_Tx_Data[8];
 uint8_t CAN2_0x2ff_Tx_Data[8];
@@ -252,25 +254,29 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
 void TIM_CAN_PeriodElapsedCallback()
 {
    
-    
     static uint8_t mod10 = 0;
     mod10++;
-   if(mod10%2==0)
-	 {
-		CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8,CAN_ID_STD);
-		CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8,CAN_ID_STD);
-	
-		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x11), CAN2_0xx01_Tx_Data, 8,CAN_ID_EXT);
-	 }
-	if(mod10%2==1)
-	{
-		CAN_Send_Data(&hcan1, 0x03, CAN1_0xxf3_Tx_Data, 8,CAN_ID_STD);
-		CAN_Send_Data(&hcan1, 0x04, CAN1_0xxf4_Tx_Data, 8,CAN_ID_STD);
-	
-		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x12), CAN2_0xx02_Tx_Data, 8,CAN_ID_EXT);
-	}
-		
-		
+//   if(mod10%2==0)
+//	 {
+//		CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8,CAN_ID_STD);
+//		CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8,CAN_ID_STD);
+//	
+//		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x11), CAN2_0xx01_Tx_Data, 8,CAN_ID_EXT);
+//	 }
+//	if(mod10%2==1)
+//	{
+//		CAN_Send_Data(&hcan1, 0x03, CAN1_0xxf3_Tx_Data, 8,CAN_ID_STD);
+//		CAN_Send_Data(&hcan1, 0x04, CAN1_0xxf4_Tx_Data, 8,CAN_ID_STD);
+//	
+//		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x12), CAN2_0xx02_Tx_Data, 8,CAN_ID_EXT);
+//	}
+// for (int i = 0; i < 8; i++)
+// 	{
+// 		CAN1_0x1fe_Tx_Data[i] = 0;
+//         CAN2_0x1fe_Tx_Data[i] = 0;
+//     }
+	// CAN_Send_Data(&hcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8,CAN_ID_STD);
+	// CAN_Send_Data(&hcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8,CAN_ID_STD);
 }
 
 /**

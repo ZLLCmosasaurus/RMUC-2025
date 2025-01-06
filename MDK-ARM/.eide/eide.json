@@ -564,7 +564,6 @@
       "custom_dep": {
         "name": "default",
         "incList": [
-          ".",
           "../Core/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
@@ -590,7 +589,15 @@
         "libList": [],
         "defineList": [
           "USE_HAL_DRIVER",
-          "STM32F407xx"
+          "STM32F407xx",
+          "__FPU_PRESENT=1",
+          "__TARGET_FPU_VFP",
+          "ARM_MATH_CM4",
+          "__CLANG_ARM",
+          "ARM_MATH_CM4",
+          "ARM_MATH",
+          "ARM_MATH_MATRIX_CHECK",
+          "ARM_MATH_ROUNDING"
         ]
       },
       "builderOptions": {
