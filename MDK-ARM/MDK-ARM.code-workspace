@@ -17,7 +17,11 @@
             "dvc_supercap.h": "c",
             "crt_chassis.h": "c",
             "crt_gimbal.h": "c",
-            "crt_booster.h": "c"
+            "crt_booster.h": "c",
+            "dvc_minipc.h": "c",
+            "dvc_djimotor.h": "c",
+            "math.h": "c",
+            "string.h": "c"
         }
     },
     "extensions": {}

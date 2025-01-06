@@ -395,23 +395,15 @@ void Class_Streeing_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     // 1.底盘四舵轮驻车模式
     // 2.随动模式不进行移动状态下，为了正确设置四舵轮角度
     // 3.地盘小陀螺不进行移动状态下，为了正确设置四舵轮角度
-    // if ((Target_Velocity_X != 0) && (Target_Velocity_Y != 0))
-    // {
-    //     break_mode = 0;
-    // }
-    // else
+    // if ((Target_Velocity_X == 0) && (Target_Velocity_Y == 0) && (Target_Omega == 0))
     // {
     //     break_mode = 1;
     // }
-    if ((Target_Velocity_X == 0) && (Target_Velocity_Y == 0) && (Target_Omega == 0))
-    {
-        break_mode = 1;
-    }
-    else
-    {
-        break_mode = 0;
-    }
-
+    // else
+    // {
+    //     break_mode = 0;
+    // }
+    break_mode = 0;
     #ifdef SPEED_SLOPE
     //斜坡函数计算用于速度解算初始值获取
     Slope_Velocity_X.Set_Target(Target_Velocity_X);
