@@ -96,13 +96,11 @@ public:
     Class_Slope Slope_Omega;
 
     Class_Supercap Supercap;
-    #ifdef POWER_LIMIT
-    
+      
     //功率限制
     Class_Power_Limit Power_Limit;
+    Struct_Power_Management Power_Management;
     
-    
-    #endif
     //裁判系统
     Class_Referee *Referee;
 
@@ -145,6 +143,8 @@ public:
     void TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status);
     void Axis_Transform();
     void Vector_Plus();
+    void Control_Update();
+    void Power_Limit_Update();
 
 protected:
     //初始化相关常量

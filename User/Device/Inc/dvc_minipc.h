@@ -133,7 +133,6 @@ enum Enum_MiniPC_Chassis_Control_Mode : uint8_t
     MiniPC_Chassis_Control_Mode_FOLLOW,      // 随动
     MiniPC_Chassis_Control_Mode_SPIN,        // 小陀螺
     MiniPC_Chassis_Control_Mode_NORMAL_SPIN, // 不随动+受击打
-    MiniPC_Chassis_Control_Mode_FOLLOW_SPIN, // 随动+受击打
 };
 
 /**
@@ -185,11 +184,17 @@ struct Struct_MiniPC_Rx_Data
     int16_t Gimbal_Angular_Velocity_Yaw_Main;                     // 目标角速度 w
     int16_t Gimbal_Angular_Velocity_Yaw_A;
     int16_t Gimbal_Angular_Velocity_Pitch_A;                     // 目标角速度 p   
-    float Gimbal_Target_X_A;                                 // 装甲板在云台坐标系的 x 坐标
-    float Gimbal_Target_Y_A;                                 // 装甲板在云台坐标系的 y 坐标
-    float Gimbal_Target_Z_A;                                 // 装甲板在云台坐标系的 z 坐标
+    int16_t Gimbal_Angular_Velocity_Yaw_B;
+    int16_t Gimbal_Angular_Velocity_Pitch_B;
+    int16_t Gimbal_Target_X_A;                                 // 装甲板在云台坐标系的 x 坐标
+    int16_t Gimbal_Target_Y_A;                                 // 装甲板在云台坐标系的 y 坐标
+    int16_t Gimbal_Target_Z_A;                                 // 装甲板在云台坐标系的 z 坐标
+    int16_t Gimbal_Target_X_B;                                 // 装甲板在云台坐标系的 x 坐标
+    int16_t Gimbal_Target_Y_B;                                 // 装甲板在云台坐标系的 y 坐标
+    int16_t Gimbal_Target_Z_B;                                 // 装甲板在云台坐标系的 z 坐标
     Enum_MiniPC_Chassis_Control_Mode Chassis_Control_Mode; // 底盘控制模式 随动/小陀螺
     Enum_Auto_aim_Status Auto_aim_Status_A;   // 云台控制模式 巡航/非巡航
+    Enum_Auto_aim_Status Auto_aim_Status_B;   // 云台控制模式 巡航/非巡航
     uint16_t crc16;
 } __attribute__((packed));
 
@@ -201,11 +206,14 @@ struct Struct_MiniPC_Rx_Data
 struct Struct_MiniPC_Tx_Data
 {
     uint8_t header;                // 帧头
-    float Gimbal_Now_Yaw_Angle_A;    // 当前云台yaw角度
-    float Gimbal_Now_Yaw_Angle_Main;  // 当前云台pitch角度
-    float Gimbal_Now_Pitch_Angle_A;  // 当前云台pitch角度
-    float Gimbal_Now_Roll_Angle_A;   // 当前云台roll角度
-    float Chassis_Now_yaw_Angle;   // 当前底盘yaw角度
+    int16_t Gimbal_Now_Yaw_Angle_Main; // Main云台yaw角度
+    int16_t Gimbal_Now_Yaw_Angle_A;    // A云台yaw角度  
+    int16_t Gimbal_Now_Pitch_Angle_A;  // A云台pitch角度
+    int16_t Gimbal_Now_Roll_Angle_A;   // A云台roll角度
+    int16_t Gimbal_Now_Yaw_Angle_B;    // B云台yaw角度
+    int16_t Gimbal_Now_Pitch_Angle_B;  // B云台pitch角度
+    int16_t Gimbal_Now_Roll_Angle_B;   // B云台roll角度
+    int16_t Chassis_Now_yaw_Angle;   // 当前底盘yaw角度
     uint8_t Game_process;          // 比赛阶段
     uint16_t Self_blood;           // 自身hp
     uint16_t Self_Outpost_HP;      // 己方前哨战hp
@@ -222,22 +230,20 @@ struct Struct_MiniPC_Tx_Data
 typedef __packed struct
 {
     uint8_t game_process;
-    uint16_t time;
+    uint16_t remaining_time;
     uint16_t self_blood;
     uint16_t self_outpost_HP;
-    uint8_t armor_id : 4;
-    uint8_t HP_deduction_reason : 4;
-} can_rx1_t;
+    uint8_t color : 1;
+    uint8_t invincible_state : 7;
+} Referee_Rx_A_t;
 
 typedef __packed struct
 {
     uint16_t self_base_HP;
     uint16_t oppo_outpost_HP;
-    uint16_t projectile_allowance_17mm;
-    uint8_t invincible_state;
+    uint16_t projectile_allowance_17mm;  
     uint8_t outpost_rfid : 1;
-    uint8_t color : 1;
-} can_rx2_t;
+} Referee_Rx_B_t;
 
 typedef __packed struct // 0x0207 实时射击信息
 {
@@ -247,26 +253,6 @@ typedef __packed struct // 0x0207 实时射击信息
     float initial_speed;         // 弹速
 } can_rx3_t;
 
-struct Struct_MiniPC_Tx_Data_B{
-    float Gimbal_Now_Yaw_Angle_B;
-    float Gimbal_Now_Pitch_Angle_B;
-    float Gimbal_Now_Roll_Angle_B;
-    uint16_t crc16;
-}__attribute__((packed));
-
-struct Struct_MiniPC_Rx_Data_B{
-    uint8_t header;
-    int16_t Gimbal_Angular_Velocity_Yaw_B;
-    int16_t Gimbal_Angular_Velocity_Pitch_B;
-    float Gimbal_Target_X_B;
-    float Gimbal_Target_Y_B;
-    float Gimbal_Target_Z_B;
-    Enum_Auto_aim_Status Auto_aim_Status_B;
-    uint16_t crc16;
-}__attribute__((packed));
-
-extern Struct_MiniPC_Tx_Data_B MiniPC_Tx_Data_B;
-extern Struct_MiniPC_Rx_Data_B MiniPC_Rx_Data_B;
 
 
 class Class_MiniPC
@@ -302,6 +288,7 @@ public:
     inline float Get_Now_Pitch_Angle_B();
     inline float Get_Now_Roll_Angle_B();
     inline float Get_Now_Relative_Angle();
+    inline float Get_Gimbal_Angle_Yaw();
 
     inline uint8_t Get_Target_Invincible_State();
     inline Enum_MiniPC_Chassis_Control_Mode Get_Chassis_Control_Mode();
@@ -328,13 +315,11 @@ public:
     inline void Set_Outpost_Status(Enum_MiniPC_Data_Status __Outpost_Status);
     inline void Set_Auto_aim_Status_A(Enum_Auto_aim_Status __Auto_aim_Status);
     inline void Set_Auto_aim_Status_B(Enum_Auto_aim_Status __Auto_aim_Status);
+    inline void Set_Gimbal_Now_Yaw_Angle(float __Gimbal_Now_Yaw_Angle);
 
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
     uint16_t Get_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength, uint16_t wCRC);
-
-    inline void Transform_Angle_Tx();
-    inline void Transform_Angle_Rx();
 
     float calc_yaw(float x, float y, float z);
     float calc_distance(float x, float y, float z) ;
@@ -382,6 +367,8 @@ protected:
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
     //迷你主机对外接口信息
     Struct_MiniPC_Rx_Data Data_NUC_To_MCU;
+
+    float Now_Angle_Yaw;
 
 	float Now_Angle_Roll_A;
     float Now_Angle_Pitch_A;
@@ -532,6 +519,11 @@ float Class_MiniPC::Get_Gimbal_Error_B()
 {
     return (Error_B);
 }
+
+float Class_MiniPC::Get_Gimbal_Angle_Yaw()
+{
+    return (Now_Angle_Yaw);
+}
 /**
  * @brief 获取底盘移动控制模式
  *
@@ -608,6 +600,25 @@ void Class_MiniPC::Set_Gimbal_Now_Relative_Angle(float __Gimbal_Now_Relative_Ang
     Now_Angle_Relative = __Gimbal_Now_Relative_Angle;
 }
 
+void Class_MiniPC::Set_Gimbal_Now_Yaw_Angle_B(float __Gimbal_Now_Yaw_Angle)
+{
+    Now_Angle_Yaw_B = __Gimbal_Now_Yaw_Angle;
+}
+
+void Class_MiniPC::Set_Gimbal_Now_Pitch_Angle_B(float __Gimbal_Now_Pitch_Angle)
+{
+    Now_Angle_Pitch_B = __Gimbal_Now_Pitch_Angle;
+}
+
+void Class_MiniPC::Set_Gimbal_Now_Roll_Angle_B(float __Gimbal_Now_Roll_Angle)
+{
+    Now_Angle_Roll_B = __Gimbal_Now_Roll_Angle;
+}
+
+void Class_MiniPC::Set_Gimbal_Now_Yaw_Angle(float __Gimbal_Now_Yaw_Angle)
+{
+    Now_Angle_Yaw = __Gimbal_Now_Yaw_Angle;
+}
 
 // /**
 //  * @brief 发送数据处理

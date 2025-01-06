@@ -182,6 +182,10 @@ void Class_LK_Motor::Init(FDCAN_HandleTypeDef *hcan, Enum_LK_Motor_ID __CAN_ID, 
     {
         CAN_Manage_Object = &CAN2_Manage_Object;
     }
+    else if (hcan->Instance == FDCAN3)
+    {
+        CAN_Manage_Object = &CAN3_Manage_Object;
+    }
     CAN_ID = __CAN_ID;
     LK_Motor_Control_Method = __Control_Method;
     Position_Offset = __Position_Offset;
@@ -190,6 +194,8 @@ void Class_LK_Motor::Init(FDCAN_HandleTypeDef *hcan, Enum_LK_Motor_ID __CAN_ID, 
     CAN_Tx_Data = allocate_tx_data(hcan, __CAN_ID);
 }
 
+uint16_t tmp_encoder;
+int16_t tmp_omega, tmp_current;
 /**
  * @brief 数据处理过程
  *
@@ -198,13 +204,21 @@ void Class_LK_Motor::Data_Process()
 {
     //数据处理过程
     int32_t delta_encoder;
-    uint16_t tmp_encoder, tmp_omega, tmp_current;
-    Struct_LK_Motor_CAN_Rx_Data *tmp_buffer = (Struct_LK_Motor_CAN_Rx_Data *)CAN_Manage_Object->Rx_Buffer.Data;
+    
+    Struct_LK_Motor_CAN_Rx_Data *tmp_buffer = (Struct_LK_Motor_CAN_Rx_Data *)CAN_Manage_Object->Rx_Buffer.Data;   
     
     //处理大小端
-    Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, &tmp_encoder);
-    Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, &tmp_omega);
-    Math_Endian_Reverse_16((void *)&tmp_buffer->Current_Reverse, &tmp_current);
+    // Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, &tmp_encoder);
+    // Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, &tmp_omega);
+    // Math_Endian_Reverse_16((void *)&tmp_buffer->Current_Reverse, &tmp_current);
+
+    if(CAN_Manage_Object->Rx_Buffer.Data[0] == 0xA1)tmp_buffer->CMD_ID = LK_Motor_Control_Torque;
+    if(CAN_Manage_Object->Rx_Buffer.Data[0] == 0xA6)tmp_buffer->CMD_ID = LK_Motor_Control_Angle;
+    tmp_encoder =  CAN_Manage_Object->Rx_Buffer.Data[7] << 8 | CAN_Manage_Object->Rx_Buffer.Data[6];
+    tmp_omega = CAN_Manage_Object->Rx_Buffer.Data[5] << 8 | CAN_Manage_Object->Rx_Buffer.Data[4];
+    tmp_current = CAN_Manage_Object->Rx_Buffer.Data[3] << 8 | CAN_Manage_Object->Rx_Buffer.Data[2];
+
+
 
     //计算圈数与总角度值
     if(Start_Flag==0)
@@ -222,15 +236,16 @@ void Class_LK_Motor::Data_Process()
         }        
     }
     Data.Total_Encoder = Data.Total_Round * Position_Max + tmp_encoder + Position_Offset;
-
+    
     //计算电机本身信息
     Data.CMD_ID = tmp_buffer->CMD_ID;
-    Data.Now_Angle = (float)Data.Total_Encoder / (float)Position_Max *360.0f; 
+    Data.Now_Angle = (float)tmp_encoder / (float)Position_Max *360.0f; 
     Data.Now_Radian = Data.Now_Angle * DEG_TO_RAD;
-    Data.Now_Omega_Angle = tmp_omega * RPM_TO_DEG;
-    Data.Now_Omega_Radian = tmp_omega *RPM_TO_RADPS; 
-    Data.Now_Current = Math_Int_To_Float(tmp_current, 0, (1 << 12) - 1, -Current_Max, Current_Max); 
-    Data.Now_Temperature = tmp_buffer->Temperature_Centigrade;  
+    Data.Now_Omega_Angle = tmp_omega ;
+    Data.Now_Omega_Radian = tmp_omega *DEG_TO_RAD; 
+    //Data.Now_Current = Math_Int_To_Float(tmp_current, -2048, 2048, -16.5, 16.5); 
+    Data.Now_Current = tmp_current;
+    Data.Now_Temperature = CAN_Manage_Object->Rx_Buffer.Data[1];  
 
     //存储预备信息
     Data.Pre_Encoder = tmp_encoder;
@@ -255,6 +270,15 @@ void Class_LK_Motor::Output(void)
         case(LK_Motor_Control_Shut_Down):
             CAN_Tx_Data[0] = LK_Motor_Control_Shut_Down;
         break;
+        case(LK_Motor_Control_Angle):
+            CAN_Tx_Data[0] = LK_Motor_Control_Angle;
+            CAN_Tx_Data[1] = Direction;//0顺 1逆
+            CAN_Tx_Data[2] = Speed >> 0;
+            CAN_Tx_Data[3] = Speed >> 8;
+            CAN_Tx_Data[4] = Angle >> 0;
+            CAN_Tx_Data[5] = Angle >> 8;
+            CAN_Tx_Data[6] = Angle >> 16;
+            CAN_Tx_Data[7] = Angle >> 24;
         default:
         break;
     }   
@@ -293,7 +317,7 @@ void Class_LK_Motor::TIM_Alive_PeriodElapsedCallback()
 
     Pre_Flag = Flag;
 }
-
+float test_omaga = 1,test_angle = 0;
 /**
  * @brief TIM定时器中断发送出去的回调函数
  *
@@ -321,18 +345,18 @@ void Class_LK_Motor::TIM_Process_PeriodElapsedCallback()
         case (LK_Motor_Control_Method_ANGLE):
         {
             PID_Angle.Set_Target(Target_Angle);
-            PID_Angle.Set_Now(Data.Now_Angle);
+            //PID_Angle.Set_Target(test_angle);
+            PID_Angle.Set_Now(Transform_Angle);
             PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 
             Target_Omega_Angle = PID_Angle.Get_Out();
 
             PID_Omega.Set_Target(Target_Omega_Angle);
-            PID_Omega.Set_Now(Data.Now_Omega_Angle);
+            //PID_Omega.Set_Target(test_omaga);
+            PID_Omega.Set_Now(Transform_Omega);
             PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
-            Target_Current = PID_Omega.Get_Out();
-
-            Out = Target_Current;
+            Out = PID_Omega.Get_Out();         
         }
         break;
         default:
@@ -342,7 +366,9 @@ void Class_LK_Motor::TIM_Process_PeriodElapsedCallback()
         break;
     }    
     //发送数据
+    Out = 0.f;//test
     Output();
+
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

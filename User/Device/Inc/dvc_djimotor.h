@@ -157,6 +157,7 @@ public:
 
     float t_yaw = 0.0f;
     float rpm = 1.0f;
+    int invert_flag = 0; //正反转标志位
 
 protected:
     //初始化相关变量
@@ -186,6 +187,7 @@ protected:
     float Transform_Angle = 0.0f;
     float Transform_Omega = 0.0f;
     float Transform_Torque = 0.0f;
+    
     //当前时刻的电机接收flag
     uint32_t Flag = 0;
     //前一时刻的电机接收flag
@@ -375,6 +377,7 @@ public:
 
     float v;
     float init_v = 0.0f;
+
 protected:
     //初始化相关变量
 
@@ -684,6 +687,7 @@ void Class_DJI_Motor_GM6020::Set_Target_Torque(float __Target_Torque)
 void Class_DJI_Motor_GM6020::Set_Out(float __Out)
 {
     Out = __Out;
+    Output();
 }
 
 /**
@@ -1150,6 +1154,7 @@ void Class_DJI_Motor_C620::Set_Target_Torque(float __Target_Torque)
 void Class_DJI_Motor_C620::Set_Out(float __Out)
 {
     Out = __Out;
+    Output();
 }
 
 #endif

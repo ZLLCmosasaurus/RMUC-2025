@@ -69,6 +69,7 @@ enum Enum_LK_Motor_Control_ID : uint8_t
     LK_Motor_Control_Stop = 0x81, //?????
     LK_Motor_Control_Run = 0x88,//???????
     LK_Motor_Control_Torque = 0xA1,//??????????
+    LK_Motor_Control_Angle = 0xA6,
 };
 
 /**
@@ -112,7 +113,7 @@ struct Struct_LK_Motor_Rx_Data
     float Now_Temperature; 
     uint16_t Pre_Encoder; 
     int32_t Total_Encoder;
-    int32_t Total_Round;
+    int32_t Total_Round = 0;
 };
 
 /**
@@ -152,6 +153,9 @@ public:
     inline float Get_Target_Omega_Radian();
     inline float Get_Target_Torque();
     inline float Get_Zero_Position();
+    inline float Get_Transform_Angle();
+    inline float Get_Transform_Omega();
+    inline float Get_Transform_Torque();
     
     inline void Set_LK_Control_Status(Enum_LK_Motor_Control_Status __DM_Motor_Control_Status);
     inline void Set_LK_Motor_Control_Method(Enum_LK_Motor_Control_Method __DM_Motor_Control_Method);
@@ -165,10 +169,15 @@ public:
     inline void Set_Target_Torque(float __Target_Torque);
     inline void Set_Zero_Position(float __Zero_Position);
     inline void Set_Out(float __Out);
+    inline void Set_Transform_Angle(float __Transform_Angle);
+    inline void Set_Transform_Omega(float __Transform_Omega);
+    inline void Set_Transform_Torque(float __Transform_Torque);
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_Process_PeriodElapsedCallback();
+
+    
 
 protected:
     
@@ -182,7 +191,7 @@ protected:
     
     float Omega_Max;
     
-    float Current_Max;
+    float Current_Max ;
     
     const int16_t Current_Max_Cmd = 2000;
     
@@ -192,8 +201,15 @@ protected:
     const float Torque_Current = 0.3;  
 
     
-    uint32_t Position_Max = 16383;
+    uint32_t Position_Max = 65535;
     float Zero_Position = 0.0f;
+    float Transform_Angle = 0.0f;
+    float Transform_Omega = 0.0f;
+    float Transform_Torque = 0.0f;
+
+    uint8_t Direction;
+    uint16_t Speed = 45;
+    uint32_t Angle;
 
 
     //����ϵ��һ֡��־λ
@@ -402,6 +418,21 @@ float Class_LK_Motor::Get_Target_Torque()
 float Class_LK_Motor::Get_Zero_Position(){
     return (Zero_Position);
 }
+
+float Class_LK_Motor::Get_Transform_Angle()
+{
+    return (Transform_Angle);
+}
+
+float Class_LK_Motor::Get_Transform_Omega()
+{
+    return (Transform_Omega);
+}
+
+float Class_LK_Motor::Get_Transform_Torque()
+{
+    return (Transform_Torque);
+}
 /**
  * @brief ?څ?????????
  *
@@ -522,6 +553,20 @@ float Class_LK_Motor::Get_Output_Max()
     return (Current_Max_Cmd);
 }
 
+void Class_LK_Motor::Set_Transform_Angle(float __Transform_Angle)
+{
+    Transform_Angle = __Transform_Angle;
+}
+
+void Class_LK_Motor::Set_Transform_Omega(float __Transform_Omega)
+{
+    Transform_Omega = __Transform_Omega;
+}
+
+void Class_LK_Motor::Set_Transform_Torque(float __Transform_Torque)
+{
+    Transform_Torque = __Transform_Torque;
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

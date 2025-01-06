@@ -52,10 +52,8 @@ uint8_t CAN2_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
 
-// uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
-// uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
-
-uint8_t CAN3_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_A[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_B[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
@@ -255,6 +253,7 @@ uint8_t CAN_Send_Data(FDCAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uin
 	return HAL_FDCAN_AddMessageToTxFifoQ(hcan, &pTxHeader, Data);	
 }
 uint32_t ECR_value = FDCAN1->ECR;
+int nnn = 500;
 /**
  * @brief CAN的TIM定时器中断发送回调函数
  *
@@ -273,25 +272,33 @@ void TIM_CAN_PeriodElapsedCallback()
     }
 
     //CAN1总线  四个底盘电机
-    // //3508    
-    // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);   
-    // //6020
-    // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
+    //3508    
+    CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);   
+    //6020
+    CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
 
     //上板
-    // CAN_Send_Data(&hfdcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
-
+    //CAN_Send_Data(&hfdcan3, 0x88, CAN3_Chassis_Tx_Data_A, 8);
+    //CAN_Send_Data(&hfdcan3, 0x99, CAN3_Chassis_Tx_Data_B, 8);
     #elif defined (GIMBAL)
 
-    //  摩擦轮*4 + 拨弹轮*2   
-    // CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮 按照0x200 ID 发送 可控制多个电机
-    // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
-    //  yaw*2 + pitch*2
-    // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+    //B
+    int16_t test = CAN1_0x1fe_Tx_Data[6] << 8 | CAN1_0x1fe_Tx_Data[7];
+    test -= nnn;
+    test = 0;
+    CAN1_0x1fe_Tx_Data[6] = test >> 8;
+    CAN1_0x1fe_Tx_Data[7] = test;
+    //CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+    //CAN_Send_Data(&hfdcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+    //  A
+    //CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+    //CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+
     //  CAN3  下板 大yaw
     CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
-    //CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+    CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
     #endif
+
 }
 
 /**

@@ -6,7 +6,13 @@
     ],
     "settings": {
         "files.associations": {
-            "cmath": "cpp"
+            "cmath": "cpp",
+            "__config": "cpp",
+            "__verbose_abort": "cpp",
+            "cstddef": "cpp",
+            "cstdint": "cpp",
+            "initializer_list": "cpp",
+            "limits": "cpp"
         }
     },
     "extensions": {}

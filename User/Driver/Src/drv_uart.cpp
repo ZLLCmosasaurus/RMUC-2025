@@ -153,9 +153,11 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
     else if (huart->Instance == UART7)
     {
         UART7_Manage_Object.Rx_Length = Size;
-        UART7_Manage_Object.Callback_Function(UART7_Manage_Object.Rx_Buffer, Size);
-        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART7_Manage_Object.Rx_Buffer, UART7_Manage_Object.Rx_Buffer_Length);
-				//__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
+        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART7_Manage_Object.Rx_Buffer, UART7_Manage_Object.Rx_Buffer_Length*2);
+        if( UART7_Manage_Object.Rx_Length<=UART7_Manage_Object.Rx_Buffer_Length)
+            UART7_Manage_Object.Callback_Function(UART7_Manage_Object.Rx_Buffer, Size);
+        else
+        memset( UART7_Manage_Object.Rx_Buffer, 0, UART7_Manage_Object.Rx_Buffer_Length);
     }
     else if (huart->Instance == USART10)
     {
