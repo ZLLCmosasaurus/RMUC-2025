@@ -21,7 +21,12 @@
             "dvc_minipc.h": "c",
             "dvc_djimotor.h": "c",
             "math.h": "c",
-            "string.h": "c"
+            "string.h": "c",
+            "dvc_referee.h": "c",
+            "alg_slope.h": "c",
+            "alg_power_limit.h": "c",
+            "dvc_sampler.h": "c",
+            "alg_fsm.h": "c"
         }
     },
     "extensions": {}

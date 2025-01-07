@@ -53,10 +53,11 @@ void Class_MiniPC::Data_Process()
     
     Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
 
-    // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    // Rx_Angle_Pitch = meanFilter(tmp_pitch);
+    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
     Rx_Angle_Pitch = tmp_pitch;//已跑通，弹道解算需要修改参数
     Rx_Angle_Yaw = tmp_yaw;//待定
+    //Rx_Angle_Yaw =  meanFilter(tmp_yaw);
+    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
     Math_Constrain(&Rx_Angle_Pitch,-40.0f,5.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 

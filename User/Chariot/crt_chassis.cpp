@@ -219,8 +219,8 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     #endif
 }
 #endif
-#define SPEED_SLOPE
-//#define NO_SPEED_SLOPE
+//#define SPEED_SLOPE
+#define NO_SPEED_SLOPE
 void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
     Velocity_X_Max = __Velocity_X_Max;
@@ -266,6 +266,14 @@ void Class_Streeing_Chassis::Speed_Resolution()
         {
             Math_Constrain(&Target_Omega, -Omega_Max, Omega_Max);
         }
+    
+        if(Target_Velocity_X <= 0.001f && -Target_Velocity_Y <= 0.001f && Target_Omega <= 0.001f)
+        {
+            Target_Velocity_X = 0;
+            Target_Velocity_Y = 0;
+            Target_Omega = 0;
+        }
+
         #ifdef NO_SPEED_SLOPE
         // 速度换算，正运动学分解
         // 右下位置的舵轮
@@ -297,15 +305,28 @@ void Class_Streeing_Chassis::Speed_Resolution()
         float Wheel_D_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_D * cos(THETA_D);
         #endif
         
-        wheel[0].ChassisCoordinate_Angle = My_atan(Wheel_A_Vy, Wheel_A_Vx) * RAD_TO_8191;
-        wheel[1].ChassisCoordinate_Angle = My_atan(Wheel_B_Vy, Wheel_B_Vx) * RAD_TO_8191;
-        wheel[2].ChassisCoordinate_Angle = My_atan(Wheel_C_Vy, Wheel_C_Vx) * RAD_TO_8191;
-        wheel[3].ChassisCoordinate_Angle = My_atan(Wheel_D_Vy, Wheel_D_Vx) * RAD_TO_8191;
-
-        wheel[0].streeing_wheel_speed = sqrt(Square(Wheel_A_Vx) + Square(Wheel_A_Vy));
-        wheel[1].streeing_wheel_speed = sqrt(Square(Wheel_B_Vx) + Square(Wheel_B_Vy));
-        wheel[2].streeing_wheel_speed = sqrt(Square(Wheel_C_Vx) + Square(Wheel_C_Vy));
-        wheel[3].streeing_wheel_speed = sqrt(Square(Wheel_D_Vx) + Square(Wheel_D_Vy));
+        if(Target_Velocity_X == 0 && Target_Velocity_Y == 0 && Target_Omega == 0)
+        {
+            wheel[0].streeing_wheel_angle = 8191 * (215) / 360;
+            wheel[1].streeing_wheel_angle = 8191 * (135) / 360;
+            wheel[2].streeing_wheel_angle = 8191 * (45) / 360;
+            wheel[3].streeing_wheel_angle = 8191 * (315) / 360;
+            for(auto i = 0; i < 4; i++)
+            {
+                wheel[i].streeing_wheel_speed = 0;
+            }
+        }
+        else
+        {
+            wheel[0].ChassisCoordinate_Angle = (My_atan(Wheel_A_Vy, Wheel_A_Vx)+PI) * RAD_TO_8191;
+            wheel[1].ChassisCoordinate_Angle = (My_atan(Wheel_B_Vy, Wheel_B_Vx)+PI) * RAD_TO_8191;
+            wheel[2].ChassisCoordinate_Angle = (My_atan(Wheel_C_Vy, Wheel_C_Vx)+PI) * RAD_TO_8191;
+            wheel[3].ChassisCoordinate_Angle = (My_atan(Wheel_D_Vy, Wheel_D_Vx)+PI) * RAD_TO_8191; 
+            wheel[0].streeing_wheel_speed = sqrt(Square(Wheel_A_Vx) + Square(Wheel_A_Vy));
+            wheel[1].streeing_wheel_speed = sqrt(Square(Wheel_B_Vx) + Square(Wheel_B_Vy));
+            wheel[2].streeing_wheel_speed = sqrt(Square(Wheel_C_Vx) + Square(Wheel_C_Vy));
+            wheel[3].streeing_wheel_speed = sqrt(Square(Wheel_D_Vx) + Square(Wheel_D_Vy));
+        }
 
         for (auto i = 0; i < 4; i++)
         {

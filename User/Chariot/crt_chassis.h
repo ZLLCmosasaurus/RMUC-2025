@@ -581,9 +581,9 @@ protected:
     void Speed_Limitation();
 };
 #define MAX_MOTOR_SPEED 500    
-#define wheel_diameter 10.000000f   // ÂÖ×ÓÖ±¾¶  cm 
-#define half_width 0.17745000f            // 25.000000f		x方向为宽
-#define half_length 0.21815000f           // 35.000000f
+#define wheel_diameter 0.12f   // m
+#define half_width   0.406f    //m     		//x方向为宽
+#define half_length 0.406f     //m
 #define ROTATION_CENTER_OFFSET 0.0f // 旋转中心位置偏移量，现在只有y方向上的偏移，且向y负方向偏移，这个偏移量为绝对值
 
 #define THETA_A atan((half_length + ROTATION_CENTER_OFFSET) / half_width) // 转向轮在坐标系下与y轴的夹角（锐角）
@@ -597,7 +597,7 @@ protected:
 #define R_D half_width / cos(THETA_D) // 旋转中心与D舵轮的距离
 
 #define RAD_TO_8191 8191.0f / PI / 2
-#define VEL2RPM 60.0f/PI/wheel_diameter*100 //159.15f //rpm = vel*60/π/D    vel(m/s)->rpm
+#define VEL2RPM 60.0f/PI/wheel_diameter // //rpm = vel*60/π/D    vel(m/s)->rpm
 /**
  * @brief 获取底盘控制方法
  *
