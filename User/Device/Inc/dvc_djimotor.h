@@ -187,6 +187,7 @@ protected:
     float Transform_Angle = 0.0f;
     float Transform_Omega = 0.0f;
     float Transform_Torque = 0.0f;
+    float Transform_Target_Omega = 0.0f;
     
     //当前时刻的电机接收flag
     uint32_t Flag = 0;

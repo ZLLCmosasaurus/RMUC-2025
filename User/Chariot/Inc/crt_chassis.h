@@ -76,7 +76,6 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_FLLOW,
     Chassis_Control_Type_SPIN,
     Chassis_Control_Mode_NORMAL_SPIN,  // 不随动+受击打小陀螺
-    Chassis_Control_Mode_FOLLOW_SPIN   // 随动+受击打小陀螺
 };
 
 /**

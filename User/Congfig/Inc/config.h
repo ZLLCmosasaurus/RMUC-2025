@@ -15,8 +15,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 /* Exported macros -----------------------------------------------------------*/
-#define CHASSIS
-//#define GIMBAL
+//#define CHASSIS
+#define GIMBAL
 
 #define STEERING_WHEEL
 #define POWER_CONTROL 0 // 启用功率控制
@@ -30,12 +30,12 @@
 
 /*轮组数据*/
 #ifdef INFANTRY
-#define ENCODER_TO_OUTPUT_RATIO 1.0f / 4.0f // 编码器转四圈，输出轴转一圈
-#define OUTPUT_TO_ENCODER_RATIO 4.0f        
-#define DIR_ROTOR_TO_OUTPUT_RATIO 1.0f / 8.0f // 转向电机转子转八圈，输出轴转一圈
-#define DIR_OUTPUT_TO_ROTOR_RATIO 8.0f      
-#define MOT_ROTOR_TO_OUTPUT_RATIO 1.0f / 14.0f // 动力电机转子转14圈，输出轴转一圈
-#define MOT_OUTPUT_TO_ROTOR_RATIO 14.0f        
+// #define ENCODER_TO_OUTPUT_RATIO 1.0f / 4.0f // 编码器转四圈，输出轴转一圈
+// #define OUTPUT_TO_ENCODER_RATIO 4.0f        
+// #define DIR_ROTOR_TO_OUTPUT_RATIO 1.0f / 8.0f // 转向电机转子转八圈，输出轴转一圈
+// #define DIR_OUTPUT_TO_ROTOR_RATIO 8.0f      
+// #define MOT_ROTOR_TO_OUTPUT_RATIO 1.0f / 14.0f // 动力电机转子转14圈，输出轴转一圈
+// #define MOT_OUTPUT_TO_ROTOR_RATIO 14.0f        
 
 #define Wheel_Diameter 0.12000000f // 轮子直径，单位为m
 #endif 
@@ -55,8 +55,8 @@
 // #define OUTPUT_TO_ENCODER_RATIO 1.0f
 // #define DIR_ROTOR_TO_OUTPUT_RATIO  // 转向电机转子转八圈，输出轴转一圈
 // #define DIR_OUTPUT_TO_ROTOR_RATIO       
-#define MOT_ROTOR_TO_OUTPUT_RATIO 1.0f / 19.2032f // 动力电机转子转19.2032圈，输出轴转一圈
-#define MOT_OUTPUT_TO_ROTOR_RATIO 19.2032f  
+// #define MOT_ROTOR_TO_OUTPUT_RATIO 1.0f / 19.2032f // 动力电机转子转19.2032圈，输出轴转一圈
+// #define MOT_OUTPUT_TO_ROTOR_RATIO 19.2032f  
 
 #define Wheel_Diameter 0.12000000f // 轮子直径，单位为m
 #define Chassis_Radius 0.46000000f // 底盘半径，单位为m
