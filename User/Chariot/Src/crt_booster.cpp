@@ -1,6 +1,6 @@
 /**
  * @file crt_booster.cpp
- * @author lez by wanghongxi
+ * @author cjw
  * @brief 发射机构
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -175,7 +175,7 @@ void Class_Booster::Init(Enum_Booster_Type __Booster_Type)
             //拨弹盘电机
             Motor_Driver.PID_Angle.Init(20.0f, 0.1f, 0.0f, 0.0f, 5.0f * PI, 5.0f * PI);
             Motor_Driver.PID_Omega.Init(3000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
-            Motor_Driver.Init(&hfdcan2, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA);
+            Motor_Driver.Init(&hfdcan3, DJI_Motor_ID_0x202, DJI_Motor_Control_Method_OMEGA);
 
             //摩擦轮电机左
             Motor_Friction_Left.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Left.Get_Output_Max());
@@ -190,7 +190,7 @@ void Class_Booster::Init(Enum_Booster_Type __Booster_Type)
             //拨弹盘电机
             Motor_Driver.PID_Angle.Init(20.0f, 0.1f, 0.0f, 0.0f, 5.0f * PI, 5.0f * PI);
             Motor_Driver.PID_Omega.Init(3000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
-            Motor_Driver.Init(&hfdcan2, DJI_Motor_ID_0x202, DJI_Motor_Control_Method_OMEGA);
+            Motor_Driver.Init(&hfdcan3, DJI_Motor_ID_0x203, DJI_Motor_Control_Method_OMEGA);
 
             //摩擦轮电机左
             Motor_Friction_Left.PID_Omega.Init(120.0f, 10.0f, 0.1f, 0.0f, 2000.0f, Motor_Friction_Left.Get_Output_Max());

@@ -71,7 +71,7 @@ void Class_MiniPC::Output()
   Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_B         = Math_Float_To_Int(Now_Angle_Yaw_B,-180,180,-2000,2000);;
   Data_MCU_To_NUC.Gimbal_Now_Roll_Angle_B        = Math_Float_To_Int(Now_Angle_Roll_B,-180,180,-2000,2000);
   // Data_MCU_To_NUC.Game_process                   = can_rx1.game_process;
-  // Data_MCU_To_NUC.Self_blood                     = can_rx1.self_blood;
+  Data_MCU_To_NUC.Self_blood                     = CAN3_Chassis_Rx_Data_A.self_blood;
   // Data_MCU_To_NUC.Self_Outpost_HP                = can_rx1.self_outpost_HP;
   // Data_MCU_To_NUC.Remaining_Time                 = can_rx1.time;
   // Data_MCU_To_NUC.Oppo_Outpost_HP                = can_rx2.oppo_outpost_HP;

@@ -1,6 +1,6 @@
 /**
  * @file dvc_dwt.cpp
- * @author lez
+ * @author cjw
  * @brief DWT
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿

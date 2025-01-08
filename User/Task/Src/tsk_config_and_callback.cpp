@@ -1,6 +1,6 @@
 /**
  * @file tsk_config_and_callback.cpp
- * @author lez by yssickjgd
+ * @author cjw by yssickjgd
  * @brief 临时任务调度测试用函数, 后续用来存放个人定义的回调函数以及若干任务
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -229,7 +229,7 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
             chariot.Gimbal.Motor_Pitch_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
-        case (0x207):
+        case (0x205):
         {
             chariot.Gimbal.Motor_Yaw_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
@@ -251,6 +251,16 @@ void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
         case (0x141):
         {
             chariot.Gimbal.Motor_Main_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x202):
+        {
+            chariot.Booster_A.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x201):
+        {
+            chariot.Booster_B.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
 	}

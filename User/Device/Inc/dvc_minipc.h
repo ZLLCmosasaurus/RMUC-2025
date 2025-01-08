@@ -534,20 +534,16 @@ Enum_MiniPC_Chassis_Control_Mode Class_MiniPC::Get_Chassis_Control_Mode()
     return (Data_NUC_To_MCU.Chassis_Control_Mode);
 }
 
-// /**
-//  * @brief 获取云台控制模式
-//  *
-//  * @return Enum_MiniPC_Gimbal_Control_Mode 移动控制模式
-//  */
-// Enum_MiniPC_Gimbal_Control_Mode Class_MiniPC::Get_Gimbal_Control_Mode()
-// {
-//     return (Data_NUC_To_MCU.Gimbal_Control_Mode);
-// }
-
 Enum_Auto_aim_Status Class_MiniPC::Get_Auto_aim_Status_A()
 {
     return (Data_NUC_To_MCU.Auto_aim_Status_A);
 }
+
+Enum_Auto_aim_Status Class_MiniPC::Get_Auto_aim_Status_B()
+{
+    return (Data_NUC_To_MCU.Auto_aim_Status_B);
+}
+
 // /**
 //  * @brief 判断目标是否处于无敌状态
 //  *
@@ -589,7 +585,6 @@ void Class_MiniPC::Set_Gimbal_Now_Roll_Angle_A(float __Gimbal_Now_Roll_Angle)
     Now_Angle_Roll_A = __Gimbal_Now_Roll_Angle;
 }
 
-
 /**
  * @brief 设定云台当前角度roll
  *
@@ -620,26 +615,6 @@ void Class_MiniPC::Set_Gimbal_Now_Yaw_Angle(float __Gimbal_Now_Yaw_Angle)
     Now_Angle_Yaw = __Gimbal_Now_Yaw_Angle;
 }
 
-// /**
-//  * @brief 发送数据处理
-//  *
-//  */
-// void Class_MiniPC::Transform_Angle_Tx()
-// {
-//     Tx_Angle_Pitch = -IMU->Get_Angle_Pitch();
-//     Tx_Angle_Roll = IMU->Get_Angle_Roll();
-//     Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
-// }
-
-// /**
-//  * @brief 接收数据处理
-//  *
-//  */
-// void Class_MiniPC::Transform_Angle_Rx()
-// {
-//     Rx_Angle_Pitch = Pack_Rx.target_pitch;
-//     Rx_Angle_Yaw = Pack_Rx.target_yaw;
-// }
 
 #endif
 

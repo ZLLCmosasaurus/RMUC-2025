@@ -1,6 +1,6 @@
 /**
  * @file drv_dwt.h
- * @author lez by yssickjgd
+ * @author cjw by yssickjgd
  * @brief DWT初始化与配置流程
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿

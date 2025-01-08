@@ -34,10 +34,9 @@
 
 /*6020参数*/
 #define GM6020_CMD_CURRENT_TO_TORQUE_CURRENT (3.0f / 16384.f)                                    // Icmd映射到Itorque
-#define GM6020_Kt (741.0f * 1000.f)                                                              // 6020转子的转矩常数
+#define GM6020_Kt (741.0f / 1000.f)                                                              // 6020转子的转矩常数
 #define GM6020_CMD_CURRENT_TO_TORQUE (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)          // 发送的电流控制值（16384）映射到转子扭矩
 #define GM6020_TORQUE_TO_CMD_CURRENT (1.0f / (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)) // 转子扭矩映射到电流控制值（16384）
-
 /*----------------------------------------------------------------------------*/
 
 #ifdef AGV

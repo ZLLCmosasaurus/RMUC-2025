@@ -37,6 +37,7 @@ void Class_IMU::Init()
 }
 
 float tmp_gravity_b[3];
+
 void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
 {
     static uint8_t Tempture_Cnt_mod50 = 0;
@@ -105,10 +106,13 @@ void Class_IMU::TIM1msMod50_Alive_PeriodElapsedCallback(void)
     }
 }
 
+float accel = 0.0004f;
+uint64_t cnt =0;
 void Class_IMU::Get_Angle()
 {
+    cnt ++;
     // 获取最终数据
-    INS.Yaw = QEKF_INS.Yaw;
+    INS.Yaw = QEKF_INS.Yaw - accel * cnt;
     INS.Pitch = QEKF_INS.Pitch;
     INS.Roll = QEKF_INS.Roll;
     INS.YawTotalAngle = QEKF_INS.YawTotalAngle;

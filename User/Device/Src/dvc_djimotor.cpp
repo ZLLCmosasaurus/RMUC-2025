@@ -156,6 +156,67 @@ uint8_t *allocate_tx_data(FDCAN_HandleTypeDef *hcan, Enum_DJI_Motor_ID __CAN_ID)
         break;
         }
     }
+    else if( hcan == &hfdcan3)
+    {
+        switch (__CAN_ID)
+        {
+        case (DJI_Motor_ID_0x201):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x200_Tx_Data[0]);
+        }
+        break;
+        case (DJI_Motor_ID_0x202):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x200_Tx_Data[2]);
+        }
+        break;
+        case (DJI_Motor_ID_0x203):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x200_Tx_Data[4]);
+        }
+        break;
+        case (DJI_Motor_ID_0x204):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x200_Tx_Data[6]);
+        }
+        break;
+        case (DJI_Motor_ID_0x205):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x1fe_Tx_Data[0]);
+        }
+        break;
+        case (DJI_Motor_ID_0x206):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x1fe_Tx_Data[2]);
+        }
+        break;
+        case (DJI_Motor_ID_0x207):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x1fe_Tx_Data[4]);
+        }
+        break;
+        case (DJI_Motor_ID_0x208):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x1fe_Tx_Data[6]);
+        }
+        break;
+        case (DJI_Motor_ID_0x209):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x2ff_Tx_Data[0]);
+        }
+        break;
+        case (DJI_Motor_ID_0x20A):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x2ff_Tx_Data[2]);
+        }
+        break;
+        case (DJI_Motor_ID_0x20B):
+        {
+            tmp_tx_data_ptr = &(CAN3_0x2ff_Tx_Data[4]);
+        }
+        break;
+        }
+    }
     return (tmp_tx_data_ptr);
 }
 
@@ -337,13 +398,7 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.Set_Now(Transform_Omega);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
-        Target_Torque = PID_Omega.Get_Out();
-
-        PID_Torque.Set_Target(Target_Torque);
-        PID_Torque.Set_Now(Transform_Torque);
-        PID_Torque.TIM_Adjust_PeriodElapsedCallback();
-
-        Out = PID_Torque.Get_Out();
+        Out = PID_Omega.Get_Out();
     }
     break;
     case (DJI_Motor_Control_Method_ANGLE):
