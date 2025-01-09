@@ -40,7 +40,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         Chassis.Init();
 
         //底盘随动PID环初始化
-        PID_Chassis_Fllow.Init(6.0f, 0.0f, 0.1f, 0.0f, 10.0f, 10.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
+        PID_Chassis_Fllow.Init(4.0f, 0.0f, 0.1f, 0.0f, 10.0f, 10.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
 
         //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
         Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206);
@@ -138,16 +138,21 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
         //随动yaw角度优化
-        Chassis_Angle = Motor_Yaw.Get_Now_Radian();
-        if(Chassis_Angle > PI)
-            Chassis_Angle -= 2 * PI;
-        else if(Chassis_Angle < -PI)
-            Chassis_Angle += 2 * PI;
+        float temp_yaw,temp_reference;
+        temp_yaw = Chassis_Angle;
+        temp_reference = Reference_Angle;
+        // if(Chassis_Angle > PI)
+        //     temp_yaw = Chassis_Angle - 2 * PI;
+        // else if(Chassis_Angle < -PI)
+        //     temp_yaw = Chassis_Angle + 2 * PI;
+        // if(Reference_Angle > PI)
+        //     temp_reference = Reference_Angle - 2 * PI;  
         //随动环
-        PID_Chassis_Fllow.Set_Target(Reference_Angle);
-        PID_Chassis_Fllow.Set_Now(Chassis_Angle);
+        PID_Chassis_Fllow.Set_Target(temp_reference);
+        PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
         chassis_omega = PID_Chassis_Fllow.Get_Out();
+        //chassis_omega = 0;
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
     {

@@ -333,7 +333,7 @@ void Class_Gimbal::Init()
 
     //yaw轴电机 
     //250 300
-    Motor_Yaw.PID_Angle.Init(2.65f, 0.0f, 0.1f, 0.0f, 3, 15,0.0f,0.0f,0,0.001f,0.0f);
+    Motor_Yaw.PID_Angle.Init(5.65f, 0.0f, 0.1f, 0.0f, 20, 50,0.0f,0.0f,0,0.001f,0.0f);
     Motor_Yaw.PID_Omega.Init(6000.0f, 400.0f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;

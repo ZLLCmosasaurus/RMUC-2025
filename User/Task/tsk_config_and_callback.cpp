@@ -318,7 +318,7 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 #if defined CHASSIS && defined POWER_LIMIT
 void SuperCAP_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.Chassis.Supercap.UART_RxCpltCallback(Buffer);
+    //chariot.Chassis.Supercap.UART_RxCpltCallback(Buffer);
 }
 #endif
 /**
@@ -358,7 +358,6 @@ void Task100us_TIM4_Callback()
  * @brief TIM5任务回调函数
  *
  */
-
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -447,7 +446,7 @@ extern "C" void Task_Init()
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
 
-        HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+        // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
 
     #endif
 
