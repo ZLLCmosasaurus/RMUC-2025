@@ -160,8 +160,8 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 获取云台坐标系和底盘坐标系的夹角（弧度制）
     //    Chassis_Angle = Motor_Yaw.Get_Now_Radian();
     Chassis_Angle = Gimbal_Follow_Yaw_Angle;
+		
     derta_angle = -(Chassis_Angle - Reference_Angle + Offset_Angle);
-
     // if (derta_angle <= 0.f)
     // {
     //     derta_angle += PI * 2.f;
@@ -171,10 +171,10 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 云台坐标系的目标速度转为底盘坐标系的目标速度
     chassis_velocity_x = (float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle));
     chassis_velocity_y = (float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle));
-    // if (fabs(chassis_velocity_x) < 0.0001f)
-    //     chassis_velocity_x = 0;
-    // if (fabs(chassis_velocity_y) < 0.0001f)
-    //     chassis_velocity_y = 0;
+    if (fabs(chassis_velocity_x) < 0.0002f)
+        chassis_velocity_x = 0;
+    if (fabs(chassis_velocity_y) < 0.0002f)
+        chassis_velocity_y = 0;
     // 设定底盘控制类型
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
 

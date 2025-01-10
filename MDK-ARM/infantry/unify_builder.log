@@ -3427,3 +3427,116 @@ These source files will be recompiled
 [2025-01-07 21:48:14]	[done]
 	build successfully !
 
+[2025-01-09 19:38:00]	[done]
+	build successfully !
+
+[2025-01-09 19:51:07]	[done]
+	build successfully !
+
+[2025-01-09 20:00:55]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-01-09 20:00:57]	[done]
+	build successfully !
+
+[2025-01-09 20:03:24]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+
+[2025-01-09 20:03:25]	[done]
+	build successfully !
+
+[2025-01-09 20:06:39]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-09 20:06:40]	[done]
+	build successfully !
+
+[2025-01-09 20:14:32]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+
+[2025-01-09 20:14:33]	[done]
+	build successfully !
+
+[2025-01-09 20:26:03]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-01-09 20:26:05]	[done]
+	build successfully !
+
+[2025-01-09 20:29:49]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+
+[2025-01-09 20:29:50]	[done]
+	build successfully !
+
+[2025-01-09 20:32:47]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-09 20:32:48]	[done]
+	build successfully !
+
+[2025-01-09 20:33:06]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-09 20:33:07]	[done]
+	build successfully !
+
+[2025-01-09 20:42:11]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-09 20:42:12]	[done]
+	build successfully !
+
+[2025-01-09 20:45:59]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+
+[2025-01-09 20:46:00]	[done]
+	build successfully !
+
+[2025-01-09 20:48:48]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+
+[2025-01-09 20:48:49]	[done]
+	build successfully !
+
+[2025-01-09 21:44:52]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-01-09 21:44:53]	[done]
+	build successfully !
+
