@@ -106,6 +106,7 @@ public:
     inline void Set_Now_Velocity_X(float __Now_Velocity_X);
     inline void Set_Now_Velocity_Y(float __Now_Velocity_Y);
     inline void Set_Now_Omega(float __Now_Omega);
+    inline void Set_Spin_Omega(float __Target_Omega);
 
     inline void Set_Velocity_Y_Max(float __Velocity_Y_Max);
     inline void Set_Velocity_X_Max(float __Velocity_X_Max);
@@ -383,6 +384,16 @@ void Class_Tricycle_Chassis::Set_Target_Velocity_Y(float __Target_Velocity_Y)
 void Class_Tricycle_Chassis::Set_Target_Omega(float __Target_Omega)
 {
     Target_Omega = __Target_Omega;
+}
+
+/**
+ * @brief 设定小陀螺目标角速度
+ *
+ * @param __Target_Omega 小陀螺目标角速度
+ */
+void Class_Tricycle_Chassis::Set_Spin_Omega(float __Target_Omega)
+{
+    Spin_Omega = __Target_Omega;
 }
 
 /**

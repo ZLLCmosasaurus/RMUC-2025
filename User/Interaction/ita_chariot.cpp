@@ -134,24 +134,25 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
     {
         chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 8.0f,8.0f);
+        Chassis.Set_Spin_Omega(chassis_omega);
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
-        //随动yaw角度优化
-        float temp_yaw,temp_reference;
-        temp_yaw = Chassis_Angle;
-        temp_reference = Reference_Angle;
-        // if(Chassis_Angle > PI)
-        //     temp_yaw = Chassis_Angle - 2 * PI;
-        // else if(Chassis_Angle < -PI)
-        //     temp_yaw = Chassis_Angle + 2 * PI;
-        // if(Reference_Angle > PI)
-        //     temp_reference = Reference_Angle - 2 * PI;  
-        //随动环
-        PID_Chassis_Fllow.Set_Target(temp_reference);
-        PID_Chassis_Fllow.Set_Now(temp_yaw);
-        PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
-        chassis_omega = PID_Chassis_Fllow.Get_Out();
+        // //随动yaw角度优化
+        // float temp_yaw,temp_reference;
+        // temp_yaw = Chassis_Angle;
+        // temp_reference = Reference_Angle;
+        // // if(Chassis_Angle > PI)
+        // //     temp_yaw = Chassis_Angle - 2 * PI;
+        // // else if(Chassis_Angle < -PI)
+        // //     temp_yaw = Chassis_Angle + 2 * PI;
+        // // if(Reference_Angle > PI)
+        // //     temp_reference = Reference_Angle - 2 * PI;  
+        // //随动环
+        // PID_Chassis_Fllow.Set_Target(temp_reference);
+        // PID_Chassis_Fllow.Set_Now(temp_yaw);
+        // PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
+        // chassis_omega = PID_Chassis_Fllow.Get_Out();
         //chassis_omega = 0;
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
@@ -162,7 +163,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     //设定底盘目标速度
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
-    Chassis.Set_Target_Omega(chassis_omega);
+    //Chassis.Set_Target_Omega(chassis_omega);
 }
 #endif
 
@@ -585,6 +586,29 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
     #ifdef CHASSIS
 
+    // 小陀螺 随动计算角速度
+    if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN)
+    {
+        Chassis.Set_Target_Omega(Chassis.Get_Spin_Omega());
+    }
+    else if (Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_FLLOW)
+    {
+        //随动yaw角度优化
+        float temp_yaw,temp_reference;
+        temp_yaw = Chassis_Angle;
+        temp_reference = Reference_Angle;
+        // if(Chassis_Angle > PI)
+        //     temp_yaw = Chassis_Angle - 2 * PI;
+        // else if(Chassis_Angle < -PI)
+        //     temp_yaw = Chassis_Angle + 2 * PI;
+        // if(Reference_Angle > PI)
+        //     temp_reference = Reference_Angle - 2 * PI;  
+        //随动环
+        PID_Chassis_Fllow.Set_Target(temp_reference);
+        PID_Chassis_Fllow.Set_Now(temp_yaw);
+        PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
+        Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());
+    }
     // 底盘解算任务
     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
 
