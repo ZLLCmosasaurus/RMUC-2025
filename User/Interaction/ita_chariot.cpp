@@ -43,7 +43,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
         //底盘随动PID环初始化
 	
-        PID_Chassis_Fllow.Init(15.0f, 0.0f, 0.5f, 0.0f, 1.0f, 3.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
+        PID_Chassis_Fllow.Init(6.0f, 0.0f, 0.5f, 0.0f, 0.0f, 4.0f,0.0f,0.0f,0.0f,0.001f,0.005f);
 
         //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
         Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205,  DJI_Motor_Control_Method_ANGLE, 2);
@@ -95,7 +95,7 @@ void Class_Chariot::Get_Gimbal_Follow_Yaw_Angle()
 			Yaw_Now_Angle = Yaw_Now_Rad/PI*180;
 		}
 		Gimbal_Follow_Yaw_Angle = Yaw_Now_Rad;
-		Gimbal_Follow_Yaw_Angle_Deg = Gimbal_Follow_Yaw_Angle / PI *360.0f;
+		Gimbal_Follow_Yaw_Angle_Deg = Gimbal_Follow_Yaw_Angle / PI * 180.0f;
 }
 
 void Class_Chariot::Get_Gimbal_To_Chassis_Angle()
@@ -158,19 +158,14 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Referee_UI_Refresh_Status = (Enum_Referee_UI_Refresh_Status)(control_type >> 7 & 0x01);
 
     // 获取云台坐标系和底盘坐标系的夹角（弧度制）
-    //    Chassis_Angle = Motor_Yaw.Get_Now_Radian();
     Chassis_Angle = Gimbal_Follow_Yaw_Angle;
-		
-    derta_angle = -(Chassis_Angle - Reference_Angle + Offset_Angle);
-    // if (derta_angle <= 0.f)
-    // {
-    //     derta_angle += PI * 2.f;
-    // }
-    // 测试：
+	
+    derta_angle = Reference_Angle - Chassis_Angle + Offset_Angle;
 
     // 云台坐标系的目标速度转为底盘坐标系的目标速度
     chassis_velocity_x = (float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle));
     chassis_velocity_y = (float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle));
+    //限制死区
     if (fabs(chassis_velocity_x) < 0.0002f)
         chassis_velocity_x = 0;
     if (fabs(chassis_velocity_y) < 0.0002f)

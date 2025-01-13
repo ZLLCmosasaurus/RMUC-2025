@@ -180,11 +180,6 @@
           <WinNumber>1</WinNumber>
           <ItemText>can_tx_status</ItemText>
         </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>CAN_Send_Data</ItemText>
-        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
