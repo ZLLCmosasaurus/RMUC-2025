@@ -238,7 +238,7 @@ protected:
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
+        float DR16_Pitch_Angle_Resolution = 0.0005f * PI * 57.29577951308232;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Resolution = 0.003f * PI;
