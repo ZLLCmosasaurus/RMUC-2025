@@ -348,7 +348,7 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
  * @brief TIM4任务回调函数
  *
  */
-void Task100us_TIM4_Callback()
+void Task1ms_TIM3_Callback()
 {
     #ifdef CHASSIS
         // static uint16_t Referee_Sand_Cnt = 0;
@@ -448,12 +448,12 @@ extern "C" void Task_Init()
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
 
-        HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+        
 
     #endif
 
     //定时器循环任务
-    TIM_Init(&htim4, Task100us_TIM4_Callback);
+    TIM_Init(&htim3, Task1ms_TIM3_Callback);
     TIM_Init(&htim5, Task1ms_TIM5_Callback);
 
     /********************************* 设备层初始化 *********************************/
@@ -466,7 +466,7 @@ extern "C" void Task_Init()
 
     /********************************* 使能调度时钟 *********************************/
 
-    HAL_TIM_Base_Start_IT(&htim4);
+    HAL_TIM_Base_Start_IT(&htim3);
     HAL_TIM_Base_Start_IT(&htim5);
 }
 
