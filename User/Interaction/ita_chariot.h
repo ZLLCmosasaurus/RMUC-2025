@@ -23,6 +23,7 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
+#include "dvc_servo.h"
 
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
@@ -148,6 +149,9 @@ public:
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
 
+        //舵机初始化
+        Class_Servo Servo_Pitch;
+        Class_Servo Servo_Roll;
     #endif
 
     void Init(float __DR16_Dead_Zone = 0);

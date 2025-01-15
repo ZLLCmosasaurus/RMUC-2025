@@ -4,30 +4,6 @@
             "path": "."
         }
     ],
-    "settings": {
-        "files.associations": {
-            "config.h": "c",
-            "usart.h": "c",
-            "main.h": "c",
-            "stm32f4xx_it.h": "c",
-            "tsk_config_and_callback.h": "c",
-            "ita_chariot.h": "c",
-            "drv_uart.h": "c",
-            "dvc_dr16.h": "c",
-            "dvc_supercap.h": "c",
-            "crt_chassis.h": "c",
-            "crt_gimbal.h": "c",
-            "crt_booster.h": "c",
-            "dvc_minipc.h": "c",
-            "dvc_djimotor.h": "c",
-            "math.h": "c",
-            "string.h": "c",
-            "dvc_referee.h": "c",
-            "alg_slope.h": "c",
-            "alg_power_limit.h": "c",
-            "dvc_sampler.h": "c",
-            "alg_fsm.h": "c"
-        }
-    },
+    "settings": {},
     "extensions": {}
 }

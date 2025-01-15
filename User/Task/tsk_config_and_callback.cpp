@@ -408,8 +408,7 @@ extern "C" void Task_Init()
 
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
-
-        //HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+        
         
     #endif
 

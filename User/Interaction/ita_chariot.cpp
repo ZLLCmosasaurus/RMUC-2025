@@ -74,6 +74,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.IMU = &Gimbal.Boardc_BMI;
     MiniPC.Referee = &Referee;
 
+    //舵机
+    Servo_Pitch.Init(&htim1,TIM_CHANNEL_1,270.0f,0.5,2.5);
+    Servo_Roll.Init(&htim1,TIM_CHANNEL_2,180.0f,0.5,2.5);
 #endif
 }
 
@@ -303,7 +306,7 @@ void Class_Chariot::Control_Chassis()
         chassis_velocity_y = dr16_l_y * sqrt(1.0f - dr16_l_x * dr16_l_x / 2.0f) * Chassis.Get_Velocity_Y_Max();
 
         // 键盘遥控器操作逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中或者左下 随动模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_MIDDLE) // 左中 随动模式
         {
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
@@ -319,7 +322,7 @@ void Class_Chariot::Control_Chassis()
         // }
         if(DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
         {
-            // 底盘随动
+            // 上位机模式底盘暂时失能
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
         }
 
@@ -416,6 +419,7 @@ void Class_Chariot::Transform_Mouse_Axis(){
  *
  */
 #ifdef GIMBAL
+float angle_pitch= 240.0f, angle_roll= 145.0f;
 #define Remote_K  0.005f * PI * 57.29577951308232
 void Class_Chariot::Control_Gimbal()
 {
@@ -471,7 +475,18 @@ void Class_Chariot::Control_Gimbal()
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
         }
-
+        
+        //倍镜
+        if (DR16.Get_Right_Switch() == DR16_Switch_Status_UP)
+        {
+            Servo_Pitch.Set_Target_Angle(angle_pitch);
+            Servo_Roll.Set_Target_Angle(angle_roll);
+        }
+        else
+        {
+            Servo_Pitch.Set_Target_Angle(angle_pitch);
+            Servo_Roll.Set_Target_Angle(angle_roll+50.0f);
+        }
     #ifdef  SERVO
         if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW &&
            DR16.Get_Right_Switch() == DR16_Switch_Status_TRIG_MIDDLE_DOWN)  // 随动才能开舵机 右拨中-下 打开舵机

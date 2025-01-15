@@ -45,7 +45,7 @@
 class Class_Servo
 {
 public:
-    void Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle);
+    void Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle , float __Pulse_Max, float __Pulse_Min);
 
     inline void Set_Target_Angle(float __Target_Angle);
 
@@ -61,8 +61,8 @@ protected:
 
     //常量
     // PWM 输出比较值范围
-    const uint16_t Pulse_Max = 250;
-    const uint16_t Pulse_Min = 50;
+    float Pulse_Max;
+    float Pulse_Min;
     //内部变量
 
     //读变量
@@ -90,7 +90,7 @@ protected:
  */
 void Class_Servo::Set_Target_Angle(float __Target_Angle)
 {
-    Math_Constrain(&__Target_Angle, 0.0f, Max_Angle);
+    //Math_Constrain(&__Target_Angle, 0.0f, Max_Angle);
     Target_Angle = __Target_Angle;
     Output();
 }

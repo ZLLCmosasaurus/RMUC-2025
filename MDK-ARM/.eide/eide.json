@@ -182,6 +182,48 @@
         "folders": []
       },
       {
+        "name": "Middleware",
+        "files": [],
+        "folders": [
+          {
+            "name": "Algorithm",
+            "files": [
+              {
+                "path": "../User/Middleware/Algorithm/alg_pid.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_filter.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_fsm.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_MahonyAHRS.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_slope.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/user_lib.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/QuaternionEKF.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/kalman_filter.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/PID.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+              }
+            ],
+            "folders": []
+          }
+        ]
+      },
+      {
         "name": "Middeware",
         "files": [],
         "folders": [
@@ -214,48 +256,6 @@
               }
             ],
             "folders": []
-          },
-          {
-            "name": "Middleware",
-            "files": [],
-            "folders": [
-              {
-                "name": "Algorithm",
-                "files": [
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_pid.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_filter.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_fsm.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_MahonyAHRS.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_slope.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/user_lib.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/QuaternionEKF.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/kalman_filter.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/PID.cpp"
-                  },
-                  {
-                    "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
-                  }
-                ],
-                "folders": []
-              }
-            ]
           }
         ]
       },
