@@ -368,7 +368,7 @@ void Task1ms_TIM3_Callback()
  * @brief TIM5任务回调函数
  *
  */
-
+uint16_t test_tone=16;
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -378,7 +378,8 @@ void Task1ms_TIM5_Callback()
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
-
+    chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+    chariot.Buzzer.Set_NowTask(test_tone);
     /****************************** 交互层回调函数 1ms *****************************************/
     if(start_flag==1)
     {
@@ -464,10 +465,15 @@ extern "C" void Task_Init()
 
     chariot.Init();
 
+    /********************************* 使能蜂鸣器 *********************************/
+    HAL_TIM_PWM_Init(&htim4);
+    
     /********************************* 使能调度时钟 *********************************/
 
     HAL_TIM_Base_Start_IT(&htim3);
     HAL_TIM_Base_Start_IT(&htim5);
+
+    
 }
 
 /**

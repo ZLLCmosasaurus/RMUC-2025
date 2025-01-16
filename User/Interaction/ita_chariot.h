@@ -22,7 +22,7 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
-
+#include "dvc_buzzer.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -143,7 +143,7 @@ public:
         friend class Class_FSM_Alive_Control;
 
     #endif
-
+    Class_Buzzer Buzzer;
     void Init(float __DR16_Dead_Zone = 0);
     
     #ifdef CHASSIS

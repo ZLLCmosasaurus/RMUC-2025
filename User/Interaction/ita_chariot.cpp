@@ -71,6 +71,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         MiniPC.IMU = &Gimbal.Boardc_BMI;
         MiniPC.Referee = &Referee;
 
+        Buzzer.Buzzer_Init(&htim4, TIM_CHANNEL_3);
     #endif
 }
 
