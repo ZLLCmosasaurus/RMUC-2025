@@ -75,8 +75,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.Referee = &Referee;
 
     //舵机
-    Servo_Pitch.Init(&htim1,TIM_CHANNEL_1,270.0f,0.5,2.5);
-    Servo_Roll.Init(&htim1,TIM_CHANNEL_2,180.0f,0.5,2.5);
+    Servo_Pitch.Init(&htim1,TIM_CHANNEL_1,270.0f,2.5,0.5);
+    Servo_Roll.Init(&htim1,TIM_CHANNEL_2,180.0f,2.5,0.5);
 #endif
 }
 
@@ -419,7 +419,7 @@ void Class_Chariot::Transform_Mouse_Axis(){
  *
  */
 #ifdef GIMBAL
-float angle_pitch= 240.0f, angle_roll= 145.0f;
+float angle_pitch= 240.0f, angle_roll= 144.0f;
 #define Remote_K  0.005f * PI * 57.29577951308232
 void Class_Chariot::Control_Gimbal()
 {
@@ -485,7 +485,7 @@ void Class_Chariot::Control_Gimbal()
         else
         {
             Servo_Pitch.Set_Target_Angle(angle_pitch);
-            Servo_Roll.Set_Target_Angle(angle_roll+50.0f);
+            Servo_Roll.Set_Target_Angle(angle_roll-90.0f);
         }
     #ifdef  SERVO
         if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW &&
