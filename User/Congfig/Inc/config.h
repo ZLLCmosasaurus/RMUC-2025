@@ -19,7 +19,7 @@
 #define GIMBAL
 
 #define STEERING_WHEEL
-#define POWER_CONTROL 0 // 启用功率控制
+#define POWER_CONTROL 1 //启用功率控制
 
 /* 兵种/底盘类型/舵小板选择 ------------------------------------------------------------*/
 #define AGV         //舵轮底盘
@@ -51,13 +51,6 @@
 #endif 
 
 #ifdef SENTRY
-// #define ENCODER_TO_OUTPUT_RATIO 1.0f
-// #define OUTPUT_TO_ENCODER_RATIO 1.0f
-// #define DIR_ROTOR_TO_OUTPUT_RATIO  // 转向电机转子转八圈，输出轴转一圈
-// #define DIR_OUTPUT_TO_ROTOR_RATIO       
-// #define MOT_ROTOR_TO_OUTPUT_RATIO 1.0f / 19.2032f // 动力电机转子转19.2032圈，输出轴转一圈
-// #define MOT_OUTPUT_TO_ROTOR_RATIO 19.2032f  
-
 #define Wheel_Diameter 0.12000000f // 轮子直径，单位为m
 #define Chassis_Radius 0.46000000f // 底盘半径，单位为m
 #endif

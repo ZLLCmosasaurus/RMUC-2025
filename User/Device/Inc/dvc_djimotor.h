@@ -98,6 +98,17 @@ struct Struct_DJI_Motor_Data
     int32_t Pre_Total_Encoder;
 };
 
+typedef struct avg {
+    int data[5];
+
+    int read;
+    int write;
+
+    void (* push)(struct avg*, int *);
+    void (* pop)(struct avg* a);
+    float (* getAvg)(struct avg* a);
+
+}AVG;
 /**
  * @brief GM6020无刷电机, 单片机控制输出电压
  *
@@ -379,6 +390,8 @@ public:
     float v;
     float init_v = 0.0f;
 
+    uint8_t *CAN_Tx_Data;
+
 protected:
     //初始化相关变量
 
@@ -387,7 +400,7 @@ protected:
     //收数据绑定的CAN ID, C6系列0x201~0x208, GM系列0x205~0x20b
     Enum_DJI_Motor_ID CAN_ID;
     //发送缓存区
-    uint8_t *CAN_Tx_Data;
+    //uint8_t *CAN_Tx_Data;
     //减速比, 默认带减速箱
     float Gearbox_Rate;
     //最大扭矩, 需根据不同负载测量后赋值, 也就开环和扭矩环输出用得到, 不过我感觉应该没有奇葩喜欢开环输出这玩意
@@ -934,6 +947,7 @@ void Class_DJI_Motor_C610::Set_Target_Torque(float __Target_Torque)
 void Class_DJI_Motor_C610::Set_Out(float __Out)
 {
     Out = __Out;
+    Output();
 }
 
 

@@ -276,13 +276,15 @@ void TIM_CAN_PeriodElapsedCallback()
     
     #ifdef CHASSIS
     
-    static uint8_t mod10 = 0,mod50 = 0;
-    mod10++, mod50++;
-    if (mod10 == 10)
+    static uint8_t mod5 = 0,mod50 = 0;
+    mod5++, mod50++;
+    if (mod5 == 5)
     {
-        mod10 = 0;
-        // CAN2超级电容
-        //CAN_Send_Data(&hfdcan2, 0x66, CAN_Supercap_Tx_Data, 8);
+        mod5 = 0;
+        //3508    
+        // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);
+        // //6020
+        // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
     }
     
     if (mod50 == 50)
@@ -292,40 +294,38 @@ void TIM_CAN_PeriodElapsedCallback()
         CAN_Send_Data(&hfdcan3, 0x99, CAN3_Chassis_Tx_Data_B, 8);
     }
 
-    //CAN1总线  四个底盘电机
-    //3508    
-    //CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);
-    // CAN2_0x1fe_Tx_Data[2] = 0;
-    // CAN2_0x1fe_Tx_Data[3] = 0;
-    // CAN2_0x1fe_Tx_Data[4] = 0;
-    // CAN2_0x1fe_Tx_Data[5] = 0;
-    // CAN2_0x1fe_Tx_Data[6] = 0;
-    // CAN2_0x1fe_Tx_Data[7] = 0;
-    //6020
-    //CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
-
     #elif defined (GIMBAL)
 
-    static uint8_t mod5 = 0;
+    static uint8_t mod5 = 0,mod2 = 0;
     mod5++;
+    mod2++;
+    //CAN1_0x1fe_Tx_Data[2] = test >> 8;//B_pitch
+    //CAN1_0x1fe_Tx_Data[3] = test;
+    CAN1_0x1fe_Tx_Data[0] = test >> 8;//B_Yaw
+    CAN1_0x1fe_Tx_Data[1] = test;
+    //CAN2_0x1fe_Tx_Data[2] = test >> 8;//A_pitch
+    //CAN2_0x1fe_Tx_Data[3] = test;
+    // CAN2_0x1fe_Tx_Data[0] = test >> 8;//A_Yaw
+    // CAN2_0x1fe_Tx_Data[1] = test;
     if(mod5 == 5)
     {
+        mod5 = 0;
         //B
-        CAN1_0x1fe_Tx_Data[6] = test >> 8;
-        CAN1_0x1fe_Tx_Data[7] = test;
-        CAN2_0x1fe_Tx_Data[2] = test >> 8;
-        CAN2_0x1fe_Tx_Data[3] = test;
-        //CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+        //  CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
         //CAN_Send_Data(&hfdcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
         //  A
-        //CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
-        //CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+        CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+        CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
 
-        //  CAN3  下板 大yaw
-        CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
-        //CAN_Send_Data(&hfdcan3, 0x200, CAN3_0x200_Tx_Data, 8); //拨弹盘  按照0x200 ID 发送 可控制多个电机
+        //  CAN3  下板 大yaw        
+        CAN_Send_Data(&hfdcan3, 0x200, CAN3_0x200_Tx_Data, 8); //拨弹盘  按照0x200 ID 发送 可控制多个电机
         CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
     }
+    if(mod2 == 2)
+    {
+        mod2 = 0;
+        //CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
+    }   
     #endif
 
 }

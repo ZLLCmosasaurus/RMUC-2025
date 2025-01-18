@@ -75,6 +75,9 @@ extern struct Struct_UART_Manage_Object UART5_Manage_Object;
 extern struct Struct_UART_Manage_Object UART6_Manage_Object;
 extern struct Struct_UART_Manage_Object UART7_Manage_Object;
 extern struct Struct_UART_Manage_Object UART8_Manage_Object;
+extern struct Struct_UART_Manage_Object UART10_Manage_Object;
+
+extern float temp_power;
 
 /* Exported function declarations --------------------------------------------*/
 

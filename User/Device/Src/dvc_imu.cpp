@@ -106,7 +106,7 @@ void Class_IMU::TIM1msMod50_Alive_PeriodElapsedCallback(void)
     }
 }
 
-float accel = 0.0004f;
+float accel = 0.00035f;
 uint64_t cnt =0;
 void Class_IMU::Get_Angle()
 {

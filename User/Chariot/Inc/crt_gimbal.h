@@ -35,6 +35,12 @@ enum Enum_Gimbal_Control_Type :uint8_t
     Gimbal_Control_Type_MINIPC,
 };
 
+enum Enum_Motor_Yaw_Type :uint8_t
+{
+    Yaw_A = 0,
+    Yaw_B,
+};
+
 /**
  * @brief Specialized, yaw轴电机类
  *
@@ -255,7 +261,9 @@ public:
     void Pitch_Angle_Transform_B();
     void Yaw_Angle_Transform_Main();
     void Control_Update_Main();
-    void Control_Update(Class_DJI_Motor_GM6020 *Motor);
+    void Yaw_Angle_Limit(Enum_Motor_Yaw_Type Motor_Yaw_Type);
+    void MiniPC_Update();
+    void PID_Update();
 
 protected:
     //初始化相关常量
@@ -294,6 +302,8 @@ protected:
 
     //云台状态
     Enum_Gimbal_Control_Type Gimbal_Control_Type = Gimbal_Control_Type_DISABLE ;
+
+    Enum_Motor_Yaw_Type Motor_Yaw_Type = Yaw_A;
 
     //读写变量
 

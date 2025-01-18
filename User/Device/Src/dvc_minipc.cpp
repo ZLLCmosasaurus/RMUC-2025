@@ -43,12 +43,9 @@ void Class_MiniPC::Data_Process()
 {
     if(!Verify_CRC16_Check_Sum(USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length)) return;
     memcpy(&Data_NUC_To_MCU, USB_Manage_Object->Rx_Buffer, sizeof(Struct_MiniPC_Rx_Data));
+    Auto_aim(float(Data_NUC_To_MCU.Gimbal_Target_X_A / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Y_A / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Z_A / 100.f), &Rx_Angle_Yaw_A, &Rx_Angle_Pitch_A,&Distance_A);
+    Auto_aim(float(Data_NUC_To_MCU.Gimbal_Target_X_B / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Y_B / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Z_B / 100.f), &Rx_Angle_Yaw_B, &Rx_Angle_Pitch_B, &Distance_B);
 
-    Auto_aim(Data_NUC_To_MCU.Gimbal_Target_X_A, Data_NUC_To_MCU.Gimbal_Target_Y_A, Data_NUC_To_MCU.Gimbal_Target_Z_A, &Rx_Angle_Yaw_A, &Rx_Angle_Pitch_B, &Distance_A);
-    Auto_aim(Data_NUC_To_MCU.Gimbal_Target_X_B, Data_NUC_To_MCU.Gimbal_Target_Y_B, Data_NUC_To_MCU.Gimbal_Target_Z_B, &Rx_Angle_Yaw_B, &Rx_Angle_Pitch_B, &Distance_B);
-
-    Error_A = Calc_Error(Data_NUC_To_MCU.Gimbal_Target_X_A, Data_NUC_To_MCU.Gimbal_Target_Y_A, Data_NUC_To_MCU.Gimbal_Target_Z_A,Now_Angle_Yaw_A, Now_Angle_Pitch_A);
-    Error_B = Calc_Error(Data_NUC_To_MCU.Gimbal_Target_X_B, Data_NUC_To_MCU.Gimbal_Target_Y_B, Data_NUC_To_MCU.Gimbal_Target_Z_B,Now_Angle_Yaw_B, Now_Angle_Pitch_B);//这里的z为上位机直接发的z，不是弹道解算后的z1，判断时存在一定误差（瞄准误差允许范围为5cm时，不影响10m内打弹）
 }
 
 /**
@@ -62,14 +59,12 @@ extern Referee_Rx_B_t CAN3_Chassis_Rx_Data_B;
 void Class_MiniPC::Output()
 {
 	Data_MCU_To_NUC.header                         = Frame_Header;
-  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_A       = Math_Float_To_Int(Now_Angle_Pitch_A,-15,25,-200,200);
-  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_Main      = Math_Float_To_Int(Now_Angle_Yaw,-180,180,-2000,2000);
-  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_A         = Math_Float_To_Int(Now_Angle_Yaw_A,-180,180,-2000,2000);
-  Data_MCU_To_NUC.Gimbal_Now_Roll_Angle_A        = Math_Float_To_Int(Now_Angle_Roll_A,-180,180,-2000,2000);
-  Data_MCU_To_NUC.Chassis_Now_yaw_Angle          = Math_Float_To_Int(Now_Angle_Relative,-180,180,-2000,2000);//relative is negative in Counter Clockwise,so plus rather minus
-  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_B       = Math_Float_To_Int(Now_Angle_Pitch_B,-15,25,-200,200);
-  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_B         = Math_Float_To_Int(Now_Angle_Yaw_B,-180,180,-2000,2000);;
-  Data_MCU_To_NUC.Gimbal_Now_Roll_Angle_B        = Math_Float_To_Int(Now_Angle_Roll_B,-180,180,-2000,2000);
+  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_A       = int16_t((- IMU->Get_Angle_Pitch() + Now_Angle_Pitch_A) * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_A         = int16_t( Now_Angle_Yaw_A * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_B       = int16_t((- IMU->Get_Angle_Pitch() + Now_Angle_Pitch_B) * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_B         = int16_t( Now_Angle_Yaw_B * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_Main      = int16_t( IMU->Get_Angle_Yaw() * 100);
+  Data_MCU_To_NUC.Chassis_Now_yaw_Angle          = int16_t((IMU->Get_Angle_Yaw() + Now_Angle_Relative) * 100);
   // Data_MCU_To_NUC.Game_process                   = can_rx1.game_process;
   Data_MCU_To_NUC.Self_blood                     = CAN3_Chassis_Rx_Data_A.self_blood;
   // Data_MCU_To_NUC.Self_Outpost_HP                = can_rx1.self_outpost_HP;
@@ -77,6 +72,7 @@ void Class_MiniPC::Output()
   // Data_MCU_To_NUC.Oppo_Outpost_HP                = can_rx2.oppo_outpost_HP;
   // Data_MCU_To_NUC.Self_Base_HP                   = can_rx2.self_base_HP;   
   // Data_MCU_To_NUC.Color_Invincible_State         = ( can_rx2.color<<7 ) | can_rx2.invincible_state;
+  Data_MCU_To_NUC.Auto_Aim_Limit                 = Get_Auto_Limit_Status_A() << 1 | Get_Auto_Limit_Status_B();
   Data_MCU_To_NUC.crc16                          = 0xffff;
 
 	memcpy(USB_Manage_Object->Tx_Buffer, &Data_MCU_To_NUC, sizeof(Struct_MiniPC_Tx_Data));
@@ -283,13 +279,8 @@ float Class_MiniPC::Calc_Error(float x, float y, float z, float now_yaw, float n
  * @param z 向量的z分量
  * @return 计算得到的目标角（以角度制表示）
  */
-uint8_t Auto_aim_flag = 1;
 void Class_MiniPC::Auto_aim(float x, float y, float z, float *yaw, float *pitch, float *distance)
 {
-    if(x == 0 && y == 0 && z == 0)
-        Auto_aim_flag = 1;
-    else
-        Auto_aim_flag = 0;
     *yaw = calc_yaw(x, y, z);//第一次标- 现改为正
     *pitch = calc_pitch(x, y, z);//第一次标- 现改为正
     *distance = calc_distance(x, y, z);
