@@ -1,27 +1,43 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        // 使用j-link进行调试时的参考配置
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Jlink",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceRoot}\\build\\${config:targetFileName}",
+      "request": "launch",
+      "type": "cortex-debug",
+      "device": "${config:targetChip}",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "servertype": "jlink",
+      "interface": "swd",
+      "svdFile": "STM32F427.svd",
+      "rtos": "FreeRTOS",
+      "preLaunchTask": "download",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/HLlll/Desktop/RMUC-2025-M58-Dart/User/Task",
+      "program": "c:/Users/HLlll/Desktop/RMUC-2025-M58-Dart/User/Task/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
         {
-            "name": "Jlink",
-            "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\build\\${config:targetFileName}",
-            "request": "launch",
-            "type": "cortex-debug",
-            "device": "${config:targetChip}",
-            "runToEntryPoint": "main",
-            "showDevDebugOutput": "none",
-            "servertype": "jlink",
-            "interface": "swd",
-            "svdFile": "STM32F427.svd",
-            "rtos": "FreeRTOS",
-            //"preLaunchTask": "build task",//先运行Build任务,取消注释即可使用
-            "preLaunchTask": "download",//调试完成后运行download任务,取消注释即可使用
-            "liveWatch": {
-                "enabled": true,
-                "samplesPerSecond": 4
-            }
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
         }
-
-    ]
+      ]
+    }
+  ]
 }

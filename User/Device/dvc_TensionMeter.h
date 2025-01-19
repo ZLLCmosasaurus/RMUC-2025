@@ -94,8 +94,13 @@ protected:
 
     // 测量值
     float Measurement;
+    // 上一次测量值
+    float Pre_Measurement;
     // 滤波输出
     float Tension_Value;
+    //上一次滤波值
+    float Pre_Tension_Value;
+
     // 原始数据
     uint32_t Raw_Data;
     // 上一次的原始数据
