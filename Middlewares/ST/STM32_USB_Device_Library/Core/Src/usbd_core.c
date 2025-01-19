@@ -169,7 +169,7 @@ USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
         /* Free Class Resources */
         pdev->pClass[i]->DeInit(pdev, (uint8_t)pdev->dev_config);
       }
-    }
+    }7
   }
 #else
   /* Free Class Resources */

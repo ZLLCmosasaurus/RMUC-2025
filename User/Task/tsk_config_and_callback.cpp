@@ -328,9 +328,12 @@ void SuperCAP_UART1_Callback(uint8_t *Buffer, uint16_t Length)
  *
  * @param Length 长度
  */
+float freq;
+uint32_t time_s;
 #ifdef GIMBAL
 void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
 {
+      freq=1/DWT_GetDeltaT(&time_s);
     chariot.MiniPC.USB_RxCpltCallback(Buffer);
 }
 #endif

@@ -459,19 +459,7 @@ void Class_Chariot::Control_Gimbal()
     if(Pitch_Control_Status == Pitch_Status_Control_Lock)
         tmp_gimbal_pitch = 0;
 
-    //如果小陀螺/随动 yaw给不同参数
-    if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_FLLOW)
-    {
-        Gimbal.Motor_Yaw.PID_Angle.Set_K_P(0.35);
-        Gimbal.Motor_Yaw.PID_Angle.Set_K_D(0.0);
-        Gimbal.Motor_Yaw.PID_Angle.Set_Out_Max(6);
-    }
-    else if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN)
-    {
-        Gimbal.Motor_Yaw.PID_Angle.Set_K_P(0.65);
-        Gimbal.Motor_Yaw.PID_Angle.Set_K_D(0.01);
-        Gimbal.Motor_Yaw.PID_Angle.Set_Out_Max(15);  
-    }
+
 
     // 设定角度
     Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);
