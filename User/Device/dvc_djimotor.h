@@ -94,6 +94,9 @@ struct Struct_DJI_Motor_Data
     int32_t Total_Encoder;
     int32_t Total_Round;
     int32_t Pre_Total_Encoder;
+
+    int16_t Start_Encoder = 0;
+    int32_t Ture_Total_Encoder = 0;
 };
 
 /**
@@ -322,6 +325,8 @@ protected:
 class Class_DJI_Motor_C620
 {
 public:
+    
+
     // PID角度环控制
     Class_PID PID_Angle;
     // PID角速度环控制
@@ -346,6 +351,9 @@ public:
     inline float Get_Target_Omega_Radian();
     inline float Get_Target_Omega_Angle();
     inline float Get_Target_Torque();
+
+    inline int32_t Get_Ture_Total_Encoder();
+
     inline float Get_Out();
 
     inline void Set_DJI_Motor_Control_Method(Enum_DJI_Motor_Control_Method __Control_Method);
@@ -397,6 +405,8 @@ protected:
     //电机对外接口信息
     Struct_DJI_Motor_Data Data;
 
+    float Now_ture_Distance = 0.0f;
+
     //写变量
 
     //读写变量
@@ -415,7 +425,7 @@ protected:
     float Target_Torque = 0.0f;
     //输出量
     float Out = 0.0f;
-
+    
     //内部函数
 
     void Data_Process();
@@ -1094,6 +1104,11 @@ void Class_DJI_Motor_C620::Set_Target_Torque(float __Target_Torque)
 void Class_DJI_Motor_C620::Set_Out(float __Out)
 {
     Out = __Out;
+}
+
+int32_t Class_DJI_Motor_C620::Get_Ture_Total_Encoder()
+{
+    return (Data.Ture_Total_Encoder);
 }
 
 #endif

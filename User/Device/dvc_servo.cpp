@@ -36,7 +36,6 @@
  * 
  * @param __Driver_PWM_TIM 舵机驱动定时器编号
  * @param __Driver_PWM_TIM_Channel_x 定时器通道
- * @param __Angle_Offset 舵机角度偏移量, 默认0
  * @param __Max_Angle 舵机双边可动范围, 默认270角度舵机, 记得除以二, 也就是对应两侧可动范围都是3/4 PI
  */
 void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel,uint32_t __Compare_Min ,uint32_t __Compare_Max , float __Max_Angle)
