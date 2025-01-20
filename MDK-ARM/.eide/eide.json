@@ -307,6 +307,18 @@
               },
               {
                 "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/RLS.hpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/Matrix.hpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_new_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_new_power_limit.h"
               }
             ],
             "folders": []
@@ -471,7 +483,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x1c000"
+                "size": "0x20000"
               },
               "isChecked": true,
               "noInit": false
@@ -480,8 +492,8 @@
               "tag": "IRAM",
               "id": 2,
               "mem": {
-                "startAddr": "0x2001c000",
-                "size": "0x4000"
+                "startAddr": "0x10000000",
+                "size": "0x10000"
               },
               "isChecked": true,
               "noInit": false
@@ -558,6 +570,7 @@
       "custom_dep": {
         "name": "default",
         "incList": [
+          ".",
           "../Core/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
