@@ -311,7 +311,7 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
     float scaled_sum = 0;
 
     // 计算理论功率
-    for (uint8_t i = 0; i < 8; i++)
+    for (uint8_t i = 0; i < 4; i++)
     {
         power_management.Motor_Data[i].theoretical_power =
             Calculate_Theoretical_Power(power_management.Motor_Data[i].feedback_omega,
@@ -321,8 +321,10 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
         {
             theoretical_sum += power_management.Motor_Data[i].theoretical_power;
         }
+				else{
+					theoretical_sum+=0;
     }
-
+	}
     power_management.Theoretical_Total_Power = theoretical_sum;
 
     // 计算收缩系数
@@ -337,7 +339,7 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
     }
 
     // 应用收缩系数并更新输出
-    for (uint8_t i = 0; i < 8; i++)
+    for (uint8_t i = 0; i < 4; i++)
     {
         power_management.Motor_Data[i].scaled_power =
             power_management.Motor_Data[i].theoretical_power *
