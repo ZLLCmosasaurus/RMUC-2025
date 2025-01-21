@@ -163,7 +163,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     //设定底盘目标速度
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
-    //Chassis.Set_Target_Omega(chassis_omega);
+    Chassis.Set_Target_Omega(chassis_omega);
 }
 #endif
 
