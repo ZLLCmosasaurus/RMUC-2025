@@ -77,7 +77,7 @@ void Class_Supercap::Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_heade
     {
         UART_Manage_Object = &UART6_Manage_Object;
     }
-    Supercap_Status = Supercap_Status_DISABLE;
+    Supercap_Status = Disconnected;
     Supercap_Tx_Data.Limit_Power = __Limit_Power_Max;
     UART_Manage_Object->UART_Handler = __huart;
     Fame_Header = __fame_header;
@@ -91,7 +91,9 @@ void Class_Supercap::Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_heade
 void Class_Supercap::Data_Process()
 {
     //数据处理过程
-    memcpy(&Supercap_Data, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Struct_Supercap_CAN_Data));    
+    memcpy(&actual_power, CAN_Manage_Object->Rx_Buffer.Data, sizeof(actual_power));
+    memcpy(&Supercap_Status, CAN_Manage_Object->Rx_Buffer.Data+4, sizeof(Supercap_Status));
+
 }
 
 /**
@@ -101,6 +103,7 @@ void Class_Supercap::Data_Process()
 void Class_Supercap::Output()
 {
     memcpy(CAN_Tx_Data, &Supercap_Tx_Data, sizeof(Struct_Supercap_Tx_Data));
+
 }
 /**
  * @brief 
@@ -173,13 +176,9 @@ void Class_Supercap::TIM_Alive_PeriodElapsedCallback()
     if (Flag == Pre_Flag)
     {
         //超级电容断开连接
-        Supercap_Status = Supercap_Status_DISABLE;
+        Supercap_Status = Disconnected;
     }
-    else
-    {
-        //超级电容保持连接
-        Supercap_Status = Supercap_Status_ENABLE;
-    }
+  
     Pre_Flag = Flag;
 }
 

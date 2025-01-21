@@ -16,7 +16,6 @@
 /* Private types -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
-
 /* Private function declarations ---------------------------------------------*/
 static inline bool floatEqual(float a, float b) { return fabs(a - b) < 1e-5f; }
 static inline float rpm2av(float rpm) { return rpm * (float)PI / 30.0f; }
@@ -133,7 +132,7 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
 
     if (actual_power > 5)
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (motor_data[i].feedback_torque * rpm2av(motor_data[i].feedback_omega) > 0)
             {
@@ -145,7 +144,7 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
                              motor_data[i].feedback_torque;
         }
 
-        params = rls.update(samples, actual_power - effectivePower - 8 * k3);
+        params = rls.update(samples, actual_power - effectivePower - 4 * k3);
         k1 = my_fmax(params[0][0], 1e-5f);
         k2 = my_fmax(params[1][0], 1e-5f);
     }
@@ -161,6 +160,12 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
  * @param motor_index 电机索引，偶数为转向电机，奇数为动力电机
  * @return float 限制后的扭矩值
  */
+
+uint8_t test_flag=0;
+float solution1;
+float solution2;
+float test_cal;
+float test_yuan;
 float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque, uint8_t motor_index)
 {
 #ifdef AGV
@@ -182,12 +187,14 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
     if (torque * omega <= 0)
     {
         newTorqueCurrent = torque;
+        test_flag=0;
     }
     else
     {
         if (floatEqual(delta, 0.0f))
         {
             newTorqueCurrent = -omega / (2.0f * k2);
+            test_flag=1;
         }
         else if (delta > 0.0f)
         {
@@ -195,14 +202,23 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
             float solution1 = (-omega + sqrtf(delta)) / (2.0f * k2_use);
             float solution2 = (-omega - sqrtf(delta)) / (2.0f * k2_use);
 #else
-            float solution1 = (-omega + sqrtf(delta)) / (2.0f * k2);
-            float solution2 = (-omega - sqrtf(delta)) / (2.0f * k2);
+            solution1 = (-omega + sqrtf(delta)) / (2.0f * k2);
+            solution2 = (-omega - sqrtf(delta)) / (2.0f * k2);
 #endif
             newTorqueCurrent = (torque > 0) ? solution1 : solution2;
+
+            test_flag=2;
+
+            test_cal=(omega) * torque +
+                     fabs((omega)) * k1 +
+                     torque * torque * k2 +
+                     k3;
+                     test_yuan=power;
         }
         else
         {
             newTorqueCurrent = -omega / (2.0f * k2);
+            test_flag=3;
         }
     }
     return newTorqueCurrent;
@@ -321,10 +337,11 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
         {
             theoretical_sum += power_management.Motor_Data[i].theoretical_power;
         }
-				else{
-					theoretical_sum+=0;
+        else
+        {
+            power_management.Motor_Data[i].theoretical_power=0;
+        }
     }
-	}
     power_management.Theoretical_Total_Power = theoretical_sum;
 
     // 计算收缩系数
