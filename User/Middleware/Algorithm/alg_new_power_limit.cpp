@@ -371,9 +371,13 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
                             i) *
             GET_TORQUE_TO_CMD_CURRENT;
 
-        if (abs(power_management.Motor_Data[i].output) >= 16384)
+        if ((power_management.Motor_Data[i].output) >= 16384)
         {
-            power_management.Motor_Data[i].output = 0;
+            power_management.Motor_Data[i].output = 16384;
+        }
+				        if ((power_management.Motor_Data[i].output) <= -16384)
+        {
+            power_management.Motor_Data[i].output = -16384;
         }
     }
 

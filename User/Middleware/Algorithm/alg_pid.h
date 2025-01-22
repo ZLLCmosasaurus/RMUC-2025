@@ -53,6 +53,7 @@ public:
     inline void Set_I_Separate_Threshold(float __I_Separate_Threshold);
     inline void Set_Target(float __Target);
     inline void Set_Now(float __Now);
+		inline void Set_Out(float __Out);
     inline void Set_Integral_Error(float __Integral_Error);
 
     void TIM_Adjust_PeriodElapsedCallback();
@@ -254,6 +255,12 @@ void Class_PID::Set_Now(float __Now)
 {
     Now = __Now;
 }
+
+void Class_PID::Set_Out(float __Out)
+{
+    Out = __Out;
+}
+
 
 /**
  * @brief 设定积分, 一般用于积分清零

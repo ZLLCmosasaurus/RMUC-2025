@@ -158,6 +158,8 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
     {
         chassis_omega = 0;
+			chassis_velocity_x=0;
+			chassis_velocity_y=0;
     }
     
     //设定底盘目标速度

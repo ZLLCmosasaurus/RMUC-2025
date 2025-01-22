@@ -601,6 +601,8 @@ void Class_DJI_Motor_C620::Disable()
     Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
     Set_Out(0.0f);
     Output();
+	//pidout也清零
+	PID_Omega.Set_Out(0);
 }
 
 /**
