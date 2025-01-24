@@ -323,7 +323,7 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -43.0f;
+    float Min_Pitch_Angle = -44.0f;
     // pitch轴最大值
     float Max_Pitch_Angle = 5.0f ;
 

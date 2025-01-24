@@ -127,7 +127,6 @@ public:
         //底盘随动PID环
         Class_DJI_Motor_GM6020 Motor_Yaw;
         Class_PID PID_Chassis_Fllow;
-
     #endif 
 
         //裁判系统
@@ -223,7 +222,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 1.90236843;
+        float Reference_Angle = 1.5955348;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //7.5°
         //底盘转换后的角度（数据来源yaw电机）

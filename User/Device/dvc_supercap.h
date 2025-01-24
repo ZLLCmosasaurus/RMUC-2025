@@ -37,8 +37,8 @@ enum Enum_Supercap_Status
  */
 struct Struct_Supercap_CAN_Data
 {
-    float Supercap_Voltage;
-    float Stored_Energy;
+    float Chassis_Actual_Power;
+    uint8_t Supercup_Status;
 } __attribute__((packed));
 
 /**
@@ -48,8 +48,8 @@ struct Struct_Supercap_CAN_Data
 struct Struct_Supercap_Tx_Data
 {
     float Limit_Power;
-    float Now_Power;
-    uint16_t Chassis_Power;
+    //float Now_Power;
+    //uint16_t Chassis_Power;
 }__attribute__((packed));
 
 /**
@@ -68,6 +68,8 @@ public:
 
     inline void Set_Limit_Power(float __Limit_Power);
     inline void Set_Now_Power(float __Now_Power);
+    inline float Get_Chassis_Actual_Power();
+    inline float Get_Limit_Power();
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -145,10 +147,10 @@ Enum_Supercap_Status Class_Supercap::Get_Supercap_Status()
  *
  * @return float 存储的能量
  */
-float Class_Supercap::Get_Stored_Energy()
-{
-    return (Supercap_Data.Stored_Energy);
-}
+// float Class_Supercap::Get_Stored_Energy()
+// {
+//     return (Supercap_Data.Stored_Energy);
+// }
 
 // /**
 //  * @brief 获取输出的功率
@@ -165,20 +167,20 @@ float Class_Supercap::Get_Stored_Energy()
  *
  * @return float 当前的电压
  */
-float Class_Supercap::Get_Now_Voltage()
-{
-    return (Supercap_Data.Supercap_Voltage);
-}
+// float Class_Supercap::Get_Now_Voltage()
+// {
+//     return (Supercap_Data.Supercap_Voltage);
+// }
 
 /**
  * @brief 设置底盘当前的功率
  *
  * @return float 输入的功率
  */
-void Class_Supercap::Set_Now_Power(float __Now_Power)
-{
-    Supercap_Tx_Data.Now_Power = __Now_Power;
-}
+// void Class_Supercap::Set_Now_Power(float __Now_Power)
+// {
+//     Supercap_Tx_Data.Now_Power = __Now_Power;
+// }
 
 /**
  * @brief 设定绝对最大限制功率
@@ -189,7 +191,14 @@ void Class_Supercap::Set_Limit_Power(float __Limit_Power)
 {
     Supercap_Tx_Data.Limit_Power = __Limit_Power;
 }
-
+float Class_Supercap::Get_Chassis_Actual_Power()
+{
+    return (Supercap_Data.Chassis_Actual_Power);
+}
+float Class_Supercap::Get_Limit_Power()
+{
+    return (Limit_Power);
+}
 #endif
 #endif
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

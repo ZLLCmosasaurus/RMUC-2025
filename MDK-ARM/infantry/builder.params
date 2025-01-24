@@ -3,7 +3,7 @@
     "target": "infantry",
     "toolchain": "AC6",
     "toolchainLocation": "D:\\Keil_v5\\ARM\\ARMCLANG",
-    "toolchainCfgFile": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.0\\res\\data\\models\\win32/arm.v6.model.json",
+    "toolchainCfgFile": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.1\\res\\data\\models\\win32/arm.v6.model.json",
     "buildMode": "fast|multhread",
     "showRepathOnLog": true,
     "threadNum": 16,
@@ -184,7 +184,7 @@
         "SYS_PathSep": ";",
         "SYS_PathSeparator": ";",
         "SYS_EOL": "\r\n",
-        "EIDE_BUILDER_DIR": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.0\\res\\tools\\win32\\unify_builder",
+        "EIDE_BUILDER_DIR": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.1\\res\\tools\\win32\\unify_builder",
         "EIDE_BINARIES_VER": "12.0.1",
         "EIDE_MSYS": "C:\\Users\\zxf\\.eide\\bin\\builder\\msys\\bin",
         "ToolchainRoot": "D:\\Keil_v5\\ARM\\ARMCLANG"

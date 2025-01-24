@@ -1,4 +1,4 @@
-arm-none-eabi-objcopy --update-section ER_IROM1="C:\Users\zxf\AppData\Local\Temp\\infantry_pZf0j1fY.bin" "d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.axf" "d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.elf"
+arm-none-eabi-objcopy --update-section ER_IROM1="C:\Users\zxf\AppData\Local\Temp\\infantry_a8rbyW/Y.bin" "d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.axf" "d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.elf"
 
 arm-none-eabi-objcopy: d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.elf: warning: allocated section `RW_IRAM1' not in segment
 

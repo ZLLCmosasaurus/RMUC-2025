@@ -227,6 +227,7 @@ struct Pack_rx_t
 	float target_x;
 	float target_y;
 	float target_z;	
+    uint8_t fire_permission;//0不允许拨弹  1允许拨弹
 	uint8_t UP_flag;
 	uint16_t crc16;
 }__attribute__((packed));
@@ -256,6 +257,7 @@ public:
     inline float Get_Rx_Pitch_Angle();
     inline float Get_Rx_Yaw_Angle();
     inline float Get_Distance();
+    inline uint8_t Get_Fire_Permission();
     inline Enum_MiniPC_Type Get_MiniPC_Type();
     inline Enum_MiniPC_Move_Control_Mode Get_Move_Control_Mode();
 
@@ -334,7 +336,7 @@ protected:
 	float Rx_Angle_Yaw;
 
 
-     float g = 8; // 重力加速度
+     float g = 12; // 重力加速度
     const float bullet_v = 16.0;//28.0; // 子弹速度  
 
     // 距离
@@ -679,7 +681,12 @@ void Class_MiniPC::Transform_Angle_Rx()
     Rx_Angle_Pitch = Pack_Rx.target_pitch;
     Rx_Angle_Yaw = Pack_Rx.target_yaw;
 }
-
+/// @brief 获取是否允许开火指令
+/// @return 指令
+uint8_t Class_MiniPC::Get_Fire_Permission()
+{
+    return (Pack_Rx.fire_permission);
+}
 #endif
 #endif
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

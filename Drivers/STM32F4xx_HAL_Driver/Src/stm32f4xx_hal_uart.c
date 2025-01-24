@@ -706,6 +706,7 @@ HAL_StatusTypeDef HAL_UART_DeInit(UART_HandleTypeDef *huart)
   return HAL_OK;
 }
 
+
 /**
   * @brief  UART MSP Init.
   * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
