@@ -1,5 +1,10 @@
 {
     "editor.fontSize": 14,
     "EIDE.ARM.Option.AxfToElf": true,
-    "EIDE.ARM.Option.AutoGenerateRTE_Components": false
+    "EIDE.ARM.Option.AutoGenerateRTE_Components": false,
+    "target_name": "Sentry",
+    "device_name": "STM32H723VG",
+    "svd_file": "STM32H723VG.svd",
+    "EIDE.ARM.ARMCC6.InstallDirectory": "D:\\Embedded system\\Tool\\keil5\\ARM\\ARMCLANG",
+    "EIDE.ARM.ARMCC5.InstallDirectory": "D:\\Embedded system\\Tool\\keil5\\ARM\\ARMCC"
 }
