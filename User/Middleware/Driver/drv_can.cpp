@@ -228,7 +228,7 @@ void TIM_CAN_PeriodElapsedCallback()
     CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch
     
     // CAN2 
-    CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮
+    //CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮
     CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
     CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
     #endif
