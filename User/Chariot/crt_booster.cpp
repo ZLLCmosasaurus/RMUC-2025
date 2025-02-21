@@ -213,7 +213,7 @@ void Class_Booster::Init()
     // FSM_Heat_Detect.Booster = this;
     // FSM_Heat_Detect.Init(3, 3);
 
-    //正常状态, 卡弹嫌疑状态, 卡弹反应状态, 卡弹处理状态
+    //正常状态, 卡弹嫌疑状态, 卡弹反应状态, 卡弹处理状态, 卡弹处理反应状态
     FSM_Antijamming.Booster = this;
     FSM_Antijamming.Init(5, 0);
 
@@ -243,6 +243,13 @@ void Class_Booster::Init()
 void Class_Booster::Output()
 {
     //控制拨弹轮
+    //枪口超热量的简单处理方法
+    // if((Referee->Get_Booster_42mm_Heat()>Referee->Get_Booster_42mm_Heat_Max()*0.9f)&&Booster_Control_Type!=Booster_Control_Type_DISABLE)
+    // {
+    //     Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
+    // }
+
+
     switch (Booster_Control_Type)
     {
         case (Booster_Control_Type_DISABLE):
@@ -288,9 +295,8 @@ void Class_Booster::Output()
             {
                 Fric[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
             }
-            //Drvie_Count++; 
+
             Drvier_Angle -= 2.0f * PI / 6.0f;
-            // Drvier_Angle = -Drvie_Count * 2.0f * PI / 6.0f;
             Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
             //点一发立刻停火

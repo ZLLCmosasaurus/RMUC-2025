@@ -4578,3 +4578,340 @@ These source files will be recompiled
 [2025-01-23 17:55:17]	[done]
 	build successfully !
 
+[2025-02-13 18:55:40]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': source file has been changed.
+
+[2025-02-13 18:55:47]	[done]
+	build successfully !
+
+[2025-02-13 19:38:28]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-13 19:38:28]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_booster.o -MMD ./../User/Chariot/crt_booster.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_booster.cpp:246:49: error: reference to non-static member function must be called; did you mean to call it with no arguments?
+  246 |     if((Referee->Get_Booster_42mm_Heat>Referee->Get_Booster_42mm_Heat_Max*0.9f)&&Booster_Control_Type!=Booster_Control_Type_DISABLE)
+      |                                        ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                                          ()
+./../User/Chariot/crt_booster.cpp:246:18: error: reference to non-static member function must be called; did you mean to call it with no arguments?
+  246 |     if((Referee->Get_Booster_42mm_Heat>Referee->Get_Booster_42mm_Heat_Max*0.9f)&&Booster_Control_Type!=Booster_Control_Type_DISABLE)
+      |         ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+      |                                       ()
+2 errors generated.
+
+[2025-02-13 19:38:44]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-13 19:38:45]	[done]
+	build successfully !
+
+[2025-02-14 08:44:27]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-14 08:44:28]	[done]
+	build successfully !
+
+[2025-02-14 09:13:10]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-02-14 09:13:11]	[done]
+	build successfully !
+
+[2025-02-14 09:17:24]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-14 09:17:26]	[done]
+	build successfully !
+
+[2025-02-14 09:18:45]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-14 09:18:46]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:325:5: error: expected expression
+  325 |     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
+      |     ^
+1 error generated.
+
+[2025-02-14 09:20:32]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-02-14 09:20:33]	[done]
+	build successfully !
+
+[2025-02-14 09:56:44]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-14 09:56:51]	[done]
+	build successfully !
+
+[2025-02-15 09:09:24]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-15 09:09:26]	[done]
+	build successfully !
+
+[2025-02-15 10:18:24]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-02-15 10:18:25]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+Error: L6200E: Symbol Class_Chariot::Get_Gimbal_Yaw_IMU_Angle() multiply defined (by tsk_config_and_callback.o and ita_chariot.o).
+Error: L6200E: Symbol Class_Chariot::Set_Gimbal_Yaw_Angle(float) multiply defined (by tsk_config_and_callback.o and ita_chariot.o).
+Not enough information to list image symbols.
+Not enough information to list the image map.
+Finished: 2 information, 0 warning and 2 error messages.
+
+
+[2025-02-15 10:22:05]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-02-15 10:22:06]	[done]
+	build successfully !
+
+[2025-02-15 10:25:06]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-15 10:25:07]	[done]
+	build successfully !
+
+[2025-02-15 10:32:52]	[done]
+	build successfully !
+
+[2025-02-15 10:33:16]	[done]
+	build successfully !
+
+[2025-02-15 10:34:02]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-15 10:34:03]	[done]
+	build successfully !
+
+[2025-02-15 10:34:36]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-15 10:34:38]	[done]
+	build successfully !
+
+[2025-02-15 10:39:21]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-15 10:39:22]	[done]
+	build successfully !
+
+[2025-02-15 10:39:33]	[info] incremental build: 9 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-02-15 10:39:34]	[done]
+	build successfully !
+
+[2025-02-15 10:41:28]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-02-15 10:41:29]	[done]
+	build successfully !
+
+[2025-02-20 19:53:10]	[info] incremental build: 75 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\can.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\dma.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\gpio.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\i2c.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\spi.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_hal_msp.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\system_stm32f4xx.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\tim.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_exti.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usb_device.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_cdc_if.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_desc.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\Target\usbd_conf.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_ist8310.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_buzzer.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dwt.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_servo.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\PID.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\user_lib.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_dwt.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_i2c.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_spi.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_tim.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_usb.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\Core\Inc\stm32f4xx_hal_conf.h' has been changed.
+
+[2025-02-20 19:53:20]	[done]
+	build successfully !
+
+[2025-02-20 20:45:14]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-02-20 20:45:15]	[done]
+	build successfully !
+
+[2025-02-21 08:49:05]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': source file has been changed.
+
+[2025-02-21 08:49:06]	[done]
+	build successfully !
+

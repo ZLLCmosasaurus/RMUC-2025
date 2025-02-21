@@ -404,7 +404,7 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-		//UART_Init(&huart6, Image_UART6_Callback, 40);
+		UART_Init(&huart6, Image_UART6_Callback, 40);
 
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
