@@ -69,7 +69,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_IMU_ANGLE):
     {
-        PID_Angle.Set_Target(Target_Angle);
+        //PID_Angle.Set_Target(Target_Angle);
         // Target_Angle=test_angle;
         PID_Angle.Set_Target(Target_Angle);
         if (IMU->Get_IMU_Status() != IMU_Status_DISABLE)
@@ -134,6 +134,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::Transform_Angle()
  *
  */
 float test_omega = 1.0f;
+float m_angle=0.0f;
 void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 {
     switch (DJI_Motor_Control_Method)
@@ -181,8 +182,8 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_IMU_ANGLE):
     {
-        PID_Angle.Set_Target(Target_Angle);
-
+        //PID_Angle.Set_Target(-m_angle);
+				PID_Angle.Set_Target(-Target_Angle);
         if (IMU->Get_IMU_Status() != IMU_Status_DISABLE)
         {
             // 角度环
@@ -209,8 +210,8 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         }
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
-        Target_Torque = PID_Omega.Get_Out();
-        Set_Out(PID_Omega.Get_Out() + Gravity_Compensate);
+        Target_Torque = -PID_Omega.Get_Out();
+        Set_Out(-PID_Omega.Get_Out() + Gravity_Compensate);
     }
     break;
     default:
@@ -235,9 +236,9 @@ void Class_Gimbal_Pitch_Motor_GM6020::Disable()
  */
 void Class_Gimbal_Pitch_Motor_GM6020::Transform_Angle()
 {
-    True_Rad_Pitch = -IMU->Get_Rad_Roll();
-    True_Gyro_Pitch = -IMU->Get_Gyro_Roll();
-    True_Angle_Pitch = -IMU->Get_Angle_Roll();
+    True_Rad_Pitch = IMU->Get_Rad_Roll();
+    True_Gyro_Pitch =IMU->Get_Gyro_Roll();
+    True_Angle_Pitch =IMU->Get_Angle_Roll();
 }
 
 /**

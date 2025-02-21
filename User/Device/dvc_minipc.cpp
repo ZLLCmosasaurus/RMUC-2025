@@ -54,7 +54,7 @@ void Class_MiniPC::Data_Process()
 
     // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
     // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = -tmp_pitch;
+    Rx_Angle_Pitch = tmp_pitch;
     Rx_Angle_Yaw = tmp_yaw;
     Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
@@ -231,12 +231,13 @@ float Class_MiniPC::calc_distance(float x, float y, float z)
  * @param z 向量的z分量
  * @return 计算得到的俯仰角（以角度制表示）
  */
+
 float Class_MiniPC::calc_pitch(float x, float y, float z) 
 {
   // 根据 x、y 分量计算的平面投影的模长和 z 分量计算的反正切值，得到弧度制的俯仰角
   float pitch = atan2f(z, sqrtf(x * x + y * y));
   // 使用重力加速度模型迭代更新俯仰角
-  for (size_t i = 0; i < 20; i++) {
+  for ( size_t i = 0; i < 20; i++) {
     float v_x = bullet_v * cosf(pitch);
     float v_y = bullet_v * sinf(pitch);
     // 计算子弹飞行时间
