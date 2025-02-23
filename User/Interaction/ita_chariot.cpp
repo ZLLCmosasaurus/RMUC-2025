@@ -323,31 +323,31 @@ void Class_Chariot::Control_Chassis()
             // 底盘随动
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
-        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 小陀螺模式
+        {
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
+            chassis_omega = -Chassis.Get_Spin_Omega();
+            if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
+            {
+                chassis_omega = Chassis.Get_Spin_Omega();
+            }
+        }
+        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
         // {
-        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
-        //     chassis_omega = -Chassis.Get_Spin_Omega();
-        //     // if (DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN) // 右下 小陀螺反向
-        //     // {
-        //     //     chassis_omega = Chassis.Get_Spin_Omega();
-        //     // }
+        //     // 上位机模式底盘暂时失能
+        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
         // }
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
-        {
-            // 上位机模式底盘暂时失能
-            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-        }
 
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
-        {
-            // 底盘锁死 云台可动
-            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-            Gimbal.Set_Launch_Mode(Launch_Enable);
-        }
-        else
-        {
-            Gimbal.Set_Launch_Mode(Launch_Disable);
-        }
+        // if (DR16.Get_Left_Switch() == DR16_Switch_Status_UP) // 左上 狙击模式
+        // {
+        //     // 底盘锁死 云台可动
+        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        //     Gimbal.Set_Launch_Mode(Launch_Enable);
+        // }
+        // else
+        // {
+        //     Gimbal.Set_Launch_Mode(Launch_Disable);
+        // }
     }
     /************************************键鼠控制逻辑*********************************************/
     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
@@ -380,8 +380,9 @@ void Class_Chariot::Control_Chassis()
         {
             chassis_velocity_y = -Chassis.Get_Velocity_Y_Max() / DR16_Mouse_Chassis_Shift;
         }
-
-        if (DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED) // Q键切换小陀螺与随动
+        //Q键自瞄模式切换代码未写
+        //code
+        if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED) // E键切换小陀螺与随动
         {
             if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
             {
@@ -392,7 +393,7 @@ void Class_Chariot::Control_Chassis()
                 Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
 
-        if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_PRESSED) // 按下G键刷新UI
+        if (DR16.Get_Keyboard_Key_R() == DR16_Key_Status_PRESSED) // 按下R键刷新UI
         {
             Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_ENABLE;
         }
@@ -515,12 +516,12 @@ void Class_Chariot::Control_Gimbal()
             tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         }
         // F键按下 一键调头
-        if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             tmp_gimbal_yaw += 180;
         }
         // E键按下切换Pitch锁定模式和free模式
-        if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Pitch_Control_Status == Pitch_Status_Control_Free)
                 Pitch_Control_Status = Pitch_Status_Control_Lock;
@@ -624,8 +625,8 @@ void Class_Chariot::Control_Booster()
         {
             Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
         }
-        //C键控制摩擦轮
-        if(DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        //CTRL键控制摩擦轮
+        if(DR16.Get_Keyboard_Key_Ctrl() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if(Booster.Get_Friction_Control_Type()==Friction_Control_Type_ENABLE)
             {
