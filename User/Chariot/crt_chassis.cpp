@@ -55,10 +55,14 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 #endif
 
     // 电机PID批量初始化
-    for (int i = 0; i < 4; i++)
-    {
-        Motor_Wheel[i].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
-    }
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     Motor_Wheel[i].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
+    // }
+    Motor_Wheel[0].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
+    Motor_Wheel[1].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
+    Motor_Wheel[2].PID_Omega.Init(2200.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
+    Motor_Wheel[3].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
 
     // 轮向电机ID初始化
     Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x201);
@@ -167,13 +171,13 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Power_Management.Actual_Power = Referee->Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {
-//        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Data().Now_Omega_Angle / 360.0f * 60.0f;
-//        Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Data().Now_Torque;
-//        Power_Management.Motor_Data[i].torque = Motor_Wheel[i].PID_Omega.Get_Out() * M3508_CMD_CURRENT_TO_TORQUE;
-//        Power_Management.Motor_Data[i].pid_output = Motor_Wheel[i].PID_Omega.Get_Out();
-			
-		Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Now_Omega_Radian()*RAD_TO_RPM*Motor_Wheel[i].Get_Gearbox_Rate();
-        Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Now_Torque()*M3508_CMD_CURRENT_TO_TORQUE;
+        //        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Data().Now_Omega_Angle / 360.0f * 60.0f;
+        //        Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Data().Now_Torque;
+        //        Power_Management.Motor_Data[i].torque = Motor_Wheel[i].PID_Omega.Get_Out() * M3508_CMD_CURRENT_TO_TORQUE;
+        //        Power_Management.Motor_Data[i].pid_output = Motor_Wheel[i].PID_Omega.Get_Out();
+
+        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Now_Omega_Radian() * RAD_TO_RPM * Motor_Wheel[i].Get_Gearbox_Rate();
+        Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Now_Torque() * M3508_CMD_CURRENT_TO_TORQUE;
         Power_Management.Motor_Data[i].torque = Motor_Wheel[i].PID_Omega.Get_Out() * M3508_CMD_CURRENT_TO_TORQUE;
         Power_Management.Motor_Data[i].pid_output = Motor_Wheel[i].PID_Omega.Get_Out();
     }
@@ -184,10 +188,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     {
         Motor_Wheel[i].Set_Out(Power_Management.Motor_Data[i].output);
         Motor_Wheel[i].Output();
-		
     }
-
-
 
     /****************************超级电容***********************************/
     //    Supercap.Set_Now_Power(Referee->Get_Chassis_Power());

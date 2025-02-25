@@ -431,11 +431,11 @@
       }
     ]
   },
-  "outDir": ".",
+  "outDir": "build",
   "deviceName": "STM32F407IGHx",
-  "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
+  "packDir": ".pack/Keil/STM32F4xx_DFP.3.0.0",
   "miscInfo": {
-    "uid": "85c96ec307b268da1692ba450d60b381"
+    "uid": "1e54d312a48e72ab690929039bd80e88"
   },
   "targets": {
     "infantry": {
@@ -605,7 +605,7 @@
           "beforeBuildTasks": [],
           "afterBuildTasks": [],
           "global": {
-            "use-microLIB": false,
+            "use-microLIB": true,
             "output-debug-info": "enable"
           },
           "c/cpp-compiler": {

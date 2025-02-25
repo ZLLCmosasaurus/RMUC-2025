@@ -111,7 +111,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
         }
     }
     //积分限幅
-    if (I_Out_Max != 0.0f)
+    if (I_Out_Max != 0.0f && K_I!=0.0f)
     {
         Math_Constrain(&Integral_Error, -I_Out_Max / K_I, I_Out_Max / K_I);
     }

@@ -210,16 +210,16 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 0.641204f;
-        //小陀螺云台坐标系稳定偏转角度 用于矫正
-        float Offset_Angle = 0.0f;  //7.5°
-        //底盘转换后的角度（数据来源yaw电机）
-        float Chassis_Angle;
-        //写变量
-        uint32_t Gimbal_Alive_Flag = 0;
-        uint32_t Pre_Gimbal_Alive_Flag = 0;
+    float Reference_Angle =  0.688184561f;
+    // 小陀螺云台坐标系稳定偏转角度 用于矫正
+    float Offset_Angle = 0.0f; // 7.5°
+    // 底盘转换后的角度（数据来源yaw电机）
+    float Chassis_Angle;
+    // 写变量
+    uint32_t Gimbal_Alive_Flag = 0;
+    uint32_t Pre_Gimbal_Alive_Flag = 0;
 
-        Enum_Gimbal_Status Gimbal_Status =  Gimbal_Status_DISABLE;
+    Enum_Gimbal_Status Gimbal_Status = Gimbal_Status_DISABLE;
     #endif
 
     #ifdef GIMBAL
