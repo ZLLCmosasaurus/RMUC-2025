@@ -226,7 +226,8 @@ void TIM_CAN_PeriodElapsedCallback()
     
     CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //摩擦轮+拨弹轮 按照0x200 ID 发送 可控制多个电机
 
-   
+//    CAN_Send_Data(&hcan1,0x141,CAN1_0x141_Tx_Data,8);
+
     CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
     
     #endif

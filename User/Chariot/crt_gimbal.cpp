@@ -79,7 +79,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
             Target_Omega_Radian = PID_Angle.Get_Out();
 
             //速度环
-            PID_Omega.Set_Target(Target_Omega_Radian);
+            PID_Omega.Set_Target(-Target_Omega_Radian);
             PID_Omega.Set_Now(True_Gyro_Yaw);
 
         }
@@ -325,11 +325,17 @@ void Class_Gimbal::Init()
     Motor_Yaw.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     //pitch轴电机
-    Motor_Pitch.PID_Angle.Init(800.f, 1.0f, 0.5f, 100.0f, 44.0f, 144.0f);
-    Motor_Pitch.PID_Omega.Init(175.0f, 10.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
-    Motor_Pitch.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
-    Motor_Pitch.IMU = &Boardc_BMI;
-    Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
+    // Motor_Pitch.PID_Angle.Init(800.f, 1.0f, 0.5f, 100.0f, 44.0f, 144.0f);
+    // Motor_Pitch.PID_Omega.Init(175.0f, 10.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
+    // Motor_Pitch.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
+    // Motor_Pitch.IMU = &Boardc_BMI;
+    // Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
+
+    Motor_Pitch_LK6010.PID_Angle.Init(0.f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    Motor_Pitch_LK6010.PID_Omega.Init(0.0f, 0.0f, 0.0f, 0, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
+    Motor_Pitch_LK6010.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max());
+    Motor_Pitch_LK6010.IMU = &Boardc_BMI;
+    Motor_Pitch_LK6010.Init(&hcan1, LK_Motor_ID_0x141, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
    
 }
 
@@ -410,8 +416,8 @@ void Class_Gimbal::TIM_Calculate_PeriodElapsedCallback()
     
     //根据不同c板的放置方式来修改这几个函数
     Motor_Yaw.Transform_Angle();
-    Motor_Pitch.Transform_Angle();
-    // Motor_Pitch_LK6010.Transform_Angle();
+    // Motor_Pitch.Transform_Angle();
+    Motor_Pitch_LK6010.Transform_Angle();
 
 
     Motor_Yaw.TIM_PID_PeriodElapsedCallback();
