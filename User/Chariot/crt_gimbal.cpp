@@ -401,14 +401,14 @@ void Class_Gimbal::Output()
         }
 
          //限制角度范围 处理yaw轴180度问题
-         while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())>Max_Yaw_Angle)
-         {
-             Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
-         }
-         while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())<-Max_Yaw_Angle)
-         {
-             Target_Yaw_Angle += (2 * Max_Yaw_Angle);
-         }
+        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())>Max_Yaw_Angle)
+        {
+            Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
+        }
+        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())<-Max_Yaw_Angle)
+        {
+            Target_Yaw_Angle += (2 * Max_Yaw_Angle);
+        }
 
         // 新处理yaw轴180度问题
         //  1. 角度优化

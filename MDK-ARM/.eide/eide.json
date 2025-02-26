@@ -258,6 +258,9 @@
           },
           {
             "path": "../User/Device/GraphicsSendTask.cpp"
+          },
+          {
+            "path": "../User/Device/dvc_buzzer.cpp"
           }
         ],
         "folders": []
@@ -570,7 +573,6 @@
       "custom_dep": {
         "name": "default",
         "incList": [
-          ".",
           "../Core/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",

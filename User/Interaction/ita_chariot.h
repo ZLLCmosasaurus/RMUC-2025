@@ -22,7 +22,7 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
-
+#include "dvc_buzzer.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -128,6 +128,7 @@ public:
         //底盘
         Class_Tricycle_Chassis Chassis;
 
+        Class_Buzzer Buzzer;
     #ifdef GIMBAL
         //遥控器
         Class_DR16 DR16;

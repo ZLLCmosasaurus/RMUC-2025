@@ -328,10 +328,10 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
 }
 #endif
 /**
- * @brief TIM4任务回调函数
+ * @brief TIM2任务回调函数
  *
  */
-void Task100us_TIM4_Callback()
+void Task100us_TIM2_Callback()
 {
 #ifdef CHASSIS
     // static uint16_t Referee_Sand_Cnt = 0;
@@ -352,8 +352,11 @@ void Task100us_TIM4_Callback()
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
-    if (init_finished > 2000)
+    if (init_finished > 2000 && start_flag == 0)
+    {
+        chariot.Buzzer.Set_NowTask(BUZZER_DJI_STARTUP_PRIORITY);
         start_flag = 1;
+    }
 
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
 
@@ -366,7 +369,7 @@ void Task1ms_TIM5_Callback()
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
-
+        chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
         /****************************** 驱动层回调函数 1ms *****************************************/
         // 统一打包发送
         TIM_CAN_PeriodElapsedCallback();
@@ -442,7 +445,7 @@ extern "C" void Task_Init()
 #endif
 
     // 定时器循环任务
-    TIM_Init(&htim4, Task100us_TIM4_Callback);
+    TIM_Init(&htim2, Task100us_TIM2_Callback);
     TIM_Init(&htim5, Task1ms_TIM5_Callback);
 
     /********************************* 设备层初始化 *********************************/
@@ -454,8 +457,8 @@ extern "C" void Task_Init()
     chariot.Init();
 
     /********************************* 使能调度时钟 *********************************/
-
-    HAL_TIM_Base_Start_IT(&htim4);
+    HAL_TIM_PWM_Init(&htim4);
+    HAL_TIM_Base_Start_IT(&htim2);
     HAL_TIM_Base_Start_IT(&htim5);
 }
 

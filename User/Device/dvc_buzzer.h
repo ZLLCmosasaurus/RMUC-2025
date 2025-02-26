@@ -70,7 +70,7 @@ enum {
  
   BUZZER_DEVICE_OFFLINE_PRIORITY = 1,
   
-  BUZZER_FREE_PRIORITY = BUZZER_MAX_PRIORITY_NUM, // 空闲状态
+  BUZZER_FREE_PRIORITY = BUZZER_MAX_PRIORITY_NUM-1, // 空闲状态
 };
 
 
@@ -109,8 +109,6 @@ class Class_Sheet_Music
   Class_Buzzer_Tone ToneList[BUZZER_MAX_TONE_NUM];
     // Tone 是一个指针，指向一个查找表，用于将音符转换为功率级别
   BUZZER_BSP_TONE_TO_POW_LUT_H *Tone; 
-    // Duration 是一个指针，指向一个数组，用于存储每个音符的持续时间
-  float *Duration;
     // Num 是一个无符号8位整数，表示乐谱中的音符数量
   uint8_t Num;
     // SetToneList 函数用于设置乐谱中的音符列表、每个音符的持续时间和音符数量

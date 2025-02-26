@@ -71,6 +71,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.Referee = &Referee;
 
 #endif
+
+    Buzzer.Buzzer_Init(&htim4, TIM_CHANNEL_3);
 }
 
 /**
