@@ -669,11 +669,19 @@ void Class_DJI_Motor_C620::TIM_PID_PeriodElapsedCallback()
     }
     break;
     case (DJI_Motor_Control_Method_OMEGA):
-    {
+    {		
+			#ifdef GIMBAL_TASK
+ 
         PID_Omega.Set_Target(Target_Omega_Angle);
         PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
+			#endif
+			#ifdef CHASSIS_TASK
+				PID_Omega.Set_Target(Target_Omega_Radian);
+        PID_Omega.Set_Now(Data.Now_Omega_Radian);
+        PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
+			#endif
         Out = PID_Omega.Get_Out();
     }
     break;

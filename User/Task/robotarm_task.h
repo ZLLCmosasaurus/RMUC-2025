@@ -24,6 +24,8 @@
 #include "drv_math.h"
 #include "drv_can.h"
 #include "dvc_minipc.h"
+#include "dvc_relays.h"
+#include "crt_chassis.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -39,21 +41,38 @@ enum Enum_Robotarm_Control_Type
 };
 
 /**
+ * @brief DR16控制数据来源
+ *
+ */
+enum Enum_DR16_Control_Type
+{
+    DR16_Control_Type_REMOTE = 0,
+    DR16_Control_Type_KEYBOARD,
+};
+/**
  * @brief 解算任务运行阶段
  *
  */
 enum Enum_Robotarm_Task_Status
 {
-    Robotarm_Task_Status_Calibration = 0,
+  	  	Robotarm_Task_Status_Calibration = 0,
 		Robotarm_Task_Status_Wait_Order=1,
 		Robotarm_Task_Status_Error=2,
 		Robotarm_Task_Status_Exchange=3,
-    Robotarm_Task_Status_Pick_First=10,
-		Robotarm_Task_Status_Place_First=11,
-	  Robotarm_Task_Status_Pick_Second=20,
-		Robotarm_Task_Status_Place_Second=21,
-	  Robotarm_Task_Status_Pick_Third=30,
+	
+    	Robotarm_Task_Status_Pick_First_Sliver=10,
+		Robotarm_Task_Status_First_Sliver_Test=90,//中期考核使用状态，后期去除
+			Robotarm_Task_Status_First_Sliver_Test_2=91,
+		Robotarm_Task_Status_Place_First_Sliver=11,
+		Robotarm_Task_Status_Pick_Second_Sliver=20,
+		Robotarm_Task_Status_Place_Second_Sliver=21,
+		Robotarm_Task_Status_Pick_Third_Sliver=30,
 
+		Robotarm_Task_Status_Pick_First_Gold=110,
+		Robotarm_Task_Status_Place_First_Gold=111,
+		Robotarm_Task_Status_Pick_Second_Gold=120,
+		Robotarm_Task_Status_Place_Second_Gold=121,
+		Robotarm_Task_Status_Pick_Third_Gold=130,
 
 
 };
@@ -77,6 +96,16 @@ enum Enum_Chassis_Control_Type__
     CHASSIS_Control_Type_FLLOW = 1,
     CHASSIS_Control_Type_SPIN = 2,
 };
+/**
+* @brief 是否冲刺控制类型
+ *
+ */
+//enum Enum_Sprint_Status : uint8_t
+//{
+//    Sprint_Status_DISABLE = 0, 
+//    Sprint_Status_ENABLE,
+//};
+
 struct Struct_Custom_Communication_Data {
 	uint16_t Flow_x;
 	uint16_t Flow_y;
@@ -261,16 +290,16 @@ public:
 	Class_DJI_Motor_C610 Motor_Joint4;
 	// 6轴电机
 	Class_DJI_Motor_C610 Motor_Joint5;
-	Class_DJI_Motor_C620 Chassis_Motor_1;
-	Class_DJI_Motor_C620 Chassis_Motor_2;
-	Class_DJI_Motor_C620 Chassis_Motor_3;
-	Class_DJI_Motor_C620 Chassis_Motor_4;
+	Class_Relays Relay1;
+	Class_Relays Relay2;
 	//机械臂抬升类
 	Class_RoRobotic_Arm_Uplift Arm_Uplift;
 	//底盘通信
 	Class_Chassis_Communication__ Chassis;
 	//底盘控制方式
 	Enum_Chassis_Control_Type__  Chassis_control_type;
+	//冲刺
+	Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
 	//存放对象的地址，需要用强制转换
 	uint32_t Motor_Joint[6]= {reinterpret_cast<uint32_t>(&Motor_Joint1),reinterpret_cast<uint32_t>(&Motor_Joint2),reinterpret_cast<uint32_t>(&Motor_Joint3),
 							 reinterpret_cast<uint32_t>(&Motor_Joint4),reinterpret_cast<uint32_t>(&Motor_Joint5)};
@@ -280,6 +309,8 @@ public:
 	inline float Get_Joint_Offset_Angle(uint8_t Num);
 	
 	inline float Get_Joint_Limit_Angle(uint8_t Num);
+							 
+	inline Enum_DR16_Control_Type Get_DR16_Control_Type();
 
 	//获得目标位姿
 	inline Position_Orientation_t Get_Target_Position_Orientation();
@@ -318,18 +349,28 @@ public:
 	void TIM_Robotarm_Disable_PeriodElapsedCallback();
 	//机械臂输出
     void Output();
+		void Judge_DR16_Control_Type();
+  void Control_Chassis();
 protected:
     //初始化相关常量
 
     //常量
+		//键鼠模式按住shift 最大速度缩放系数	
+        float DR16_Mouse_Chassis_Shift = 2.0f;
 		//车在特定位置，各种情况机械臂的角度
-		const float Angle_Pick_Fisrt[6]={90,145,145,0,0,0};
-		const float Angle_Place_Fisrt[6]={45,3,10,0,0,10};
-		const float Angle_Pick_Second[6]={45,145,178,0,0,0};
-		const float Angle_Place_Second[6]={150,178,135,0,0,10};
-    const float Angle_Pick_Third[6]={3,140,170,0,0,0};
-											
-		const	float Angle_On_The_Way[6] = {2.0f,175.0f,180.0f,0.0f,90.0f,0.0f};
+		//取出银矿相关角度
+		//const float Angle_Pick_Fisrt[6]={90,145,145,0,0,5};
+		const float Angle_Pick_Fisrt[6]={70,110,180,0,0,5};
+		const float Angle_Place_Second[6]={45,3,10,0,0,13};
+		//const float Angle_Pick_Second[6]={45,145,178,0,0,5};
+		const float Angle_Pick_Second[6]={70,110,0,0,0,5};
+		const float Angle_Place_Fisrt[6]={150,178,135,0,0,13};
+    	const float Angle_Pick_Third[6]={3,140,170,0,0,0};
+		//取出金矿相关角度		
+		const float Angle_Pick_Gold[6]={50,175,40,0,90,5.0f};
+		
+		//行进过程中角度			
+		const float Angle_On_The_Way[6] = {2.0f,175.0f,180.0f,0.0f,90.0f,0.0f};
     //关节角度限制
     const float Joint_Limit_Angle[2][5] = {{-90.00f,-179.85f,-121.8f,-90.0f,-40.6f},
 										   {91.22f,135.0f,109.88f,90.0f,207.541f}};
@@ -397,7 +438,7 @@ protected:
 	Struct_Custom_Communication_Data Custom_Communication_Data;
 	//Joint坐标系角度
 	float Joint_World_Angle[5] = {0.0f};
-	float Joint_World_Angle_Now[5] = {0.0f};
+	float Joint_World_Angle_Now[6] = {0.0f};
 	// 到达机械限位后的电机角度值，机械臂＋抬升
 	float Joint_Offset_Angle[6] = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f};
 	
@@ -422,11 +463,28 @@ protected:
 	bool Motor_Calibration(Class_DJI_Motor_C610 &Motor,uint8_t num,float Cali_Omega,float Cali_Max_Out,float Target_Angle);
 	bool Motor_Calibration(float Cali_Omega,float Cali_Max_Out);
   bool Motor_Calibration_Uplift(Class_RoRobotic_Arm_Uplift &Uplift,float Cali_Omega,float Cali_Max_Out);
+	
+	Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
+	//键鼠操作相关函数
+  
 };
 
 /* Exported variables --------------------------------------------------------*/
 
 /* Exported function declarations --------------------------------------------*/
+
+
+ /**
+     * @brief 获取DR16控制数据来源
+     * 
+     * @return Enum_DR16_Control_Type DR16控制数据来源
+     */
+
+Enum_DR16_Control_Type Class_Robotarm::Get_DR16_Control_Type()
+    {
+        return (DR16_Control_Type);
+    }
+
 
 /**
  * @brief 获取第Num个Joint的世界坐标系角度

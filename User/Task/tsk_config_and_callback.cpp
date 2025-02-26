@@ -32,7 +32,9 @@
  * @brief TIM开头的默认任务均1ms, 特殊任务需额外标记时间
  *
  */
+#include "config.h"
 
+#ifdef GIMBAL_TASK
 /* Includes ------------------------------------------------------------------*/
 
 #include "tsk_config_and_callback.h"
@@ -42,19 +44,12 @@
 #include "drv_usb.h"
 #include "usbd_cdc.h"
 #include "usbd_cdc_if.h"
-#include "config.h"
+
 //#include "GraphicsSendTask.h"
 //#include "ui.h"
 #include "dvc_GraphicsSendTask.h"
 #include "robotarm_task.h"
 #include "dvc_message.h"
-#include "tsk_config_and_callback.h"
-#include "ita_chariot.h"
-#include "drv_can.h"
-#include "crt_chassis.h"
-//#define gimbal_task
-#define chassis_task
-#ifdef gimbal_task
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -66,10 +61,14 @@ extern Class_Robotarm Robotarm;
 extern Struct_USB_Manage_Object MiniPC_USB_Manage_Object;
 
 Struct_Offline_Controller_Data Offline_Controller_Data;
+
+//Struct_Customize_Controller_Data Customize_Controller_Data;
 //注册发布者
 //Publisher UART1_Controller_Data = Message_Manager.PubRegister("Controller_Data", sizeof(Struct_Offline_Controller_Data));
 
 /* Private function declarations ---------------------------------------------*/
+float tmp_1_5_angle[5] = {2.0f,175.0f,180.0f,0.0f,90.0f};
+float a=0.15;
 
 /* Function prototypes -------------------------------------------------------*/
 
@@ -97,6 +96,11 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
                Robotarm.Motor_Joint5.CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
+						  case (0x05)://
+            {
+                Robotarm.Motor_Joint3.CAN_RxCpltCallback(CAN_RxMessage->Data);
+            }
+            break;
         }
 	}
 	else if(CAN_RxMessage->Header.IDE == CAN_ID_EXT)
@@ -109,13 +113,11 @@ void Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
                 Robotarm.Motor_Joint2.CAN_RxCpltCallback(CAN_RxMessage->Data);
             }
             break;
-            case (0x05)://
-            {
-                Robotarm.Motor_Joint3.CAN_RxCpltCallback(CAN_RxMessage->Data);
-            }
-            break;
+
+          
+          
 				
-						}
+		}
 	}
 	
 }
@@ -135,37 +137,19 @@ void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 	
     switch (temp_id)
     {
-        case 0x01:
-        {
-            Robotarm.Motor_Joint1.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case 0x202:
-        {
-//            Robotarm.Arm_Uplift.CAN_RxCpltCallback(CAN_RxMessage->Data);
-					Robotarm.Chassis_Motor_1.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case (0x203):
+        
+        case 0x203:
         {
             Robotarm.Arm_Uplift.CAN_RxCpltCallback(CAN_RxMessage->Data);
+					
         }
         break;
-        case (0x205):
-        {
-            	Robotarm.Chassis_Motor_2.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-        case (0x206):
-        {
-             	Robotarm.Chassis_Motor_3.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
-				 case (0x204):
-        {
-             	Robotarm.Chassis_Motor_4.CAN_RxCpltCallback(CAN_RxMessage->Data);
-        }
-        break;
+				 case 0x01:
+            {
+            Robotarm.Motor_Joint1.CAN_RxCpltCallback(CAN_RxMessage->Data);
+            }
+            break;
+		
     }
 }
 
@@ -181,16 +165,7 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 
 }
 
-/**
- * @brief UART1图传回调函数
- *
- * @param Buffer UART1收到的消息
- * @param Length 长度
- */
-void Image_UART1_Callback(uint8_t *Buffer, uint16_t Length)
-{
-    Robotarm.DR16.Image_UART_RxCpltCallback(Buffer);
-}
+
 
 
 
@@ -249,6 +224,21 @@ void UART1_Offline_Controller_Callback(uint8_t *Buffer, uint16_t Length)
     }
 }
 /**
+ * @brief UART1图传回调函数
+ *
+ * @param Buffer UART1收到的消息
+ * @param Length 长度
+ */
+void Image_UART1_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    Robotarm.DR16.Image_UART_RxCpltCallback(Buffer);
+//    for(uint8_t i=0; i<5; i++)
+//    {
+//        Customize_Controller_Data.Angle[i] = Robotarm.DR16.Get_Angle_Image(i);
+//    }
+
+}
+/**
  * @brief USB MiniPC回调函数
  *
  * @param Buffer USB收到的消息
@@ -276,6 +266,8 @@ void Task100us_TIM4_Callback()
  *
  */
 #define DEBUG_REMOTE
+#define IMAGE_REMOTE
+//#define OFFLINE_REMOTE
 #define DEBUG_REMOTE_SPEED_1 1.f
 #define DEBUG_REMOTE_SPEED_2 1.f
 //注册订阅者
@@ -284,12 +276,22 @@ float debug_test_angle[5];
 float debug_test_k = 1.0f;
 
 void Set_Joint_1_5_Angle_Init_Data()
-{
+{		
+	 
+    #ifdef OFFLINE_REMOTE
     for (auto  i = 0; i < 5; i++)
     {
         Robotarm.Jonit_AngleInit[i] = Offline_Controller_Data.Angle[i];
     }
-		Robotarm.Jonit_AngleInit[4]=Robotarm.Jonit_AngleInit[4]*2;
+    #endif
+    #ifdef IMAGE_REMOTE
+    for (auto  i = 0; i < 5; i++)
+    {
+        Robotarm.Jonit_AngleInit[i] = Robotarm.DR16.Customize_Controller_Data.Angle[i];
+    }
+	//	Robotarm.Jonit_AngleInit[4]=Robotarm.Jonit_AngleInit[4]*2;
+    #endif
+     memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
     #ifdef DEBUG_REMOTE
 //    debug_test_angle[0]+=Robotarm.DR16.Get_Right_X()*DEBUG_REMOTE_SPEED_1;
 //    debug_test_angle[1]+=Robotarm.DR16.Get_Right_Y()*DEBUG_REMOTE_SPEED_2;
@@ -297,16 +299,18 @@ void Set_Joint_1_5_Angle_Init_Data()
 //    Robotarm.Jonit_AngleInit[1]=debug_test_angle[1];
 //		debug_test_angle[2]+=Robotarm.DR16.Get_Right_Y()*debug_test_k;
 //		Robotarm.Jonit_AngleInit[2]=debug_test_angle[2];
+//Robotarm.Robotarm_Resolution.Get_Now_Status_Serial()==
     #endif
-    Math_Constrain(Robotarm.Jonit_AngleInit[0], 0.f, 180.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[1], 0.f, 180.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[2], 0.f, 180.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[3], 0.f, 175.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[4], 0.f, 175.f);
+    if((Robotarm.Relay1.Get_Open_flag()==1)&&(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN))
+    Math_Constrain(Robotarm.Jonit_AngleInit[0], 2.f, 178.f);
+    Math_Constrain(Robotarm.Jonit_AngleInit[1], 2.f, 178.f);
+    Math_Constrain(Robotarm.Jonit_AngleInit[2], -25.f, 205.f);
+    Math_Constrain(Robotarm.Jonit_AngleInit[3], 0.f, 180.f);
+    Math_Constrain(Robotarm.Jonit_AngleInit[4], 0.f, 180.f);
 }
 
-float tmp_1_5_angle[5] = {2.0f,175.0f,180.0f,0.0f,90.0f};
-float a=0.15;
+
+
 void Task1ms_TIM5_Callback()
 {
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
@@ -316,8 +320,6 @@ void Task1ms_TIM5_Callback()
     {
         Robotarm.Task_Alive_PeriodElapsedCallback();
         TIM1msMod50 = 0;
-			
-			//	Robotarm.Init();
     }
 
     // 遥控器控制
@@ -326,19 +328,38 @@ void Task1ms_TIM5_Callback()
     case DR16_Status_ENABLE:
     {
         if (!Robotarm.init_finished)
-					{ Robotarm.init_finished = Robotarm.Robotarm_Calibration();
-					Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Calibration);
-					}
+			{ Robotarm.init_finished = Robotarm.Robotarm_Calibration();
+			Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Calibration);
+			}
         else if (Robotarm.init_finished)
         {
             switch (Robotarm.DR16.Get_Right_Switch())
             {
             case (DR16_Switch_Status_DOWN): // 当遥控器右拨杆朝下的时候使能自定义控制器控制
-            {
-                Set_Joint_1_5_Angle_Init_Data();
-							 if (huart1.ErrorCode){
-							 UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);//如果串口错误，重启使能串口
-								}
+            {			
+									Robotarm.Motor_Joint4.PID_Angle.Set_K_P(18);
+									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(16);
+									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(18);
+									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(16);
+									Set_Joint_1_5_Angle_Init_Data();
+									if (huart1.ErrorCode)
+                                    {
+										#ifdef OFFLINE_REMOTE
+										UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);//如果串口错误，重启使能串口
+								    #endif
+										#ifdef IMAGE_REMOTE
+										UART_Init(&huart1, Image_UART1_Callback, 40);//如果串口错误，重启使能串口
+										#endif
+										}
+									if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_UP)//抬升高度控制，在自定义控制器控制模式下通过左拨杆控制抬升高度
+									{Robotarm.Arm_Uplift.Target_Up_Length+=0.0025;}
+									else if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)
+									{Robotarm.Arm_Uplift.Target_Up_Length-=0.0025;}
+									if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_MIDDLE)
+  									{Robotarm.Arm_Uplift.Target_Up_Length=Robotarm.Arm_Uplift.Actual_Up_Length;}
+									
+									Math_Constrain(Robotarm.Arm_Uplift.Target_Up_Length,0.f,25.f);
+										
 						}
             break;
             case (DR16_Switch_Status_UP): // 当遥控器右拨杆朝上的时候使能miniPC控制
@@ -348,42 +369,62 @@ void Task1ms_TIM5_Callback()
 //                else
 //                    Robotarm.MiniPc.Transform_Angle_Rx(Robotarm.Jonit_AngleInit);
 //							
-							Robotarm.Robotarm_Resolution.Reload_Task_Status_PeriodElapsedCallback();
+									Robotarm.Motor_Joint4.PID_Angle.Set_K_P(22);
+									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(20);
+									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(22);
+									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(20);
+									Robotarm.Robotarm_Resolution.Reload_Task_Status_PeriodElapsedCallback();//状态机调试入口
 							
-//														Robotarm.Jonit_AngleInit[3]+=Robotarm.DR16.Get_Right_X()*a;
-//							Robotarm.Jonit_AngleInit[4]+=Robotarm.DR16.Get_Right_Y()*a;
-//							if(Robotarm.Jonit_AngleInit[3]>120)Robotarm.Jonit_AngleInit[3]=120;
-//							if(Robotarm.Jonit_AngleInit[3]<-120)Robotarm.Jonit_AngleInit[3]=-120;
-//							if(Robotarm.Jonit_AngleInit[4]>120)Robotarm.Jonit_AngleInit[4]=120;
-//							if(Robotarm.Jonit_AngleInit[4]<-120)Robotarm.Jonit_AngleInit[4]=-120;
+
+            }
+            break;
+            case (DR16_Switch_Status_MIDDLE)://右拨杆为中时保持行进姿态
+            {
+                Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Wait_Order);
+                 memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
+                Robotarm.Arm_Uplift.Target_Up_Length=0;
             }
             break;
             default:
             {
              memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
+             Robotarm.Arm_Uplift.Target_Up_Length=0;
             }
             break;
             }
-					
-						Robotarm.Output();
-					}
-		}
+					if(Robotarm.DR16.Get_Right_Y()>0.8)//气泵继电器临时控制
+                    {Robotarm.Relay1.Set_Open_flag(1);}
+                    else if(Robotarm.DR16.Get_Right_Y()<-0.8)
+                    {Robotarm.Relay1.Set_Open_flag(0);}
+					if(Robotarm.Relay1.Get_Open_flag()==1)
+					{HAL_GPIO_WritePin(GPIOE,GPIO_PIN_11,GPIO_PIN_SET);}
+					else 
+					{HAL_GPIO_WritePin(GPIOE,GPIO_PIN_11,GPIO_PIN_RESET);}
+						
+						
+						
+			Robotarm.Output();
+		} 
+	}
     break;
     case DR16_Status_DISABLE:
     {
         Robotarm.TIM_Robotarm_Disable_PeriodElapsedCallback();
         Robotarm.init_finished = false;
     }
-    break;
-		}
+     break;
+	}
+
 		
-//    // 控制底盘任务
-     Robotarm.Control_Chassis_Task();
+    // 控制底盘任务
+	  Robotarm.Judge_DR16_Control_Type();
+    Robotarm.Control_Chassis_Task();
     Robotarm.CAN_Gimbal_Tx_Chassis();
     // 机械臂任务善后函数
     Robotarm.TIM_Robotarm_Task_PeriodElapsedCallback();
     // 发送CAN数据
     TIM_CAN_PeriodElapsedCallback();
+
     // 订阅者获取消息
     // Message_Manager.SubGet_Message<float>(Task_Sub_Joint5_angle, joint5_test_angle);
 
@@ -392,6 +433,8 @@ void Task1ms_TIM5_Callback()
     /****************************** 驱动层回调函数 1ms *****************************************/
     // 统一打包发送
     //    TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+
+
 }
 /**
  * @brief 初始化任务
@@ -420,7 +463,13 @@ extern "C" void Task_Init()
     UART_Init(&huart3, DR16_UART3_Callback, 18);
   
     //UART_Init(&huart1, Image_UART1_Callback, 40);
-    UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);
+    //UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);
+	#ifdef OFFLINE_REMOTE
+	UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);//如果串口错误，重启使能串口
+	#endif
+	#ifdef IMAGE_REMOTE
+	UART_Init(&huart1, Image_UART1_Callback, 40);//如果串口错误，重启使能串口
+	#endif
 
     //定时器循环任务
     TIM_Init(&htim4, Task100us_TIM4_Callback);
@@ -438,7 +487,7 @@ extern "C" void Task_Init()
 
     HAL_TIM_Base_Start_IT(&htim4);
     HAL_TIM_Base_Start_IT(&htim5);
-    
+		
 }
 
 /**
@@ -449,36 +498,39 @@ extern "C" void Task_Loop()
 {
 
 }
-
-/************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
 #endif
-#ifdef chassis_task
-
+#ifdef CHASSIS_TASK
+#include "drv_tim.h"
+#include "drv_can.h"
+#include "task_callback_and_config.h"
+#include "ita_chariot.h"
 Class_Chariot chariot;
 uint32_t init_finished = 0;
 uint8_t start_flag = 0;
+
+
 void Chariot_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
     case (0x201):
     {
-        chariot.chassis.Motor_Wheel[0].CAN_RxCpltCallback(CAN_RxMessage->Data);
+       chariot.chassis.Motor_Wheel[0].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x202):
     {
-        chariot.chassis.Motor_Wheel[1].CAN_RxCpltCallback(CAN_RxMessage->Data);
+       chariot.chassis.Motor_Wheel[1].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x203):
     {
-        chariot.chassis.Motor_Wheel[2].CAN_RxCpltCallback(CAN_RxMessage->Data);
+       chariot.chassis.Motor_Wheel[2].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x204):
     {
-        chariot.chassis.Motor_Wheel[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
+       chariot.chassis.Motor_Wheel[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     }
@@ -493,30 +545,15 @@ void Chariot_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     }
     case (0x088):
     {
-        chariot.CAN_Chassis_Rx_Gimbal_Callback();
+       chariot.CAN_Chassis_Rx_Gimbal_Callback();
 			
     }
     break;
     break;
     }
 }
-void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
-{
-        for (auto i = 0; i < 4; i++)
-        {
-            chassis.Motor_Wheel[i].TIM_Alive_PeriodElapsedCallback();
-        }
-        TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
-				if(chariot.Gimbal_Status == Gimbal_Status_DISABLE)
-				{
-					chariot.chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-				}
-}
 
-float Motor_Target_Speed;
 uint8_t mod50_cnt = 0;
-//循环任务
-//12.25日
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -542,6 +579,6 @@ extern "C" void Task_Init()
     chariot.Init();
 	
 		HAL_TIM_Base_Start_IT(&htim5);
-	
 }
 #endif
+

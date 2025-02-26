@@ -303,6 +303,51 @@ void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
 }
 
 /**
+ * @brief 数据处理过程
+ *
+ */
+void Class_DR16::Image_Data_Process_Customer_controller(uint8_t* __rx_buffer)
+{
+    //获取当前原始值数据
+    memcpy(&Now_UART_Image_Rx_Data_Customer_controller, __rx_buffer,sizeof(Struct_Image_UART_Data_Customer_controller));
+    //数据处理过程
+    Struct_Image_UART_Data_Customer_controller *tmp_buffer = (Struct_Image_UART_Data_Customer_controller *)__rx_buffer;
+
+    /*源数据转为对外数据*/
+//    for (int i = 0; i < 5; i++)
+//    {
+//    memcpy(&Angle_Image[i],&tmp_buffer[3*i],2);
+//    memcpy(&total_round[i],&tmp_buffer[3*i+2],1);
+//    Angle_Image[i]=Angle_Image[i]/100.f;
+//    }
+//	        for(uint8_t i=0; i<5; i++)
+//        {
+//            int16_t temp = (tmp_buffer->Data[3*i+1]<<8) | tmp_buffer->Data[3*i];
+//            Angle_Image[i] = temp/100.f;
+//        }
+//	    
+	
+	
+//	int16_t IntAngle;
+//    int8_t total_round;
+//	for(uint8_t i=0;i<5;i++)
+//  {
+
+//		memcpy(&IntAngle,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i],2);
+//    memcpy(&total_round,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i+2],1);
+//		Angle_Image[i]=(float)(IntAngle/100.f);
+
+//  }
+	for(uint8_t i=0; i<5; i++)
+        {
+            int16_t temp = (Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+2]<<8) | Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+1];
+            Angle_Image[i] = temp/100.f;
+        }
+	
+    //memcpy(&Customer_controller,&tmp_buffer,15);
+   
+}
+/**
  * @brief UART通信接收回调函数
  *
  * @param Rx_Data 接收的数据
@@ -342,6 +387,19 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
             //保留上一次数据
             memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[7], sizeof(Struct_Image_UART_Data));            
         }
+        else if ((cmd_id == 0x0302)&& (data_length == 30))// && data_length == 30
+        {
+				 for(uint8_t i=0; i<5; i++)
+        {
+            int16_t temp = (Rx_Data[2*i+8]<<8) | (Rx_Data[2*i+7]);
+            Customize_Controller_Data.Angle[i] = float(temp/100.f);
+        }
+//            Image_Flag_Customer_controller += 1;
+//            Image_Data_Process_Customer_controller(&Rx_Data[7]);
+//            //保留上一次数据
+//            memcpy(&Pre_UART_Image_Rx_Data_Customer_controller, &Rx_Data[7], sizeof(Struct_Image_UART_Data_Customer_controller));     
+        }
+        
     }
 }
 
