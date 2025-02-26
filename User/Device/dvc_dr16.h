@@ -112,6 +112,44 @@ struct Struct_Image_UART_Data
 } __attribute__((packed)); 
 
 /**
+ * @brief 图传自定义控制器源数据
+ *
+ */
+struct Struct_Customer_controller
+{ 
+   int16_t Angle_1;
+   int8_t total_round1;
+   int16_t Angle_2; 
+   int8_t total_round2;
+   int16_t Angle_3;
+   int8_t total_round3;
+   int16_t Angle_4;
+   int8_t total_round4;
+   int16_t Angle_5;
+   int8_t total_round5;
+	
+} __attribute__((packed)); 
+
+struct Struct_Image_UART_Data_Customer_controller
+{ 
+//   int16_t Angle_1;
+//   int8_t total_round1;
+//   int16_t Angle_2; 
+//   int8_t total_round2;
+//   int16_t Angle_3;
+//   int8_t total_round3;
+//   int16_t Angle_4;
+//   int8_t total_round4;
+//   int16_t Angle_5;
+//   int8_t total_round5;
+   int8_t Data[30];
+} __attribute__((packed)); 
+
+struct Struct_Customize_Controller_Data
+{
+  float Angle[5];
+}__attribute__((packed));
+/**
  * @brief DR16源数据
  *
  */
@@ -174,6 +212,8 @@ public:
     inline float Get_Mouse_X();
     inline float Get_Mouse_Y();
     inline float Get_Mouse_Z();
+    inline float Get_Angle_Image(int i);
+			inline void Set_Angle_Image(uint8_t num,float angle);
     inline Enum_DR16_Key_Status Get_Mouse_Left_Key();
     inline Enum_DR16_Key_Status Get_Mouse_Right_Key();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_W();
@@ -197,8 +237,9 @@ public:
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
     void Image_UART_RxCpltCallback(uint8_t *Rx_Data);
-    
+
     void TIM1msMod50_Alive_PeriodElapsedCallback();
+Struct_Customize_Controller_Data Customize_Controller_Data;
 
     
 protected:
@@ -224,6 +265,11 @@ protected:
     Struct_Image_UART_Data Now_UART_Image_Rx_Data;
     Struct_Image_UART_Data Pre_UART_Image_Rx_Data;
 
+    Struct_Image_UART_Data_Customer_controller Now_UART_Image_Rx_Data_Customer_controller;
+    Struct_Image_UART_Data_Customer_controller Pre_UART_Image_Rx_Data_Customer_controller;
+		
+		Struct_Customer_controller Customer_controller;
+		
     //当前时刻的遥控器接收flag
     uint32_t DR16_Flag = 0;
     //前一时刻的遥控器接收flag
@@ -233,6 +279,11 @@ protected:
     uint32_t Image_Flag = 0;
     //前一时刻的遥控器接收flag
     uint32_t Pre_Image_Flag = 0;
+
+    //当前时刻的遥控器接收flag
+    uint32_t Image_Flag_Customer_controller = 0;
+    //前一时刻的遥控器接收flag
+    uint32_t Pre_Image_Flag_Customer_controller = 0;
 
     //遥控器50ms离线次数
     uint16_t Unline_Cnt = 0;
@@ -250,7 +301,8 @@ protected:
     //写变量
 
     //读写变量
-
+    float Angle_Image[5];
+    int16_t total_round[5];
     //内部函数
 
     void Judge_Switch(Enum_DR16_Switch_Status *Switch, uint8_t Status, uint8_t Pre_Status);
@@ -258,6 +310,8 @@ protected:
     void Judge_Updata(Struct_DR16_UART_Data Pre_UART_Rx_Data,Struct_DR16_UART_Data Now_UART_Rx_Data);
     void DR16_Data_Process();
     void Image_Data_Process(uint8_t* __rx_buffer);
+    void Image_Data_Process_Customer_controller(uint8_t* __rx_buffer);
+    
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -564,6 +618,14 @@ float Class_DR16::Get_Yaw()
     return (Data.Yaw);
 }
 
+float Class_DR16::Get_Angle_Image(int i)
+{
+    return (Angle_Image[i]);
+}
+void Class_DR16::Set_Angle_Image(uint8_t num,float angle)
+{
+   Angle_Image[num]=angle;
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

@@ -1,14 +1,3 @@
-# 输出文件
-infantry/
-# keil debug配置文件
-DebugConfig/
-
-RTE/
-
-* MDK-ARM.code-workspace
-*.eide.usr.ctx.json
-*.clang-format
-
 *.rar
 *.o
 *.d
@@ -25,10 +14,12 @@ RTE/
 *.scvd
 *.dbg*
 
-MDK-ARM/JLinkLog.txt
+#Ozone jlink log
+*JLinkLog.txt
 *.jdebug
 *.jdebug.*
 
+#调试/输出文件
 *.axf
 *.exf
 *.elf
@@ -37,6 +28,26 @@ MDK-ARM/JLinkLog.txt
 *.uvoptx
 *.uvguix.*
 *.mxproject
+*.uvguix
+
+# eide 编译输出配置文件
+*.eide.usr.ctx.json
+infantry.files.options.yml
+
+# eide 插件下载的工程文件夹
+*.cmsis/
+
+# eide 插件下载的支持包
+*.pack/
+
+# 格式化文件
+*.clang-format
+
+# 输出文件
+infantry/
+
+# keil debug配置文件
+DebugConfig/
 
 
 

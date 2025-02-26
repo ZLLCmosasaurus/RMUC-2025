@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State and Errors functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -94,9 +105,9 @@
      [..]
       (#) The compilation define  USE_HAL_DMA2D_REGISTER_CALLBACKS when set to 1
           allows the user to configure dynamically the driver callbacks.
-          Use function HAL_DMA2D_RegisterCallback() to register a user callback.
+          Use function @ref HAL_DMA2D_RegisterCallback() to register a user callback.
 
-      (#) Function HAL_DMA2D_RegisterCallback() allows to register following callbacks:
+      (#) Function @ref HAL_DMA2D_RegisterCallback() allows to register following callbacks:
             (+) XferCpltCallback : callback for transfer complete.
             (+) XferErrorCallback : callback for transfer error.
             (+) LineEventCallback : callback for line event.
@@ -106,9 +117,9 @@
           This function takes as parameters the HAL peripheral handle, the Callback ID
           and a pointer to the user callback function.
 
-      (#) Use function HAL_DMA2D_UnRegisterCallback() to reset a callback to the default
-          weak (surcharged) function.
-          HAL_DMA2D_UnRegisterCallback() takes as parameters the HAL peripheral handle,
+      (#) Use function @ref HAL_DMA2D_UnRegisterCallback() to reset a callback to the default
+          weak (overridden) function.
+          @ref HAL_DMA2D_UnRegisterCallback() takes as parameters the HAL peripheral handle,
           and the Callback ID.
           This function allows to reset following callbacks:
             (+) XferCpltCallback : callback for transfer complete.
@@ -118,45 +129,34 @@
             (+) MspInitCallback    : DMA2D MspInit.
             (+) MspDeInitCallback  : DMA2D MspDeInit.
 
-      (#) By default, after the HAL_DMA2D_Init and if the state is HAL_DMA2D_STATE_RESET
-          all callbacks are reset to the corresponding legacy weak (surcharged) functions:
-          examples HAL_DMA2D_LineEventCallback(), HAL_DMA2D_CLUTLoadingCpltCallback()
+      (#) By default, after the @ref HAL_DMA2D_Init and if the state is HAL_DMA2D_STATE_RESET
+          all callbacks are reset to the corresponding legacy weak (overridden) functions:
+          examples @ref HAL_DMA2D_LineEventCallback(), @ref HAL_DMA2D_CLUTLoadingCpltCallback()
           Exception done for MspInit and MspDeInit callbacks that are respectively
-          reset to the legacy weak (surcharged) functions in the HAL_DMA2D_Init
-          and HAL_DMA2D_DeInit only when these callbacks are null (not registered beforehand)
-          If not, MspInit or MspDeInit are not null, the HAL_DMA2D_Init and HAL_DMA2D_DeInit
+          reset to the legacy weak (overridden) functions in the @ref HAL_DMA2D_Init
+          and @ref HAL_DMA2D_DeInit only when these callbacks are null (not registered beforehand)
+          If not, MspInit or MspDeInit are not null, the @ref HAL_DMA2D_Init and @ref HAL_DMA2D_DeInit
           keep and use the user MspInit/MspDeInit callbacks (registered beforehand).
 
           Exception as well for Transfer Completion and Transfer Error callbacks that are not defined
-          as weak (surcharged) functions. They must be defined by the user to be resorted to.
+          as weak (overridden) functions. They must be defined by the user to be resorted to.
 
           Callbacks can be registered/unregistered in READY state only.
           Exception done for MspInit/MspDeInit callbacks that can be registered/unregistered
           in READY or RESET state, thus registered (user) MspInit/DeInit callbacks can be used
           during the Init/DeInit.
           In that case first register the MspInit/MspDeInit user callbacks
-          using HAL_DMA2D_RegisterCallback before calling HAL_DMA2D_DeInit
-          or HAL_DMA2D_Init function.
+          using @ref HAL_DMA2D_RegisterCallback before calling @ref HAL_DMA2D_DeInit
+          or @ref HAL_DMA2D_Init function.
 
           When The compilation define USE_HAL_DMA2D_REGISTER_CALLBACKS is set to 0 or
           not defined, the callback registering feature is not available
-          and weak (surcharged) callbacks are used.
+          and weak (overridden) callbacks are used.
 
      [..]
       (@) You can refer to the DMA2D HAL driver header file for more useful macros
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -422,7 +422,7 @@ __weak void HAL_DMA2D_MspDeInit(DMA2D_HandleTypeDef *hdma2d)
 #if (USE_HAL_DMA2D_REGISTER_CALLBACKS == 1)
 /**
   * @brief  Register a User DMA2D Callback
-  *         To be used instead of the weak (surcharged) predefined callback
+  *         To be used instead of the weak (overridden) predefined callback
   * @param hdma2d DMA2D handle
   * @param CallbackID ID of the callback to be registered
   *        This parameter can be one of the following values:
@@ -521,7 +521,7 @@ HAL_StatusTypeDef HAL_DMA2D_RegisterCallback(DMA2D_HandleTypeDef *hdma2d, HAL_DM
 
 /**
   * @brief  Unregister a DMA2D Callback
-  *         DMA2D Callback is redirected to the weak (surcharged) predefined callback
+  *         DMA2D Callback is redirected to the weak (overridden) predefined callback
   * @param hdma2d DMA2D handle
   * @param CallbackID ID of the callback to be unregistered
   *        This parameter can be one of the following values:
@@ -562,11 +562,11 @@ HAL_StatusTypeDef HAL_DMA2D_UnRegisterCallback(DMA2D_HandleTypeDef *hdma2d, HAL_
         break;
 
       case HAL_DMA2D_MSPINIT_CB_ID :
-        hdma2d->MspInitCallback = HAL_DMA2D_MspInit; /* Legacy weak (surcharged) Msp Init */
+        hdma2d->MspInitCallback = HAL_DMA2D_MspInit; /* Legacy weak (overridden) Msp Init */
         break;
 
       case HAL_DMA2D_MSPDEINIT_CB_ID :
-        hdma2d->MspDeInitCallback = HAL_DMA2D_MspDeInit; /* Legacy weak (surcharged) Msp DeInit */
+        hdma2d->MspDeInitCallback = HAL_DMA2D_MspDeInit; /* Legacy weak (overridden) Msp DeInit */
         break;
 
       default :
@@ -582,11 +582,11 @@ HAL_StatusTypeDef HAL_DMA2D_UnRegisterCallback(DMA2D_HandleTypeDef *hdma2d, HAL_
     switch (CallbackID)
     {
       case HAL_DMA2D_MSPINIT_CB_ID :
-        hdma2d->MspInitCallback = HAL_DMA2D_MspInit;   /* Legacy weak (surcharged) Msp Init */
+        hdma2d->MspInitCallback = HAL_DMA2D_MspInit;   /* Legacy weak (overridden) Msp Init */
         break;
 
       case HAL_DMA2D_MSPDEINIT_CB_ID :
-        hdma2d->MspDeInitCallback = HAL_DMA2D_MspDeInit;  /* Legacy weak (surcharged) Msp DeInit */
+        hdma2d->MspDeInitCallback = HAL_DMA2D_MspDeInit;  /* Legacy weak (overridden) Msp DeInit */
         break;
 
       default :
@@ -2124,5 +2124,3 @@ static void DMA2D_SetConfig(DMA2D_HandleTypeDef *hdma2d, uint32_t pdata, uint32_
   */
 #endif /* DMA2D */
 #endif /* HAL_DMA2D_MODULE_ENABLED */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

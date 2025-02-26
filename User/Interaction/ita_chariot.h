@@ -1,8 +1,16 @@
-#ifndef _ITA_CHARIOT_H_
-#define _ITA_CHARIOT_H_
-#ifdef __cplusplus
-#include "crt_booster.h"
-#include "crt_gimbal.h"
+/**
+ * @file ita_chariot.h
+ * @author yssickjgd (yssickjgd@mail.ustc.edu.cn)
+ * @brief 人机交互控制逻辑
+ * @version 0.1
+ * @date 2024-07-1 0.1 24赛季定稿
+ *
+ * @copyright ZLLC 2024
+ *
+ */
+
+
+/* Includes ------------------------------------------------------------------*/
 #include "dvc_dr16.h"
 #include "drv_uart.h"
 #include "drv_math.h"
@@ -18,6 +26,28 @@ enum Enum_Gimbal_Status_
 {
     Gimbal_Status_DISABLE = 0,
     Gimbal_Status_ENABLE = 1,
+};
+/**
+ * @brief DR16控制数据来源
+ *
+ */
+
+enum Enum_DR16_Control_Type
+{
+    DR16_Control_Type_REMOTE = 0,
+    DR16_Control_Type_KEYBOARD,
+};
+
+/**
+ * @brief 机器人是否离线 控制模式有限自动机
+ *
+ */
+class Class_FSM_Alive_Control : public Class_FSM
+{
+public:
+    Class_Chariot *Chariot;
+
+    void Reload_TIM_Statu_PeriodElapsedCallback();
 };
 
 class Class_Chariot
@@ -41,6 +71,6 @@ protected:
     //内部函数
     void Control_Chassis();
 };
+
+
 #define DR16_Yaw_Angle_Resolution  0.005f * PI * 57.29577951308232
-#endif
-#endif

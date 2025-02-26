@@ -1,14 +1,41 @@
+/**
+ * @file crt_chassis.h
+ * @author lez by wanghongxi
+ * @brief 底盘
+ * @version 0.1
+ * @date 2024-07-1 0.1 24赛季定稿
+ *
+ * @copyright ZLLC 2024
+ *
+ */
+
+/**
+ * @brief 轮组编号
+ * 3 2
+ *  1
+ */
+
 #ifndef CRT_CHASSIS_H
 #define CRT_CHASSIS_H
-#ifdef __cplusplus
 
-#include "dvc_djimotor.h"
+/* Includes ------------------------------------------------------------------*/
+
 #include "alg_slope.h"
+#include "dvc_sampler.h"
+#include "dvc_referee.h"
+#include "dvc_djimotor.h"
+#include "alg_power_limit.h"
+#include "dvc_supercap.h"
+#include "config.h"
+/* Exported macros -----------------------------------------------------------*/
+
+/* Exported types ------------------------------------------------------------*/
+
 /**
  * @brief 底盘冲刺状态枚举
  *
  */
-enum Enum_Sprint_Status 
+enum Enum_Sprint_Status : uint8_t
 {
     Sprint_Status_DISABLE = 0, 
     Sprint_Status_ENABLE,
@@ -19,7 +46,7 @@ enum Enum_Sprint_Status
  * @brief 底盘控制类型
  *
  */
-enum Enum_Chassis_Control_Type 
+enum Enum_Chassis_Control_Type :uint8_t
 {
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
@@ -35,14 +62,14 @@ class Class_Tricycle_Chassis
 {
 public:
 
-//    //斜坡函数加减速速度X
+    //斜坡函数加减速速度X
     Class_Slope Slope_Velocity_X;
-//    //斜坡函数加减速速度Y
+    //斜坡函数加减速速度Y
     Class_Slope Slope_Velocity_Y;
-//    //斜坡函数加减速角速度
+    //斜坡函数加减速角速度
     Class_Slope Slope_Omega;
 
-//    Class_Supercap Supercap;
+    Class_Supercap Supercap;
     #ifdef POWER_LIMIT
     
     //功率限制
@@ -51,12 +78,12 @@ public:
     
     #endif
     //裁判系统
-//    Class_Referee *Referee;
+    Class_Referee *Referee;
 
     //下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 
-    void Init(float __Velocity_X_Max = 3.0f, float __Velocity_Y_Max = 3.0f, float __Omega_Max = 3.0f, float __Steer_Power_Ratio = 0.5);
+    void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
 
     inline Enum_Chassis_Control_Type Get_Chassis_Control_Type();
     inline float Get_Velocity_X_Max();
@@ -123,7 +150,7 @@ protected:
     float Now_Wheel_Power = 0.0f;
     //可使用的轮向电机功率
     float Target_Wheel_Power = 0.0f;
- 
+
     //写变量
 
     //读写变量
@@ -173,10 +200,10 @@ const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -F
 const float WHELL_DIAMETER = 0.13f;	
 
 //底盘半宽 单位m
-const float HALF_WIDTH = 0.58f/2.0f;		
+const float HALF_WIDTH = 0.15f;		
 
 //底盘半长 单位m
-const float HALF_LENGTH = 0.58f/2.0f;	
+const float HALF_LENGTH = 0.15f;	
 
 //转速转角速度	1 rpm = 2pi/60 rad/s 
 const float RPM2RAD = 0.104720f;				
@@ -414,5 +441,8 @@ void Class_Tricycle_Chassis::Set_Velocity_X_Max(float __Velocity_X_Max)
 {
     Velocity_X_Max = __Velocity_X_Max;
 }
+
+
 #endif
-#endif
+
+/************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

@@ -2,7 +2,7 @@
 
 void Class_Chariot::Init()
 {
-    chassis.Init(0.5f,3.0f,2.0f);
+    chassis.Init(1.0f,3.0f,2.0f);
 }
 
 
@@ -12,6 +12,18 @@ void Class_Chariot::Control_Chassis()
 
 void Class_Chariot::TIM_Control_Callback()
 {
+}
+void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
+{
+        for (auto i = 0; i < 4; i++)
+        {
+            chassis.Motor_Wheel[i].TIM_Alive_PeriodElapsedCallback();
+        }
+        TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+				if(Gimbal_Status == Gimbal_Status_DISABLE)
+				{
+					chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+				}
 }
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 {
