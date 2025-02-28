@@ -207,37 +207,59 @@ void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
  * @brief TIM5任务回调函数
  *
  */
-float test_yaw,test_tension,test_angle;
 extern "C" void Control_Task_Callback()
 {
+
     static uint8_t tx_cnt = 0;
     tx_cnt++;
+
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     
     chariot.TIM5msMod10_Alive_PeriodElapsedCallback();
 
     /****************************** 交互层回调函数 1ms *****************************************/
-
     chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-    chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
+    // chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
 
     if(chariot.DR16.Get_DR16_Status() == DR16_Status_DISABLE)
     {
         // 遥控器控制
         
     }
- 
+    chariot.Updata_Switch_Status();
+
+    chariot.Updata_Distance_Angle();
+
+    chariot.Updata_Motor_Left_Right_Offset();
+
+    chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
+
+    chariot.TIM_Calculate_PeriodElapsedCallback();
+
+
+    // if(chariot.Calibrate()){
+    //     chariot.Test_Tension();
+    // }
+    
+    // chariot.Test_PID();
+
+    //测试6020 速度环
+    // chariot.Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+    // chariot.Motor_Yaw.Set_Target_Omega_Angle(Test_Target_Omega);
+    // chariot.Motor_Yaw.TIM_PID_PeriodElapsedCallback();
+
+
     /****************************** 驱动层回调函数 1ms *****************************************/ 
     //统一打包发送
     TIM_CAN_PeriodElapsedCallback();
 
     // debug 发送
-    if(tx_cnt=100)
+    if(tx_cnt==10)
     {   
         if(chariot.DebugControl.Debug_Start_Flag)
         {
             //20hz
-            chariot.DebugControl.DebugControl_Tx_Callback(test_yaw,test_tension);
+            chariot.DebugControl.DebugControl_Tx_Callback(chariot.Motor_Yaw.Get_Now_Angle(),chariot.Now_Distance_Motor_Down);
             TIM_UART_PeriodElapsedCallback();
             tx_cnt = 0;            
         }
@@ -251,6 +273,13 @@ extern "C" void Control_Task_Callback()
  */
 void Motor_Callback()
 {
+    switch(CAN2_Manage_Object.Rx_Buffer.Header.StdId){
+        case(0x205):
+        {
+            chariot.Motor_Yaw.CAN_RxCpltCallback(CAN2_Manage_Object.Rx_Buffer.Data);
+        }
+        break;
+    }
     switch (CAN1_Manage_Object.Rx_Buffer.Header.StdId)
     {   
         case (0x201):   
@@ -271,11 +300,6 @@ void Motor_Callback()
         case (0x204):
         {
             chariot.Motor_Right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
-        }
-        break;
-        case (0x205):
-        {
-            chariot.Motor_Yaw.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
         default:
@@ -325,6 +349,7 @@ void Pull_Measure_Callback()
 extern "C" void Task_Init()
 {  
 
+    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_SET);
     DWT_Init(168);
 
     /********************************** 驱动层初始化 **********************************/

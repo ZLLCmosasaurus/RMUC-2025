@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_TensionMeter.h"
-
+#include <arm_math.h>
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -107,6 +107,7 @@ void Class_TensionMeter::Read_Raw_Data(void)
         SCK_HIGH();
         SCK_LOW();
 
+        //Pre_Raw_Data = Raw_Data;
         Raw_Data = data ^ 0x800000; // 如果最高位为负数标志，转化为有符号值
     }
 }

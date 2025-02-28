@@ -101,6 +101,9 @@ struct Struct_DM_Motor_Rx_Data
     uint16_t Pre_Position;
     int32_t Total_Position;
     int32_t Total_Round;
+
+    int16_t Start_encoder = 0;
+    int32_t Total_Delta_Encoder = 0;
 };
 
 /**

@@ -314,13 +314,15 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
-        Target_Torque = PID_Omega.Get_Out();
+        Out = PID_Omega.Get_Out();
 
-        PID_Torque.Set_Target(Target_Torque);
-        PID_Torque.Set_Now(Data.Now_Torque);
-        PID_Torque.TIM_Adjust_PeriodElapsedCallback();
+        // Target_Torque = PID_Omega.Get_Out();
 
-        Out = PID_Torque.Get_Out();
+        // PID_Torque.Set_Target(Target_Torque);
+        // PID_Torque.Set_Now(Data.Now_Torque);
+        // PID_Torque.TIM_Adjust_PeriodElapsedCallback();
+
+        // Out = PID_Torque.Get_Out();
     }
     break;
     case (DJI_Motor_Control_Method_ANGLE):
@@ -335,6 +337,9 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.Set_Now(Data.Now_Omega_Angle);
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
+        Out = PID_Omega.Get_Out();
+
+        /*
         Target_Torque = PID_Omega.Get_Out();
 
         PID_Torque.Set_Target(Target_Torque);
@@ -342,6 +347,7 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Torque.TIM_Adjust_PeriodElapsedCallback();
 
         Out = PID_Torque.Get_Out();
+        */
     }
     break;
     default:
@@ -350,6 +356,7 @@ void Class_DJI_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     }
     break;
     }
+    //Out = 10000;
     Output();
 }
 
@@ -595,7 +602,11 @@ void Class_DJI_Motor_C620::Data_Process()
 
     //存储预备信息
     Data.Pre_Encoder = tmp_encoder;
-    if(Start_Falg==0)  Start_Falg = 1;
+    if(Start_Falg==0){
+        Data.Start_Encoder = tmp_encoder;
+        Start_Falg = 1;
+    }
+    Data.Ture_Total_Encoder = Data.Total_Encoder - Data.Start_Encoder;
 }
 
 /**
