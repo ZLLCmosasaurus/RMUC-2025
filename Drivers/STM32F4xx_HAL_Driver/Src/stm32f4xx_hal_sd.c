@@ -10,6 +10,17 @@
   *           + Peripheral Control functions
   *           + Peripheral State functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### How to use this driver #####
@@ -242,17 +253,6 @@
 
   @endverbatim
   ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -429,6 +429,9 @@ HAL_StatusTypeDef HAL_SD_InitCard(SD_HandleTypeDef *hsd)
 
   /* Enable SDIO Clock */
   __HAL_SD_ENABLE(hsd);
+
+  /* Required power up waiting time before starting the SD initialization  sequence */
+  HAL_Delay(2);
 
   /* Identify card operating voltage */
   errorstate = SD_PowerON(hsd);
@@ -693,7 +696,11 @@ HAL_StatusTypeDef HAL_SD_ReadBlocks(SD_HandleTypeDef *hsd, uint8_t *pData, uint3
     }
 
     /* Get error state */
+#if defined(SDIO_STA_STBITERR)
+    if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT) || (__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_STBITERR)))
+#else /* SDIO_STA_STBITERR not defined */
     if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT))
+#endif /* SDIO_STA_STBITERR */
     {
       /* Clear all the static flags */
       __HAL_SD_CLEAR_FLAG(hsd, SDIO_STATIC_FLAGS);
@@ -908,7 +915,11 @@ HAL_StatusTypeDef HAL_SD_WriteBlocks(SD_HandleTypeDef *hsd, uint8_t *pData, uint
     }
 
     /* Get error state */
+#if defined(SDIO_STA_STBITERR)
+    if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT) || (__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_STBITERR)))
+#else /* SDIO_STA_STBITERR not defined */
     if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT))
+#endif /* SDIO_STA_STBITERR */		
     {
       /* Clear all the static flags */
       __HAL_SD_CLEAR_FLAG(hsd, SDIO_STATIC_FLAGS);
@@ -2918,13 +2929,17 @@ static uint32_t SD_SendSDStatus(SD_HandleTypeDef *hsd, uint32_t *pSDstatus)
       }
     }
 
-    if((HAL_GetTick() - tickstart) >=  SDMMC_DATATIMEOUT)
+    if((HAL_GetTick() - tickstart) >=  SDMMC_SWDATATIMEOUT)
     {
       return HAL_SD_ERROR_TIMEOUT;
     }
   }
 
+#if defined(SDIO_STA_STBITERR)
+  if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT) || (__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_STBITERR)))
+#else /* SDIO_STA_STBITERR not defined */
   if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT))
+#endif /* SDIO_STA_STBITERR */
   {
     return HAL_SD_ERROR_DATA_TIMEOUT;
   }
@@ -2946,7 +2961,7 @@ static uint32_t SD_SendSDStatus(SD_HandleTypeDef *hsd, uint32_t *pSDstatus)
     *pData = SDIO_ReadFIFO(hsd->Instance);
     pData++;
 
-    if((HAL_GetTick() - tickstart) >=  SDMMC_DATATIMEOUT)
+    if((HAL_GetTick() - tickstart) >=  SDMMC_SWDATATIMEOUT)
     {
       return HAL_SD_ERROR_TIMEOUT;
     }
@@ -3138,13 +3153,17 @@ static uint32_t SD_FindSCR(SD_HandleTypeDef *hsd, uint32_t *pSCR)
       break;
     }
 
-    if((HAL_GetTick() - tickstart) >=  SDMMC_DATATIMEOUT)
+    if((HAL_GetTick() - tickstart) >=  SDMMC_SWDATATIMEOUT)
     {
       return HAL_SD_ERROR_TIMEOUT;
     }
   }
 
+#if defined(SDIO_STA_STBITERR)
+  if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT) || (__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_STBITERR)))
+#else /* SDIO_STA_STBITERR not defined */
   if(__HAL_SD_GET_FLAG(hsd, SDIO_FLAG_DTIMEOUT))
+#endif /* SDIO_STA_STBITERR */
   {
     __HAL_SD_CLEAR_FLAG(hsd, SDIO_FLAG_DTIMEOUT);
 
@@ -3272,5 +3291,3 @@ static void SD_Write_IT(SD_HandleTypeDef *hsd)
   */
 
 #endif /* SDIO */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

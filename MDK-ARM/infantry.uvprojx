@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -684,6 +684,11 @@
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_message.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dvc_relays.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_relays.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -828,6 +833,11 @@
               <FileName>robotarm_task.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Task\robotarm_task.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>task_callback_and_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\Task\task_callback_and_config.h</FilePath>
             </File>
           </Files>
         </Group>
