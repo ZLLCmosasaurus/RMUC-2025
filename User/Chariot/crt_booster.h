@@ -157,10 +157,11 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
-    int16_t Fric_High_Rpm = 4800;
-    int16_t Fric_Low_Rpm = 4950;
-		//5100 4975
-		//4900 4775
+    int16_t Fric_High_Rpm = 4900;
+    int16_t Fric_Low_Rpm = 5050;
+		//5150 5000
+		//5100 4950
+		//5000 4850
     float Friction_Omega = 0.0f;//暂时用不到
     //拨弹盘实际的目标速度, 一圈八发子弹
     float Driver_Omega = -2.0f * PI;

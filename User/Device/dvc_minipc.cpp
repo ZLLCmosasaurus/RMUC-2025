@@ -43,6 +43,7 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  * @brief 数据处理过程
  *
  */
+float Test_Rx_Angle_Pitch,Test_Rx_Angle_Yaw;
 void Class_MiniPC::Data_Process()
 {
     // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
@@ -52,15 +53,21 @@ void Class_MiniPC::Data_Process()
     
     Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
 
-    // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = -tmp_pitch;//转换正方向为下位机控制逻辑：从左往右做增量
-    Rx_Angle_Yaw = -tmp_yaw;//目前上位机控制逻辑：从左往右做减量，但是下位机控制逻辑与之相反：故改为从左往右做增量（加负号）
-    Math_Constrain(&Rx_Angle_Pitch,-10.0f,34.0f);
+    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
+    Rx_Angle_Pitch = tmp_pitch;//已跑通，弹道解算需要修改参数
+    Rx_Angle_Yaw = tmp_yaw;//待定
+    //Rx_Angle_Yaw =  meanFilter(tmp_yaw);
+    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
+    Math_Constrain(&Rx_Angle_Pitch,-40.0f,5.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
+
+    //debug
+    Test_Rx_Angle_Pitch = Rx_Angle_Pitch;
+    Test_Rx_Angle_Yaw = Rx_Angle_Yaw;
 }
+
 
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区

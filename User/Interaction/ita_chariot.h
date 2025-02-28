@@ -23,6 +23,7 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
+#include "dvc_servo.h"
 
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
@@ -119,14 +120,12 @@ public:
     #ifdef CHASSIS
         //参数
 		float Gimbal_Follow_Yaw_Angle;
-			float Gimbal_Follow_Yaw_Angle_Deg;
-		float Gimbal_To_Chassis_Angle;//弧度
-		float Gimbal_To_Chassis_Angle_Deg;//度
+		float Gimbal_Follow_Yaw_Angle_Deg;
+        float Chassis_Yaw_absolute_Angle;
         //获取yaw电机编码器值 用于底盘和云台坐标系的转换
         //底盘随动PID环
         Class_DJI_Motor_GM6020 Motor_Yaw;
         Class_PID PID_Chassis_Fllow;
-
     #endif 
 
         //裁判系统
@@ -148,6 +147,9 @@ public:
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
 
+        //舵机初始化
+        Class_Servo Servo_Pitch;
+        Class_Servo Servo_Roll;
     #endif
 
     void Init(float __DR16_Dead_Zone = 0);
@@ -155,7 +157,9 @@ public:
     #ifdef CHASSIS
         
         void Get_Gimbal_Follow_Yaw_Angle();
-		void Get_Gimbal_To_Chassis_Angle();
+        void Get_Gimbal_Yaw_Absolute_Angle();
+        inline float Get_Gimbal_Yaw_IMU_Angle();
+        inline void Set_Gimbal_Yaw_Angle(float __Angle);
         void CAN_Chassis_Rx_Gimbal_Callback();
         void CAN_Chassis_Tx_Gimbal_Callback();
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
@@ -219,11 +223,13 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 2.24333715;
+        float Reference_Angle = 1.5955348;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //7.5°
         //底盘转换后的角度（数据来源yaw电机）
         float Chassis_Angle;
+        //获取云台的IMU yaw轴角度
+        float Yaw_IMU_Angle;
         //写变量
         uint32_t Gimbal_Alive_Flag = 0;
         uint32_t Pre_Gimbal_Alive_Flag = 0;
@@ -419,7 +425,16 @@ protected:
 
 
 #endif
-
+#ifdef CHASSIS
+float Class_Chariot::Get_Gimbal_Yaw_IMU_Angle()
+{
+    return (Yaw_IMU_Angle);
+}
+void Class_Chariot::Set_Gimbal_Yaw_Angle(float __Angle)
+{
+    Yaw_IMU_Angle = __Angle;
+}
+#endif
 
 #endif
 

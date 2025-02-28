@@ -90,13 +90,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         }
         else
         {
-            //角度环
-            PID_Angle.Set_Now(Data.Now_Angle);
-            PID_Angle.TIM_Adjust_PeriodElapsedCallback();
-
-            //Target_Omega_Angle = PID_Angle.Get_Out();
             Target_Omega_Angle = 0.0f;
-
             //速度环
             PID_Omega.Set_Target(Target_Omega_Angle);
             PID_Omega.Set_Now(Data.Now_Omega_Angle);
@@ -105,7 +99,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
         Test_Output_Yaw = PID_Omega.Get_Out();//jscope曲线观测
         
-        Set_Out(PID_Omega.Get_Out());
+        Set_Out(-PID_Omega.Get_Out());//由于电机的输出值
     }
     break;
     case (DJI_Motor_Control_Method_ANGLE):
@@ -116,9 +110,9 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         Target_Omega_Angle = PID_Yaw_Encoder_Angle.Get_Out();
 
         PID_Yaw_Encoder_Omega.Set_Target(Target_Omega_Angle);
-        PID_Yaw_Encoder_Omega.Set_Now(Data.Now_Omega_Angle);
+        PID_Yaw_Encoder_Omega.Set_Now(-Data.Now_Omega_Angle);
         PID_Yaw_Encoder_Omega.TIM_Adjust_PeriodElapsedCallback();
-        Out = PID_Yaw_Encoder_Omega.Get_Out();
+        Out = -PID_Yaw_Encoder_Omega.Get_Out();
 
         Tmp_Target_Yaw_omega = Target_Omega_Angle;//jscope曲线观测
         Tmp_Ture_Yaw_omega = Data.Now_Omega_Angle;//jscope曲线观测
@@ -139,9 +133,9 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
  */
 void Class_Gimbal_Yaw_Motor_GM6020::Transform_Angle()
 {
-    True_Rad_Yaw = -IMU->Get_Rad_Yaw();
-    True_Gyro_Yaw = -IMU->Get_Gyro_Yaw(); 
-    True_Angle_Yaw = -IMU->Get_Angle_Yaw();
+    True_Rad_Yaw = IMU->Get_Rad_Yaw();
+    True_Gyro_Yaw = IMU->Get_Gyro_Yaw(); 
+    True_Angle_Yaw = IMU->Get_Angle_Yaw();
 
     Tmp_Ture_Yaw_omega = True_Gyro_Yaw*180.f/PI;//jscope曲线观测
     Yaw_IMU_Angle = True_Angle_Yaw;//jscope曲线观测
@@ -163,7 +157,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::Transform_EmcoderAngle_To_TrueAngle()
         Yaw_Now_Rad -= 2 * PI;
         Yaw_Now_Angle = Yaw_Now_Rad / PI * 180;
     }
-    EmcoderAngle_To_TrueAngle = Yaw_Now_Angle;
+    EmcoderAngle_To_TrueAngle = -Yaw_Now_Angle;
 }
 
 /**
@@ -407,12 +401,8 @@ void Class_Gimbal_Pitch_Motor_M2006::TIM_PID_PeriodElapsedCallback()
         }
         else
         {
-            //角度环
-            PID_Angle.Set_Now(Data.Now_Angle);
-            PID_Angle.TIM_Adjust_PeriodElapsedCallback();
-
             Target_Omega_Angle = 0.0f;
-
+            
             //速度环
             PID_Omega.Set_Target(Target_Omega_Angle);
             PID_Omega.Set_Now(Data.Now_Omega_Angle);
@@ -421,7 +411,7 @@ void Class_Gimbal_Pitch_Motor_M2006::TIM_PID_PeriodElapsedCallback()
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
     
         Target_Torque = PID_Omega.Get_Out();
-        Set_Out(-PID_Omega.Get_Out() + Gravity_Compensate);
+        Set_Out(PID_Omega.Get_Out() + Gravity_Compensate);
     }
     break;
     default:
@@ -439,9 +429,9 @@ void Class_Gimbal_Pitch_Motor_M2006::TIM_PID_PeriodElapsedCallback()
  */
 void Class_Gimbal_Pitch_Motor_M2006::Transform_Angle()
 {
-    True_Rad_Pitch = -1 * IMU->Get_Rad_Roll();
-    True_Gyro_Pitch = -1 * IMU->Get_Gyro_Roll(); 
-    True_Angle_Pitch = -1 * IMU->Get_Angle_Roll();  
+    True_Rad_Pitch = 1 * IMU->Get_Rad_Roll();
+    True_Gyro_Pitch = 1 * IMU->Get_Gyro_Roll(); 
+    True_Angle_Pitch = 1 * IMU->Get_Angle_Roll();  
 
     Target_Pitch = Target_Angle;
     Test_Pitch = True_Angle_Pitch;
@@ -505,10 +495,9 @@ void Class_Gimbal::Output()
     }
     else // 非失能模式
     {   
-        
+        //设置目标角度，最后会做软件限幅处理
         if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
         {
-            //设置目标角度
             Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
             Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
         }
@@ -517,39 +506,40 @@ void Class_Gimbal::Output()
             Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
             Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();          
         }
-
+        //pitch轴控制方式
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
+        //yaw轴控制方式
         switch (Get_Launch_Mode())//吊射模式 拨杆左上 不影响自瞄
         {
         case Launch_Disable:
+        case Launch_Enable:
         {
             Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
             Tmp_Target_Yaw_Angle = Target_Yaw_Angle;
             Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw();//IMU获取的真实角度
         }
         break;
-        case Launch_Enable:
-        {
-            Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-            Tmp_Target_Yaw_Angle = Target_Yaw_Encoder_Angle;
-            Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw_From_Encoder();//编码器获取的真实角度
-        }
-        break;
+        // case Launch_Enable:
+        // {
+        //     Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        //     Tmp_Target_Yaw_Angle = Target_Yaw_Encoder_Angle;
+        //     Tmp_Ture_Yaw_Angle = Motor_Yaw.Get_True_Angle_Yaw_From_Encoder();//编码器获取的真实角度
+        // }
+        // break;
         }
 
         //限制角度范围 处理yaw轴180度问题
-        if((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)>Max_Yaw_Angle)
+        while((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)>Max_Yaw_Angle)
         {
             Tmp_Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
         }
-        else if((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)<-Max_Yaw_Angle)
+        while((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)<-Max_Yaw_Angle)
         {
             Tmp_Target_Yaw_Angle += (2 * Max_Yaw_Angle);
         }
 				
         //pitch限位
         Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
-
         //设置目标角度
         Motor_Yaw.Set_Target_Angle(Tmp_Target_Yaw_Angle);
         Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle); 

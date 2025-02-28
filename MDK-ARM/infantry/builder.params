@@ -3,7 +3,7 @@
     "target": "infantry",
     "toolchain": "AC6",
     "toolchainLocation": "D:\\Keil_v5\\ARM\\ARMCLANG",
-    "toolchainCfgFile": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.20.1\\res\\data\\models\\win32/arm.v6.model.json",
+    "toolchainCfgFile": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.1\\res\\data\\models\\win32/arm.v6.model.json",
     "buildMode": "fast|multhread",
     "showRepathOnLog": true,
     "threadNum": 16,
@@ -125,7 +125,6 @@
         "startup_stm32f407xx.s"
     ],
     "sourceParams": {},
-    "sourceParamsMtime": 1729314651710.6646,
     "options": {
         "version": 3,
         "beforeBuildTasks": [],
@@ -185,21 +184,10 @@
         "SYS_PathSep": ";",
         "SYS_PathSeparator": ";",
         "SYS_EOL": "\r\n",
-        "EIDE_BUILDER_DIR": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.20.1\\res\\tools\\win32\\unify_builder",
+        "EIDE_BUILDER_DIR": "c:\\Users\\zxf\\.vscode\\extensions\\cl.eide-3.21.1\\res\\tools\\win32\\unify_builder",
         "EIDE_BINARIES_VER": "12.0.1",
         "EIDE_MSYS": "C:\\Users\\zxf\\.eide\\bin\\builder\\msys\\bin",
-        "EIDE_TOOL_JLINK": "C:\\Users\\zxf\\.eide\\tools\\jlink",
-        "EIDE_TOOL_OPENOCD": ".",
         "ToolchainRoot": "D:\\Keil_v5\\ARM\\ARMCLANG"
     },
-    "sysPaths": [],
-    "sha": {
-        "c/cpp-defines": "6fb1138e1eb34669ca45eb53f4ff62b9",
-        "beforeBuildTasks": "d751713988987e9331980363e24189ce",
-        "afterBuildTasks": "befd246dc2a562de63cfbb1b2663c556",
-        "global": "a620fd78ce68cb35fdf638caa176e530",
-        "c/cpp-compiler": "46799a0a273cb05ab9923dfd5bc0f31a",
-        "asm-compiler": "f16bc066fd83f6b0cf6cd2b7eea65136",
-        "linker": "0aede8cd5c7fca2aa64d3bad3a8ff520"
-    }
+    "sysPaths": []
 }

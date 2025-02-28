@@ -67,7 +67,7 @@ CAN_Massage_Unit Massage_queue[4] =
     {&hcan1, 0x01c, CAN1_0x1c_Tx_Streeing_Wheel_C_data, 8},
     {&hcan1, 0x01d, CAN1_0x1d_Tx_Streeing_Wheel_D_data, 8},
 };
-static int8_t CAN1_Tx_Index = 0;
+static uint8_t CAN1_Tx_Index = 0;
 //底盘给舵小板发送功率数据
 uint8_t CAN1_0x01E_Tx_Data[8];
 /*********LK电机 控制缓冲区***********/
@@ -269,13 +269,12 @@ void TIM_CAN_PeriodElapsedCallback()
 #ifdef CHASSIS
     static uint8_t mod10 = 0;
     mod10++;
-
-    // if (mod10 == 10)
-    // {
-    //     mod10 = 0;
-    //     // CAN2超级电容
-    //     CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8);
-    // }
+    if (mod10 == 10)
+    {
+        mod10 = 0;
+        // CAN2超级电容
+        CAN_Send_Data(&hcan2, 0x66, CAN_Supercap_Tx_Data, 8);
+    }
     #ifdef Forward_Code
     // CAN1 发送报文给舵小板
     if (mod10 % 12 == 0)

@@ -100,6 +100,7 @@ void Class_Supercap::Data_Process()
  */
 void Class_Supercap::Output()
 {
+    
     memcpy(CAN_Tx_Data, &Supercap_Tx_Data, sizeof(Struct_Supercap_Tx_Data));
 }
 /**
@@ -136,7 +137,7 @@ void Class_Supercap::Data_Process_UART()
     if(UART_Manage_Object->Rx_Buffer[0]!='*' && UART_Manage_Object->Rx_Buffer[1]!=12 && UART_Manage_Object->Rx_Buffer[10]!=';') return;
     else
     {
-        Supercap_Data.Stored_Energy = (float)(UART_Manage_Object->Rx_Buffer[4]/10.0f);
+        //Supercap_Data.Stored_Energy = (float)(UART_Manage_Object->Rx_Buffer[4]/10.0f);
     }
 }
 

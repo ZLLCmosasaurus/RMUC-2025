@@ -6,18 +6,7 @@
     ],
     "settings": {
         "files.associations": {
-            "config.h": "c",
-            "usart.h": "c",
-            "main.h": "c",
-            "stm32f4xx_it.h": "c",
-            "tsk_config_and_callback.h": "c",
-            "ita_chariot.h": "c",
-            "drv_uart.h": "c",
-            "dvc_dr16.h": "c",
-            "dvc_supercap.h": "c",
-            "crt_chassis.h": "c",
-            "crt_gimbal.h": "c",
-            "crt_booster.h": "c"
+            "config.h": "c"
         }
     },
     "extensions": {}

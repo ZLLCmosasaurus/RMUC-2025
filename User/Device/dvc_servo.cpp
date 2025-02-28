@@ -31,34 +31,36 @@
 
 // /* Function prototypes -------------------------------------------------------*/
 
-// /**
-//  * @brief 舵机初始化
-//  * 
-//  * @param __Driver_PWM_TIM 舵机驱动定时器编号
-//  * @param __Driver_PWM_TIM_Channel_x 定时器通道
-//  * @param __Angle_Offset 舵机角度偏移量, 默认0
-//  * @param __Max_Angle 舵机双边可动范围, 默认270角度舵机, 记得除以二, 也就是对应两侧可动范围都是3/4 PI
-//  */
-// void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle)
-// {
-//     Driver_PWM_TIM = __Driver_PWM_TIM;
-//     Driver_PWM_TIM_Channel = __Driver_PWM_TIM_Channel;
-//     Max_Angle = __Max_Angle;
+/**
+ * @brief 舵机初始化
+ * 
+ * @param __Driver_PWM_TIM 舵机驱动定时器编号
+ * @param __Driver_PWM_TIM_Channel_x 定时器通道
+ * @param __Angle_Offset 舵机角度偏移量, 默认0
+ * @param __Max_Angle 舵机双边可动范围, 默认270角度舵机, 记得除以二, 也就是对应两侧可动范围都是3/4 PI
+ */
+void Class_Servo::Init(TIM_HandleTypeDef *__Driver_PWM_TIM, uint8_t __Driver_PWM_TIM_Channel, float __Max_Angle , float __Pulse_Max, float __Pulse_Min)
+{
+    Driver_PWM_TIM = __Driver_PWM_TIM;
+    Driver_PWM_TIM_Channel = __Driver_PWM_TIM_Channel;
+    Max_Angle = __Max_Angle;
+    Pulse_Max = __Pulse_Max;
+    Pulse_Min = __Pulse_Min;
+    HAL_TIM_PWM_Start(__Driver_PWM_TIM, __Driver_PWM_TIM_Channel);
+}
 
-//     HAL_TIM_PWM_Start(__Driver_PWM_TIM, __Driver_PWM_TIM_Channel);
-// }
+/**
+ * @brief 角度输出
+ * 
+ */
+void Class_Servo::Output()
+{
+    uint16_t out;
+    float T = (Driver_PWM_TIM->Instance->ARR + 1) * (Driver_PWM_TIM->Instance->PSC + 1) / 168000.0f; // 计算周期 ms
 
-// /**
-//  * @brief 角度输出
-//  * 
-//  */
-// void Class_Servo::Output()
-// {
-//     uint16_t out;
+    out = (uint16_t)(Driver_PWM_TIM->Instance->ARR * (Pulse_Min + (Pulse_Max-Pulse_Min) * Target_Angle / Max_Angle) / (T));
 
-//     out = 150.0f + (Target_Angle - Max_Angle / 2.0f) / (Max_Angle / 2.0f) * 100.0f;
-
-//     __HAL_TIM_SetCompare(Driver_PWM_TIM, Driver_PWM_TIM_Channel, out);
-// }
+    __HAL_TIM_SetCompare(Driver_PWM_TIM, Driver_PWM_TIM_Channel, out);
+}
 
 // /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
