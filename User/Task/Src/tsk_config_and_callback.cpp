@@ -1,6 +1,6 @@
 /**
  * @file tsk_config_and_callback.cpp
- * @author lez by yssickjgd
+ * @author cjw by yssickjgd
  * @brief 临时任务调度测试用函数, 后续用来存放个人定义的回调函数以及若干任务
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -196,7 +196,7 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
             chariot.Gimbal.Motor_Yaw_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
-        case (0x208):
+        case (0x206):
         {
             chariot.Gimbal.Motor_Pitch_B.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
@@ -214,12 +214,12 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.Identifier)
     {
-        case (0x201):
+        case (0x207):
         {
             chariot.Booster_A.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
-        case (0x202):
+        case (0x208):
         {
             chariot.Booster_A.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
@@ -229,7 +229,7 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
             chariot.Gimbal.Motor_Pitch_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
-        case (0x207):
+        case (0x205):
         {
             chariot.Gimbal.Motor_Yaw_A.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
@@ -251,6 +251,16 @@ void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
         case (0x141):
         {
             chariot.Gimbal.Motor_Main_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x202):
+        {
+            chariot.Booster_A.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        }
+        break;
+        case (0x203):
+        {
+            chariot.Booster_B.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
 	}
@@ -302,7 +312,7 @@ void Image_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 
 
 /**
- * @brief UART3遥控器回调函数
+ * @brief UART5遥控器回调函数
  *
  * @param Buffer UART1收到的消息
  * @param Length 长度
@@ -337,7 +347,7 @@ void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_L
  * @param Length 长度
  */
 #ifdef CHASSIS
-void Referee_UART7_Callback(uint8_t *Buffer, uint16_t Length)
+void Referee_UART10_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.Referee.UART_RxCpltCallback(Buffer,Length);
 }
@@ -348,7 +358,7 @@ void Referee_UART7_Callback(uint8_t *Buffer, uint16_t Length)
  * @param Buffer UART1收到的消息
  * @param Length 长度
  */
-#if defined CHASSIS && defined POWER_LIMIT
+#if defined CHASSIS
 void SuperCAP_UART1_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.Chassis.Supercap.UART_RxCpltCallback(Buffer);
@@ -416,7 +426,7 @@ void Task1ms_TIM5_Callback()
         TIM_CAN_PeriodElapsedCallback();
         
         
-        //TIM_UART_PeriodElapsedCallback();
+       // TIM_UART_PeriodElapsedCallback();
         
         static int mod5 = 0;
         mod5++;
@@ -446,7 +456,9 @@ extern "C" void Task_Init()
         CAN_Init(&hfdcan3, Chassis_Device_CAN3_Callback);
 
         //裁判系统
-        UART_Init(&huart7, Referee_UART7_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+        //UART_Init(&huart10, Referee_UART10_Callback, 128);//并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+        //超电
+        UART_Init(&huart10, SuperCAP_UART1_Callback, 8);//8暂用 后面需要改
 
         #ifdef POWER_LIMIT
         //旧版超电

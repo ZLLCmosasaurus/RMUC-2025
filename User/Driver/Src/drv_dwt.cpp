@@ -1,6 +1,6 @@
 /**
  * @file drv_dwt.cpp
- * @author lez by yssickjgd
+ * @author cjw by yssickjgd
  * @brief DWT初始化与配置流程
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -25,7 +25,7 @@ void DWT_Init(uint32_t CPU_Freq_mHz)
   
     //Ennable write access  only M7 need this operateion
     #ifdef STM32H7
-    DWT->LAR = 0xC5ACCE55;
+    DWT->LAR |= 0xC5ACCE55;//访问锁寄存器
     #endif
   
     /* DWT CYCCNT寄存器计数清0 */

@@ -1,6 +1,6 @@
 /**
  * @file crt_chassis.cpp
- * @author lez by wanghongxi
+ * @author cjw
  * @brief 底盘
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
@@ -28,36 +28,6 @@
 /* Private function declarations ---------------------------------------------*/
 
 /* Function prototypes -------------------------------------------------------*/
-
-double My_atan(double y, double x)
-{
-	double atan;
-	atan = atan2(y, x);
-	if (x == 0)
-	{
-		if (y > 0)
-			atan = PI / 2;
-		else if (y < 0)
-			atan = -PI / 2;
-	}
-	if (y == 0)
-	{
-		if (x > 0)
-			atan = 0;
-		else if (x < 0)
-			atan = PI;
-	}
-	return atan;
-}
-
-float Square(float Input) //
-{
-	float Ans;
-	Ans = Input * Input;
-	return Ans;
-}
-
-
 void Class_Tricycle_Chassis::Vector_Plus()//实现向量a+b
 {
     for(int i = 0; i < 4; i++)
@@ -77,6 +47,9 @@ void Class_Tricycle_Chassis::Vector_Plus()//实现向量a+b
  */
 void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
+    Power_Limit.Init();
+    Supercap.Init_UART(&huart10);
+    
     Velocity_X_Max = __Velocity_X_Max;
     Velocity_Y_Max = __Velocity_Y_Max;
     Omega_Max = __Omega_Max;
@@ -107,12 +80,23 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[3].Init(&hfdcan1, DJI_Motor_ID_0x204);
 
     //舵向电机PID初始化
-    for (int i = 0; i < 4; i++)
-    {
-        Motor_Steer[i].PID_Angle.Init(15.f, 0.0f, 0.0f, 0.0f, Motor_Steer[i].Get_Output_Max(), Motor_Steer[i].Get_Output_Max(),5,11,0.25,0.001);
-        Motor_Steer[i].PID_Omega.Init(20.0f, 650.0f, 0.0f, 0.0f, 8000, Motor_Steer[i].Get_Output_Max(),3,7);
-        Motor_Steer[i].PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Steer[i].Get_Output_Max(), Motor_Steer[i].Get_Output_Max());       
-    }
+
+    Motor_Steer[0].PID_Angle.Init(10.f, 5.0f, 0.0f, 0.0f, Motor_Steer[0].Get_Output_Max(), Motor_Steer[0].Get_Output_Max(),10,20,0.25,0.001);
+    Motor_Steer[0].PID_Omega.Init(15.0f, 50.0f, 0.0f, 0.0f, 4000, Motor_Steer[0].Get_Output_Max());
+    Motor_Steer[0].PID_Torque.Init(0.f, 0.0f, 0.0f, 0.0f, Motor_Steer[0].Get_Output_Max(), Motor_Steer[0].Get_Output_Max()); 
+    
+    Motor_Steer[1].PID_Angle.Init(10.f, 20.0f, 0.0f, 0.0f, Motor_Steer[1].Get_Output_Max(), Motor_Steer[1].Get_Output_Max(),10,20,0.25,0.001);
+    Motor_Steer[1].PID_Omega.Init(15.0f, 30.0f, 0.0f, 0.0f, 4000, Motor_Steer[1].Get_Output_Max());
+    Motor_Steer[1].PID_Torque.Init(0.f, 0.0f, 0.0f, 0.0f, Motor_Steer[1].Get_Output_Max(), Motor_Steer[1].Get_Output_Max());
+
+    Motor_Steer[2].PID_Angle.Init(10.f, 0.0f, 0.0f, 0.0f, Motor_Steer[2].Get_Output_Max(), Motor_Steer[2].Get_Output_Max(),10,20,0.25,0.001);//阻力可能不均匀
+    Motor_Steer[2].PID_Omega.Init(15.0f, 60.0f, 0.0f, 0.0f, 4000, Motor_Steer[2].Get_Output_Max());
+    Motor_Steer[2].PID_Torque.Init(0.f, 0.0f, 0.0f, 0.0f, Motor_Steer[2].Get_Output_Max(), Motor_Steer[2].Get_Output_Max());
+
+    Motor_Steer[3].PID_Angle.Init(7.f, 10.0f, 0.0f, 0.0f, Motor_Steer[3].Get_Output_Max(), Motor_Steer[3].Get_Output_Max(),10,20,0.25,0.001);
+    Motor_Steer[3].PID_Omega.Init(15.0f, 60.0f, 0.0f, 0.0f, 4000, Motor_Steer[3].Get_Output_Max());
+    Motor_Steer[3].PID_Torque.Init(0.f, 0.0f, 0.0f, 0.0f, Motor_Steer[3].Get_Output_Max(), Motor_Steer[3].Get_Output_Max());
+
 
     //舵向电机ID初始化
     Motor_Steer[0].Init(&hfdcan2, DJI_Motor_ID_0x206);
@@ -120,10 +104,10 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Steer[2].Init(&hfdcan2, DJI_Motor_ID_0x207);
     Motor_Steer[3].Init(&hfdcan2, DJI_Motor_ID_0x205);
     //舵向电机零点位置初始化
-    Motor_Steer[0].Set_Zero_Position(5.2554);
-    Motor_Steer[1].Set_Zero_Position(5.2301);
+    Motor_Steer[0].Set_Zero_Position(5.1963);
+    Motor_Steer[1].Set_Zero_Position(5.2040);
     Motor_Steer[2].Set_Zero_Position(1.0538);
-    Motor_Steer[3].Set_Zero_Position(0.0621);
+    Motor_Steer[3].Set_Zero_Position(0.8268);
 
     Motor_Steer[0].init_Yaw = -PI/4;
     Motor_Steer[1].init_Yaw = PI/4;
@@ -139,10 +123,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
  * @brief 速度解算
  *
  */
-float temp_test_1,temp_test_2,temp_test_3,temp_test_4;
-float car_V;//车体总体朝向与速度
-float car_R;
-float car_yaw;
+float car_V,car_yaw;//车体总体朝向与速度
 void Class_Tricycle_Chassis::Speed_Resolution(){  
     for(int i = 0; i < 4; i++){
         Motor_Steer[i].Pre_Yaw = Motor_Steer[i].Yaw;
@@ -194,7 +175,7 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
         break;
 		case (Chassis_Control_Type_SPIN) :
 		{
-		    Motor_Wheel[0].init_v = Get_Target_Omega();
+            Motor_Wheel[0].init_v = Get_Target_Omega();
             Motor_Wheel[1].init_v = - Get_Target_Omega();
             Motor_Wheel[2].init_v = Get_Target_Omega();
             Motor_Wheel[3].init_v = - Get_Target_Omega();
@@ -202,7 +183,7 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             Vector_Plus(); 
 
             for (int i = 0; i < 4; i++) {
-                Motor_Steer[i].Set_Target_Angle(Motor_Steer[i].Yaw*180/PI);//电机坐标系逆时针为正 编码器左手坐标系
+                Motor_Steer[i].Set_Target_Angle(Motor_Steer[i].Yaw * 180 / PI);//电机坐标系逆时针为正 编码器左手坐标系
                 Motor_Wheel[i].Set_Target_Omega_Radian(Motor_Wheel[i].v / Wheel_Diameter / 2); //线速度转角速度
             }
 
@@ -218,7 +199,6 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
         break;
         case (Chassis_Control_Type_FLLOW):
         {
-            
             //底盘四电机模式配置
             for (int i = 0; i < 4; i++)
             {
@@ -347,20 +327,36 @@ void Class_Tricycle_Chassis::Control_Update()
 
 void Class_Tricycle_Chassis::Power_Limit_Update()
 {
-    int16_t temp_out = 0,temp_torque = 0;
+    int16_t temp_out = 0;
+    float temp_pid_torque = 0,temp_omega = 0,temp_feedback_torque= 0 ;
+    int index = 0;
+    Power_Management.Max_Power = 100.f;
+    Power_Management.Actual_Power = temp_power;
     for(int i=0;i<8;i++)
     {
         if(i % 2 == 0){
-            temp_out = Motor_Steer[i].Get_Out();
-            temp_torque = Motor_Steer[i].Get_Out() *GET_CMD_CURRENT_TO_TORQUE(i);
+            index = i / 2 + i % 2;
+            temp_out = Motor_Steer[index].Get_Out();
+            temp_pid_torque = Motor_Steer[index].Get_Out() * GET_CMD_CURRENT_TO_TORQUE(i);
+            temp_omega = Motor_Steer[index].Get_Now_Omega_Radian() * 60 / (2 * PI);
+            temp_feedback_torque = Motor_Steer[index].Get_Now_Torque() * GET_CMD_CURRENT_TO_TORQUE(i);
+
             Power_Management.Motor_Data[i].pid_output = temp_out;
-            Power_Management.Motor_Data[i].torque = temp_torque;
+            Power_Management.Motor_Data[i].torque = temp_pid_torque;
+            Power_Management.Motor_Data[i].feedback_torque = temp_feedback_torque;
+            Power_Management.Motor_Data[i].feedback_omega = temp_omega;
         }
         else if(i % 2 == 1){
-            temp_out = Motor_Wheel[i].Get_Out();
-            temp_torque = Motor_Wheel[i].Get_Out() *GET_CMD_CURRENT_TO_TORQUE(i);
+            index = i / 2;
+            temp_out = Motor_Wheel[index].Get_Out();
+            temp_pid_torque = Motor_Wheel[index].Get_Out() * GET_CMD_CURRENT_TO_TORQUE(i);
+            temp_omega = Motor_Wheel[index].Get_Now_Omega_Radian() * 60 / (2 * PI);
+            temp_feedback_torque = Motor_Wheel[index].Get_Now_Torque() * GET_CMD_CURRENT_TO_TORQUE(i);
+
             Power_Management.Motor_Data[i].pid_output = temp_out;
-            Power_Management.Motor_Data[i].torque = temp_torque;
+            Power_Management.Motor_Data[i].torque = temp_pid_torque;
+            Power_Management.Motor_Data[i].feedback_torque = temp_feedback_torque;
+            Power_Management.Motor_Data[i].feedback_omega = temp_omega;
         }
     }
 
@@ -370,10 +366,12 @@ void Class_Tricycle_Chassis::Power_Limit_Update()
     for(int i=0;i<8;i++)
     {
         if(i % 2 == 0){
-            Motor_Steer[i].Set_Out(Power_Management.Motor_Data[i].output);
+            index = i / 2 + i % 2;
+            Motor_Steer[index].Set_Out(Power_Management.Motor_Data[i].output);
         }
         else if(i % 2 == 1){
-            Motor_Wheel[i].Set_Out(Power_Management.Motor_Data[i].output);
+            index = i / 2;
+            Motor_Wheel[index].Set_Out(Power_Management.Motor_Data[i].output);
         }
     }
     

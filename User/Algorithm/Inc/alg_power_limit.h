@@ -19,6 +19,7 @@
 #include "config.h"
 #include "RLS.hpp"
 
+
 /* Exported macros -----------------------------------------------------------*/
 #define RAD_TO_RPM 9.5493f
 #define PI 3.14159265354f
@@ -34,10 +35,9 @@
 
 /*6020参数*/
 #define GM6020_CMD_CURRENT_TO_TORQUE_CURRENT (3.0f / 16384.f)                                    // Icmd映射到Itorque
-#define GM6020_Kt (741.0f * 1000.f)                                                              // 6020转子的转矩常数
+#define GM6020_Kt (741.0f / 1000.f)                                                              // 6020转子的转矩常数
 #define GM6020_CMD_CURRENT_TO_TORQUE (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)          // 发送的电流控制值（16384）映射到转子扭矩
 #define GM6020_TORQUE_TO_CMD_CURRENT (1.0f / (GM6020_CMD_CURRENT_TO_TORQUE_CURRENT * GM6020_Kt)) // 转子扭矩映射到电流控制值（16384）
-
 /*----------------------------------------------------------------------------*/
 
 #ifdef AGV
@@ -138,11 +138,11 @@ protected:
     float k2_mot = 1.183594;     // 动力电机k2
     float k3_mot = 9.28f / 8.0f; // 动力电机k3
 
-    float k1_dir = 0.024246;     // 转向电机k1
-    float k2_dir = 1.183594;     // 转向电机k2
+    float k1_dir = 0.051423;     // 转向电机k1
+    float k2_dir = 0.000009;     // 转向电机k2
     float k3_dir = 9.28f / 8.0f; // 转向电机k3
 
-    RLS<2> rls_mot{1e-5f, 0.9999f}; // 动力电机RLS
+    RLS<2> rls_mot{1e-5f, 0.999f}; // 动力电机RLS
     RLS<2> rls_dir{1e-5f, 0.9999f}; // 转向电机RLS
 #else
     // 普通四电机底盘参数

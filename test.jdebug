@@ -5,7 +5,7 @@
 **********************************************************************
 
 File          : D:/Embedded system/Project/RM/M57_New/test.jdebug
-Created       : 1 Jan 2025 17:05
+Created       : 16 Jan 2025 14:31
 Ozone Version : V3.24
 */
 
@@ -25,11 +25,11 @@ void OnProjectLoad (void) {
   Project.AddPathSubstitute ("D:/Embedded system/Project/RM/M57_New", "$(ProjectDir)");
   Project.AddPathSubstitute ("d:/embedded system/project/rm/m57_new", "$(ProjectDir)");
   Project.SetDevice ("Cortex-M7");
-  Project.SetHostIF ("USB", "69403441");
+  Project.SetHostIF ("USB", "69531172");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M7F.svd");
-  Project.AddSvdFile ("D:/Embedded system/Project/RM/M57_New/STM32H723.svd");
+  Project.AddSvdFile ("$(InstallDir)/Config/Peripherals/STM32F407IG.svd");
   //
   // User settings
   //

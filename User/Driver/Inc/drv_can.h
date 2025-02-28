@@ -99,6 +99,7 @@ extern uint8_t CAN1_0xxf7_Tx_Data[];
 extern uint8_t CAN1_0xxf8_Tx_Data[];
 
 extern uint8_t CAN2_0x1ff_Tx_Data[];
+extern uint8_t CAN2_0x1fe_Tx_Data[];
 extern uint8_t CAN2_0x200_Tx_Data[];
 extern uint8_t CAN2_0x2ff_Tx_Data[];
 extern uint8_t CAN2_0xxf1_Tx_Data[];
@@ -109,6 +110,19 @@ extern uint8_t CAN2_0xxf5_Tx_Data[];
 extern uint8_t CAN2_0xxf6_Tx_Data[];
 extern uint8_t CAN2_0xxf7_Tx_Data[];
 extern uint8_t CAN2_0xxf8_Tx_Data[];
+
+extern uint8_t CAN3_0x1ff_Tx_Data[];
+extern uint8_t CAN3_0x1fe_Tx_Data[];
+extern uint8_t CAN3_0x200_Tx_Data[];
+extern uint8_t CAN3_0x2ff_Tx_Data[];
+extern uint8_t CAN3_0xxf1_Tx_Data[];
+extern uint8_t CAN3_0xxf2_Tx_Data[];
+extern uint8_t CAN3_0xxf3_Tx_Data[];
+extern uint8_t CAN3_0xxf4_Tx_Data[];
+extern uint8_t CAN3_0xxf5_Tx_Data[];
+extern uint8_t CAN3_0xxf6_Tx_Data[];
+extern uint8_t CAN3_0xxf7_Tx_Data[];
+extern uint8_t CAN3_0xxf8_Tx_Data[];
 
 extern uint8_t CAN_Supercap_Tx_Data[];
 extern uint8_t CAN3_Gimbal_Tx_Chassis_Data[];  //云台给底盘发送缓冲区
