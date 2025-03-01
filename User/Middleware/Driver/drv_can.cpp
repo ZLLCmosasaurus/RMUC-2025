@@ -36,23 +36,23 @@ uint8_t CAN1_0xxf7_Tx_Data[8];
 uint8_t CAN1_0xxf8_Tx_Data[8];
 uint8_t CAN1_0x1fe_Tx_Data[8];
 uint8_t CAN1_0x2fe_Tx_Data[8];
- uint8_t CAN1_0xx01_Tx_Data[8];
- uint8_t CAN1_0xx02_Tx_Data[8];
- uint8_t CAN1_0xx03_Tx_Data[8];
- uint8_t CAN1_0xx04_Tx_Data[8];
- uint8_t CAN1_0xx05_Tx_Data[8];
- uint8_t CAN1_0xx06_Tx_Data[8];
- uint8_t CAN1_0xx07_Tx_Data[8];
- uint8_t CAN1_0xx08_Tx_Data[8];
+uint8_t CAN1_0xx01_Tx_Data[8];
+uint8_t CAN1_0xx02_Tx_Data[8];
+uint8_t CAN1_0xx03_Tx_Data[8];
+uint8_t CAN1_0xx04_Tx_Data[8];
+uint8_t CAN1_0xx05_Tx_Data[8];
+uint8_t CAN1_0xx06_Tx_Data[8];
+uint8_t CAN1_0xx07_Tx_Data[8];
+uint8_t CAN1_0xx08_Tx_Data[8];
 
- uint8_t CAN2_0xx01_Tx_Data[8];
- uint8_t CAN2_0xx02_Tx_Data[8];
- uint8_t CAN2_0xx03_Tx_Data[8];
- uint8_t CAN2_0xx04_Tx_Data[8];
- uint8_t CAN2_0xx05_Tx_Data[8];
- uint8_t CAN2_0xx06_Tx_Data[8];
- uint8_t CAN2_0xx07_Tx_Data[8];
- uint8_t CAN2_0xx08_Tx_Data[8];
+uint8_t CAN2_0xx01_Tx_Data[8];
+uint8_t CAN2_0xx02_Tx_Data[8];
+uint8_t CAN2_0xx03_Tx_Data[8];
+uint8_t CAN2_0xx04_Tx_Data[8];
+uint8_t CAN2_0xx05_Tx_Data[8];
+uint8_t CAN2_0xx06_Tx_Data[8];
+uint8_t CAN2_0xx07_Tx_Data[8];
+uint8_t CAN2_0xx08_Tx_Data[8];
 uint8_t CAN2_0x1fe_Tx_Data[8];
 uint8_t CAN2_0x2fe_Tx_Data[8];
 uint8_t CAN2_0x1ff_Tx_Data[8];
@@ -69,8 +69,8 @@ uint8_t CAN2_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
 
-uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
-uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
+uint8_t CAN2_Gimbal_Tx_Chassis_Data[8]; // 云台给底盘发送缓冲区
+uint8_t CAN2_Chassis_Tx_Gimbal_Data[8]; // 底盘给云台发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
 uint8_t CAN1_0x141_Tx_Data[8];
@@ -82,11 +82,11 @@ uint8_t CAN1_0x146_Tx_Data[8];
 uint8_t CAN1_0x147_Tx_Data[8];
 uint8_t CAN1_0x148_Tx_Data[8];
 
-uint8_t CAN2_0x141_Tx_Data[8];    
+uint8_t CAN2_0x141_Tx_Data[8];
 uint8_t CAN2_0x142_Tx_Data[8];
 uint8_t CAN2_0x143_Tx_Data[8];
 uint8_t CAN2_0x144_Tx_Data[8];
-uint8_t CAN2_0x145_Tx_Data[8];    
+uint8_t CAN2_0x145_Tx_Data[8];
 uint8_t CAN2_0x146_Tx_Data[8];
 uint8_t CAN2_0x147_Tx_Data[8];
 uint8_t CAN2_0x148_Tx_Data[8];
@@ -105,60 +105,58 @@ uint8_t CAN2_0x148_Tx_Data[8];
  */
 void can_filter_mask_config(CAN_HandleTypeDef *hcan, uint8_t Object_Para, uint32_t ID, uint32_t Mask_ID)
 {
-	
-    //检测传参是否正确
+
+    // 检测传参是否正确
     assert_param(hcan != NULL);
 
-	   //CAN过滤器初始化结构体
+    // CAN过滤器初始化结构体
     CAN_FilterTypeDef can_filter_init_structure;
-    //滤波器序号, 0-27, 共28个滤波器
+    // 滤波器序号, 0-27, 共28个滤波器
     can_filter_init_structure.FilterBank = Object_Para >> 3;
-    //滤波器模式，设置ID掩码模式
+    // 滤波器模式，设置ID掩码模式
     can_filter_init_structure.FilterMode = CAN_FILTERMODE_IDMASK;
-    
-	
+
     if ((Object_Para & 0x02))
-    {   
-        //29位 拓展帧
-			  // 32位滤波
+    {
+        // 29位 拓展帧
+        //  32位滤波
         can_filter_init_structure.FilterScale = CAN_FILTERSCALE_32BIT;
-        //验证码 高16bit
+        // 验证码 高16bit
         can_filter_init_structure.FilterIdHigh = (ID << 3) >> 16;
-        //验证码 低16bit
+        // 验证码 低16bit
         can_filter_init_structure.FilterIdLow = ID << 3 | (Object_Para & 0x03) << 1;
-        //屏蔽码 高16bit
+        // 屏蔽码 高16bit
         can_filter_init_structure.FilterMaskIdHigh = (Mask_ID << 3) >> 16;
-        //屏蔽码 低16bit
-        can_filter_init_structure.FilterMaskIdLow = Mask_ID << 3 | (0x03) << 1 ;
+        // 屏蔽码 低16bit
+        can_filter_init_structure.FilterMaskIdLow = Mask_ID << 3 | (0x03) << 1;
     }
     else
     {
-        //11位 标准帧
-			  // 32位滤波
+        // 11位 标准帧
+        //  32位滤波
         can_filter_init_structure.FilterScale = CAN_FILTERSCALE_16BIT;
-        //标准帧验证码 高16bit不启用
-        can_filter_init_structure.FilterIdHigh = 0x0000 ; 
-        //验证码 低16bit
-			  can_filter_init_structure.FilterIdLow =ID << 5 | (Object_Para & 0x02) << 4;  
-        //标准帧屏蔽码 高16bit不启用
-        can_filter_init_structure.FilterMaskIdHigh =  0x0000 ;
-        //屏蔽码 低16bit
-        can_filter_init_structure.FilterMaskIdLow =(Mask_ID << 5) | 0x01 << 4 ; 
+        // 标准帧验证码 高16bit不启用
+        can_filter_init_structure.FilterIdHigh = 0x0000;
+        // 验证码 低16bit
+        can_filter_init_structure.FilterIdLow = ID << 5 | (Object_Para & 0x02) << 4;
+        // 标准帧屏蔽码 高16bit不启用
+        can_filter_init_structure.FilterMaskIdHigh = 0x0000;
+        // 屏蔽码 低16bit
+        can_filter_init_structure.FilterMaskIdLow = (Mask_ID << 5) | 0x01 << 4;
     }
 
-    //滤波器绑定FIFO0或FIFO1
+    // 滤波器绑定FIFO0或FIFO1
     can_filter_init_structure.FilterFIFOAssignment = (Object_Para >> 2) & 0x01;
-    //从机模式选择开始单元 , 前14个在CAN1, 后14个在CAN2
+    // 从机模式选择开始单元 , 前14个在CAN1, 后14个在CAN2
     can_filter_init_structure.SlaveStartFilterBank = 14;
-    //使能滤波器
+    // 使能滤波器
     can_filter_init_structure.FilterActivation = ENABLE;
 
     // 过滤器配置
-    if(HAL_CAN_ConfigFilter(hcan, &can_filter_init_structure)!=HAL_OK)
+    if (HAL_CAN_ConfigFilter(hcan, &can_filter_init_structure) != HAL_OK)
     {
         Error_Handler();
     }
-	
 }
 
 /**
@@ -172,29 +170,29 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
     if (hcan->Instance == CAN1)
     {
         CAN1_Manage_Object.CAN_Handler = hcan;
-        CAN1_Manage_Object.Callback_Function = Callback_Function;					
-//         can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0x200 ,0x7F8);  //只接收0x200-0x207
-//         can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0x200, 0x7F8);
-			can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
-			can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);
-			can_filter_mask_config(hcan, CAN_FILTER(2) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0 ,0);  //只接收
-	    can_filter_mask_config(hcan, CAN_FILTER(3) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
+        CAN1_Manage_Object.Callback_Function = Callback_Function;
+        //         can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0x200 ,0x7F8);  //只接收0x200-0x207
+        //         can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0x200, 0x7F8);
+        can_filter_mask_config(hcan, CAN_FILTER(0) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0, 0);
+        can_filter_mask_config(hcan, CAN_FILTER(1) | CAN_FIFO_0 | CAN_STDID | CAN_DATA_TYPE, 0, 0);
+        can_filter_mask_config(hcan, CAN_FILTER(2) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0, 0); // 只接收
+        can_filter_mask_config(hcan, CAN_FILTER(3) | CAN_FIFO_0 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
     }
     else if (hcan->Instance == CAN2)
     {
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
-		can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0 ,0);  //只接收
-	    can_filter_mask_config(hcan, CAN_FILTER(15) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0, 0);
-			can_filter_mask_config(hcan, CAN_FILTER(16) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0 ,0);  //只接收
-	    can_filter_mask_config(hcan, CAN_FILTER(17) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
+        can_filter_mask_config(hcan, CAN_FILTER(14) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0, 0); // 只接收
+        can_filter_mask_config(hcan, CAN_FILTER(15) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, 0, 0);
+        can_filter_mask_config(hcan, CAN_FILTER(16) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0); // 只接收
+        can_filter_mask_config(hcan, CAN_FILTER(17) | CAN_FIFO_1 | CAN_EXTID | CAN_DATA_TYPE, 0, 0);
     }
     /*离开初始模式*/
-    HAL_CAN_Start(hcan);				
-    
+    HAL_CAN_Start(hcan);
+
     /*开中断*/
-    HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);       //can 接收fifo 0不为空中断
-	HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO1_MSG_PENDING);       //can 接收fifo 1不为空中断
+    HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING); // can 接收fifo 0不为空中断
+    HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO1_MSG_PENDING); // can 接收fifo 1不为空中断
 }
 
 /**
@@ -206,38 +204,39 @@ void CAN_Init(CAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
  * @param Length 长度
  * @return uint8_t 执行状态
  */
-uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length,uint8_t data_type) 
+uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint16_t Length, uint8_t data_type)
 {
-   CAN_TxHeaderTypeDef tx_header;
+    CAN_TxHeaderTypeDef tx_header;
     uint32_t freeMailboxes;
-		
-    //检测传参是否正确
+
+    // 检测传参是否正确
     assert_param(hcan != NULL);
 
     // 获取空闲邮箱数量
-//   do{ freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);}
-//		 while(freeMailboxes==0);
+    //   do{ freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);}
+    //		 while(freeMailboxes==0);
 
     // 如果没有空闲邮箱，则返回错误码
-	 while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0)
-	 {}
-//    if (freeMailboxes == 0)
-//    {
-//        return HAL_ERROR;
-//    }
+    while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0)
+    {
+    }
+    //    if (freeMailboxes == 0)
+    //    {
+    //        return HAL_ERROR;
+    //    }
 
     // 根据 data_type 设置帧类型
-    if (data_type == CAN_ID_STD)  // 标准帧
+    if (data_type == CAN_ID_STD) // 标准帧
     {
-        tx_header.IDE = CAN_ID_STD;  // 使用标准标识符 (11位)
-        tx_header.StdId = ID;        // 设置标准标识符
-        tx_header.ExtId = 0;         // 扩展标识符设为0
+        tx_header.IDE = CAN_ID_STD; // 使用标准标识符 (11位)
+        tx_header.StdId = ID;       // 设置标准标识符
+        tx_header.ExtId = 0;        // 扩展标识符设为0
     }
-    else if (data_type == CAN_ID_EXT)  // 扩展帧
+    else if (data_type == CAN_ID_EXT) // 扩展帧
     {
-        tx_header.IDE = CAN_ID_EXT;  // 使用扩展标识符 (29位)
-        tx_header.ExtId = ID;        // 设置扩展标识符
-        tx_header.StdId = 0;         // 标准标识符设为0
+        tx_header.IDE = CAN_ID_EXT; // 使用扩展标识符 (29位)
+        tx_header.ExtId = ID;       // 设置扩展标识符
+        tx_header.StdId = 0;        // 标准标识符设为0
     }
 
     tx_header.RTR = CAN_RTR_DATA; // 数据帧
@@ -246,37 +245,60 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
     // 发送数据
     return HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &freeMailboxes);
 }
-
+uint8_t set_zero_point[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE};
+uint8_t enable_cmd[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC};
 /**
  * @brief CAN的TIM定时器中断发送回调函数
  *
  */
 void TIM_CAN_PeriodElapsedCallback()
 {
-   
-    static uint8_t mod10 = 0;
-    mod10++;
-//   if(mod10%2==0)
-//	 {
-//		CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8,CAN_ID_STD);
-//		CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8,CAN_ID_STD);
-//	
-//		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x11), CAN2_0xx01_Tx_Data, 8,CAN_ID_EXT);
-//	 }
-//	if(mod10%2==1)
-//	{
-//		CAN_Send_Data(&hcan1, 0x03, CAN1_0xxf3_Tx_Data, 8,CAN_ID_STD);
-//		CAN_Send_Data(&hcan1, 0x04, CAN1_0xxf4_Tx_Data, 8,CAN_ID_STD);
-//	
-//		CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT<<8|0x12), CAN2_0xx02_Tx_Data, 8,CAN_ID_EXT);
-//	}
-// for (int i = 0; i < 8; i++)
-// 	{
-// 		CAN1_0x1fe_Tx_Data[i] = 0;
-//         CAN2_0x1fe_Tx_Data[i] = 0;
-//     }
-	// CAN_Send_Data(&hcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8,CAN_ID_STD);
-	// CAN_Send_Data(&hcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8,CAN_ID_STD);
+    static uint8_t init_flag = 0;
+    if (init_flag == 0)
+    {
+        init_flag = 1;
+        CAN_Send_Data(&hcan1, 0x01, enable_cmd, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan1, 0x02, enable_cmd, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan2, 0x03, enable_cmd, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan2, 0x04, enable_cmd, 8, CAN_ID_STD);
+    }
+    else
+    {
+        CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan2, 0x03, CAN2_0xxf3_Tx_Data, 8, CAN_ID_STD);
+        CAN_Send_Data(&hcan2, 0x04, CAN2_0xxf4_Tx_Data, 8, CAN_ID_STD);
+    }
+    // CAN_Send_Data(&hcan1, 0x01, set_zero_point, 8, CAN_ID_STD);
+    // CAN_Send_Data(&hcan1, 0x02, set_zero_point, 8, CAN_ID_STD);
+
+    // CAN_Send_Data(&hcan2, 0x01, AK_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
+    // CAN_Send_Data(&hcan2, 0x06, CAN2_0xx06_Tx_Data, 8, CAN_ID_STD);
+    // CAN_Send_Data(&hcan2, 0x04, set_zero_point, 8, CAN_ID_STD);
+    // CAN_Send_Data(&hcan1, (uint32_t)(CAN_PACKET_SET_CURRENT << 8 | 0x11), CAN1_0xx01_Tx_Data, 8, CAN_ID_EXT);
+    // CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT << 8 | 0x12), CAN2_0xx02_Tx_Data, 8, CAN_ID_EXT);
+
+    //   if(mod10%2==0)
+    //	 {
+
+    //
+
+    //	 }
+
+    //	if(mod10%2==1)
+    //	{
+    //		CAN_Send_Data(&hcan1, 0x03, CAN1_0xxf3_Tx_Data, 8,CAN_ID_STD);
+    //		CAN_Send_Data(&hcan1, 0x04, CAN1_0xxf4_Tx_Data, 8,CAN_ID_STD);
+    //
+
+    //	}
+    // for (int i = 0; i < 8; i++)
+    // 	{
+    // 		CAN1_0x1fe_Tx_Data[i] = 0;
+    //         CAN2_0x1fe_Tx_Data[i] = 0;
+    //     }
+    // CAN_Send_Data(&hcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8,CAN_ID_STD);
+    // CAN_Send_Data(&hcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8,CAN_ID_STD);
 }
 
 /**
@@ -286,7 +308,7 @@ void TIM_CAN_PeriodElapsedCallback()
  */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    //选择回调函数
+    // 选择回调函数
     if (hcan->Instance == CAN1)
     {
         HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO0, &CAN1_Manage_Object.Rx_Buffer.Header, CAN1_Manage_Object.Rx_Buffer.Data);
@@ -306,7 +328,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
  */
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    //选择回调函数
+    // 选择回调函数
     if (hcan->Instance == CAN1)
     {
         HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN1_Manage_Object.Rx_Buffer.Header, CAN1_Manage_Object.Rx_Buffer.Data);

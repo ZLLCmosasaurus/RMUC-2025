@@ -41,75 +41,77 @@
  */
 enum Enum_Sprint_Status : uint8_t
 {
-    Sprint_Status_DISABLE = 0, 
+    Sprint_Status_DISABLE = 0,
     Sprint_Status_ENABLE,
 };
-
 
 /**
  * @brief 底盘控制类型
  *
  */
-enum Enum_Chassis_Control_Type :uint8_t
+enum Enum_Chassis_Control_Type : uint8_t
 {
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
     Chassis_Control_Type_SPIN,
 };
 
-
-
 /**
  * @brief Specialized, 三轮舵轮底盘类
  *
  */
-//omnidirectional 全向轮
+// omnidirectional 全向轮
 class Class_Tricycle_Chassis
 {
 public:
-    #ifdef SPEED_SLOPE
-    //斜坡函数加减速速度X
+#ifdef SPEED_SLOPE
+    // 斜坡函数加减速速度X
     Class_Slope Slope_Velocity_X;
-    //斜坡函数加减速速度Y
+    // 斜坡函数加减速速度Y
     Class_Slope Slope_Velocity_Y;
-    //斜坡函数加减速角速度
+    // 斜坡函数加减速角速度
     Class_Slope Slope_Omega;
-    #endif
-    #ifdef SUPERCAP
+#endif
+#ifdef SUPERCAP
     Class_Supercap Supercap;
-    #endif
-    #ifdef C_IMU
+#endif
+#ifdef C_IMU
     Class_IMU Boardc_BMI;
 
-    #endif
-    #ifdef POWER_LIMIT
-    //功率限制
+#endif
+#ifdef POWER_LIMIT
+    // 功率限制
     Class_Power_Limit Power_Limit;
-    #endif
-    
-    #ifdef REFEREE
-    //裁判系统
+#endif
+
+#ifdef REFEREE
+    // 裁判系统
     Class_Referee *Referee;
-    #endif
-    //下方转动电机
-    void mySaturate(float *in,float min,float max);
+#endif
+    // 下方转动电机
+    void mySaturate(float *in, float min, float max);
     void Pose_Calculate(void);
     float CHASSIS_DWT_Dt;
     uint32_t CHASSIS_DWT_Count;
-    float mg=161.75f;
+    // float total_mg = 181.75f;
+    float total_mg = 0.0f;
+    float wheel_mg = 11.0f;
     Class_VMC Left_Leg;
     Class_VMC Right_Leg;
 
     Joint_Motor_T Joint_Motor[4];
     Wheel_Motor_T Wheel_Motor[2];
-	Class_DJI_Motor_GM6020 Yaw_Motor;
+    Class_DJI_Motor_GM6020 Yaw_Motor;
 
     Class_PID left_leg_length_pid;
     Class_PID right_leg_length_pid;
     Class_PID roll_pid;
     Class_PID Tp_pid;
     Class_PID turn_pid;
-
+    
+    Class_PID test_left_leg_theta_pid;
+    Class_PID test_right_leg_theta_pid;
+    
     float v_set;
     float x_set;
     float v_ramp_set;
@@ -126,17 +128,19 @@ public:
     float v_filter;
     float x_filter;
 
-    float mypitch;
-    float mypitchgyro;
+    float myPithL;
+    float myPithGyroL;
+    float myPithR;
+    float myPithGyroR;
 
     float roll;
     float total_yaw;
     float leg_theta_err;
 
-    float turn_T;
+    float turn_T; // yaw轴补偿
     float roll_f0;
 
-    float leg_tp;
+    float leg_tp; // 防劈叉补偿
 
     uint8_t start_flag;
 
@@ -148,19 +152,18 @@ public:
 
     uint8_t suspend_flag[2];
 
-    float Poly_Coefficient[12][4]={{-76.9979,105.9114,-64.9616,0.7344},
-{3.7446,-2.2845,-4.4331,0.1291},
-{-27.2457,29.3704,-11.3412,-0.1478},
-{-28.2823,30.9176,-12.6474,-0.2663},
-{9.8085,13.0682,-22.2879,10.4822},
-{4.9405,-2.2052,-1.4609,1.4435},
-{255.3113,-243.0448,71.0275,4.2785},
-{20.4603,-22.1931,8.0161,0.1069},
-{-6.7938,19.4710,-15.8375,5.1344},
-{-9.2937,22.5758,-17.5690,5.7190},
-{336.2836,-369.7908,148.6145,-4.6627},
-{42.4009,-48.4684,20.6784,-1.3454}
-};
+    float Poly_Coefficient[12][4] = {{-76.9979, 105.9114, -64.9616, 0.7344},
+                                     {3.7446, -2.2845, -4.4331, 0.1291},
+                                     {-27.2457, 29.3704, -11.3412, -0.1478},
+                                     {-28.2823, 30.9176, -12.6474, -0.2663},
+                                     {9.8085, 13.0682, -22.2879, 10.4822},
+                                     {4.9405, -2.2052, -1.4609, 1.4435},
+                                     {255.3113, -243.0448, 71.0275, 4.2785},
+                                     {20.4603, -22.1931, 8.0161, 0.1069},
+                                     {-6.7938, 19.4710, -15.8375, 5.1344},
+                                     {-9.2937, 22.5758, -17.5690, 5.7190},
+                                     {336.2836, -369.7908, 148.6145, -4.6627},
+                                     {42.4009, -48.4684, 20.6784, -1.3454}};
     Class_observe Observe;
     // Class_DJI_Motor_C620 Motor_Wheel[4];
 
@@ -194,112 +197,116 @@ public:
     void TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status);
 
 protected:
-    //初始化相关常量
+    // 初始化相关常量
 
-    //速度X限制
+    // 速度X限制
     float Velocity_X_Max;
-    //速度Y限制
+    // 速度Y限制
     float Velocity_Y_Max;
-    //角速度限制
+    // 角速度限制
     float Omega_Max;
-    //舵向电机功率上限比率
+    // 舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
-    //底盘小陀螺模式角速度
+    // 底盘小陀螺模式角速度
     float Spin_Omega = 4.0f;
-    //常量
+    // 常量
 
-    //电机理论上最大输出
+    // 电机理论上最大输出
     float Steer_Max_Output = 30000.0f;
     float Wheel_Max_Output = 16384.0f;
 
-    //内部变量
+    // 内部变量
 
-    //舵向电机目标值
+    // 舵向电机目标值
     float Target_Steer_Angle[3];
-    //转动电机目标值
+    // 转动电机目标值
     float Target_Wheel_Omega[4];
 
-    //读变量
+    // 读变量
 
-    //当前总功率
+    // 当前总功率
     float Now_Power = 0.0f;
-    //当前舵向电机功率
+    // 当前舵向电机功率
     float Now_Steer_Power = 0.0f;
-    //可使用的舵向电机功率
+    // 可使用的舵向电机功率
     float Target_Steer_Power = 0.0f;
-    //当前轮向电机功率
+    // 当前轮向电机功率
     float Now_Wheel_Power = 0.0f;
-    //可使用的轮向电机功率
+    // 可使用的轮向电机功率
     float Target_Wheel_Power = 0.0f;
 
-    //写变量
+    // 写变量
 
-    //读写变量
+    // 读写变量
 
-    //底盘控制方法
+    // 底盘控制方法
     Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
-    //目标速度X
+    // 目标速度X
     float Target_Velocity_X = 0.0f;
-    //目标速度Y
+    // 目标速度Y
     float Target_Velocity_Y = 0.0f;
-    //目标角速度
+    // 目标角速度
     float Target_Omega = 0.0f;
-    //当前速度X
+    // 当前速度X
     float Now_Velocity_X = 0.0f;
-    //当前速度Y
+    // 当前速度Y
     float Now_Velocity_Y = 0.0f;
-    //当前角速度
+    // 当前角速度
     float Now_Omega = 0.0f;
 
-    //内部函数
+    // 内部函数
     void Speed_Resolution();
+    void chassisL_feedback_update();
+    void chassisR_feedback_update();
+    void chassisL_control_loop();
+    void chassisR_control_loop();
 };
 
 /* Exported variables --------------------------------------------------------*/
 
-//三轮车底盘参数
+// 三轮车底盘参数
 
-//轮组半径
+// 轮组半径
 const float WHEEL_RADIUS = 0.0520f;
 
-//轮距中心长度
+// 轮距中心长度
 const float WHEEL_TO_CORE_DISTANCE[3] = {0.23724f, 0.21224f, 0.21224f};
 
-//前心距中心长度
+// 前心距中心长度
 const float FRONT_CENTER_TO_CORE_DISTANCE = 0.11862f;
 
-//前后轮距
+// 前后轮距
 const float FRONT_TO_REAR_DISTANCE = WHEEL_TO_CORE_DISTANCE[0] + FRONT_CENTER_TO_CORE_DISTANCE;
 
-//前轮距前心
+// 前轮距前心
 const float FRONT_TO_FRONT_CENTER_DISTANCE = 0.176f;
 
-//轮组方位角
+// 轮组方位角
 const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE), atan2f(FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE)};
 
-//轮子直径 单位m
-const float WHELL_DIAMETER = 0.13f;	
+// 轮子直径 单位m
+const float WHELL_DIAMETER = 0.13f;
 
-//底盘半宽 单位m
-const float HALF_WIDTH = 0.15f;		
+// 底盘半宽 单位m
+const float HALF_WIDTH = 0.15f;
 
-//底盘半长 单位m
-const float HALF_LENGTH = 0.15f;	
+// 底盘半长 单位m
+const float HALF_LENGTH = 0.15f;
 
-//转速转角速度	1 rpm = 2pi/60 rad/s 
-const float RPM2RAD = 0.104720f;				
+// 转速转角速度	1 rpm = 2pi/60 rad/s
+const float RPM2RAD = 0.104720f;
 
-//转速转线速度	vel = rpn*pi*D/60  cm/s
-const float RPM2VEL = 0.806342f;			
+// 转速转线速度	vel = rpn*pi*D/60  cm/s
+const float RPM2VEL = 0.806342f;
 
-//线速度转转度  //1.240168							
-const float VEL2RPM = 1.240168f;				
+// 线速度转转度  //1.240168
+const float VEL2RPM = 1.240168f;
 
-//线速度转角速度 rad/s
-const float VEL2RAD = 1.0f/(WHELL_DIAMETER/2.0f);
+// 线速度转角速度 rad/s
+const float VEL2RAD = 1.0f / (WHELL_DIAMETER / 2.0f);
 
-//齿轮箱减速比;	
-const float M3508_REDUCTION_RATIO = 13.733f;	
+// 齿轮箱减速比;
+const float M3508_REDUCTION_RATIO = 13.733f;
 /* Exported function declarations --------------------------------------------*/
 
 /**
@@ -371,7 +378,6 @@ float Class_Tricycle_Chassis::Get_Target_Omega()
 {
     return (Target_Omega);
 }
-
 
 /**
  * @brief 获取小陀螺角速度
@@ -522,7 +528,6 @@ void Class_Tricycle_Chassis::Set_Velocity_X_Max(float __Velocity_X_Max)
 {
     Velocity_X_Max = __Velocity_X_Max;
 }
-
 
 #endif
 

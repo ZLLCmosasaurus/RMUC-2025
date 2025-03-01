@@ -19,13 +19,13 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-//清除电机错误信息
+// 清除电机错误信息
 uint8_t DM_Motor_CAN_Message_Clear_Error[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfb};
-//使能电机
+// 使能电机
 uint8_t DM_Motor_CAN_Message_Enter[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfc};
-//失能电机
+// 失能电机
 uint8_t DM_Motor_CAN_Message_Exit[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfd};
-//保存当前电机位置为零点
+// 保存当前电机位置为零点
 uint8_t DM_Motor_CAN_Message_Save_Zero[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe};
 
 /* Private function declarations ---------------------------------------------*/
@@ -159,7 +159,7 @@ void Class_DM_Motor_J4310::Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_
     }
     CAN_ID = __CAN_ID;
     DM_Motor_Control_Method = __Control_Method;
-		DM_Motor_Control_Status	=	DM_Motor_Control_Status_ENABLE;
+    DM_Motor_Control_Status = DM_Motor_Control_Status_ENABLE;
     Position_Offset = __Position_Offset;
     Omega_Max = __Omega_Max;
     Torque_Max = __Torque_Max;
@@ -172,41 +172,51 @@ void Class_DM_Motor_J4310::Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_
  */
 void Class_DM_Motor_J4310::Data_Process()
 {
-    //数据处理过程
+    // 数据处理过程
     int32_t delta_position;
     uint16_t tmp_position, tmp_omega, tmp_torque;
     Struct_DM_Motor_CAN_Rx_Data *tmp_buffer = (Struct_DM_Motor_CAN_Rx_Data *)CAN_Manage_Object->Rx_Buffer.Data;
 
-    //处理大小端
+    // 处理大小端
     Math_Endian_Reverse_16((void *)&tmp_buffer->Position_Reverse, &tmp_position);
     tmp_omega = (tmp_buffer->Omega_11_4 << 4) | (tmp_buffer->Omega_3_0_Torque_11_8 >> 4);
     tmp_torque = ((tmp_buffer->Omega_3_0_Torque_11_8 & 0x0f) << 8) | (tmp_buffer->Torque_7_0);
 
     Data.CAN_ID = tmp_buffer->CAN_ID;
 
-    //计算圈数与总角度值
+    // 计算圈数与总角度值
     delta_position = tmp_position - Data.Pre_Position;
-    if (delta_position < -(Position_Max / 2.f))
-    {
-        //正方向转过了一圈
-        Data.Total_Round++;
-    }
-    else if (delta_position > (Position_Max / 2.f))
-    {
-        //反方向转过了一圈
-        Data.Total_Round--;
-    }
-    Data.Total_Position = Data.Total_Round * Position_Max + tmp_position + Position_Offset;
-    Data.Pre_Position   =   tmp_position;
-    //计算电机本身信息
-    Data.Now_Angle = (float)Data.Total_Position / (float)Position_Max * 2.0f * PI;
-    Data.Now_Omega = Math_Int_To_Float(tmp_omega, 0, (1 << 12) - 1, -Omega_Max, Omega_Max);
-    Data.Now_Torque = Math_Int_To_Float(tmp_torque, 0, (1 << 12) - 1, -Torque_Max, Torque_Max);
+    // if (Start_Falg == 1)
+    // {
+    //     if (delta_position < -(Position_Max / 2.f))
+    //     {
+    //         // 正方向转过了一圈
+    //         Data.Total_Round++;
+    //     }
+    //     else if (delta_position > (Position_Max / 2.f))
+    //     {
+    //         // 反方向转过了一圈
+    //         Data.Total_Round--;
+    //     }
+    // }
+    // Data.Total_Position = Data.Total_Round * Position_Max + tmp_position + Position_Offset;
+    // Data.Pre_Position = tmp_position;
+    // // 计算电机本身信息
+    // Data.Now_Angle = (float)Data.Total_Position / (float)Position_Max * 2.0f * PI;
+    // Data.Now_Omega = Math_Int_To_Float(tmp_omega, 0, (1 << 12) - 1, -Omega_Max, Omega_Max);
+    // Data.Now_Torque = Math_Int_To_Float(tmp_torque, 0, (1 << 12) - 1, -Torque_Max, Torque_Max);
+
+    Data.Now_Angle = uint_to_float(tmp_position, -Position_Max, Position_Max, 16);
+    Data.Now_Omega = uint_to_float(tmp_omega, -Omega_Max, Omega_Max, 12);
+    Data.Now_Torque = uint_to_float(tmp_torque, -Torque_Max, Torque_Max, 12);
+
     Data.Now_MOS_Temperature = tmp_buffer->MOS_Temperature + CELSIUS_TO_KELVIN;
     Data.Now_Rotor_Temperature = tmp_buffer->Rotor_Temperature + CELSIUS_TO_KELVIN;
 
-    //存储预备信息
+    // 存储预备信息
     Data.Pre_Position = tmp_position;
+    if (Start_Falg == 0)
+        Start_Falg = 1;
 }
 
 /**
@@ -216,7 +226,7 @@ void Class_DM_Motor_J4310::Data_Process()
  */
 void Class_DM_Motor_J4310::CAN_RxCpltCallback(uint8_t *Rx_Data)
 {
-    //滑动窗口, 判断电机是否在线
+    // 滑动窗口, 判断电机是否在线
     this->Flag += 1;
 
     Data_Process();
@@ -228,20 +238,20 @@ void Class_DM_Motor_J4310::CAN_RxCpltCallback(uint8_t *Rx_Data)
  */
 void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
 {
-    //判断该时间段内是否接收过电机数据
+    // 判断该时间段内是否接收过电机数据
     if (Flag == Pre_Flag)
     {
-        //电机断开连接
+        // 电机断开连接
         DM_Motor_Status = DM_Motor_Status_DISABLE;
     }
     else
     {
-        //电机保持连接
+        // 电机保持连接
         DM_Motor_Status = DM_Motor_Status_ENABLE;
     }
-    
-    //控制电机使能或失能
-		
+
+    // 控制电机使能或失能
+
     switch (DM_Motor_Control_Status)
     {
     case (DM_Motor_Control_Status_DISABLE):
@@ -250,27 +260,27 @@ void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
         {
         case (DM_Motor_Control_Method_MIT_POSITION):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_MIT_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_MIT_TORQUE):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Exit, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_POSITION_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, DM_Motor_CAN_Message_Exit, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, DM_Motor_CAN_Message_Exit, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, DM_Motor_CAN_Message_Exit, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, DM_Motor_CAN_Message_Exit, 8, CAN_ID_STD);
         }
         break;
         }
@@ -282,37 +292,34 @@ void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
         {
         case (DM_Motor_Control_Method_MIT_POSITION):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_MIT_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_MIT_TORQUE):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, DM_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_POSITION_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, DM_Motor_CAN_Message_Enter, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, DM_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
         }
         break;
         case (DM_Motor_Control_Method_OMEGA):
         {
-            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, DM_Motor_CAN_Message_Enter, 8,CAN_ID_STD);
+            CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, DM_Motor_CAN_Message_Enter, 8, CAN_ID_STD);
         }
         break;
         }
     }
     break;
-    
-
-	}
+    }
     Pre_Flag = Flag;
-    
 }
 
 /**
@@ -321,15 +328,15 @@ void Class_DM_Motor_J4310::TIM_Alive_PeriodElapsedCallback()
  */
 void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
 {
-                                                                                                                                                                                                                                                                                                        switch (DM_Motor_Control_Method)
+    switch (DM_Motor_Control_Method)
     {
     case (DM_Motor_Control_Method_MIT_POSITION):
     {
         uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI, 16);
         uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max, 12);
-        uint16_t tmp_k_p = float_to_uint(MIT_K_P, 0.0f, 500.0f,12);
-        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f,12);
-        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,12);
+        uint16_t tmp_k_p = float_to_uint(MIT_K_P, 0.0f, 500.0f, 12);
+        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f, 12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max, 12);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));
@@ -352,16 +359,16 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
         uint8_t tmp_torque_7_0 = tmp_torque;
         memcpy(&CAN_Tx_Data[7], &tmp_torque_7_0, sizeof(uint8_t));
 
-//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
+        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
     }
     break;
     case (DM_Motor_Control_Method_MIT_OMEGA):
     {
-        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI,16);
-        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max,16);
-       uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f,12);
-        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f,12);
-        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,16);
+        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI, 16);
+        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max, 16);
+        uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f, 12);
+        uint16_t tmp_k_d = float_to_uint(MIT_K_D, 0.0f, 5.0f, 12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max, 16);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));
@@ -384,16 +391,16 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
         uint8_t tmp_torque_7_0 = tmp_torque;
         memcpy(&CAN_Tx_Data[7], &tmp_torque_7_0, sizeof(uint8_t));
 
-//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
+        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
     }
     break;
     case (DM_Motor_Control_Method_MIT_TORQUE):
     {
-        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI,16);
-        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max,12);
-        uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f,12);
-        uint16_t tmp_k_d = float_to_uint(0, 0.0f, 5.0f,12);
-        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max,12);
+        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI, 16);
+        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max, 12);
+        uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f, 12);
+        uint16_t tmp_k_d = float_to_uint(0, 0.0f, 5.0f, 12);
+        uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max, 12);
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));
@@ -416,7 +423,7 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
         uint8_t tmp_torque_7_0 = tmp_torque;
         memcpy(&CAN_Tx_Data[7], &tmp_torque_7_0, sizeof(uint8_t));
 
-//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
+        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x00, CAN_Tx_Data, 8,CAN_ID_STD);
     }
     break;
     case (DM_Motor_Control_Method_POSITION_OMEGA):
@@ -425,14 +432,14 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
 
         memcpy(&CAN_Tx_Data[4], &Target_Omega, sizeof(float));
 
-//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, CAN_Tx_Data, 8,CAN_ID_STD);
+        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x100, CAN_Tx_Data, 8,CAN_ID_STD);
     }
     break;
     case (DM_Motor_Control_Method_OMEGA):
     {
         memcpy(&CAN_Tx_Data[0], &Target_Omega, sizeof(float));
 
-//        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, CAN_Tx_Data, 4,CAN_ID_STD);
+        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, static_cast<Enum_DM_Motor_ID>(CAN_ID) + 0x200, CAN_Tx_Data, 4,CAN_ID_STD);
     }
     break;
     default:

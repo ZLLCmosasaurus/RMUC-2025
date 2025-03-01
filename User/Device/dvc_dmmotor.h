@@ -16,7 +16,7 @@
 
 #include "drv_math.h"
 #include "drv_can.h"
-#include "dvc_dwt.h""
+#include "dvc_dwt.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -106,15 +106,14 @@ struct Struct_DM_Motor_Rx_Data
 /**
  * @brief J4310无刷电机, 单片机控制输出控制帧
  * DM_Motor_Control_Method_POSITION_OMEGA模式下, 需调参助手辅助设置位置环PI参数, 空载250与0
- * 
+ *
  * PMAX值需在调参助手设置为3.141593, 即PI, 此时可在MIT模式下当舵机使用
  *
  */
 class Class_DM_Motor_J4310
 {
 public:
-
-    void Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_ID, Enum_DM_Motor_Control_Method __Control_Method = DM_Motor_Control_Method_MIT_POSITION, int32_t __Position_Offset = 0, float __Omega_Max = 20.94359f, float __Torque_Max = 6.0f);
+    void Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_ID, Enum_DM_Motor_Control_Method __Control_Method = DM_Motor_Control_Method_MIT_POSITION, int32_t __Position_Offset = 0, float __Omega_Max = 45.0f, float __Torque_Max = 35.0f);
 
     inline Enum_DM_Motor_Control_Status Get_DM_Motor_Control_Status();
     inline Enum_DM_Motor_Status Get_DM_Motor_Status();
@@ -129,7 +128,7 @@ public:
     inline float Get_Target_Angle();
     inline float Get_Target_Omega();
     inline float Get_Target_Torque();
-    
+
     inline void Set_DM_Control_Status(Enum_DM_Motor_Control_Status __DM_Motor_Control_Status);
     inline void Set_DM_Motor_Control_Method(Enum_DM_Motor_Control_Method __DM_Motor_Control_Method);
     inline void Set_MIT_K_P(float __MIT_K_P);
@@ -142,62 +141,66 @@ public:
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_Process_PeriodElapsedCallback();
 
-		Enum_DM_Motor_Status DM_Motor_Status = DM_Motor_Status_DISABLE;
-protected:
-    //初始化相关变量
+    Enum_DM_Motor_Status DM_Motor_Status = DM_Motor_Status_DISABLE;
 
-    //绑定的CAN
+protected:
+    // 初始化相关变量
+
+    // 绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object;
-    //收数据绑定的CAN ID, 控制帧是0xxa1~0xxaf
+    // 收数据绑定的CAN ID, 控制帧是0xxa1~0xxaf
     Enum_DM_Motor_ID CAN_ID;
-    //发送缓存区
+    // 发送缓存区
     uint8_t *CAN_Tx_Data;
-    //位置反馈偏移
+    // 位置反馈偏移
     uint32_t Position_Offset;
-    //最大速度, 调参助手设置, 推荐20.94359, 也就是最大转速200rpm
+    //最大位置，rad
+    float Position_Max=12.5f;
+    // 最大速度, 调参助手设置, 推荐20.94359, 也就是最大转速200rpm
     float Omega_Max;
-    //最大扭矩, 调参助手设置, 推荐7, 也就是最大输出7NM
+    // 最大扭矩, 调参助手设置, 推荐7, 也就是最大输出7NM
     float Torque_Max;
 
-    //常量
-    
-    //一圈位置刻度
-    uint32_t Position_Max = 16384;
+    // 常量
+    // 电机上电第一帧标志位
+    uint8_t Start_Falg = 0;
+    // 一圈位置刻度
+  
 
-    //内部变量
+    // 内部变量
 
-    //当前时刻的电机接收flag
+    // 当前时刻的电机接收flag
     uint32_t Flag = 0;
-    //前一时刻的电机接收flag
+    // 前一时刻的电机接收flag
     uint32_t Pre_Flag = 0;
 
-    //读变量
+    // 读变量
 
-    //电机状态
-    
-    //电机对外接口信息
+    // 电机状态
+
+    // 电机对外接口信息
     Struct_DM_Motor_Rx_Data Data;
 
-    //写变量
+    // 写变量
 
-    //读写变量
+    // 读写变量
 
-    //电机控制状态
+    // 电机控制状态
     Enum_DM_Motor_Control_Status DM_Motor_Control_Status = DM_Motor_Control_Status_DISABLE;
-    //电机控制方式
+    // 电机控制方式
     Enum_DM_Motor_Control_Method DM_Motor_Control_Method = DM_Motor_Control_Method_MIT_POSITION;
-    //MIT的Kp值, 0~500, 空载6, 位置控制需要
+    // MIT的Kp值, 0~500, 空载6, 位置控制需要
     float MIT_K_P = 0.0f;
-    //MIT的Kd值, 0~5, 空载0.2, 位置和速度控制需要
+    // MIT的Kd值, 0~5, 空载0.2, 位置和速度控制需要
     float MIT_K_D = 0.0f;
-    //目标的角度, rad
+    // 目标的角度, rad
     float Target_Angle = 0.0f;
-    //目标的速度, rad/s
+    // 目标的速度, rad/s
     float Target_Omega = 0.0f;
-    //目标的扭矩
+    // 目标的扭矩
     float Target_Torque = 0.0f;
 
-    //内部函数
+    // 内部函数
 
     void Data_Process();
 };

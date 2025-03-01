@@ -59,7 +59,11 @@ enum Enum_IMU_Status
 
 class Class_IMU
 {
-    public:
+
+
+
+public:
+    QEKF_INS_t QEKF_INS;
 
     void Init(void);
     void TIM_Calculate_PeriodElapsedCallback(void);
@@ -104,7 +108,7 @@ class Class_IMU
     void TIM_Set_PWM(TIM_HandleTypeDef *tim_pwmHandle, uint8_t Channel, uint16_t value);
 
     INS_t INS;
-    QEKF_INS_t QEKF_INS;
+
     IMU_Data_t BMI088_Raw_Data;
     IMU_Data_t Pre_BMI088_Raw_Data;
     IST8310_Real_Data_t IST8310_Real_Data;

@@ -223,12 +223,12 @@ float Class_IMU::Get_True_Angle_Total_Roll(void)
 
 float Class_IMU::Get_Motion_Accel_X_N(void)
 {
-    return (INS.MotionAccel_n[0]);
+    return (INS.MotionAccel_n[1]);
 }
 
 float Class_IMU::Get_Motion_Accel_Y_N(void)
 {
-    return (INS.MotionAccel_n[1]);
+    return (INS.MotionAccel_n[0]);
 }
 
 float Class_IMU::Get_Motion_Accel_Z_N(void)
