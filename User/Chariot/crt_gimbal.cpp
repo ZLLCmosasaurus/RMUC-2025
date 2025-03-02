@@ -29,6 +29,7 @@
  */
 float test_angle = 0;
 float Test_Target_Omega = 0;
+float last_angle=0;
 void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 {
     switch (DJI_Motor_Control_Method)
@@ -69,9 +70,13 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_IMU_ANGLE):
     {
-        //PID_Angle.Set_Target(Target_Angle);
-        // Target_Angle=test_angle;
-        PID_Angle.Set_Target(Target_Angle);
+        // PID_Angle.Set_Target(Target_Angle);
+        //  Target_Angle=test_angle;
+	    if(last_angle!=Target_Angle)
+	    {
+		    PID_Angle.Set_Target(Target_Angle);
+	    }
+        last_angle=Target_Angle;
         if (IMU->Get_IMU_Status() != IMU_Status_DISABLE)
         {
             // 角度环
@@ -134,7 +139,7 @@ void Class_Gimbal_Yaw_Motor_GM6020::Transform_Angle()
  *
  */
 float test_omega = 1.0f;
-float m_angle=0.0f;
+float m_angle = 0.0f;
 void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 {
     switch (DJI_Motor_Control_Method)
@@ -182,8 +187,8 @@ void Class_Gimbal_Pitch_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     break;
     case (DJI_Motor_Control_Method_IMU_ANGLE):
     {
-        //PID_Angle.Set_Target(-m_angle);
-				PID_Angle.Set_Target(-Target_Angle);
+        // PID_Angle.Set_Target(-m_angle);
+        PID_Angle.Set_Target(-Target_Angle);
         if (IMU->Get_IMU_Status() != IMU_Status_DISABLE)
         {
             // 角度环
@@ -237,8 +242,8 @@ void Class_Gimbal_Pitch_Motor_GM6020::Disable()
 void Class_Gimbal_Pitch_Motor_GM6020::Transform_Angle()
 {
     True_Rad_Pitch = IMU->Get_Rad_Roll();
-    True_Gyro_Pitch =IMU->Get_Gyro_Roll();
-    True_Angle_Pitch =IMU->Get_Angle_Roll();
+    True_Gyro_Pitch = IMU->Get_Gyro_Roll();
+    True_Angle_Pitch = IMU->Get_Angle_Roll();
 }
 
 /**
@@ -400,12 +405,12 @@ void Class_Gimbal::Output()
             Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
         }
 
-         //限制角度范围 处理yaw轴180度问题
-        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())>Max_Yaw_Angle)
+        // 限制角度范围 处理yaw轴180度问题
+        while ((Target_Yaw_Angle - Motor_Yaw.Get_True_Angle_Yaw()) > Max_Yaw_Angle)
         {
             Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
         }
-        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())<-Max_Yaw_Angle)
+        while ((Target_Yaw_Angle - Motor_Yaw.Get_True_Angle_Yaw()) < -Max_Yaw_Angle)
         {
             Target_Yaw_Angle += (2 * Max_Yaw_Angle);
         }
@@ -413,42 +418,42 @@ void Class_Gimbal::Output()
         // 新处理yaw轴180度问题
         //  1. 角度优化
 
-//        float temp_min;
+        //        float temp_min;
 
-//        // 计算误差，考虑当前电机状态
-//        temp_err = Target_Yaw_Angle - Motor_Yaw.Get_True_Angle_Yaw();
+        //        // 计算误差，考虑当前电机状态
+        //        temp_err = Target_Yaw_Angle - Motor_Yaw.Get_True_Angle_Yaw();
 
-//        // 标准化到[0, 360)范围
-//        while (temp_err > 360.0f)
-//            temp_err -= 360.0f;
-//        while (temp_err < 0.0f)
-//            temp_err += 360.0f;
+        //        // 标准化到[0, 360)范围
+        //        while (temp_err > 360.0f)
+        //            temp_err -= 360.0f;
+        //        while (temp_err < 0.0f)
+        //            temp_err += 360.0f;
 
-//        // 比较路径长度
-//        if (fabs(temp_err) < (360.0f - fabs(temp_err)))
-//            temp_min = fabs(temp_err);
-//        else
-//            temp_min = 360.0f - fabs(temp_err);
+        //        // 比较路径长度
+        //        if (fabs(temp_err) < (360.0f - fabs(temp_err)))
+        //            temp_min = fabs(temp_err);
+        //        else
+        //            temp_min = 360.0f - fabs(temp_err);
 
-//        // 判断是否需要切换方向
-//        // if (temp_min > 90.0f)
-//        // {
-//        //     steering_wheel->invert_flag = !steering_wheel->invert_flag;
-//        //     // 重新计算误差
-//        //     temp_err = steering_wheel->Target_Angle - steering_wheel->Now_Angle - steering_wheel->invert_flag * 180.0f;
-//        // }
-//        // 2. 优劣弧优化，实际上角度优化那里已经完成了
-//        if (temp_err > 180.0f)
-//        {
-//            temp_err -= 360.0f;
-//        }
-//        else if (temp_err < -180.0f)
-//        {
-//            temp_err += 360.0f;
-//        }
+        //        // 判断是否需要切换方向
+        //        // if (temp_min > 90.0f)
+        //        // {
+        //        //     steering_wheel->invert_flag = !steering_wheel->invert_flag;
+        //        //     // 重新计算误差
+        //        //     temp_err = steering_wheel->Target_Angle - steering_wheel->Now_Angle - steering_wheel->invert_flag * 180.0f;
+        //        // }
+        //        // 2. 优劣弧优化，实际上角度优化那里已经完成了
+        //        if (temp_err > 180.0f)
+        //        {
+        //            temp_err -= 360.0f;
+        //        }
+        //        else if (temp_err < -180.0f)
+        //        {
+        //            temp_err += 360.0f;
+        //        }
 
-//        temp_target_angle = Motor_Yaw.Get_True_Angle_Yaw() + temp_err;
-//        Target_Yaw_Angle = temp_target_angle;
+        //        temp_target_angle = Motor_Yaw.Get_True_Angle_Yaw() + temp_err;
+        //        Target_Yaw_Angle = temp_target_angle;
 
         // pitch限位
         Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);

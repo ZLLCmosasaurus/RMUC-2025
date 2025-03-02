@@ -89,7 +89,7 @@ void can_filter_mask_config(CAN_HandleTypeDef *hcan, uint8_t Object_Para, uint32
     //检测传参是否正确
     assert_param(hcan != NULL);
 
-	   //CAN过滤器初始化结构体
+	//CAN过滤器初始化结构体
     CAN_FilterTypeDef can_filter_init_structure;
     //滤波器序号, 0-27, 共28个滤波器
     can_filter_init_structure.FilterBank = Object_Para >> 3;
@@ -219,12 +219,14 @@ void TIM_CAN_PeriodElapsedCallback()
         CAN_Send_Data(&hcan1, 0x66, CAN_Supercap_Tx_Data, 8);
     }
 
-    // CAN1总线  四个底盘电机  
+    // CAN1总线  四个底盘电机
+    memset(CAN1_0x200_Tx_Data, 0, sizeof(CAN1_0x200_Tx_Data));
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
+    // memset(CAN2_Chassis_Tx_Gimbal_Data, 0, sizeof(CAN2_Chassis_Tx_Gimbal_Data));
     CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
 
-    #elif defined (GIMBAL)
+#elif defined (GIMBAL)
 
     // CAN1 
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机

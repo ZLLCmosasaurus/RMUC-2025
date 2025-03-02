@@ -344,20 +344,22 @@ void Task100us_TIM2_Callback()
     chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 #endif
 }
-
+uint16_t delta_time;
 /**
  * @brief TIM5任务回调函数
  *
  */
 void Task1ms_TIM5_Callback()
 {
+
+    float start_time = DWT_GetTimeline_us();
+    
     init_finished++;
     if (init_finished > 2000 && start_flag == 0)
     {
         chariot.Buzzer.Set_NowTask(BUZZER_DJI_STARTUP_PRIORITY);
         start_flag = 1;
     }
-
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
 
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
@@ -369,10 +371,10 @@ void Task1ms_TIM5_Callback()
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
-        chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+        // chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
         /****************************** 驱动层回调函数 1ms *****************************************/
         // 统一打包发送
-        TIM_CAN_PeriodElapsedCallback();
+        // TIM_CAN_PeriodElapsedCallback();
 
         TIM_UART_PeriodElapsedCallback();
 
@@ -393,6 +395,8 @@ void Task1ms_TIM5_Callback()
             mod5 = 0;
         }
     }
+
+    delta_time = DWT_GetTimeline_us() - start_time;
 }
 
 /**

@@ -600,8 +600,15 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 
 #elif defined(GIMBAL)
 
+    static uint8_t mod2 = 0;
     // 各个模块的分别解算
-    Gimbal.TIM_Calculate_PeriodElapsedCallback();
+    mod2++;
+    if (mod2 == 2)
+    {
+        Gimbal.TIM_Calculate_PeriodElapsedCallback();
+        mod2 = 0;
+    }
+
     Booster.TIM_Calculate_PeriodElapsedCallback();
     // 传输数据给上位机
     MiniPC.TIM_Write_PeriodElapsedCallback();
