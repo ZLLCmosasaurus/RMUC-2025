@@ -45,7 +45,7 @@ class Class_Gimbal_Yaw_Motor_GM6020 : public Class_DJI_Motor_GM6020
 public:
     //陀螺仪获取云台角速度
     Class_IMU *IMU;
-
+ Class_Filter_Fourier filtered_target_angle;
     inline float Get_Trer_Rad_Yaw();
     inline float Get_True_Gyro_Yaw();
     inline float Get_True_Angle_Yaw();

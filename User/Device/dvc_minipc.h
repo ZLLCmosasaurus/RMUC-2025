@@ -665,8 +665,8 @@ void Class_MiniPC::Set_Outpost_Protect_Status(Enum_MiniPC_Data_Status __Outpost_
  */
 void Class_MiniPC::Transform_Angle_Tx()
 {
-    Tx_Angle_Pitch = -IMU->Get_Angle_Pitch();
-    Tx_Angle_Roll = IMU->Get_Angle_Roll();
+    Tx_Angle_Pitch = IMU->Get_Angle_Roll();
+    Tx_Angle_Roll = IMU->Get_Angle_Pitch();
     Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
 }
 
@@ -676,7 +676,7 @@ void Class_MiniPC::Transform_Angle_Tx()
  */
 void Class_MiniPC::Transform_Angle_Rx()
 {
-    Rx_Angle_Pitch = Pack_Rx.target_pitch;
+    Rx_Angle_Pitch = -Pack_Rx.target_pitch;
     Rx_Angle_Yaw = Pack_Rx.target_yaw;
 }
 

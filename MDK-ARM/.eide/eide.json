@@ -258,6 +258,9 @@
           },
           {
             "path": "../User/Device/GraphicsSendTask.cpp"
+          },
+          {
+            "path": "../User/Device/dvc_buzzer.cpp"
           }
         ],
         "folders": []
@@ -307,6 +310,18 @@
               },
               {
                 "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/RLS.hpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/Matrix.hpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_new_power_limit.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_new_power_limit.h"
               }
             ],
             "folders": []
@@ -419,11 +434,11 @@
       }
     ]
   },
-  "outDir": ".",
+  "outDir": "build",
   "deviceName": "STM32F407IGHx",
-  "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
+  "packDir": ".pack/Keil/STM32F4xx_DFP.3.0.0",
   "miscInfo": {
-    "uid": "85c96ec307b268da1692ba450d60b381"
+    "uid": "1e54d312a48e72ab690929039bd80e88"
   },
   "targets": {
     "infantry": {
@@ -471,7 +486,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x1c000"
+                "size": "0x20000"
               },
               "isChecked": true,
               "noInit": false
@@ -480,8 +495,8 @@
               "tag": "IRAM",
               "id": 2,
               "mem": {
-                "startAddr": "0x2001c000",
-                "size": "0x4000"
+                "startAddr": "0x10000000",
+                "size": "0x10000"
               },
               "isChecked": true,
               "noInit": false
@@ -554,7 +569,25 @@
         "speed": 8000,
         "otherCmds": ""
       },
-      "uploadConfigMap": {},
+      "uploadConfigMap": {
+        "JLink": {
+          "bin": "",
+          "baseAddr": "",
+          "cpuInfo": {
+            "vendor": "ST",
+            "cpuName": "STM32F407IG"
+          },
+          "proType": 1,
+          "speed": 8000,
+          "otherCmds": ""
+        },
+        "OpenOCD": {
+          "bin": "",
+          "target": "stm32f1x",
+          "interface": "stlink",
+          "baseAddr": "0x08000000"
+        }
+      },
       "custom_dep": {
         "name": "default",
         "incList": [
@@ -592,7 +625,7 @@
           "beforeBuildTasks": [],
           "afterBuildTasks": [],
           "global": {
-            "use-microLIB": false,
+            "use-microLIB": true,
             "output-debug-info": "enable"
           },
           "c/cpp-compiler": {

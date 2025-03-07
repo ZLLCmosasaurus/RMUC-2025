@@ -56,7 +56,7 @@
         {
             "name": "Jlink",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf",
+            "executable": "${workspaceRoot}\\build\\infantry\\infantry.elf",
             "request": "launch",
             "type": "cortex-debug",
             "device": "STM32F407IG",
@@ -94,7 +94,7 @@
         {
             "name": "Jlink-attach",
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceRoot}\\infantry\\infantry.elf",
+            "executable": "${workspaceRoot}\\build\\infantry\\infantry.elf",
             "request": "attach",
             "type": "cortex-debug",
             "device": "STM32F407IG",

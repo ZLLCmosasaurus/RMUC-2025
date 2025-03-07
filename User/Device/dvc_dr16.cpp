@@ -226,13 +226,15 @@ void Class_DR16::Judge_Updata(Struct_DR16_UART_Data Pre_UART_Rx_Data,Struct_DR16
     }
 }
 
-
+	volatile float * Rocker_Num_p;
 /**
  * @brief 数据处理过程
  *
  */
 void Class_DR16::DR16_Data_Process()
 {
+	
+	Rocker_Num_p=&Rocker_Num;
     //获取当前原始值数据
     memcpy(&Now_UART_Rx_Data, UART_Manage_Object_1->Rx_Buffer,sizeof(Struct_DR16_UART_Data));
     //数据处理过程

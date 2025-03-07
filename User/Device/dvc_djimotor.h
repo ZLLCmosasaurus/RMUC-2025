@@ -161,7 +161,8 @@ protected:
     //一圈编码器刻度
     uint16_t Encoder_Num_Per_Round = 8192;
     //最大输出电压
-    uint16_t Output_Max = 25000;
+    //uint16_t Output_Max = 25000;
+		uint16_t Output_Max = 20000;
 
     //内部变量
 
@@ -318,7 +319,7 @@ public:
     Class_PID PID_Omega;
     
     //功率限制友元函数
-    friend class Class_Power_Limit;
+   // friend class Class_Power_Limit;
 
     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 13.933f, float __Torque_Max = 16384.0f);
 
@@ -337,7 +338,8 @@ public:
     inline float Get_Target_Omega_Angle();
     inline float Get_Target_Torque();
     inline float Get_Out();
-
+    inline Struct_DJI_Motor_Data Get_Data();
+    inline float Get_Gearbox_Rate();
     inline void Set_DJI_Motor_Control_Method(Enum_DJI_Motor_Control_Method __Control_Method);
     inline void Set_Target_Angle(float __Target_Angle);
     inline void Set_Target_Radian(float __Target_Radian);
@@ -351,7 +353,7 @@ public:
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_PID_PeriodElapsedCallback();
-
+    void Output();
 protected:
     //初始化相关变量
 
@@ -411,7 +413,7 @@ protected:
     //内部函数
 
     void Data_Process();
-    void Output();
+
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -1006,6 +1008,16 @@ float Class_DJI_Motor_C620::Get_Target_Torque()
 float Class_DJI_Motor_C620::Get_Out()
 {
     return (Out);
+}
+
+inline Struct_DJI_Motor_Data Class_DJI_Motor_C620::Get_Data()
+{
+    return Data;
+}
+
+inline float Class_DJI_Motor_C620::Get_Gearbox_Rate()
+{
+    return Gearbox_Rate;
 }
 
 /**
