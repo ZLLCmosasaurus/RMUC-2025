@@ -44,13 +44,13 @@
 extern "C" {
 #endif
  
-  void Task_Init();
+  void Task_Init_();
   void Task_Loop(); 
   void Control_Task_Callback();
   void Motor_Callback();
   void DR16_Callback();
   void Referee_Callback();
-  void Pull_Measure_Callback();
+  void Pull_Measure_Callback(uint8_t *Buffer, uint16_t Length);
  
 #ifdef __cplusplus
 }

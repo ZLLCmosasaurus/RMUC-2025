@@ -135,6 +135,16 @@ void Class_TensionMeter::TIM_Alive_PeriodElapsedCallback()
        Tension_Meter_Status = Tension_Meter_Status_ENABLE;
     }
     Pre_Raw_Data = Raw_Data;
+
+    if(Pre_Tension_Value == Tension_Value)
+    {
+        Tension_Meter_Status  = Tension_Meter_Status_DISABLE;
+    }
+    else
+    {
+       Tension_Meter_Status = Tension_Meter_Status_ENABLE;
+    }
+    Pre_Tension_Value = Tension_Value;
 }
 
 // 读取数据引脚

@@ -103,8 +103,9 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_UART7_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  Task_Init();
+  // Task_Init();
   dbus_uart_init();
   /* USER CODE END 2 */
 

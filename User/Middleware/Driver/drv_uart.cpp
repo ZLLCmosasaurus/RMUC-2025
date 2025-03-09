@@ -71,6 +71,15 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART7_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART7_Manage_Object.Rx_Buffer, UART7_Manage_Object.Rx_Buffer_Length);
     }
+    else if (huart->Instance == USART3)
+    {
+        UART3_Manage_Object.UART_Handler = huart;
+        UART3_Manage_Object.Callback_Function = Callback_Function;
+        UART3_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
+        // HAL_UARTEx_ReceiveToIdle_DMA(huart, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
+        HAL_UART_Receive_IT(huart, UART3_Manage_Object.Rx_Buffer, 1);
+        // HAL_UARTEx_ReceiveToIdle_IT(&huart1,UART3_Manage_Object.Rx_Buffer, Rx_Buffer_Length);
+    }    
 }
 
 /**
@@ -126,6 +135,18 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         UART7_Manage_Object.Callback_Function(UART7_Manage_Object.Rx_Buffer, Size);
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART7_Manage_Object.Rx_Buffer, UART7_Manage_Object.Rx_Buffer_Length);
     }
+    else if(huart->Instance == USART3)
+    {
+        UART3_Manage_Object.Rx_Length = Size;
+        UART3_Manage_Object.Callback_Function(UART3_Manage_Object.Rx_Buffer, Size);
+        // HAL_UARTEx_ReceiveToIdle_DMA(huart, UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
+        // HAL_UARTEx_ReceiveToIdle_IT(&huart1,UART3_Manage_Object.Rx_Buffer, UART3_Manage_Object.Rx_Buffer_Length);
+        HAL_UART_Receive_IT(&huart3, UART3_Manage_Object.Rx_Buffer, 1);
+        
+    }
 }
+
+
+
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

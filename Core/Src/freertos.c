@@ -53,6 +53,7 @@ osThreadId pull_measure_taskHandle;
 osThreadId motor_callback_taskHandle;
 osThreadId dr16_callback_taskHandle;
 osThreadId refree_callback_taskHandle;
+osThreadId init_taskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -64,6 +65,7 @@ void Pull_Measure_Task(void const * argument);
 void Motor_Callback_Task(void const * argument);
 void DR16_Callback_Task(void const * argument);
 void Refree_Callback_Task(void const * argument);
+void Task_Init(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -130,6 +132,10 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(refree_callback_task, Refree_Callback_Task, osPriorityNormal, 0, 128);
   refree_callback_taskHandle = osThreadCreate(osThread(refree_callback_task), NULL);
 
+  /* definition and creation of init_task */
+  osThreadDef(init_task, Task_Init, osPriorityRealtime, 0, 128);
+  init_taskHandle = osThreadCreate(osThread(init_task), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -152,6 +158,7 @@ void Control_Task(void const * argument)
   {
     // 5ms周期执行
     Control_Task_Callback();
+    // Pull_Measure_Callback();
     osDelayUntil(&start_tick,5);
   }
   /* USER CODE END Control_Task */
@@ -172,7 +179,7 @@ void Pull_Measure_Task(void const * argument)
   {
     // 等待中断唤醒
     ulTaskNotifyTake(pdTRUE,portMAX_DELAY);
-    Pull_Measure_Callback();
+    // Pull_Measure_Callback();
   }
   /* USER CODE END Pull_Measure_Task */
 }
@@ -190,7 +197,7 @@ void Motor_Callback_Task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    // pdTRUE 每次收到通知就清零通知 portMAX_DELAY 阻塞等待通知
+    // pdTRUE 每次收到通知就清零�?�知 portMAX_DELAY 阻塞等待通知
     ulTaskNotifyTake(pdTRUE,portMAX_DELAY);
     Motor_Callback();
   }
@@ -212,7 +219,7 @@ void DR16_Callback_Task(void const * argument)
   {
     // 等待中断唤醒
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-    //遥控器数据接收完成
+    //遥控器数据接收完�?
     DR16_Callback();
   }
   /* USER CODE END DR16_Callback_Task */
@@ -237,6 +244,26 @@ void Refree_Callback_Task(void const * argument)
     Referee_Callback();
   }
   /* USER CODE END Refree_Callback_Task */
+}
+
+/* USER CODE BEGIN Header_Task_Init */
+/**
+* @brief Function implementing the init_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_Task_Init */
+void Task_Init(void const * argument)
+{
+  /* USER CODE BEGIN Task_Init */
+  /* Infinite loop */
+  for(;;)
+  {
+    Task_Init_();
+    vTaskSuspend(NULL); // ??????
+  }
+
+  /* USER CODE END Task_Init */
 }
 
 /* Private application code --------------------------------------------------*/
