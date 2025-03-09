@@ -27,8 +27,13 @@
  */
 enum Enum_Supercap_Status
 {
-    Supercap_Status_DISABLE = 0,
-    Supercap_Status_ENABLE,
+ Disconnected=0,
+  Charging=1,
+  Discharging,
+  CapLowVoltage,
+  SelfChecking,
+  Error,
+  Overload
 };
 
 /**
@@ -103,7 +108,7 @@ protected:
     //读变量
 
     //超级电容状态
-    Enum_Supercap_Status Supercap_Status = Supercap_Status_DISABLE;
+    Enum_Supercap_Status Supercap_Status = Disconnected;
     //超级电容对外接口信息
     Struct_Supercap_CAN_Data Supercap_Data;
 
@@ -111,7 +116,7 @@ protected:
     Struct_Supercap_Tx_Data Supercap_Tx_Data;
 
     //写变量
-
+    float actual_power = 0.0f;
     //限制的功率
     float Limit_Power = 0.0f;
 
