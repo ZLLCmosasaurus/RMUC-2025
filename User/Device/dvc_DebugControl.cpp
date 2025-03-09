@@ -95,9 +95,9 @@ void Class_DebugControl::DebugControl_Data_Process(uint8_t *Buffer, uint16_t Len
         {
             DebugControl_RxData.target_tension = 1695.0f; 
         }
-        else if(DebugControl_RxData.target_tension*10 > 1748.0f)
+        else if(DebugControl_RxData.target_tension*10 > 1780.0f)
         {
-            DebugControl_RxData.target_tension = 1748.0f;
+            DebugControl_RxData.target_tension = 1780.0f;
         }
         else
         {

@@ -98,6 +98,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
  */
 bool Class_Chariot::Calibrate()
 {
+        return true;
     static bool Calibration_Motor_Yaw_Flag = false;
     static bool Calibration_Motor_Up_Flag = false;
     static bool Calibration_Motor_Left_Flag = false;
@@ -565,10 +566,10 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                         success_cnt++;
                         Chariot->Motor_Right.Set_Target_Omega_Radian(0);
                     }
-                    if(success_cnt>500){
+                    if(success_cnt>100){
                         Chariot->Servo_Lock();
                     }
-                    if(success_cnt>1000){
+                    if(success_cnt>500){
                         success_cnt = 0;
                         Status_Time[Debug_Status] = 0;
                         Debug_Status = 2;
@@ -619,6 +620,8 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                     if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_SHOOT
                         &&Status_Time[Debug_Status]>3000
                         &&fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5){
+                        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                        Chariot->Motor_Down.Set_Out(0);
                         Status_Time[Debug_Status] = 0;
                         Debug_Status = 4;
                     }
