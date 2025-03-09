@@ -91,6 +91,18 @@ void Class_DebugControl::DebugControl_Data_Process(uint8_t *Buffer, uint16_t Len
             Debug_Start_Flag = 1;
         }
         memcpy(&DebugControl_RxData, UART_Manage_Object->Rx_Buffer, sizeof(Struct_DebugControl_RxData));
+        if(DebugControl_RxData.target_tension*10 < 1695.0f)
+        {
+            DebugControl_RxData.target_tension = 1695.0f; 
+        }
+        else if(DebugControl_RxData.target_tension*10 > 1748.0f)
+        {
+            DebugControl_RxData.target_tension = 1748.0f;
+        }
+        else
+        {
+            DebugControl_RxData.target_tension = DebugControl_RxData.target_tension*10;
+        }
     }        
 }
 

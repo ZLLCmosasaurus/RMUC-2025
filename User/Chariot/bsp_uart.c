@@ -8,7 +8,7 @@
  ***************************************(C) COPYRIGHT 2018 DJI***************************************
  */
                                                                                                               
-#include "string.h"
+#include "string.h" 
 #include "stdlib.h"
 #include "bsp_uart.h"
 #include "usart.h"
@@ -138,6 +138,30 @@ static void uart_rx_idle_callback(UART_HandleTypeDef* huart)
 		__HAL_DMA_SET_COUNTER(huart->hdmarx, DBUS_MAX_LEN);
 		__HAL_DMA_ENABLE(huart->hdmarx);
 	}
+	else if (huart == &huart3)
+	{
+		/* clear DMA transfer complete flag */
+		__HAL_DMA_DISABLE(huart->hdmarx);
+
+		/* handle dbus data dbus_buf from DMA */
+		if ((DBUS_MAX_LEN - dma_current_data_counter(huart->hdmarx->Instance)) == 6)
+		{
+			//rc_callback_handler(&rc, dbus_buf);	
+      // UART1_Manage_Object.Callback_Function(UART1_Manage_Object.Rx_Buffer, DBUS_BUFLEN);
+      // extern osThreadId dr16_callback_taskHandle;
+      // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+      // vTaskNotifyGiveFromISR(dr16_callback_taskHandle,&xHigherPriorityTaskWoken); // 通知任务
+      // // 有必要就 切换任务上下文
+      // if(xHigherPriorityTaskWoken == pdTRUE){
+      //   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+      // }
+      
+		}
+		
+		/* restart dma transmission */
+		__HAL_DMA_SET_COUNTER(huart->hdmarx, DBUS_MAX_LEN);
+		__HAL_DMA_ENABLE(huart->hdmarx);
+	}  
 }
 
 /**

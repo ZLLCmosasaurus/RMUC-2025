@@ -91,7 +91,7 @@ public:
         Class_Servo Servo_Load_1;
         Class_Servo Servo_Load_2;
         Class_Servo Servo_Load_3;
-        Class_Servo Servo_Load_4;
+        Class_Servo Servo_GM6020;
 
         // 一个扳机舵机
         Class_Servo Servo_Trigger;
@@ -149,9 +149,25 @@ public:
         void Servo_Lock();
         void Servo_Unlock();
 
+        void Servo_GM6020_Init();
+
+        inline float Get_Now_Distance_Motor_Down();
+
         //迷你主机状态
         Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
-
+        //120.8496
+        float Servo_GM6020_Offeset[3]={131.699997,250.0,0};
+        float Servo_Init_1_Offeset=269;
+        float Servo_Init_2_Offeset=250;
+        //初始267，放弹50
+        // 2750 1号 131.699997
+        // 5398 2号 250
+        // 8137 3号 0
+        float Servo_Init_3_Offeset=260;
+        float Servo_Load_1_Offeset=50;
+        float Servo_Load_2_Offeset=50;
+        float Servo_Load_3_Offeset=50;
+        float uart_tension_tare=0;
 protected:
 
         //每次拨弹前进距离
@@ -189,8 +205,14 @@ protected:
         float Now_Distance_Motor_Down = 0.0f;
 
         //微动开关状态，初始低电平false
-        bool Switch_Bool = false;               
-
+        //上膛的微动开关
+        bool Switch_Bool_Trigger = false;
+        //丝杆的微动开关
+        bool Switch_Bool_Motor_Down = false;
+        //皮带左的微动开关               
+        bool Switch_Bool_Motor_Left = false;
+        //皮带右的微动开关
+        bool Switch_Bool_Motor_Right = false;
         //左右传动电机当前位置，最上端为0
         float Now_Distance_Motor_Left = 0.0f;
 
@@ -226,7 +248,7 @@ protected:
         // 电机校准目标角速度
         float Calibration_Motor_Yaw_Target_Omega_Angle = 0; // 角度制
         float Calibration_Motor_Up_Target_Omega_Radian = -10.0f; // 弧度制
-        float Calibration_Motor_Down_Target_Omega_Radian = 10.0f;       //向上运动
+        float Calibration_Motor_Down_Target_Omega_Radian = -10.0f;       //向下运动
 
         // 电机堵转校准阈值
         float Calibration_Motor_Yaw_Troque_Threshold = 0;
@@ -241,9 +263,11 @@ protected:
 
 
         // 四个舵机装弹
-        void Servo_Reload();
+        void Servo_Reload(int _Servo_Index);
         // 四个舵机恢复初始位置
         void Servo_Init();
+
+
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -273,6 +297,10 @@ float Class_Chariot::Get_Calibration_Position_Right(){
     return Calibration_Motor_Right_Radian_Offset;
 }
 
+float Class_Chariot::Get_Now_Distance_Motor_Down()
+{
+    return Now_Distance_Motor_Down;
+}
 /**
  * @brief 左传动电机零位校准
  */
@@ -291,7 +319,10 @@ void Class_Chariot::Updata_Calibration_Position_Right(){
  * @brief 更新微动开关状态
  */
 void Class_Chariot::Updata_Switch_Status(){
-    Switch_Bool = HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_12);
+    Switch_Bool_Trigger = HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_5);
+    Switch_Bool_Motor_Down = HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_6);
+    Switch_Bool_Motor_Left = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_2);
+    Switch_Bool_Motor_Right = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_2);
 }
 
 #endif

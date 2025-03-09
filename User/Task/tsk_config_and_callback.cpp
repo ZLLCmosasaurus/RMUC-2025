@@ -48,6 +48,8 @@
 
 uint32_t init_finished =0 ;
 bool start_flag=0;
+
+uint16_t tension_flag,pre_tension_flag;
 //机器人控制对象
 Class_Chariot chariot;
 extern osThreadId control_taskHandle;
@@ -154,7 +156,7 @@ void Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 // 外部中断回调函数
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    if (GPIO_Pin == GPIO_PIN_1)
+    if (GPIO_Pin == GPIO_PIN_5)
     {
         // 接收 0x201-4 ID的电机
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -219,13 +221,13 @@ extern "C" void Control_Task_Callback()
 
     /****************************** 交互层回调函数 1ms *****************************************/
     chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-    // chariot.FSM_Dart_Control.Reload_TIM_Status_PeriodElapsedCallback();
 
     if(chariot.DR16.Get_DR16_Status() == DR16_Status_DISABLE)
     {
         // 遥控器控制
         
     }
+    
     chariot.Updata_Switch_Status();
 
     chariot.Updata_Distance_Angle();
@@ -236,7 +238,14 @@ extern "C" void Control_Task_Callback()
 
     chariot.TIM_Calculate_PeriodElapsedCallback();
 
+    // chariot.Test_Tension();
 
+    // Pull_Measure_Callback(UART3_Manage_Object.Rx_Buffer,6);
+
+    if(huart3.ErrorCode == HAL_UART_ERROR_FE || huart3.ErrorCode == HAL_UART_ERROR_ORE || huart3.ErrorCode == HAL_UART_ERROR_NE){
+        huart3.ErrorCode = HAL_UART_ERROR_NONE;
+        HAL_UART_Receive_IT(&huart3, UART3_Manage_Object.Rx_Buffer, 6);
+    }
     // if(chariot.Calibrate()){
     //     chariot.Test_Tension();
     // }
@@ -259,7 +268,8 @@ extern "C" void Control_Task_Callback()
         if(chariot.DebugControl.Debug_Start_Flag)
         {
             //20hz
-            chariot.DebugControl.DebugControl_Tx_Callback(chariot.Motor_Yaw.Get_Now_Angle(),chariot.Now_Distance_Motor_Down);
+            chariot.DebugControl.DebugControl_Tx_Callback(chariot.Motor_Yaw.Get_Now_Angle(),
+                                                          chariot.Tension_Meter.Get_Tension_Meter()/10.0f);
             TIM_UART_PeriodElapsedCallback();
             tx_cnt = 0;            
         }
@@ -336,9 +346,13 @@ void Referee_Callback()
  * @brief EXIT 拉力计解包任务 
  * details: 触发方式 isr 触发
  */
-void Pull_Measure_Callback()
+void Pull_Measure_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.Tension_Meter.TensionMeter_Cal();
+    // chariot.Tension_Meter.TensionMeter_Cal();
+    Struct_Tension_Meter_Data Tension_Meter_Data;
+    tension_flag++;
+    memcpy(&Tension_Meter_Data,Buffer,sizeof(Struct_Tension_Meter_Data));
+    chariot.Tension_Meter.Set_Tension_Meter(Tension_Meter_Data.Tension_Value);  
 }
 
 
@@ -346,10 +360,10 @@ void Pull_Measure_Callback()
  * @brief 初始化任务
  *
  */
-extern "C" void Task_Init()
+extern "C" void Task_Init_()
 {  
 
-    HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_SET);
+    // HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0, GPIO_PIN_SET);
     DWT_Init(168);
 
     /********************************** 驱动层初始化 **********************************/
@@ -362,6 +376,8 @@ extern "C" void Task_Init()
 
     //调试控制串口
     UART_Init(&huart7, DebugControl_UART7_Callback, sizeof(Struct_DebugControl_RxData));
+
+    UART_Init(&huart3, Pull_Measure_Callback, 6);
 
     //集中总线can1/can2
     CAN_Init(&hcan1, Device_CAN1_Callback);
@@ -405,6 +421,51 @@ extern "C" void Task_Init()
  extern "C" void Task_Loop()
 {
 
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if(huart->Instance == USART3)
+    {
+        static uint8_t index = 0;
+        static uint8_t rec_buf[20] = {0};
+        // 处理接收到的数据
+        // 获取最新接收的字节
+        uint8_t new_byte = UART3_Manage_Object.Rx_Buffer[0];
+        
+        // 检测起始字节（0x55）
+        if(index == 0 && new_byte == 0x55) 
+        {
+            rec_buf[index++] = new_byte;
+        } 
+        // 已开始接收数据包
+        else if(index > 0) 
+        {
+            // 检测是否提前出现新包头
+            if(new_byte == 0x55) 
+            {
+                index = 0; // 重置索引，开始新数据包
+                rec_buf[index++] = new_byte;
+            } 
+            else 
+            {
+                rec_buf[index++] = new_byte;
+                
+                // 完整接收6字节后验证尾字节
+                if(index >= 6) 
+                {
+                    if(rec_buf[5] == 0xAA) // 验证结束标志
+                    {
+                        Pull_Measure_Callback(rec_buf, 6);
+                    }
+                    index = 0; // 重置索引准备接收新包
+                }
+            }
+        }
+        
+        // 重新启动单字节接收（重要！）
+        HAL_UART_Receive_IT(&huart3, UART3_Manage_Object.Rx_Buffer, 1);
+    }
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

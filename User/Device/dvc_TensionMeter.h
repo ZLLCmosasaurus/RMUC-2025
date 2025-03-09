@@ -18,6 +18,14 @@
 
 /* Private types -------------------------------------------------------------*/
 
+struct Struct_Tension_Meter_Data
+{
+    uint8_t frame;
+    float Tension_Value;
+    uint8_t tear;
+}__attribute__((packed));
+
+
 enum Enum_Tension_Meter_Status
 {
     Tension_Meter_Status_DISABLE = 0,
@@ -61,6 +69,11 @@ public:
     inline void Set_Ratio(float ratio);
     inline void Set_OffsetValue(float offset);/* 设置传感器误差校正/补偿值 */
     inline void Set_Gain(Enum_HX711_Gain gain);/* 设置传感器增益 */
+
+    inline void Set_Tension_Meter_Tare(float _tare);
+
+    inline void Set_Tension_Meter(float tension);
+    inline Enum_Tension_Meter_Status Get_Tension_Meter_Status(void);
 
     inline float Get_Tension_Meter(void);
     inline float Get_Tare(void);
@@ -106,6 +119,7 @@ protected:
     // 上一次的原始数据
     uint32_t Pre_Raw_Data;
 
+    float uart_tare;
 
     uint32_t init_data_cal;
     uint8_t init_cnt;
@@ -146,6 +160,20 @@ void Class_TensionMeter::Set_OffsetValue(float offset)
 void Class_TensionMeter::Set_Gain(Enum_HX711_Gain gain)
 {
     HX711.gain = gain;
+}
+
+void Class_TensionMeter::Set_Tension_Meter_Tare(float _tare)
+{
+    uart_tare = _tare;
+}
+
+void Class_TensionMeter::Set_Tension_Meter(float tension){
+    Tension_Value = tension;
+}
+
+
+Enum_Tension_Meter_Status Class_TensionMeter::Get_Tension_Meter_Status(void){
+    return (Tension_Meter_Status);
 }
 
 float Class_TensionMeter::Get_Tension_Meter(void)
