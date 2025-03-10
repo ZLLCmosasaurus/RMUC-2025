@@ -1,0 +1,6 @@
+r
+halt
+loadfile "d:\js\RM\suppercap\FSBB_V8\FSBB_V8\MDK-ARM\FSBB_V8\FSBB_V8.hex"
+r
+go
+exit

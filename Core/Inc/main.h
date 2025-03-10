@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stm32f3xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,31 +57,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BoardC_CAN2_Rx_Pin GPIO_PIN_5
-#define BoardC_CAN2_Rx_GPIO_Port GPIOB
-#define BoardC_CAN2_Tx_Pin GPIO_PIN_6
-#define BoardC_CAN2_Tx_GPIO_Port GPIOB
-#define BoardC_CAN1_Rx_Pin GPIO_PIN_0
-#define BoardC_CAN1_Rx_GPIO_Port GPIOD
-#define BoardC_CAN1_Tx_Pin GPIO_PIN_1
-#define BoardC_CAN1_Tx_GPIO_Port GPIOD
-#define RSTN_IST8310_Pin GPIO_PIN_6
-#define RSTN_IST8310_GPIO_Port GPIOG
-#define IMU_PWM_Pin GPIO_PIN_6
-#define IMU_PWM_GPIO_Port GPIOF
-#define DRDY_IST8310_Pin GPIO_PIN_3
-#define DRDY_IST8310_GPIO_Port GPIOG
-#define DRDY_IST8310_EXTI_IRQn EXTI3_IRQn
-#define CS1_ACCEL_Pin GPIO_PIN_4
-#define CS1_ACCEL_GPIO_Port GPIOA
-#define INT1_ACCEL_Pin GPIO_PIN_4
-#define INT1_ACCEL_GPIO_Port GPIOC
-#define INT1_ACCEL_EXTI_IRQn EXTI4_IRQn
-#define INT1_GYRO_Pin GPIO_PIN_5
-#define INT1_GYRO_GPIO_Port GPIOC
-#define INT1_GYRO_EXTI_IRQn EXTI9_5_IRQn
-#define CS1_GYRO_Pin GPIO_PIN_0
-#define CS1_GYRO_GPIO_Port GPIOB
+#define ADC_I_VIN_Pin GPIO_PIN_0
+#define ADC_I_VIN_GPIO_Port GPIOA
+#define ADC_V_VIN_Pin GPIO_PIN_1
+#define ADC_V_VIN_GPIO_Port GPIOA
+#define ADC_I_MOTOR_Pin GPIO_PIN_2
+#define ADC_I_MOTOR_GPIO_Port GPIOA
+#define KEY1_Pin GPIO_PIN_6
+#define KEY1_GPIO_Port GPIOA
+#define KEY2_Pin GPIO_PIN_7
+#define KEY2_GPIO_Port GPIOA
+#define BUZZER_Pin GPIO_PIN_1
+#define BUZZER_GPIO_Port GPIOB
+#define KEY3_Pin GPIO_PIN_11
+#define KEY3_GPIO_Port GPIOB
+#define LED_R_Pin GPIO_PIN_12
+#define LED_R_GPIO_Port GPIOB
+#define LED_B_Pin GPIO_PIN_13
+#define LED_B_GPIO_Port GPIOB
+#define ADC_I_CAP_Pin GPIO_PIN_14
+#define ADC_I_CAP_GPIO_Port GPIOB
+#define ADC_V_CAP_Pin GPIO_PIN_15
+#define ADC_V_CAP_GPIO_Port GPIOB
+#define _12V_EN_Pin GPIO_PIN_12
+#define _12V_EN_GPIO_Port GPIOA
+#define LED_G_Pin GPIO_PIN_15
+#define LED_G_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

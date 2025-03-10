@@ -1,5 +1,5 @@
 {
-  "name": "infantry",
+  "name": "FSBB_V8",
   "type": "ARM",
   "dependenceList": [],
   "srcDirs": [],
@@ -15,7 +15,7 @@
             "name": "MDK-ARM",
             "files": [
               {
-                "path": "startup_stm32f407xx.s"
+                "path": "startup_stm32f334x8.s"
               }
             ],
             "folders": []
@@ -34,16 +34,19 @@
                     "path": "../Core/Src/gpio.c"
                   },
                   {
+                    "path": "../Core/Src/adc.c"
+                  },
+                  {
                     "path": "../Core/Src/can.c"
                   },
                   {
                     "path": "../Core/Src/dma.c"
                   },
                   {
-                    "path": "../Core/Src/i2c.c"
+                    "path": "../Core/Src/hrtim.c"
                   },
                   {
-                    "path": "../Core/Src/spi.c"
+                    "path": "../Core/Src/i2c.c"
                   },
                   {
                     "path": "../Core/Src/tim.c"
@@ -52,43 +55,13 @@
                     "path": "../Core/Src/usart.c"
                   },
                   {
-                    "path": "../Core/Src/stm32f4xx_it.c"
+                    "path": "../Core/Src/stm32f3xx_it.c"
                   },
                   {
-                    "path": "../Core/Src/stm32f4xx_hal_msp.c"
+                    "path": "../Core/Src/stm32f3xx_hal_msp.c"
                   }
                 ],
                 "folders": []
-              },
-              {
-                "name": "USB_DEVICE",
-                "files": [],
-                "folders": [
-                  {
-                    "name": "App",
-                    "files": [
-                      {
-                        "path": "../USB_DEVICE/App/usb_device.c"
-                      },
-                      {
-                        "path": "../USB_DEVICE/App/usbd_desc.c"
-                      },
-                      {
-                        "path": "../USB_DEVICE/App/usbd_cdc_if.c"
-                      }
-                    ],
-                    "folders": []
-                  },
-                  {
-                    "name": "Target",
-                    "files": [
-                      {
-                        "path": "../USB_DEVICE/Target/usbd_conf.c"
-                      }
-                    ],
-                    "folders": []
-                  }
-                ]
               }
             ]
           }
@@ -99,76 +72,70 @@
         "files": [],
         "folders": [
           {
-            "name": "STM32F4xx_HAL_Driver",
+            "name": "STM32F3xx_HAL_Driver",
             "files": [
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_dma.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_pwr_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2c_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_exti.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_can.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_hrtim.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c"
               },
               {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c"
-              },
-              {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c"
-              },
-              {
-                "path": "../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c"
+                "path": "../Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c"
               }
             ],
             "folders": []
@@ -177,7 +144,7 @@
             "name": "CMSIS",
             "files": [
               {
-                "path": "../Core/Src/system_stm32f4xx.c"
+                "path": "../Core/Src/system_stm32f3xx.c"
               }
             ],
             "folders": []
@@ -185,16 +152,13 @@
         ]
       },
       {
-        "name": "Chariot",
+        "name": "Congfig",
         "files": [
           {
-            "path": "../User/Chariot/crt_booster.cpp"
+            "path": "../Hardware/Congfig/config.cpp"
           },
           {
-            "path": "../User/Chariot/crt_chassis.cpp"
-          },
-          {
-            "path": "../User/Chariot/crt_gimbal.cpp"
+            "path": "../Hardware/Congfig/config.h"
           }
         ],
         "folders": []
@@ -203,211 +167,118 @@
         "name": "Device",
         "files": [
           {
-            "path": "../User/Device/dvc_imu.cpp"
+            "path": "../Hardware/Device/dvc_dwt.cpp"
           },
           {
-            "path": "../User/Device/dvc_boardc_bmi088.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_boardc_ist8310.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_djimotor.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_dmmotor.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_lkmotor.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_dr16.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_supercap.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_manifold.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_minipc.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_referee.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_sampler.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_serialplot.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_servo.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_witahrs.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_dwt.cpp"
-          },
-          {
-            "path": "../User/Device/CharSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_GraphicsSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/GraphicsSendTask.cpp"
+            "path": "../Hardware/Device/dvc_dwt.h"
           }
         ],
         "folders": []
       },
       {
-        "name": "Interaction",
+        "name": "Driver",
         "files": [
           {
-            "path": "../User/Interaction/ita_chariot.cpp"
+            "path": "../Hardware/Driver/drv_can.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_can.h"
+          },
+          {
+            "path": "../Hardware/Driver/drv_dwt.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_dwt.h"
+          },
+          {
+            "path": "../Hardware/Driver/drv_i2c.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_i2c.h"
+          },
+          {
+            "path": "../Hardware/Driver/drv_math.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_math.h"
+          },
+          {
+            "path": "../Hardware/Driver/drv_tim.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_tim.h"
+          },
+          {
+            "path": "../Hardware/Driver/drv_uart.cpp"
+          },
+          {
+            "path": "../Hardware/Driver/drv_uart.h"
           }
         ],
         "folders": []
-      },
-      {
-        "name": "Middleware",
-        "files": [],
-        "folders": [
-          {
-            "name": "Algorithm",
-            "files": [
-              {
-                "path": "../User/Middleware/Algorithm/alg_filter.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/alg_fsm.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/alg_pid.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/alg_slope.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/user_lib.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/QuaternionEKF.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/kalman_filter.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/PID.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/alg_MahonyAHRS.cpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
-              }
-            ],
-            "folders": []
-          },
-          {
-            "name": "Driver",
-            "files": [
-              {
-                "path": "../User/Middleware/Driver/drv_math.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_adc.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_bsp-boarda.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_can.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_dwt.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_i2c.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_spi.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_tim.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_uart.cpp"
-              },
-              {
-                "path": "../User/Middleware/Driver/drv_usb.cpp"
-              }
-            ],
-            "folders": []
-          }
-        ]
       },
       {
         "name": "Task",
         "files": [
           {
-            "path": "../User/Task/tsk_config_and_callback.cpp"
+            "path": "../Hardware/Task/tsk_config_and_callback.cpp"
+          },
+          {
+            "path": "../Hardware/Task/tsk_config_and_callback.h"
           }
         ],
         "folders": []
       },
       {
-        "name": "Middlewares",
-        "files": [],
-        "folders": [
-          {
-            "name": "USB_Device_Library",
-            "files": [
-              {
-                "path": "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c"
-              },
-              {
-                "path": "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c"
-              },
-              {
-                "path": "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c"
-              },
-              {
-                "path": "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c"
-              }
-            ],
-            "folders": []
-          },
-          {
-            "name": "Library",
-            "files": [],
-            "folders": [
-              {
-                "name": "DSP Library",
-                "files": [],
-                "folders": [
-                  {
-                    "name": "DSP Library",
-                    "files": [
-                      {
-                        "path": "../Middlewares/ST/ARM/DSP/Lib/arm_cortexM4lf_math.lib"
-                      }
-                    ],
-                    "folders": []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Config",
+        "name": "USER",
         "files": [
           {
-            "path": "../User/Congfig/config.h"
+            "path": "../Hardware/USER/Buzzer.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Buzzer.h"
+          },
+          {
+            "path": "../Hardware/USER/Communication.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Communication.h"
+          },
+          {
+            "path": "../Hardware/USER/Key.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Key.h"
+          },
+          {
+            "path": "../Hardware/USER/Led.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Led.h"
+          },
+          {
+            "path": "../Hardware/USER/Measure.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Measure.h"
+          },
+          {
+            "path": "../Hardware/USER/PID.cpp"
+          },
+          {
+            "path": "../Hardware/USER/PID.h"
+          },
+          {
+            "path": "../Hardware/USER/Power_Control.cpp"
+          },
+          {
+            "path": "../Hardware/USER/Power_Control.h"
+          },
+          {
+            "path": "../Hardware/USER/TIMER.cpp"
+          },
+          {
+            "path": "../Hardware/USER/TIMER.h"
           }
         ],
         "folders": []
@@ -419,16 +290,16 @@
       }
     ]
   },
-  "outDir": "..\\MDK-ARM",
-  "deviceName": "STM32F407IGHx",
-  "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
+  "outDir": ".",
+  "deviceName": null,
+  "packDir": null,
   "miscInfo": {
-    "uid": "85c96ec307b268da1692ba450d60b381"
+    "uid": "bcf3cc74dd54627521f46277c8bb9cb6"
   },
   "targets": {
-    "infantry": {
+    "FSBB_V8": {
       "excludeList": [],
-      "toolchain": "AC6",
+      "toolchain": "AC5",
       "compileConfig": {
         "cpuType": "Cortex-M4",
         "floatingPointHardware": "single",
@@ -471,7 +342,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x1c000"
+                "size": "0x3000"
               },
               "isChecked": true,
               "noInit": false
@@ -480,8 +351,8 @@
               "tag": "IRAM",
               "id": 2,
               "mem": {
-                "startAddr": "0x2001c000",
-                "size": "0x4000"
+                "startAddr": "0x10000000",
+                "size": "0x1000"
               },
               "isChecked": true,
               "noInit": false
@@ -523,7 +394,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x8000000",
-                "size": "0x100000"
+                "size": "0x10000"
               },
               "isChecked": true,
               "isStartup": true
@@ -547,8 +418,8 @@
         "bin": "",
         "baseAddr": "",
         "cpuInfo": {
-          "vendor": "ST",
-          "cpuName": "STM32F407IG"
+          "vendor": "null",
+          "cpuName": "null"
         },
         "proType": 1,
         "speed": 8000,
@@ -558,36 +429,51 @@
       "custom_dep": {
         "name": "default",
         "incList": [
-          ".",
           "../Core/Inc",
-          "../Drivers/STM32F4xx_HAL_Driver/Inc",
-          "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
-          "../Drivers/CMSIS/Device/ST/STM32F4xx/Include",
+          "../Drivers/STM32F3xx_HAL_Driver/Inc",
+          "../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy",
+          "../Drivers/CMSIS/Device/ST/STM32F3xx/Include",
           "../Drivers/CMSIS/Include",
-          "../User/Chariot",
-          "../User/Device",
-          "../User/Interaction",
-          "../User/Middleware/Algorithm",
-          "../User/Middleware/Driver",
-          "../User/Task",
-          "../USB_DEVICE/App",
-          "../USB_DEVICE/Target",
-          "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc",
-          "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src",
-          "../Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
-          "../Middlewares/ST/STM32_USB_Device_Library/Core/Src",
-          "../Middlewares/ST/ARM/DSP/Inc",
-          "../Drivers/CMSIS/DSP/Include",
-          "../User/Congfig",
-          "RTE/_infantry"
+          "../Hardware/Congfig",
+          "../Hardware/USER",
+          "../Hardware/Device",
+          "../Hardware/Driver",
+          "../Hardware/Task",
+          "RTE/_FSBB_V8"
         ],
         "libList": [],
         "defineList": [
           "USE_HAL_DRIVER",
-          "STM32F407xx"
+          "STM32F334x8"
         ]
+      },
+      "builderOptions": {
+        "AC5": {
+          "version": 4,
+          "beforeBuildTasks": [],
+          "afterBuildTasks": [],
+          "global": {
+            "use-microLIB": true,
+            "output-debug-info": "enable"
+          },
+          "c/cpp-compiler": {
+            "optimization": "level-0",
+            "one-elf-section-per-function": true,
+            "c99-mode": true,
+            "C_FLAGS": "--diag_suppress=1 --diag_suppress=1295",
+            "CXX_FLAGS": "--diag_suppress=1 --diag_suppress=1295",
+            "warnings": "all-warnings"
+          },
+          "asm-compiler": {},
+          "linker": {
+            "output-format": "elf",
+            "xo-base": "",
+            "ro-base": "",
+            "rw-base": ""
+          }
+        }
       }
     }
   },
-  "version": "3.4"
+  "version": "3.5"
 }
