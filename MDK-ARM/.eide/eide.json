@@ -261,6 +261,9 @@
           },
           {
             "path": "../User/Device/dvc_buzzer.cpp"
+          },
+          {
+            "path": "../User/Device/dvc_ws2812.cpp"
           }
         ],
         "folders": []

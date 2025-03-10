@@ -112,7 +112,7 @@ protected:
     //常量
 
     // 重力补偿
-    float Gravity_Compensate = 3200.0f;
+    float Gravity_Compensate = 0.0f;
 
     //内部变量
     float True_Rad_Pitch = 0.0f;
@@ -248,9 +248,9 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -0.74f;
+    float Min_Pitch_Angle = -7.f;
     // pitch轴最大值
-    float Max_Pitch_Angle = 0.25f ; //多10°
+    float Max_Pitch_Angle = 35.0f ; //多10°
 
     //内部变量 
 

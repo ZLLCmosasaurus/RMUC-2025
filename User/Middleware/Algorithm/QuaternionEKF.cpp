@@ -203,7 +203,7 @@ void IMU_QuaternionEKF_Update(float gx, float gy, float gz, float ax, float ay, 
     QEKF_INS->q[3] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[3];
     QEKF_INS->GyroBias[0] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[4];
     QEKF_INS->GyroBias[1] = QEKF_INS->IMU_QuaternionEKF.FilteredValue[5];
-    QEKF_INS->GyroBias[2] = -0.000045234381626762; // 大部分时候z轴通天,无法观测yaw的漂移
+    QEKF_INS->GyroBias[2] = 9.846522626022788e-5; // 大部分时候z轴通天,无法观测yaw的漂移
 
     // 利用四元数反解欧拉角
     QEKF_INS->Yaw = atan2f(2.0f * (QEKF_INS->q[0] * QEKF_INS->q[3] + QEKF_INS->q[1] * QEKF_INS->q[2]), 2.0f * (QEKF_INS->q[0] * QEKF_INS->q[0] + QEKF_INS->q[1] * QEKF_INS->q[1]) - 1.0f) * 57.295779513f;

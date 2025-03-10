@@ -205,10 +205,10 @@ void Class_LK_Motor::Data_Process()
     Data.CMD_ID = tmp_buffer->CMD_ID;
     Data.Now_Angle = (float)Data.Total_Encoder / (float)Position_Max *360.0f; 
     Data.Now_Radian = Data.Now_Angle * DEG_TO_RAD;
-    Data.Now_Omega_Angle = tmp_omega;
-    Data.Now_Omega_Radian = tmp_omega *DEG_TO_RAD; 
-    Data.Now_Current = Math_Int_To_Float(tmp_current, -(1 << 11) + 1, (1 << 11) - 1, -Current_Max, Current_Max); 
-    Data.Now_Temperature = tmp_buffer->Temperature_Centigrade;  
+    Data.Now_Omega_Angle = (int16_t)tmp_omega;
+    Data.Now_Omega_Radian = Data.Now_Omega_Angle *DEG_TO_RAD; 
+    Data.Now_Current = Math_Int_To_Float((int16_t)tmp_current, -2048, 2048, -Current_Max, Current_Max); 
+    Data.Now_Temperature = (int8_t)tmp_buffer->Temperature_Centigrade;  
 
     //存储预备信息
     Data.Pre_Encoder = tmp_encoder;
@@ -233,7 +233,17 @@ void Class_LK_Motor::Output(void)
         case(LK_Motor_Control_Shut_Down):
             CAN_Tx_Data[0] = LK_Motor_Control_Shut_Down;
         break;
+        case(LK_Motor_Control_Position):
+            CAN_Tx_Data[0] = LK_Motor_Control_Position;
+            CAN_Tx_Data[2]  =   limit_speed;
+            CAN_Tx_Data[3]  =   limit_speed>>8;
+            CAN_Tx_Data[4] = (int32_t)Out; 
+            CAN_Tx_Data[5] = (int32_t)Out >> 8;
+            CAN_Tx_Data[6] = (int32_t)Out>> 16; 
+            CAN_Tx_Data[7] = (int32_t)Out >> 24;
+        break;
         default:
+        
         break;
     }   
 }

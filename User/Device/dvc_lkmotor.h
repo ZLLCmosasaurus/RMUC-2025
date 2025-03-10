@@ -69,6 +69,7 @@ enum Enum_LK_Motor_Control_ID : uint8_t
     LK_Motor_Control_Stop = 0x81, //?????
     LK_Motor_Control_Run = 0x88,//???????
     LK_Motor_Control_Torque = 0xA1,//??????????
+    LK_Motor_Control_Position =   0xA8,
 };
 
 /**
@@ -189,7 +190,7 @@ protected:
     
     const float Torque_Current = 0.3;  
 
-    
+    uint16_t limit_speed    =   240;
     uint32_t Position_Max = 16383;
 
 
@@ -206,7 +207,7 @@ protected:
     Struct_LK_Motor_Rx_Data Data;
 
 
-    Enum_LK_Motor_Control_ID LK_Motor_Control_ID = LK_Motor_Control_Torque;
+    Enum_LK_Motor_Control_ID LK_Motor_Control_ID = LK_Motor_Control_Position;
     
     Enum_LK_Motor_Control_Status LK_Motor_Control_Status = LK_Motor_Control_Status_DISABLE;
     
@@ -220,7 +221,7 @@ protected:
     float Target_Angle = 0.0f;
     float Target_Omega_Radian = 0.0f;
     float Target_Omega_Angle = 0.0f;
-    
+    float Target_Angle_Additon=0.0f;
     float Target_Current = 0.0f;
     
     float Target_Torque = 0.0f;

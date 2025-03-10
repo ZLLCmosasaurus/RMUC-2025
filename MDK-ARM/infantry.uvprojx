@@ -10,6 +10,7 @@
       <TargetName>infantry</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pArmCC>6210000::V6.21::ARMCLANG</pArmCC>
       <pCCUsed>6210000::V6.21::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
@@ -81,7 +82,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -698,6 +699,11 @@
               <FileName>dvc_buzzer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_buzzer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dvc_ws2812.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_ws2812.cpp</FilePath>
             </File>
           </Files>
         </Group>

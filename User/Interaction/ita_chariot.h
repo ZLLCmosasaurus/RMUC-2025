@@ -23,6 +23,7 @@
 #include "crt_chassis.h"
 #include "config.h"
 #include "dvc_buzzer.h"
+#include "dvc_ws2812.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -144,6 +145,7 @@ public:
 
     #endif
     Class_Buzzer Buzzer;
+    Class_WS2812 LED;
     void Init(float __DR16_Dead_Zone = 0);
     
     #ifdef CHASSIS
@@ -238,7 +240,7 @@ protected:
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Angle_Resolution = 0.0005f * PI * 57.29577951308232;
+        float DR16_Pitch_Angle_Resolution = 0.005f * PI * 57.29577951308232;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Resolution = 0.003f * PI;

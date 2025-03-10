@@ -34,7 +34,7 @@
 #define CELSIUS_TO_KELVIN (273.15f)
 //重力加速度
 //合肥9.7933
-#define GRAVITY_ACCELERATE (9.7933f)
+#define GRAVITY_ACCELERATE (9.7997f)
 
 /* Exported types ------------------------------------------------------------*/
 

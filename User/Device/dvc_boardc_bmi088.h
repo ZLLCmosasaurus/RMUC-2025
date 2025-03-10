@@ -18,6 +18,8 @@
 #include "tim.h"
 #include "QuaternionEKF.h"
 
+#define INFANTRY_ID 5
+
 #define BMI088_TEMP_FACTOR 0.125f
 #define BMI088_TEMP_OFFSET 23.0f
 
@@ -71,6 +73,11 @@
 #define GyOFFSET -0.001786f
 #define GzOFFSET 0.0004346f
 #define gNORM 9.876785f
+#elif INFANTRY_ID == 5
+#define GxOFFSET 0.00348736974f
+#define GyOFFSET 0.00322634866f
+#define GzOFFSET 8.52203993e-06
+#define gNORM 9.77793121
 #endif
 
 
@@ -143,7 +150,7 @@ protected:
 
     uint8_t error = BMI088_NO_ERROR;
 
-    const uint8_t caliOffset = 1;
+    const uint8_t caliOffset = 0;
 
     uint8_t fac_us = 0;
     uint32_t fac_ms = 0;

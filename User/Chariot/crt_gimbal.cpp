@@ -233,6 +233,7 @@ void Class_Gimbal_Pitch_Motor_LK6010::TIM_PID_PeriodElapsedCallback()
     case (LK_Motor_Control_Method_TORQUE):
     {
         Out = Target_Torque*Torque_Current/Current_Max*Current_Max_Cmd;
+				Target_Angle_Additon=0;
         Set_Out(Out);
     }
     break;
@@ -283,10 +284,19 @@ void Class_Gimbal_Pitch_Motor_LK6010::TIM_PID_PeriodElapsedCallback()
         // }
         PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
-        Out = PID_Omega.Get_Out() + Gravity_Compensate;
+        Out = -PID_Omega.Get_Out() + Gravity_Compensate;
         Set_Out(Out);
     }
     break;
+    case (LK_Motor_Control_Method_ANGLE):
+    {
+        PID_Angle.Set_Target(Target_Angle);
+            PID_Angle.Set_Now(True_Angle_Pitch);
+            PID_Angle.TIM_Adjust_PeriodElapsedCallback();
+            Out = -PID_Angle.Get_Out();
+            Set_Out(Out);
+            
+    }
     default:
     {
         Set_Out(0.0f);
@@ -331,11 +341,13 @@ void Class_Gimbal::Init()
     // Motor_Pitch.IMU = &Boardc_BMI;
     // Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 3413);
 
-    Motor_Pitch_LK6010.PID_Angle.Init(0.f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    Motor_Pitch_LK6010.PID_Omega.Init(0.0f, 0.0f, 0.0f, 0, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
-    Motor_Pitch_LK6010.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max());
+    Motor_Pitch_LK6010.PID_Angle.Init(10.f, 0.5f, 0.0f, 0.0f, 1.0f, 20.0f);
+    // Motor_Pitch_LK6010.PID_Omega.Init(0.0f, 0.0f, 0.0f, 0, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.8f);
+    // Motor_Pitch_LK6010.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch_LK6010.Get_Output_Max(), Motor_Pitch_LK6010.Get_Output_Max());
+    // Motor_Pitch_LK6010.PID_Omega.Init(0.0f, 0.0f, 0.0f, 0, 0, 0,0.0f,0.0f,0.0f,0.001f,0.8f);
+    // Motor_Pitch_LK6010.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, 0, 0);
     Motor_Pitch_LK6010.IMU = &Boardc_BMI;
-    Motor_Pitch_LK6010.Init(&hcan1, LK_Motor_ID_0x141, DJI_Motor_Control_Method_IMU_ANGLE);
+    Motor_Pitch_LK6010.Init(&hcan1, LK_Motor_ID_0x141, LK_Motor_Control_Method_ANGLE);
    
 }
 
@@ -370,7 +382,7 @@ void Class_Gimbal::Output()
     {   
         Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
         // Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        Motor_Pitch_LK6010.Set_LK_Motor_Control_Method(LK_Motor_Control_Method_IMU_ANGLE);
+        Motor_Pitch_LK6010.Set_LK_Motor_Control_Method(LK_Motor_Control_Method_ANGLE);
         
         if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
         {

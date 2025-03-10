@@ -14,6 +14,7 @@
 #include "ita_chariot.h"
 #include "drv_math.h"
 #include "dvc_GraphicsSendTask.h"
+
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -72,6 +73,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         MiniPC.Referee = &Referee;
 
         Buzzer.Buzzer_Init(&htim4, TIM_CHANNEL_3);
+//        LED.Init(&htim1, TIM_CHANNEL_1);
+
     #endif
 }
 

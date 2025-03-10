@@ -108,7 +108,7 @@ class Class_IMU
     float INS_Angle[3] = {0.0f, 0.0f, 0.0f};
 
     //重力加速度
-	const float Gravity[3] = {0, 0, 9.81f};
+	const float Gravity[3] = {0, 0, 9.7997f};
 
     //DWT计数
     float INS_DWT_Dt;
