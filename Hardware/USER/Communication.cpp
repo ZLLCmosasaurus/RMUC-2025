@@ -114,18 +114,13 @@ void Data_Send_F2(int *pst, unsigned char len)
 void CAN_Data_Process(uint8_t *RX_Data)
 {   
     memcpy(&control.P_set,&RX_Data[0],4);
+    memcpy(&control.power_limit,&RX_Data[4],1);
     rx_cnt++;
 }
 
 void Send_Error()
-{   
-    int Send_P_Motor;   //处理后的数据
-    int Send_V_Cap;
-    Send_P_Motor=measure.P_Motor*100;
-    Send_V_Cap=ADC_V_CAP.Solved_value*100;
-    memcpy(&ERROR_DATA[0],&Send_P_Motor,2);  //底盘功率
-    memcpy(&ERROR_DATA[3],&Send_V_Cap,2);  //电容组电量百分比
-
-    ERROR_DATA[5]=Low_Volt;                   //低电压警告
-    CAN_Send_Data(&hcan,CAN_ID,ERROR_DATA,8);
+{
+    ERROR_DATA[0]=Low_Volt;                   //低电压警告
+    memcpy(&ERROR_DATA[1],& measure.p_beyondl,4);          //底盘功率
+    CAN_Send_Data(&hcan,ERROR_ID,ERROR_DATA,8);
 }

@@ -249,22 +249,6 @@ void TIM2_IRQHandler(void)
 /**
   * @brief This function handles HRTIM timer C global interrupt.
   */
-void HRTIM1_TIMC_IRQHandler(void)
-{
-  /* USER CODE BEGIN HRTIM1_TIMC_IRQn 0 */
-
-  /* USER CODE END HRTIM1_TIMC_IRQn 0 */
-  HAL_HRTIM_IRQHandler(&hhrtim1,HRTIM_TIMERINDEX_TIMER_C);
-  /* USER CODE BEGIN HRTIM1_TIMC_IRQn 1 */
-//	get_time_ms1=DWT_GetTimeline_ms3
-	  ADC_Measure();
-    Mode_Judgment();
-    PID_Control();
-//  get_time_ms2=DWT_GetTimeline_ms();
-//  get_time=get_time_ms2-get_time_ms1;
-  /* USER CODE END HRTIM1_TIMC_IRQn 1 */
-}
-
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

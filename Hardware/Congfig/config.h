@@ -25,7 +25,7 @@
 /* Exported variables --------------------------------------------------------*/
 /*************设置本设备CAN发送ID***************/
 #define CAN_ID 0X67
-
+#define ERROR_ID 0X55
 /* Exported function declarations --------------------------------------------*/
 
 #endif

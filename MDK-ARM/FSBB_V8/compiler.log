@@ -18,24 +18,24 @@
   			ratio_test+=0.01;
   			^
 .\..\Hardware\USER\Key.cpp: 2 warnings, 0 errors
-".\..\Hardware\USER\Measure.cpp", line 152: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	V_Motor=ADC_VIN.Solved_value-2*ADC_I_MOTOR.Solved_value*MOTOR_Sense_resistor/I_Magnification;		//¿¼ÂÇ¼ì²âµç×è
-  	                             ^
-.\..\Hardware\USER\Measure.cpp: 1 warning, 0 errors
-".\..\Hardware\USER\Power_Control.cpp", line 92: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
+".\..\Hardware\USER\Power_Control.cpp", line 104: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	control.Volt_ratio=M_MAX(control.Volt_ratio,1.2);			//ÏÞ·ù
   	                   ^
-".\..\Hardware\USER\Power_Control.cpp", line 92: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
+".\..\Hardware\USER\Power_Control.cpp", line 104: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	control.Volt_ratio=M_MAX(control.Volt_ratio,1.2);			//ÏÞ·ù
   	                   ^
-".\..\Hardware\USER\Power_Control.cpp", line 310: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
+".\..\Hardware\USER\Power_Control.cpp", line 309: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	VBToVA=M_MAX(VBToVA,1.2);			//ÏÞ·ù
   	       ^
-".\..\Hardware\USER\Power_Control.cpp", line 310: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
+".\..\Hardware\USER\Power_Control.cpp", line 309: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	VBToVA=M_MAX(VBToVA,1.2);			//ÏÞ·ù
   	       ^
 .\..\Hardware\USER\Power_Control.cpp: 4 warnings, 0 errors
+".\..\Hardware\USER\Measure.cpp", line 150: Warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	V_Motor=ADC_VIN.Solved_value-2*ADC_I_MOTOR.Solved_value*MOTOR_Sense_resistor/I_Magnification;		//¿¼ÂÇ¼ì²âµç×è
+  	                             ^
+.\..\Hardware\USER\Measure.cpp: 1 warning, 0 errors
 
 >>> ld
 
-Program Size: Code=32388 RO-data=480 RW-data=280 ZI-data=5808  
+Program Size: Code=32948 RO-data=480 RW-data=280 ZI-data=5824  

@@ -39,14 +39,7 @@ void  PID_Control()
     case Standby:   //故障
     {
 		BUZZER(1000);
-	/*	
-	if(control.error_code==VOLT&&ADC_VIN.Solved_value>MAX_UVP_VAL)
-		{
-			control.Volt_ratio=ADC_V_CAP.Solved_value/24.0f;
-		}
-			*/
         break;
-
     }
     case Normal:  
     	{	
@@ -88,14 +81,33 @@ void  PID_Control()
 	
 		break;
     	}
+	case LISTEN:
+	{
+		break;
+	}
     }
+/*
+if(control.recovery_ratio_flag==1)
+{
+	if(control.Volt_ratio>control.recovery_ratio)
+	{
+		control.Volt_ratio=control.recovery_ratio;
+		control.cnt++;
+		if (control.cnt>=3)
+		{
+			control.recovery_ratio_flag=0;
+			control.cnt=0;
+		}
+	}
+}
+*/
 	control.Volt_ratio=M_MAX(control.Volt_ratio,1.2);			//限幅
 	control.Volt_ratio=M_MIN(control.Volt_ratio,0);
 	Update_PWM(control.Volt_ratio);
 //	Update_PWM(control.test_ratio);
 if(	PreBBFlag != control.Cap_Mode)
 	{
-		if(PreBBFlag==Standby)
+		if(PreBBFlag==Standby&&control.Cap_Mode==Normal)
 		{	
 			HRTIM_ENABLE();
 		}
@@ -144,9 +156,10 @@ int  Power_on_Self_Test()
 		}
 		else if(control.Real_ratio_forward>0&&control.Real_ratio_forward<1.2f)
 		{	
+			control.recovery_decrease_ratio=map_input_to_output(control.Real_ratio_forward);
 			control.Cap_Mode=Normal;
-			control.currout_loop.Kf=control.Real_ratio_forward-0.1f;
-			control.voltout_loop.Kf=control.Real_ratio_forward-0.1f;
+			control.currout_loop.Kf=control.Real_ratio_forward-control.recovery_decrease_ratio;
+			control.voltout_loop.Kf=control.Real_ratio_forward-control.recovery_decrease_ratio;
 			Update_PWM(control.Real_ratio_forward);
 			HRTIM_ENABLE();
 		}
@@ -222,7 +235,111 @@ void Mode_Judgment(void)
     //NA
     case Standby:
     {
-	 if(ADC_I_IN.Solved_filter_out>0.5f||ADC_I_MOTOR.Solved_filter_out>0.5f||ADC_I_CAP.Solved_filter_out>0.5f)		//
+		Recovery_detect();							//恢复检测
+	break;
+    }
+
+    case Normal:
+    {
+		Error_check();								//错误检测
+        break;
+    }
+	
+	case LISTEN :
+	{
+		HRTIM_DISABLE();
+		break;
+	}
+    }
+
+	if(	PreBBFlag != control.Cap_Mode)
+	{
+		if(PreBBFlag==Standby)
+		{	
+
+		control.recovery_decrease_ratio=map_input_to_output(control.Real_ratio);
+		control.currout_loop.Kf=control.Real_ratio-control.recovery_decrease_ratio;
+		control.voltout_loop.Kf=control.Real_ratio-control.recovery_decrease_ratio;
+		control.error_code=NO;
+		}
+		else
+		{
+		//	HRTIM_DISABLE();
+		}
+		control.BBModeChange=1;
+		
+	}
+	if (control.power_limit==1)
+	{
+		control.Cap_Mode=LISTEN;
+	}
+	else if (control.Cap_Mode==LISTEN&&control.power_limit==0)
+	{
+		control.Cap_Mode=Normal;
+	}
+	
+	
+
+}
+
+
+void HRTIM_DISABLE()
+{
+	HAL_HRTIM_WaveformCountStop(&hhrtim1, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2 | HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //通道关闭
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
+}
+
+void HRTIM_ENABLE()
+{
+	
+	uint8_t state;
+	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2 | HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //通道打开
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
+	state=HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12);
+	while ( state ^ 1)
+	{
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
+	}
+	
+}
+
+void Update_PWM(float VBToVA)		//输入值为电容电压比输入电压
+									//将占空比转换为寄存器实际值
+{
+	VBToVA=M_MAX(VBToVA,1.2);			//限幅
+	VBToVA=M_MIN(VBToVA,0);
+		// A代表DCDC左测
+    	// B代表DCDC右侧
+			if (VBToVA <0.95f)
+			{
+				control.DutyA = 0.95f * VBToVA;
+				control.DutyB = 0.95f;
+			} 
+		
+		else if (0.95f<VBToVA <1.1f)
+			{
+				control.DutyA = (VBToVA + 1.0f) * 0.4f;
+				control.DutyB = (1.0f / VBToVA + 1.0f) * 0.4f;
+			}
+		
+			else
+			{
+				control.DutyA = 0.95f ;
+				control.DutyB = 0.95f/VBToVA;
+			}
+
+	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A , HRTIM_COMPAREUNIT_1, (HRTIMMaster_Period/2)*(1-control.DutyA));
+	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A , HRTIM_COMPAREUNIT_3, (HRTIMMaster_Period/2)*(1+control.DutyA));
+	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B , HRTIM_COMPAREUNIT_1, (HRTIMMaster_Period/2)*(1-control.DutyB));
+	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B , HRTIM_COMPAREUNIT_3, (HRTIMMaster_Period/2)*(1+control.DutyB));
+	control.left_duty=HRTIMMaster_Period * control.DutyA;
+	control.right_duty=HRTIMMaster_Period * control.DutyB;
+}
+
+void Recovery_detect()
+{
+
+	if(ADC_I_IN.Solved_filter_out>0.5f||ADC_I_MOTOR.Solved_filter_out>0.5f||ADC_I_CAP.Solved_filter_out>0.5f)		//
 	{	 
 		recovery_cnt_I=0;
 		recovery_flag_I=FALASE;
@@ -253,85 +370,30 @@ void Mode_Judgment(void)
 	}
 	recovery_flag=(recovery_flag_I&&recovery_flag_V);
 	if(recovery_flag==TRUE)
-	{
+	{	
 		control.Cap_Mode = Normal; 
 		recovery_flag=FALASE;
 	}
-	break;
+}
+
+
+// 函数：将输入值从范围 [0, 1.2] 映射到输出值范围 [0.1, 0.4]
+double map_input_to_output(double input_value) 
+{
+    // 输入范围
+    double x_min = 0.0;
+    double x_max = 1.2;
+
+    // 输出范围
+    double y_min = 0.1;
+    double y_max = 0.4;
+
+    // 检查输入值是否在有效范围内
+    if (input_value < x_min || input_value > x_max) {
+        return 0; // 返回一个错误标志
     }
 
-    case Normal:
-    {
-		Error_check();
-        break;
-    }		
-    }
-
-	if(	PreBBFlag != control.Cap_Mode)
-	{
-		if(PreBBFlag==Standby)
-		{	
-		//	HRTIM_ENABLE();
-		control.currout_loop.Kf=control.Real_ratio-0.1f;
-	//	control.voltout_loop.Kf=control.Real_ratio-0.1f;
-		control.error_code=NO;
-		}
-		else
-		{
-		//	HRTIM_DISABLE();
-		}
-		control.BBModeChange=1;
-		
-	}
+    // 线性映射公式
+    double output_value = y_min + (y_max - y_min) * (input_value - x_min) / (x_max - x_min);
+    return output_value;
 }
-
-
-void HRTIM_DISABLE()
-{
-	HAL_HRTIM_WaveformCountStop(&hhrtim1, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2 | HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //通道关闭
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
-}
-
-void HRTIM_ENABLE()
-{
-	uint8_t state;
-	HAL_HRTIM_WaveformOutputStart(&hhrtim1, HRTIM_OUTPUT_TA1|HRTIM_OUTPUT_TA2 | HRTIM_OUTPUT_TB1|HRTIM_OUTPUT_TB2); //通道打开
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-	state=HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12);
-	while ( state ^ 1)
-	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-	}
-}
-
-void Update_PWM(float VBToVA)		//输入值为电容电压比输入电压
-									//将占空比转换为寄存器实际值
-{
-	VBToVA=M_MAX(VBToVA,1.2);			//限幅
-	VBToVA=M_MIN(VBToVA,0);
-		// A代表DCDC左测
-    	// B代表DCDC右侧
-			if (VBToVA <0.95f)
-			{
-				control.DutyA = 0.95f * VBToVA;
-				control.DutyB = 0.95f;
-			} 
-			else if (0.95f<VBToVA <1.1f)
-			{
-				control.DutyA = (VBToVA + 1.0f) * 0.4f;
-				control.DutyB = (1.0f / VBToVA + 1.0f) * 0.4f;
-			}
-			else
-			{
-				control.DutyA = 0.95f ;
-				control.DutyB = 0.95f/VBToVA;
-			}
-
-	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A , HRTIM_COMPAREUNIT_1, (HRTIMMaster_Period/2)*(1-control.DutyA));
-	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_A , HRTIM_COMPAREUNIT_3, (HRTIMMaster_Period/2)*(1+control.DutyA));
-	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B , HRTIM_COMPAREUNIT_1, (HRTIMMaster_Period/2)*(1-control.DutyB));
-	__HAL_HRTIM_SETCOMPARE(&hhrtim1, HRTIM_TIMERINDEX_TIMER_B , HRTIM_COMPAREUNIT_3, (HRTIMMaster_Period/2)*(1+control.DutyB));
-	control.left_duty=HRTIMMaster_Period * control.DutyA;
-	control.right_duty=HRTIMMaster_Period * control.DutyB;
-}
-

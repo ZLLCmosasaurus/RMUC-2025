@@ -16,6 +16,8 @@ void Mode_Judgment(void);
 void HRTIM_DISABLE();
 void HRTIM_ENABLE();
 void Update_PWM(float ratio);
+void Recovery_detect();
+double map_input_to_output(double input_value) ;
 #define MAX_DUTY 1.2    //DUTY=V_CAP/V_VIN
 #define MIN_DUTY 0.1
 #define MAX_P_DCDC 120  //充电
@@ -24,7 +26,7 @@ void Update_PWM(float ratio);
 #define HRTIMMaster_Period 8000
 #define FALASE 0
 #define TRUE 1
-#define V_SET 25.0f
+#define V_SET 24.3f
 #define BUCK_RIGHT_DUTY   (0.97 * HRTIMMaster_Period+50)    	  //0.9*5760+50=5234                     Buck模式下，右桥固定占空比90%
 #define BUCK_LEFT_MIN_DUTY		(0.10 * HRTIMMaster_Period+50)  //0.1*5760+50=626                        Buck模式下，左桥最小占空比10%
 #define BUCK_LEFT_MAX_DUTY   (0.97 * HRTIMMaster_Period+50) //0.9*5760+50=5234  			                 Buck模式下，左桥最大占空比85%
@@ -52,7 +54,9 @@ enum LOOP_MODE
 enum CAP_MODE
 {
     Normal=1,                                    //BUCK模态
-		Standby                                     //故障或待机
+		Standby,                                     //故障或待机
+    LISTEN
+
 };
 
 
@@ -95,7 +99,9 @@ typedef struct {
 	float I_DCDC_IN_MAX;																				//H桥左侧最大输入电流
 	float I_CAP_IN_MAX;																					//H桥右侧最大输入电流
 	float I_DCDC_OUT_MAX;																				//H桥左侧输出最大电流
-	float I_CAP_OUT_MAX;																					//H桥右侧输出最大电流
+	float I_CAP_OUT_MAX;																				//H桥右侧输出最大电流
+  uint8_t power_limit;                                        //电控功率限制开关  
+  float recovery_decrease_ratio;
 } control_struct_t;
 
 extern control_struct_t control;

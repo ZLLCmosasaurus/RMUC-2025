@@ -83,6 +83,7 @@ typedef struct
 		float efficiency;
 		float surplus_energy;
 		uint16_t V_REFINT_CAL;
+		float p_beyondl;			//³¬¹¦ÂÊÖµ
 	} measure_struct_t;
 extern measure_struct_t measure; 
 

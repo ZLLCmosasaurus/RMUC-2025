@@ -4,6 +4,7 @@
 #include "adc.h"
 #include "config.h"
 #include "dvc_dwt.h"
+#include "Communication.h"
 uint16_t AD_Buf_1[3];
 uint16_t AD_Buf_2[3];
 ELEC_INFO_STRUCT ADC_I_IN;
@@ -32,17 +33,17 @@ float ringbuf_cal(int16_t *adc_ch , int16_t wide)
 void ratio_init()
 {
 
-	ADC_I_IN.ratio = ADC_V_REF.Average_value/(I_Magnification*VIN_Sense_resistor);
+	ADC_I_IN.ratio = ADC_V_REF.Average_value/(I_Magnification*VIN_Sense_resistor);			//修改宏定义即可
 	ADC_VIN.ratio = ADC_V_REF.Average_value*V_Magnification;
 	ADC_I_MOTOR.ratio=ADC_V_REF.Average_value/(I_Magnification*MOTOR_Sense_resistor);
-	ADC_I_CAP.ratio = -ADC_V_REF.Average_value/(I_Magnification*CAP_Sense_resistor);
+	ADC_I_CAP.ratio = -ADC_V_REF.Average_value/(I_Magnification*CAP_Sense_resistor);		//正值为充电，负值为放电
 	ADC_V_CAP.ratio=ADC_V_REF.Average_value*V_Magnification;
 	
 	ADC_I_IN.bias = 2048;//1.5V的叠加值
 	ADC_I_MOTOR.bias=2048;
 	ADC_I_CAP.bias = 2048;
-switch(Board_number)  //线性校准
-	{
+switch(Board_number)  			//线性校准
+	{							//设置ID号在congfig.h中
 	
 		case 001:
 		{
@@ -126,18 +127,15 @@ void ADC_VREF()
 	{
 		ADC_V_REF.Externally_read_values_total+=AD_Buf_2[2];
 	}
-	ADC_V_REF.Internally_read_values = *(__IO uint32_t *)(0X1FFFF7BA);
-	/*ADC_V_REF.Externally_read_values=ADC_V_REF.Externally_read_values_total/200;
-	ADC_V_REF.Average_value = 1.23f*2.0f/(ADC_V_REF.Internally_read_values+ADC_V_REF.Externally_read_values);//内部读取读取电压对应4096量程数值
-	*/
+	ADC_V_REF.Internally_read_values = *(__IO uint32_t *)(0X1FFFF7BA);			//单片机内部电压读取地址
 	ADC_V_REF.Average_value = 1.1120879f/ADC_V_REF.Internally_read_values;//内部读取读取电压对应4096量程数值
 }
 
 void ADC_Measure(void)
 {	
 	LED_Cnt++;
-	sumBuffer();			//环形数组12次求和取平均
-	ADC_I_IN.Solved_value=ADCvalue_to_ELEC(&ADC_I_IN,ADC_I_IN.filter_out);
+	sumBuffer();						//环形数组求和取平均
+	ADC_I_IN.Solved_value=ADCvalue_to_ELEC(&ADC_I_IN,ADC_I_IN.filter_out);			//转化单片机读取值为实际值
 	ADC_VIN.Solved_value=ADCvalue_to_ELEC(&ADC_VIN,ADC_VIN.filter_out);	
 	ADC_I_MOTOR.Solved_value=ADCvalue_to_ELEC(&ADC_I_MOTOR,ADC_I_MOTOR.filter_out);
 	ADC_V_CAP.Solved_value=ADCvalue_to_ELEC(&ADC_V_CAP,ADC_V_CAP.filter_out);
@@ -161,11 +159,11 @@ void ADC_Measure(void)
 	measure.P_Cap=ADC_V_CAP.Solved_value*ADC_I_CAP.Solved_value;
 	
 	//计算DC-DC效率
-	if(measure.I_DCDC>0)				
+	if(measure.I_DCDC>0)									//正向充电	
 	{
 		measure.efficiency=measure.P_Cap/measure.P_DCDC*100;
-	}
-	else
+	}	
+	else													//反向放电
 	{
 		measure.efficiency=measure.P_DCDC/measure.P_Cap*100;
 	}
@@ -196,117 +194,18 @@ void ADC_Measure(void)
 		control.I_Charge_limited=control.I_DCDC_OUT_MAX;
 	}
 
-}
-
-
-/*
-void ADC_Measure(void)
-{	
-//	
-//	for (int i = 0; i < Measure_count; i++){
-		
-	ADC_VIN.measured_value=AD_Buf_1[0];
-	ADC_I_IN.measured_value=AD_Buf_1[1]-ADC_I_IN.bias;
-	ADC_I_MOTOR.measured_value=AD_Buf_1[2]-ADC_I_MOTOR.bias;
-	ADC_V_CAP.measured_value=AD_Buf_2[0];
-	ADC_I_CAP.measured_value=AD_Buf_2[1]-ADC_I_CAP.bias;
-	//ADC_V_REFINT.measured_value=AD_Buf_2[2];
-	
-	ADC_VIN.measured_array[ringbuf_cnt]=ADC_VIN.measured_value;
-	ADC_I_IN.measured_array[ringbuf_cnt]=ADC_I_IN.measured_value;
-	ADC_I_MOTOR.measured_array[ringbuf_cnt]=ADC_I_MOTOR.measured_value;
-		
-	ADC_V_CAP.measured_array[ringbuf_cnt]=ADC_V_CAP.measured_value;
-	ADC_I_CAP.measured_array[ringbuf_cnt]=ADC_I_CAP.measured_value;
-	ringbuf_cnt++;
-//	}
- 	
-//			
-	if (ringbuf_cnt>=Measure_count)
-	{
-		
-		control.flag=1;//运行一次控制能量代码
-		LED_Cnt++;
-		ringbuf_cnt=0;
-	ADC_VIN.filter_out=ringbuf_cal(ADC_VIN.measured_array,Measure_count);
-	ADC_I_IN.filter_out=ringbuf_cal(ADC_I_IN.measured_array,Measure_count);
-	ADC_I_MOTOR.filter_out=ringbuf_cal(ADC_I_MOTOR.measured_array,Measure_count);
-	
-	ADC_V_CAP.filter_out=ringbuf_cal(ADC_V_CAP.measured_array,Measure_count);
-	ADC_I_CAP.filter_out=ringbuf_cal(ADC_I_CAP.measured_array,Measure_count);
-		//计算VDDA
-		//ADC_V_REFINT.Solved_value=1.224f*measure.V_REFINT_CAL/ADC_V_REFINT.filter_out;
-
-	//计算电压比
-	control.Real_ratio=ADC_V_CAP.Solved_value/ADC_VIN.Solved_value;
-	//计算电管输出功率
-	
-	ADC_I_IN.Solved_value=ADCvalue_to_ELEC(&ADC_I_IN,ADC_I_IN.filter_out);
-	ADC_VIN.Solved_value=ADCvalue_to_ELEC(&ADC_VIN,ADC_VIN.filter_out)+ADC_I_IN.Solved_value/250;
-	measure.P_In=ADC_I_IN.Solved_value*ADC_VIN.Solved_value;
-		
-	//计算输入底盘功率
-	ADC_I_MOTOR.Solved_value=ADCvalue_to_ELEC(&ADC_I_MOTOR,ADC_I_MOTOR.filter_out);
-	V_Motor=ADC_VIN.Solved_value-ADC_I_MOTOR.Solved_value/250;
-	measure.P_Motor=ADC_I_MOTOR.Solved_value*V_Motor;
-		
-	//计算DC-DC输入/输出功率
-	measure.V_DCDC = ADC_VIN.Solved_value;
-	measure.I_DCDC = ADC_I_IN.Solved_value - ADC_I_MOTOR.Solved_value ;
-	measure.P_DCDC = measure.V_DCDC * measure.I_DCDC ;
-		
-	//计算电容输入/输出功率
-	ADC_V_CAP.Solved_value=ADCvalue_to_ELEC(&ADC_V_CAP,ADC_V_CAP.filter_out);
-	ADC_I_CAP.Solved_value=ADCvalue_to_ELEC(&ADC_I_CAP,ADC_I_CAP.filter_out);
-	measure.P_Cap=ADC_V_CAP.Solved_value*ADC_I_CAP.Solved_value;
-		
-	//计算DC-DC效率
-	if(measure.I_DCDC>0)
-	{
-		measure.efficiency=measure.P_Cap/measure.P_DCDC*100;
+	if(measure.P_In-3.0f>control.P_set)				
+	{												//抑制抖动重复发送
+		measure.p_beyondl=measure.P_In-control.P_set;
+		Send_Error();								//超功率发送错误信息
 	}
 	else
 	{
-		measure.efficiency=measure.P_DCDC/measure.P_Cap*100;
+		measure.p_beyondl=0;
 	}
-	//计算剩余能量
-	if(control.left_duty!=BUCK_LEFT_MIN_DUTY)
-	{
-	measure.surplus_energy=(ADC_V_CAP.Solved_value*ADC_V_CAP.Solved_value)/(23.85f*23.85f)*100;
-		if(measure.surplus_energy>100)
-		{
-			measure.surplus_energy=100;
-		}
-	}
-	else
-	{
-		measure.surplus_energy=0;
-	}
+}	
 
-	//计算目标DC-DC输入电流
-	//P.set为裁判系统限制功率值
-	control.I_Set = control.P_set / ADC_VIN.Solved_value ;
-	control.I_Charge_limited = control.I_Set - ADC_I_MOTOR.Solved_value ;
-	
-	//限制目标DC-DC输入电流
-	control.I_CAP_IN_MAX=10.0f;
-	control.I_CAP_OUT_MAX=-8.0f;
-	control.I_DCDC_IN_MAX = ADC_V_CAP.Solved_value*control.I_CAP_IN_MAX/measure.V_DCDC;
-	control.I_DCDC_OUT_MAX = ADC_V_CAP.Solved_value*control.I_CAP_OUT_MAX/measure.V_DCDC;
-   	if(control.I_Charge_limited>control.I_DCDC_IN_MAX)
-	{
-		control.I_Charge_limited=control.I_DCDC_IN_MAX;
-	}
 
-	if(control.I_Charge_limited<control.I_DCDC_OUT_MAX)                     
-	{
-		control.I_Charge_limited=control.I_DCDC_OUT_MAX;
-	}
-	
-	}
-	
-}
-*/
 void ADC_init(void)
 {
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);//ADC软件校准
