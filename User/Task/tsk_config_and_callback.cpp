@@ -396,16 +396,17 @@ void Task1ms_TIM5_Callback()
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
         TIM_CAN_PeriodElapsedCallback();
-//        chariot.LED.WriteAll(Color_RED);
+        
         // TIM_UART_PeriodElapsedCallback();
         
-        // static int mod5 = 0;
-        // mod5++;
-        // if (mod5 == 5)
-        // {
-        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        // mod5 = 0;
-        // }	        
+         static int mod5 = 0;
+         mod5++;
+         if (mod5 == 20)
+         {
+             TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+					 chariot.LED.WaterFall(18,Color_RED);
+         mod5 = 0;
+         }	        
     }
 }
 
