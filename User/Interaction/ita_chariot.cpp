@@ -575,6 +575,7 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                         }
                     }
                     if(success_cnt>100){
+                    if(success_cnt>100){
                         Chariot->Servo_Lock();
                     }
                     if(success_cnt>400){
