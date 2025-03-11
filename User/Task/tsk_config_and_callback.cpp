@@ -302,12 +302,12 @@ void Motor_Callback()
             chariot.Motor_Down.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         } 
         break;
-        case (0x203):
+        case (0x204):
         {
             chariot.Motor_Left.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
-        case (0x204):
+        case (0x203):
         {
             chariot.Motor_Right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }

@@ -34,8 +34,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     //拉力电机canid初始化
     Motor_Down.Init(&hcan1, DJI_Motor_ID_0x202);
     Motor_Up.Init(&hcan1, DJI_Motor_ID_0x201);
-    Motor_Left.Init(&hcan1, DJI_Motor_ID_0x203);
-    Motor_Right.Init(&hcan1, DJI_Motor_ID_0x204);
+    Motor_Left.Init(&hcan1, DJI_Motor_ID_0x204);
+    Motor_Right.Init(&hcan1, DJI_Motor_ID_0x203);
 
     // PID 初始化
     //拉力环 速度环
@@ -47,13 +47,13 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Motor_Down.PID_Omega.Init(1200.0f, 1000.0f, 0.0, 0.0f, 8000.0f,16000.0f,0.0,0.0,0.0,0.001,0.1);
 
     // 上膛电机 速度环即可
-    Motor_Left.PID_Angle.Init(0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
-    Motor_Right.PID_Angle.Init(3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
+    Motor_Left.PID_Angle.Init(3.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
+    Motor_Right.PID_Angle.Init(3.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     Motor_Left.PID_Omega.Init(2000.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     Motor_Right.PID_Omega.Init(2000.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     // yaw电机 角度环 速度环
-    Motor_Yaw.PID_Omega.Init(2.0f, 0.05f, 0.0f, 0.0f, 0.0f, 20000.0f);
-    Motor_Yaw.PID_Angle.Init(10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20000.0f);
+    Motor_Yaw.PID_Omega.Init(3.0f, 0.20f, 0.0f, 0.0f, 0.0f, 20000.0f);
+    Motor_Yaw.PID_Angle.Init(250.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20000.0f);
     // 推镖电机 速度环即可
     Motor_Up.PID_Omega.Init(1500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
 
@@ -98,6 +98,11 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
  */
 bool Class_Chariot::Calibrate()
 {
+    //暂时不需要校准
+    // return true;
+
+
+
     static bool Calibration_Motor_Yaw_Flag = false;
     static bool Calibration_Motor_Up_Flag = false;
     static bool Calibration_Motor_Left_Flag = false;
@@ -111,26 +116,17 @@ bool Class_Chariot::Calibrate()
 
     if(!Calibration_Motor_Yaw_Flag)
     {
-        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Yaw.Set_Target_Omega_Radian(Calibration_Motor_Yaw_Target_Omega_Angle);
-        if(fabs(Motor_Yaw.Get_Now_Torque())>Calibration_Motor_Yaw_Troque_Threshold)
-        {
-            Times_Motor_Yaw ++;
-            if(Times_Motor_Yaw > 20){
-                Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-                Calibration_Motor_Yaw_Angle_Offset = Motor_Yaw.Get_Now_Angle(); // 记录上电校准后电机初始offset角度 角度制
-                Motor_Yaw.Set_Target_Radian(Calibration_Motor_Yaw_Angle_Offset*DEG_TO_RAD); // 电机初始位置
-                Calibration_Motor_Yaw_Flag = true; // 退出校准
-            }        
-        }
-        else{
-            Times_Motor_Yaw = 0;
-        }
+        // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        // Motor_Yaw.Set_Target_Omega_Radian(Calibration_Motor_Yaw_Target_Omega_Angle);
+        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        // Calibration_Motor_Yaw_Angle_Offset = Motor_Yaw.Get_Now_Angle(); // 记录上电校准后电机初始offset角度 角度制
+        Motor_Yaw.Set_Target_Angle(Motor_Yaw_Angle); // 电机初始位置
+        Calibration_Motor_Yaw_Flag = true; // 退出校准
     }
 
     if(!Calibration_Motor_Left_Flag){
         Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Left.Set_Target_Omega_Radian(-Target_Speed_Motor_Left);
+        Motor_Left.Set_Target_Omega_Radian(Target_Speed_Motor_Left);
         if(Switch_Bool_Motor_Left){
             Motor_Left.Set_Target_Omega_Radian(0);
             Calibration_Motor_Left_Radian_Offset = Motor_Left.Get_Now_Radian();
@@ -173,22 +169,25 @@ bool Class_Chariot::Calibrate()
         }
     }
 
-    if(!Calibration_Motor_Down_Flag)
-    {
-        Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Down.Set_Target_Omega_Radian(Calibration_Motor_Down_Target_Omega_Radian);
-        if(Switch_Bool_Motor_Down)
-        {
-                Motor_Down.Set_Target_Omega_Radian(0);  //校准结束就停下来
-                Calibration_Motor_Down_Radian_Offset = Motor_Down.Get_Now_Radian();   // 记录上电校准后电机初始offset角度 弧度制
-                Calibration_Motor_Down_Flag = true; // 退出校准     
-        }
-    }
+    // if(!Calibration_Motor_Down_Flag)
+    // {
+    //     Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+    //     Motor_Down.Set_Target_Omega_Radian(Calibration_Motor_Down_Target_Omega_Radian);
+    //     if(Switch_Bool_Motor_Down)
+    //     {
+    //             Motor_Down.Set_Target_Omega_Radian(0);  //校准结束就停下来
+    //             Calibration_Motor_Down_Radian_Offset = Motor_Down.Get_Now_Radian();   // 记录上电校准后电机初始offset角度 弧度制
+    //             Calibration_Motor_Down_Flag = true; // 退出校准     
+    //     }
+    // }
 
-    Calibration_Finish = Calibration_Motor_Down_Flag && Calibration_Motor_Right_Flag;
+    Calibration_Finish = Calibration_Motor_Down_Flag &&Calibration_Motor_Left_Flag&&Calibration_Motor_Right_Flag&&Calibration_Motor_Yaw_Flag;
     Tension_Meter.Set_Tension_Meter_Tare(Tension_Meter.Get_Tension_Meter());
-    // Calibration_Finish = Calibration_Motor_Left_Flag && Calibration_Motor_Right_Flag && Calibration_Motor_Down_Flag;
+    Calibration_Finish = Calibration_Motor_Left_Flag
+                      &&Calibration_Motor_Yaw_Flag;
+                      //&& Calibration_Motor_Down_Flag;
     return  Calibration_Finish;
+
 }
 
 /**
@@ -539,7 +538,7 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
             static int Load_Count=0;
             static int Shoot_Count=1;
             static bool shift_flag = false;
-
+            static uint16_t Tension_Achieve_Count=0;
             static uint8_t Status = 0;
             
             // 所有状态 状态时间
@@ -559,23 +558,46 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                 case 1:
                     //上膛逻辑
                     static uint16_t success_cnt = 0; //记录上膛成功后的延时时间
+                    static bool count_start=false;
                     Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
                     Chariot->Motor_Right.Set_Target_Omega_Radian(-Chariot->Target_Speed_Motor_Right); //不确定正负
-                    if(Chariot->Switch_Bool_Trigger){
-                        success_cnt++;
-                        Chariot->Motor_Right.Set_Target_Omega_Radian(0);
+                    Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                    Chariot->Motor_Left.Set_Target_Omega_Radian(-Chariot->Target_Speed_Motor_Left);
+                    if(Chariot->Switch_Bool_Trigger)
+                    {
+                        count_start=true;   
                     }
-                    if(success_cnt>500){
+                    if(count_start){
+                        success_cnt++;
+                        if(success_cnt>100){
+                            Chariot->Motor_Right.Set_Target_Omega_Radian(0);                  
+                            Chariot->Motor_Left.Set_Target_Omega_Radian(0);
+                        }
+                    }
+                    if(success_cnt>100){
                         Chariot->Servo_Lock();
                     }
-                    if(success_cnt>1000){
+                    if(success_cnt>400){
                         success_cnt = 0;
+                        count_start=false;
                         Status_Time[Debug_Status] = 0;
                         Debug_Status = 2;
+                       
                     }
                     break;
                 case 2:
                     // 拉力环调整拉力逻辑
+                    static bool Motor_Left_Stop = false;
+                    if(fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5)
+                    {
+                        Tension_Achieve_Count++;   
+                    }
+                    if(Tension_Achieve_Count>500)
+                    {
+                        Chariot->Motor_Down.PID_Omega.Set_Target(0);
+                        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                        Chariot->Motor_Down.Set_Out(0);
+                    }
                     Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
                     Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
                     Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
@@ -584,22 +606,44 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                     Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
 
                     // 上膛3508反向
-                    Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                    Chariot->Motor_Right.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Right); //反向移动
+                    // if(!Chariot->Switch_Bool_Motor_Left)
+                    {
+                        Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                        Chariot->Motor_Right.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Right); //反向移动
+                        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                        Chariot->Motor_Left.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Left);
+                    }
                     // 碰到微动开关就或者堵转就停下|| Chariot->Motor_Right.Get_Now_Torque()>500
-                    if(Chariot->Switch_Bool_Motor_Right ){
-                        Chariot->Motor_Right.Set_Target_Omega_Radian(0); 
-
+                    if(Chariot->Switch_Bool_Motor_Left)
+                    {
+                        Motor_Left_Stop=true;
+                    }
+                    if(Motor_Left_Stop){
+                        Chariot->Motor_Left.Set_Target_Omega_Radian(0);
+                        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                        Chariot->Motor_Left.Set_Out(0);
                         //等待3508结束后，才能切换状态
                         if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_RELOAD){
+                            Motor_Left_Stop=false;
                             Status_Time[Debug_Status] = 0;
                             Debug_Status =3;
+                
                         }
 
                     }
                     break;
                 case 3:
                     // 拉力环调整拉力逻辑
+                    if(fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5)
+                    {
+                        Tension_Achieve_Count++;   
+                    }
+                    if(Tension_Achieve_Count>500)
+                    {
+                        Chariot->Motor_Down.PID_Omega.Set_Target(0);
+                        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                        Chariot->Motor_Down.Set_Out(0);
+                    }
                     Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
                     Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
                     Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
@@ -618,9 +662,11 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
 
                     if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_SHOOT
                         &&Status_Time[Debug_Status]>3000
-                        &&fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5){
-                        Status_Time[Debug_Status] = 0;
-                        Debug_Status = 4;
+                        &&fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5)
+                        {
+                            Tension_Achieve_Count=0;
+                            Status_Time[Debug_Status] = 0;
+                            Debug_Status = 4;
                     }
                     break;
                 case 4:
@@ -632,7 +678,7 @@ void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
                         &&Status_Time[Debug_Status]>1000){
                         Chariot->Servo_Init();
                         Status_Time[Debug_Status] = 0;
-                        Debug_Status = 1;    
+                        Debug_Status = 0;    
                     }
                     break;            
                 default:

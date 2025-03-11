@@ -95,14 +95,29 @@ void Class_DebugControl::DebugControl_Data_Process(uint8_t *Buffer, uint16_t Len
         {
             DebugControl_RxData.target_tension = 1695.0f; 
         }
-        else if(DebugControl_RxData.target_tension*10 > 1748.0f)
+        else if(DebugControl_RxData.target_tension*10 > 1780.0f)
         {
-            DebugControl_RxData.target_tension = 1748.0f;
+            DebugControl_RxData.target_tension = 1780.0f;
         }
         else
         {
             DebugControl_RxData.target_tension = DebugControl_RxData.target_tension*10;
         }
+        // if(DebugControl_RxData.target_yaw < 122.9150390f)
+        // {
+        //     DebugControl_RxData.target_yaw = 122.9150390f;
+       
+        // }
+        // else if(DebugControl_RxData.target_yaw > 337.983398f)
+        // {
+        //     DebugControl_RxData.target_yaw = 337.983398f;
+       
+        // }
+        // else
+        // {
+        //     DebugControl_RxData.target_yaw = DebugControl_RxData.target_yaw;  
+        // }
+        DebugControl_RxData.target_yaw=230.1f;
     }        
 }
 

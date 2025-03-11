@@ -168,6 +168,12 @@ public:
         float Servo_Load_2_Offeset=50;
         float Servo_Load_3_Offeset=50;
         float uart_tension_tare=0;
+        // motor_yaw 6020的绝对角度每次左右旋转会有轻微的偏移
+        float Motor_Yaw_Left_Angle=122.9150390f;
+        float Motor_Yaw_Right_Angle=337.983398f;
+        float Motor_Yaw_Angle=(Motor_Yaw_Right_Angle+Motor_Yaw_Left_Angle)/2;
+        float Motor_Yaw_Angle_Offset=0;
+
 protected:
 
         //每次拨弹前进距离
@@ -231,8 +237,8 @@ protected:
 
         // 拉皮筋速度
         //Left 给正值向下，Right相反
-        float Target_Speed_Motor_Left = 10.0f;
-        float Target_Speed_Motor_Right = -10.0f;
+        float Target_Speed_Motor_Left = -10.0f;
+        float Target_Speed_Motor_Right = 10.0f;
 
         // 目标拉力
         float Target_Tension;
@@ -251,7 +257,7 @@ protected:
         float Calibration_Motor_Down_Target_Omega_Radian = -10.0f;       //向下运动
 
         // 电机堵转校准阈值
-        float Calibration_Motor_Yaw_Troque_Threshold = 0;
+        float Calibration_Motor_Yaw_Troque_Threshold = 500;
         float Calibration_Motor_Up_Torque_Threshold = 800;
 
         // 电机校准编码器角度
@@ -322,7 +328,7 @@ void Class_Chariot::Updata_Switch_Status(){
     Switch_Bool_Trigger = HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_5);
     Switch_Bool_Motor_Down = HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_6);
     Switch_Bool_Motor_Left = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_2);
-    Switch_Bool_Motor_Right = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_2);
+    Switch_Bool_Motor_Right = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_3);
 }
 
 #endif
