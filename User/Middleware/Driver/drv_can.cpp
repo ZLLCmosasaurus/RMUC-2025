@@ -220,7 +220,7 @@ void TIM_CAN_PeriodElapsedCallback()
     }
 
     // CAN1总线  四个底盘电机
-    memset(CAN1_0x200_Tx_Data, 0, sizeof(CAN1_0x200_Tx_Data));
+   //  memset(CAN1_0x200_Tx_Data, 0, sizeof(CAN1_0x200_Tx_Data));
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
     // memset(CAN2_Chassis_Tx_Gimbal_Data, 0, sizeof(CAN2_Chassis_Tx_Gimbal_Data));

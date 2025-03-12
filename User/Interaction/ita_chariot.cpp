@@ -312,7 +312,7 @@ void Class_Chariot::Control_Chassis()
             chassis_velocity_y = -Chassis.Get_Velocity_Y_Max() / DR16_Mouse_Chassis_Shift;
         }
 
-        if (DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED) // Q键切换小陀螺与随动
+        if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED) // E键切换小陀螺与随动
         {
             if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
             {
@@ -323,7 +323,7 @@ void Class_Chariot::Control_Chassis()
                 Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
         }
 
-        if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_PRESSED) // 按下G键刷新UI
+        if (DR16.Get_Keyboard_Key_R() == DR16_Key_Status_PRESSED) // 按下R键刷新UI
         {
             Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_ENABLE;
         }
@@ -421,7 +421,7 @@ void Class_Chariot::Control_Gimbal()
             tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         }
         // R键按下 一键开关弹舱
-        if (DR16.Get_Keyboard_Key_R() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Compare == 1700)
             {
@@ -435,7 +435,7 @@ void Class_Chariot::Control_Gimbal()
             }
         }
         // F键按下 一键调头
-        if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             tmp_gimbal_yaw += 180;
         }
@@ -446,8 +446,8 @@ void Class_Chariot::Control_Gimbal()
             Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill);
             // Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
         }
-        // E键按下切换Pitch锁定模式和free模式
-        if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        // G键按下切换Pitch锁定模式和free模式
+        if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Pitch_Control_Status == Pitch_Status_Control_Free)
                 Pitch_Control_Status = Pitch_Status_Control_Lock;
@@ -519,19 +519,20 @@ void Class_Chariot::Control_Booster()
                 Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
             }
         }
-        // 正常模式 左键猎兽模式  长按左键并且摩擦轮开启 无限火力
-        else if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_PRESSED) &&
-                 (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()) &&
-                 (Booster.Motor_Driver.Get_Now_Radian() - Booster.Motor_Driver.Get_Target_Radian() < 0.1f))
+        
+        // 正常模式 
+        else if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED) &&
+                 (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()) /*&&
+                 (Booster.Motor_Driver.Get_Now_Radian() - Booster.Motor_Driver.Get_Target_Radian() < 0.1f)*/)
         {
-            Booster.Set_Booster_Control_Type(Booster_Control_Type_MULTI);
+            Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
         }
         else
         {
             Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
         }
         // C键控制摩擦轮
-        if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_Ctrl() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Booster.Get_Friction_Control_Type() == Friction_Control_Type_ENABLE)
             {
@@ -595,8 +596,18 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
         Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());
     }
+
+    static uint8_t mod2 = 0;
+    // 各个模块的分别解算
+    mod2++;
+    if (mod2 == 2)
+    {
+        Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+        mod2 = 0;
+    }
+
     // 底盘解算任务
-    Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
+   
 
 #elif defined(GIMBAL)
 
@@ -766,6 +777,7 @@ void Class_Chariot::TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback(
     if (Chassis_Alive_Flag == Pre_Chassis_Alive_Flag)
     {
         Chassis_Status = Chassis_Status_DISABLE;
+        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -781,6 +793,7 @@ void Class_Chariot::TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback()
     if (Gimbal_Alive_Flag == Pre_Gimbal_Alive_Flag)
     {
         Gimbal_Status = Gimbal_Status_DISABLE;
+        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

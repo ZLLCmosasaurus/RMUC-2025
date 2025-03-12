@@ -12,6 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_supercap.h"
+#include "dvc_buzzer.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -177,6 +178,7 @@ void Class_Supercap::TIM_Alive_PeriodElapsedCallback()
     {
         //超级电容断开连接
         Supercap_Status = Disconnected;
+        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
   
     Pre_Flag = Flag;

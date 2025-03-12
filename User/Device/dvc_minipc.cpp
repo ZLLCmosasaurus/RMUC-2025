@@ -12,6 +12,7 @@
 /* includes ------------------------------------------------------------------*/
 
 #include "dvc_minipc.h"
+#include "dvc_buzzer.h"
 
 /* private macros ------------------------------------------------------------*/
 
@@ -120,6 +121,7 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
     {
         //迷你主机断开连接
         MiniPC_Status =  MiniPC_Status_DISABLE;
+        // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -254,7 +256,7 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
   }
 
   // 将弧度制的俯仰角转换为角度制
-  pitch = -(pitch * 180 / PI); // 向上为负，向下为正
+  pitch = (pitch * 180 / PI); // 向上为负，向下为正
 
   return pitch;
 }

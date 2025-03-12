@@ -204,3 +204,4 @@ class Class_Buzzer
 
 
 
+extern Class_Buzzer  Buzzer;
