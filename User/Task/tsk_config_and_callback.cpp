@@ -357,12 +357,12 @@ void Task1ms_TIM5_Callback()
     init_finished++;
     if (init_finished > 2000 && start_flag == 0)
     {
-        chariot.Buzzer.Set_NowTask(BUZZER_DJI_STARTUP_PRIORITY);
+        //Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
         start_flag = 1;
     }
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
 
-    chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
+   chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
 
     /****************************** 交互层回调函数 1ms *****************************************/
     if (start_flag == 1)
@@ -371,10 +371,10 @@ void Task1ms_TIM5_Callback()
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
-        // chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+        //Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
         /****************************** 驱动层回调函数 1ms *****************************************/
         // 统一打包发送
-        // TIM_CAN_PeriodElapsedCallback();
+        TIM_CAN_PeriodElapsedCallback();
 
         TIM_UART_PeriodElapsedCallback();
 

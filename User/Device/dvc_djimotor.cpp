@@ -12,6 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_djimotor.h"
+#include "dvc_buzzer.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -272,6 +273,7 @@ void Class_DJI_Motor_GM6020::TIM_Alive_PeriodElapsedCallback()
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
         PID_Torque.Set_Integral_Error(0.0f);
+        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -459,6 +461,7 @@ void Class_DJI_Motor_C610::TIM_Alive_PeriodElapsedCallback()
         DJI_Motor_Status = DJI_Motor_Status_DISABLE;
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
+         Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -641,6 +644,7 @@ void Class_DJI_Motor_C620::TIM_Alive_PeriodElapsedCallback()
         DJI_Motor_Status = DJI_Motor_Status_DISABLE;
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
+         Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

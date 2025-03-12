@@ -2,18 +2,26 @@
 
 // 定义不同优先级下的蜂鸣器音调列表的音调数量
 #define BUZZER_FORCE_STOP_PRIORITY_NUM 10
-#define BUZZER_DEVICE_OFFLINE_PRIORITY_NUM 10
 #define BUZZER_CALIBRATING_PRIORITY_NUM 5
 #define BUZZER_CALIBRATED_PRIORITY_NUM 10
 #define BUZZER_DJI_STARTUP_PRIORITY_NUM 3
 #define BUZZER_FREE_PRIORITY_NUM 10
+#define BUZZER_DEVICE_OFFLINE_PRIORITY_NUM 20
+#define QUARTER_NOTE_DURATION_MS 500 // 120 BPM
 
+Class_Buzzer  Buzzer;
 // 定义强制停止优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
 int BUZZER_FORCE_STOP_PRIORITY_TONELIST[2][BUZZER_FORCE_STOP_PRIORITY_NUM] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 // 定义设备离线优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
-int BUZZER_DEVICE_OFFLINE_PRIORITY_TONELIST[2][BUZZER_DEVICE_OFFLINE_PRIORITY_NUM] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                                                                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+int BUZZER_DEVICE_OFFLINE_PRIORITY_TONELIST[2][BUZZER_DEVICE_OFFLINE_PRIORITY_NUM] = {
+  // 音调
+  {TONE_G4, TONE_E4, TONE_D4, TONE_C4, TONE_D4, TONE_E4, TONE_G4, TONE_G4, TONE_A4, TONE_G4,
+   TONE_E4, TONE_D4, TONE_C4, TONE_D4, TONE_E4, TONE_G4, TONE_G4, TONE_A4, TONE_G4, TONE_E4},
+  // 终止时间（每个音符持续 500ms）
+  {500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,
+   5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000}
+};
 // 定义校准中优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
 int BUZZER_CALIBRATING_PRIORITY_TONELIST[2][BUZZER_CALIBRATING_PRIORITY_NUM] = {{TONE_A3, TONE_A4, TONE_A3, TONE_D4, TONE_C5},
                                                                                 {1000, 2000, 3000, 4000, 8000}};

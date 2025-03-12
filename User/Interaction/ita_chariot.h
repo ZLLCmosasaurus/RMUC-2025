@@ -128,7 +128,6 @@ public:
         //底盘
         Class_Tricycle_Chassis Chassis;
 
-        Class_Buzzer Buzzer;
     #ifdef GIMBAL
         //遥控器
         Class_DR16 DR16;
@@ -211,7 +210,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-    float Reference_Angle =  0.688184561f;
+    float Reference_Angle =  2.08467984f;
     // 小陀螺云台坐标系稳定偏转角度 用于矫正
     float Offset_Angle = 0.0f; // 7.5°
     // 底盘转换后的角度（数据来源yaw电机）
@@ -237,7 +236,7 @@ protected:
         float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
+        float DR16_Yaw_Angle_Resolution = 0.025f * PI * 57.29577951308232;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
         float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
 
