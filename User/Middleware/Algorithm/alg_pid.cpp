@@ -163,7 +163,10 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     {
         Math_Constrain(&Out, -Out_Max, Out_Max);
     }
-
+    if(Out == isnan(Out)||Out== isinf(Out)){
+        Out = 0.0f;
+        
+    }
     // 善后工作,
     Pre_Now = Now;
     Pre_Target = Target;
