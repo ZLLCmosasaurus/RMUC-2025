@@ -52,10 +52,10 @@
                     "path": "../Core/Src/usart.c"
                   },
                   {
-                    "path": "../Core/Src/stm32f4xx_hal_msp.c"
+                    "path": "../Core/Src/stm32f4xx_it.c"
                   },
                   {
-                    "path": "../Core/Src/stm32f4xx_it.c"
+                    "path": "../Core/Src/stm32f4xx_hal_msp.c"
                   }
                 ],
                 "folders": []
@@ -360,9 +360,6 @@
           },
           {
             "path": "../User/Task/robotarm_task.cpp"
-          },
-          {
-            "path": "../User/Task/task_callback_and_config.h"
           }
         ],
         "folders": []

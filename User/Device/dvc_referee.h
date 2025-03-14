@@ -1213,7 +1213,7 @@ public:
     void Referee_UI_Draw_Float(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Integer(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, int32_t __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_String(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
-    void Referee_UI_Draw_String_Test(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
+
     void Referee_UI_Packed_String();
 
     template <typename T>
@@ -1303,7 +1303,6 @@ protected:
     Struct_Referee_Tx_Data_Interaction_Graphic_7 Interaction_Graphic_7;
     //画字符图形交互信息
     Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String;
-		Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String_test;
     //雷达发送小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Radar_Send Interaction_Radar_Send;
 
@@ -1357,7 +1356,7 @@ void Class_Referee::Referee_UI_Packed_Data(T* __data)
 	Append_CRC16_Check_Sum(UART_Manage_Object->Tx_Buffer,frame_length);  //一帧数据校验CRC16
 
     UART_Manage_Object->Tx_Length = frame_length;
-	//	memset(__data,0,sizeof(T));
+
     seq++;
 }
 

@@ -33,23 +33,16 @@ Class_Robotarm Robotarm;
 
 //#define _CAN_PACKET_SET_RUN_CONTROL
 void Class_Robotarm::Init()
-{	
+{
   //遥控器离线控制 状态机
     FSM_Alive_Control.Robotarm = this;
     FSM_Alive_Control.Init(5, 0);
 	//机械臂解算任务初始化
 	Robotarm_Resolution.Robotarm = this;
 	Robotarm_Resolution.Init(9 , 0);
-	//裁判系统初始化
-	Robotarm.Referee.Init(&huart6,0xA5);
-	//
-	DR16.Init(&huart3,&huart1);
-	//板载imu初始化
-	Boardc_BMI.Init();
+	DR16.Init(&huart3,&huart6);
 	//底盘通信初始化
 	Chassis_Communication.Init(&hcan2);
-	//底盘YawPid初始化
-	Chassis.PID_Yaw.Init(0.15f,0.f,0.f,0.f,0.f,4.0f);
 	//MiniPC初始化
 	MiniPc.Init(&MiniPC_USB_Manage_Object);
 	//设置机械臂为正常模式
@@ -122,8 +115,8 @@ void Class_Robotarm::TIM_Robotarm_Task_PeriodElapsedCallback()
 
 
 	Motor_Joint1.Task_Process_PeriodElapsedCallback();
-  Motor_Joint2.Task_Process_PeriodElapsedCallback();
-  Motor_Joint3.TIM_Process_PeriodElapsedCallback();
+    Motor_Joint2.Task_Process_PeriodElapsedCallback();
+    Motor_Joint3.TIM_Process_PeriodElapsedCallback();
 	Motor_Joint4.TIM_PID_PeriodElapsedCallback();
 	//校准的时候不进行右边2006电机控制
 	//if (init_finished)
@@ -281,19 +274,7 @@ void Class_Robotarm::Control_Chassis_Task()
         {
             chassis_velocity_y = -Chassis.Max_Chassis_Vy / DR16_Mouse_Chassis_Shift;
         }
-		Chassis.Actual_Yaw=-Robotarm.Boardc_BMI.Get_Angle_YawTotal();
-		Chassis.Target_Yaw+=Robotarm.DR16.Get_Mouse_X()*10.0f;
-		Chassis.TIM_PID_PeriodElapsedCallback();
-		chassis_omega=Chassis.PID_Yaw.Get_Out();
-				
-				//				 if (DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_PRESSED) // y轴
-//        {
-//            chassis_omega = -2.5;
-//        }
-//        if (DR16.Get_Keyboard_Key_E()  == DR16_Key_Status_PRESSED)
-//        {
-//            chassis_omega = 2.5;
-//        }
+
 //        if (DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED) // Q键切换小陀螺与随动
 //        {
 //            if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
@@ -313,13 +294,11 @@ void Class_Robotarm::Control_Chassis_Task()
 //        {
 //            Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
 //        }
-
 			Chassis.Chassis_Vx =chassis_velocity_x;
 			Chassis.Chassis_Vy =chassis_velocity_y;
-		  Chassis.Chassis_Omega=chassis_omega;
+			Chassis.Chassis_Omega =chassis_omega;
     }
 	}
-		
 		else
 		{
 		Chassis_control_type = CHASSIS_Control_Type_DISABLE;
@@ -1001,13 +980,6 @@ void Class_Robotarm_Resolution::Reload_Task_Status_PeriodElapsedCallback()
 			break;
 	}
 }
-}
-void Class_Chassis_Communication__::TIM_PID_PeriodElapsedCallback()
-{
-		PID_Yaw.Set_Target(Target_Yaw);
-        PID_Yaw.Set_Now(Actual_Yaw);
-        PID_Yaw.TIM_Adjust_PeriodElapsedCallback();
-       
 }
 //#endif
 #ifdef _OLD

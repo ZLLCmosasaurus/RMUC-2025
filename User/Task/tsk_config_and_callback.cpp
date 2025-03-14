@@ -291,9 +291,15 @@ void Set_Joint_1_5_Angle_Init_Data()
     }
 	//	Robotarm.Jonit_AngleInit[4]=Robotarm.Jonit_AngleInit[4]*2;
     #endif
-   //  memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
+     memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
     #ifdef DEBUG_REMOTE
-
+//    debug_test_angle[0]+=Robotarm.DR16.Get_Right_X()*DEBUG_REMOTE_SPEED_1;
+//    debug_test_angle[1]+=Robotarm.DR16.Get_Right_Y()*DEBUG_REMOTE_SPEED_2;
+//    Robotarm.Jonit_AngleInit[0]=debug_test_angle[0];
+//    Robotarm.Jonit_AngleInit[1]=debug_test_angle[1];
+//		debug_test_angle[2]+=Robotarm.DR16.Get_Right_Y()*debug_test_k;
+//		Robotarm.Jonit_AngleInit[2]=debug_test_angle[2];
+//Robotarm.Robotarm_Resolution.Get_Now_Status_Serial()==
     #endif
     if((Robotarm.Relay1.Get_Open_flag()==1)&&(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN))
     Math_Constrain(Robotarm.Jonit_AngleInit[0], 2.f, 178.f);
@@ -304,19 +310,18 @@ void Set_Joint_1_5_Angle_Init_Data()
 }
 
 
+
 void Task1ms_TIM5_Callback()
 {
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     static uint8_t TIM1msMod50 = 0;
-	
     TIM1msMod50++;
     if (TIM1msMod50 == 50)
     {
-        Robotarm.Task_Alive_PeriodElapsedCallback();//to do ：加入裁判系统
-				Robotarm.Referee.UART_Tx_Referee_UI();
+        Robotarm.Task_Alive_PeriodElapsedCallback();
         TIM1msMod50 = 0;
     }
-	
+
     // 遥控器控制
     switch (Robotarm.DR16.Get_DR16_Status())
     {
@@ -336,10 +341,7 @@ void Task1ms_TIM5_Callback()
 									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(16);
 									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(18);
 									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(16);
-							if(Robotarm.DR16.Get_Image_Status()==Image_Status_ENABLE)
-							{Set_Joint_1_5_Angle_Init_Data();}
-							else
-							{  memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));}	
+									Set_Joint_1_5_Angle_Init_Data();
 									if (huart1.ErrorCode)
                                     {
 										#ifdef OFFLINE_REMOTE
@@ -356,7 +358,7 @@ void Task1ms_TIM5_Callback()
 									if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_MIDDLE)
   									{Robotarm.Arm_Uplift.Target_Up_Length=Robotarm.Arm_Uplift.Actual_Up_Length;}
 									
-									Math_Constrain(Robotarm.Arm_Uplift.Target_Up_Length,0.f,28.f);
+									Math_Constrain(Robotarm.Arm_Uplift.Target_Up_Length,0.f,25.f);
 										
 						}
             break;
@@ -412,7 +414,7 @@ void Task1ms_TIM5_Callback()
     }
      break;
 	}
-    Robotarm.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
+
 		
     // 控制底盘任务
 	  Robotarm.Judge_DR16_Control_Type();
@@ -449,18 +451,17 @@ extern "C" void Task_Init()
     CAN_Init(&hcan1, Device_CAN1_Callback);
     CAN_Init(&hcan2, Device_CAN2_Callback);
  
-//    //c板陀螺仪spi外设
-    SPI_Init(&hspi1,Device_SPI1_Callback);
+    //c板陀螺仪spi外设
+    // SPI_Init(&hspi1,Device_SPI1_Callback);
 
-//    //磁力计iic外设
-     IIC_Init(&hi2c3, Ist8310_IIC3_Callback);    
-	
+    //磁力计iic外设
+    // IIC_Init(&hi2c3, Ist8310_IIC3_Callback);    
   
     //裁判系统
     UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
     //遥控器接收
     UART_Init(&huart3, DR16_UART3_Callback, 18);
-		
+  
     //UART_Init(&huart1, Image_UART1_Callback, 40);
     //UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);
 	#ifdef OFFLINE_REMOTE
@@ -473,7 +474,6 @@ extern "C" void Task_Init()
     //定时器循环任务
     TIM_Init(&htim4, Task100us_TIM4_Callback);
     TIM_Init(&htim5, Task1ms_TIM5_Callback);
-		HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
 
     /********************************* 设备层初始化 *********************************/
 
@@ -487,8 +487,6 @@ extern "C" void Task_Init()
 
     HAL_TIM_Base_Start_IT(&htim4);
     HAL_TIM_Base_Start_IT(&htim5);
-		
-	
 		
 }
 
