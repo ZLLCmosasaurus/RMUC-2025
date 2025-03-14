@@ -204,14 +204,22 @@ public:
 };
 class Class_Chassis_Communication__
 {
+	
 public:
+	// PID角度环控制
+  Class_PID PID_Yaw;
 	float Chassis_Vx;
 	float Chassis_Vy;
 	float Chassis_Omega;
+	float Target_Yaw=0.f;
+	float Actual_Yaw;
 	float Max_Chassis_Vx = 4.0f;
 	float Max_Chassis_Vy = 4.0f;
 	float Max_Chassis_Omega = 4.0f;
+  void TIM_PID_PeriodElapsedCallback();
+ 
 };
+
 /**
  * @brief 机器人是否离线 控制模式有限自动机
  *
@@ -269,7 +277,7 @@ public:
 	friend class Class_Robotarm_Resolution;
 	Class_Robotarm_Resolution Robotarm_Resolution;
     //imu对象
-    //Class_IMU Boardc_BMI;
+  Class_IMU Boardc_BMI;
 	//遥控器
 	Class_DR16 DR16;
 	//裁判系统

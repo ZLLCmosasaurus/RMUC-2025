@@ -50,6 +50,21 @@ public:
     void Reload_TIM_Statu_PeriodElapsedCallback();
 };
 
+////抬升机构类
+//class Class_RoRobotic_Arm_Uplift : public Class_DJI_Motor_C620
+//{
+//public:
+//	//变量
+//	float Target_Up_Length;
+//	float Actual_Up_Length;
+//	float K_Target = 5.0f;
+//    float K_Actual = 0.018f;
+//	//函数
+//    void Calculate_Actual_Up_Length(float Off_Set_Angle);
+//    void TIM_PID_PeriodElapsedCallback();
+
+//};
+
 class Class_Chariot
 {
 public:

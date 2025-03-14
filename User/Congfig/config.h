@@ -20,7 +20,7 @@
 //#define GIMBAL
 //#define CHASSIS_TASK
 #define GIMBAL_TASK
-#define Manipulator
+//#define Manipulator
 
 #ifdef CHASSIS 	
 
