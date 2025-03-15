@@ -116,6 +116,11 @@ void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
+    case (0x55):
+    {
+        chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
     }
 }
 #endif
@@ -487,15 +492,15 @@ extern "C" void Task_Loop()
     }
 #endif
 #ifdef CHASSIS
-    JudgeReceiveData.robot_id = chariot.Referee.Get_ID();
-    JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;                       // pitch角度
-    JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;                          // 弹舱
-    JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                 // 摩擦轮
-    JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                              // 自瞄是否离线
-    JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                     // 自瞄是否瞄准
-    JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
-    JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();     // 超级电容电压
-    JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); // 底盘控制模式
+    // JudgeReceiveData.robot_id = chariot.Referee.Get_ID();
+    // JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;                       // pitch角度
+    // JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;                          // 弹舱
+    // JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                 // 摩擦轮
+    // JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                              // 自瞄是否离线
+    // JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                     // 自瞄是否瞄准
+    // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
+    // JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();     // 超级电容电压
+    // JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); // 底盘控制模式
     if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
         Init_Cnt = 10;
     GraphicSendtask();
