@@ -69,6 +69,8 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[1].Init(&hcan1, DJI_Motor_ID_0x202);
     Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x203);
     Motor_Wheel[3].Init(&hcan1, DJI_Motor_ID_0x204);
+
+    Power_Limit.Init();
 }
 
 /**
@@ -144,7 +146,8 @@ void Class_Tricycle_Chassis::Speed_Resolution()
     break;
     }
 }
-
+Enum_Supercap_Mode test_mode = Supercap_Mode_ENABLE;
+float test_power = 58.0f;
 /**
  * @brief TIM定时器中断计算回调函数
  *
@@ -168,7 +171,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 
 #ifdef POWER_LIMIT
     Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
-    Power_Management.Actual_Power = Referee->Get_Chassis_Power();
+    Power_Management.Actual_Power =Supercap.Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {
         //        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Data().Now_Omega_Angle / 360.0f * 60.0f;
@@ -191,17 +194,18 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     }
 
     /****************************超级电容***********************************/
-    //    Supercap.Set_Now_Power(Referee->Get_Chassis_Power());
-    //    if(Referee->Get_Referee_Status()==Referee_Status_DISABLE)
-    //        Supercap.Set_Limit_Power(45.0f);
-    //    else
-    //    {
-    //        float offset;
-    //        offset = (Referee->Get_Chassis_Energy_Buffer()-20.0f)/4;
-    //        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() + offset);
-    //    }
-    //
-    //    Supercap.TIM_Supercap_PeriodElapsedCallback();
+    if (Referee->Get_Referee_Status() == Referee_Status_DISABLE)
+    {
+        Supercap.Set_Supercap_Mode(test_mode);
+        Supercap.Set_Limit_Power(test_power);
+    }
+
+    else
+    {
+        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+        Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+    }
+       Supercap.TIM_Supercap_PeriodElapsedCallback();
 
     //    /*************************功率限制策略*******************************/
     //    if(__Sprint_Status==Sprint_Status_ENABLE)
