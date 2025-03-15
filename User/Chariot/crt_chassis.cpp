@@ -52,6 +52,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 #ifdef POWER_LIMIT
     // 超级电容初始化
     Supercap.Init(&hcan1, 45);
+    Power_Limit.Init();
 #endif
 
     // 电机PID批量初始化
@@ -70,7 +71,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x203);
     Motor_Wheel[3].Init(&hcan1, DJI_Motor_ID_0x204);
 
-    Power_Limit.Init();
+    
 }
 
 /**
