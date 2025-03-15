@@ -1,6 +1,6 @@
 #include "crt_observe.h"
 
-float vaEstimateKF_F[4] = {1.0f, 0.003f,
+float vaEstimateKF_F[4] = {1.0f, 0.001f,
 						   0.0f, 1.0f}; // ״̬ת�ƾ��󣬿�������Ϊ0.001s
 
 float vaEstimateKF_P[4] = {1.0f, 0.0f,
@@ -50,27 +50,24 @@ void Class_observe::xvEstimateKF_Update(float acc, float vel)
 	}
 }
 
-void Class_observe::TIM_Calculate_PeriodElapsedCallback(uint32_t OBSERVE_TIME)
+void Class_observe::TIM_Calculate_PeriodElapsedCallback(float OBSERVE_TIME)
 {
-	wr = -Wheel_Motor[0]->motor.Get_Now_Omega() - Boardc_BMI->Get_Gyro_Pitch() + Right_Leg->d_alpha;
+	// wr = -Wheel_Motor[0]->motor.Get_Now_Omega() - Boardc_BMI->Get_Gyro_Pitch() + Right_Leg->d_alpha;
 
-	vrb = wr * 0.09f + Right_Leg->L0 * Right_Leg->d_theta * arm_cos_f32(Right_Leg->theta) + Right_Leg->d_L0 * arm_sin_f32(Right_Leg->theta);
+	// vrb = wr * 0.09f + Right_Leg->L0 * Right_Leg->d_theta * arm_cos_f32(Right_Leg->theta) + Right_Leg->d_L0 * arm_sin_f32(Right_Leg->theta);
 
-	wr = -Wheel_Motor[1]->motor.Get_Now_Omega() + Boardc_BMI->Get_Gyro_Pitch() + Left_Leg->d_alpha;
+	// wr = -Wheel_Motor[1]->motor.Get_Now_Omega() + Boardc_BMI->Get_Gyro_Pitch() + Left_Leg->d_alpha;
 
-	vlb = wl * 0.09f + Left_Leg->L0 * Left_Leg->d_theta * arm_cos_f32(Left_Leg->theta) + Left_Leg->d_L0 * arm_sin_f32(Left_Leg->theta); // 
+	// vlb = wl * 0.09f + Left_Leg->L0 * Left_Leg->d_theta * arm_cos_f32(Left_Leg->theta) + Left_Leg->d_L0 * arm_sin_f32(Left_Leg->theta); //
 
-	aver_v=(vrb+vlb)/2.0f;//
-	xvEstimateKF_Update(Boardc_BMI->Get_Motion_Accel_X_N(),aver_v);
+	// aver_v=(vrb+vlb)/2.0f;//
+	// xvEstimateKF_Update(Boardc_BMI->Get_Motion_Accel_X_N(),aver_v);
 
-	// //ԭ����ת�Ĺ�����v_filter��x_filterӦ�ö���Ϊ0
-	v_filter=vel_acc[0];//�õ��������˲�����ٶ�
-	x_filter=x_filter+v_filter*((float)OBSERVE_TIME/1000.0f);
+	// v_filter=vel_acc[0];
+	// x_filter=x_filter+v_filter*OBSERVE_TIME;
 
-	// �����ֱ���������ٶȣ������ںϵĻ���������
-	// v_filter = (Wheel_Motor[1]->motor.Get_Now_Omega() + Wheel_Motor[1]->motor.Get_Now_Omega()) * (0.09f) / 2.0f;
-	// //	v_filter=0.f;
-	// x_filter = x_filter + v_filter * ((float)OBSERVE_TIME / 1000.0f);
+	v_filter = (Wheel_Motor[0]->motor.Get_Now_Omega() - Wheel_Motor[1]->motor.Get_Now_Omega()) * (-0.09f) / 2.0f;
+	x_filter = x_filter + v_filter * ((float)OBSERVE_TIME);
 }
 
 float RAMP_float(float final, float now, float ramp)

@@ -12,6 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_AKmotor.h"
+#include "dvc_dwt.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -144,7 +145,7 @@ uint8_t *allocate_tx_data(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID)
  * @param __Omega_Max 最大速度, 调参助手设置
  * @param __Torque_Max 最大扭矩, 调参助手设置
  */
-void Class_AK_Motor_80_6::Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID, Enum_AK_Motor_Control_Method __Control_Method, float __MIT_K_P, float __MIT_K_D,
+void Class_AK_Motor_80_6::Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID, Enum_AK_Motor_Control_Method __Control_Method, bool __Is_Diff, float __MIT_K_P, float __MIT_K_D,
                                int32_t __Position_Offset, float __Angle_Max, float __Omega_Max, float __Torque_Max, float __Slope_Angle)
 {
     if (hcan->Instance == CAN1)
@@ -157,6 +158,7 @@ void Class_AK_Motor_80_6::Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_I
     }
     CAN_ID = __CAN_ID;
     AK_Motor_Control_Method = __Control_Method;
+    Is_Diff = __Is_Diff;
     MIT_K_P = __MIT_K_P;
     MIT_K_D = __MIT_K_D;
     Position_Offset = __Position_Offset;
@@ -167,7 +169,7 @@ void Class_AK_Motor_80_6::Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_I
     Slope_Joint_Angle.Init(__Slope_Angle, __Slope_Angle);
     CAN_Tx_Data = allocate_tx_data(hcan, __CAN_ID);
 }
-
+float ak_test_omega;
 /**
  * @brief 数据处理过程
  *
@@ -214,6 +216,9 @@ void Class_AK_Motor_80_6::Data_Process()
     }
     else if (AK_Motor_Control_Method != CAN_PACKET_DIS_RUN_CONTROL)
     {
+
+        Delta_T = DWT_GetDeltaT(&Time_Cnt);
+
         // 数据处理过程
         int32_t delta_position;
         int16_t tmp_position, tmp_omega, tmp_torque;
@@ -244,13 +249,37 @@ void Class_AK_Motor_80_6::Data_Process()
         // 计算电机本身信息
         if (fabs(tmp_omega) < 32000.0f)
         {
-            Data.Now_Angle = AK80_POSITION_FROM_LSB_TO_FLOAT(tmp_position)*DEG_TO_RAD;
-            Data.Now_Omega = AK80_SPEED_FROM_LSB_TO_FLOAT(tmp_omega) * RPM_TO_RADPS;
-            Data.Now_Torque = AK80_CURRENT_FROM_LSB_TO_FLOAT(tmp_torque);
-            Data.Now_Rotor_Temperature = AK80_TEMPERATURE_FROM_LSB_TO_FLOAT(tmp_buffer->Motor_Temperature);
-            Data.error_statue = tmp_buffer->error_statue;
-            // 存储预备信息
-            Data.Pre_Position = tmp_position;
+            if (Is_Diff)
+            {
+                Data.Now_Angle = -AK80_POSITION_FROM_LSB_TO_FLOAT(tmp_position) * DEG_TO_RAD;
+
+                // ak_test_omega = AK80_POSITION_FROM_LSB_TO_FLOAT(delta_position) * DEG_TO_RAD / Delta_T;
+
+                Data.Now_Omega = -AK80_SPEED_FROM_LSB_TO_FLOAT(tmp_omega) * RPM_TO_RADPS / 21.0f / 6.0f; // 编码器21减速比6
+                Data.Now_Torque = -AK80_CURRENT_FROM_LSB_TO_FLOAT(tmp_torque);
+                Data.Now_Rotor_Temperature = AK80_TEMPERATURE_FROM_LSB_TO_FLOAT(tmp_buffer->Motor_Temperature);
+                Data.error_statue = tmp_buffer->error_statue;
+                // 存储预备信息
+                Data.Pre_Position = -tmp_position;
+            }
+            else
+            {
+                Data.Now_Angle = AK80_POSITION_FROM_LSB_TO_FLOAT(tmp_position) * DEG_TO_RAD;
+
+                // ak_test_omega = AK80_POSITION_FROM_LSB_TO_FLOAT(delta_position) * DEG_TO_RAD / Delta_T;
+
+                Data.Now_Omega = AK80_SPEED_FROM_LSB_TO_FLOAT(tmp_omega) * RPM_TO_RADPS / 21.0f / 6.0f; // 编码器21减速比6
+                Data.Now_Torque = AK80_CURRENT_FROM_LSB_TO_FLOAT(tmp_torque);
+                Data.Now_Rotor_Temperature = AK80_TEMPERATURE_FROM_LSB_TO_FLOAT(tmp_buffer->Motor_Temperature);
+                Data.error_statue = tmp_buffer->error_statue;
+                // 存储预备信息
+                Data.Pre_Position = tmp_position;
+            }
+        }
+
+        if (init_flag == 0)
+        {
+            init_flag = 1;
         }
     }
 }
@@ -396,12 +425,18 @@ void Class_AK_Motor_80_6::Task_Process_PeriodElapsedCallback()
     break;
     case (CAN_PACKET_SET_CURRENT):
     {
-        int32_t tmp_current = AK80_CURRENT_FROM_FLOAT_TO_LSB(Target_Current);
+        int32_t tmp_current;
+        if (Is_Diff)
+        {
+            tmp_current = AK80_CURRENT_FROM_FLOAT_TO_LSB(-Target_Current);
+        }
+        else
+        {
+            tmp_current = AK80_CURRENT_FROM_FLOAT_TO_LSB(Target_Current);
+        }
 
         Math_Endian_Reverse_32(&tmp_current);
         memcpy(CAN_Tx_Data, &tmp_current, sizeof(int32_t));
-
-        //        CAN_Send_Data(CAN_Manage_Object->CAN_Handler, (uint32_t)(AK_Motor_Control_Method<<8|CAN_ID), CAN_Tx_Data, 8, CAN_ID_EXT);
     }
     break;
     default:

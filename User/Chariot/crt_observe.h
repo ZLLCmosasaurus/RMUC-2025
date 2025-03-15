@@ -30,7 +30,6 @@ class Class_observe
 {
 public:
 	KalmanFilter_t vaEstimateKF;
-	uint32_t OBSERVE_TIME;
 	float wr, wl;
 	float vrb, vlb;
 	float aver_v;
@@ -42,7 +41,7 @@ public:
 	float vel_acc[2];
 	float v_filter;
 	float x_filter;
-	void TIM_Calculate_PeriodElapsedCallback(uint32_t OBSERVE_TIME);
+	void TIM_Calculate_PeriodElapsedCallback(float OBSERVE_TIME);
 	void xvEstimateKF_Init(void);
 	void xvEstimateKF_Update(float acc, float vel);
 	inline float Get_X_Filter(void);

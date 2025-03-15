@@ -88,32 +88,32 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Yaw_Motor.PID_Angle.Init(1.0f, 0.0f, 0.0f, 0.0f, Yaw_Motor.Get_Output_Max(), Yaw_Motor.Get_Output_Max());
     Yaw_Motor.PID_Omega.Init(1.0f, 0.0f, 0.0f, 0.0f, Yaw_Motor.Get_Output_Max(), Yaw_Motor.Get_Output_Max());
 
-    Joint_Motor[0].motor.Init(&hcan1, DM_Motor_ID_0xA1, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 35.f); // 6.16621923
-    Joint_Motor[1].motor.Init(&hcan1, DM_Motor_ID_0xA2, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 35.f); // 6.34684563
-    Joint_Motor[2].motor.Init(&hcan2, DM_Motor_ID_0xA3, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 35.f); // 6.42469501
-    Joint_Motor[3].motor.Init(&hcan2, DM_Motor_ID_0xA4, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 35.f); // 6.29660797
+    Joint_Motor[0].motor.Init(&hcan1, DM_Motor_ID_0xA1, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 15.f); // 6.16621923
+    Joint_Motor[1].motor.Init(&hcan1, DM_Motor_ID_0xA2, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 15.f); // 6.34684563
+    Joint_Motor[2].motor.Init(&hcan2, DM_Motor_ID_0xA3, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 15.f); // 6.42469501
+    Joint_Motor[3].motor.Init(&hcan2, DM_Motor_ID_0xA4, DM_Motor_Control_Method_MIT_TORQUE, 0, 45.f, 15.f); // 6.29660797
 
     //	Joint_Motor[0].motor.Init(&hcan1, DM_Motor_ID_0xA1,DM_Motor_Control_Method_POSITION_OMEGA,0,1.f,35.f);
     //    Joint_Motor[1].motor.Init(&hcan1, DM_Motor_ID_0xA2,DM_Motor_Control_Method_POSITION_OMEGA,0,1.f,35.f);
     //    Joint_Motor[2].motor.Init(&hcan1, DM_Motor_ID_0xA3,DM_Motor_Control_Method_POSITION_OMEGA,0,1.f,35.f);
     //    Joint_Motor[3].motor.Init(&hcan1, DM_Motor_ID_0xA4,DM_Motor_Control_Method_POSITION_OMEGA,0,1.f,35.f);
 
-    Wheel_Motor[0].motor.Init(&hcan1, AK_Motor_ID_0x01);
-    Wheel_Motor[1].motor.Init(&hcan2, AK_Motor_ID_0x02);
-    leg_set = 0.38;
+    Wheel_Motor[0].motor.Init(&hcan1, AK_Motor_ID_0x01, CAN_PACKET_SET_CURRENT, true);
+    Wheel_Motor[1].motor.Init(&hcan2, AK_Motor_ID_0x02, CAN_PACKET_SET_CURRENT, false);
+    leg_set = 0.28;
     Left_Leg.VMC_Init();
     Left_Leg.Set_LQR_K(Length15_K);
     Right_Leg.VMC_Init();
     Right_Leg.Set_LQR_K(Length15_K);
 
-    left_leg_length_pid.Init(100.0f, 0.0f, 20.0f, 0.0f, 0.0f, 150.f);
-    right_leg_length_pid.Init(100.0f, 0.0f, 20.0f, 0.0f, 0.0f, 150.f);
+    left_leg_length_pid.Init(1200.0f, 0.0f, 3.0f, 0.0f, 0.0f, 150.f);
+    right_leg_length_pid.Init(1200.0f, 0.0f, 3.0f, 0.0f, 0.0f, 150.f);
     roll_pid.Init(140.0f, 0.0f, 10.0f, 0.0f, 0.0f, 1.0f);
     Tp_pid.Init(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10.0f);
-    turn_pid.Init(0.04f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+    turn_pid.Init(0.06f, 0.0f, 0.005f, 0.0f, 0.0f, 1.0f);
 
-    test_left_leg_theta_pid.Init(2.5f, 0.0f, 0.5f, 0.0f, 0.0f, 10.0f);
-    test_right_leg_theta_pid.Init(2.5f, 0.0f, 0.5f, 0.0f, 0.0f, 10.0f);
+    test_left_leg_theta_pid.Init(120.0f, 0.0f, 0.7f, 0.0f, 0.0f, 10.0f);
+    test_right_leg_theta_pid.Init(120.0f, 0.0f, 0.7f, 0.0f, 0.0f, 10.0f);
 
     /*Observe*/
     Observe.Boardc_BMI = &Boardc_BMI;
@@ -166,7 +166,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
  * @brief 速度解算
  *
  */
-float torque_limition = 0, torque_limition_wheel = 0;
+float torque_limition = 30.0f, torque_limition_wheel = 0;
 float test;
 float temp_test_1, temp_test_2, temp_test_3, temp_test_4;
 float tmp_wheel_t[2];
@@ -181,10 +181,10 @@ void Class_Tricycle_Chassis::Speed_Resolution()
     x_filter = Observe.Get_X_Filter();
     v_filter = Observe.Get_V_Filter();
 
-    //  turn_pid.Set_Now(yaw_set-total_yaw);
-    //  turn_pid.Set_Target(0);
-    //  turn_pid.TIM_Adjust_PeriodElapsedCallback();
-    //  turn_T=turn_pid.Get_Out();
+     turn_pid.Set_Now(total_yaw);
+     turn_pid.Set_Target(yaw_set);
+     turn_pid.TIM_Adjust_PeriodElapsedCallback();
+     turn_T=turn_pid.Get_Out();
 
     // roll_pid.Set_Now(Roll.Get_True_Gyro_Roll());
     // roll_pid.Set_Target(roll_set-roll);
@@ -240,7 +240,7 @@ void Class_Tricycle_Chassis::chassisL_feedback_update()
     Left_Leg.phi1 = PI / 2.0f + Joint_Motor[2].motor.Get_Now_Angle();
     Left_Leg.phi4 = PI / 2.0f + Joint_Motor[3].motor.Get_Now_Angle();
 
-    myPithL = 0.0f - Boardc_BMI.Get_Rad_Pitch();
+    myPithL = pitch_offset*DEG_TO_RAD + 0.00f - Boardc_BMI.Get_Rad_Pitch();
     myPithGyroL = 0.0f - Boardc_BMI.Get_Gyro_Pitch();
 }
 
@@ -249,10 +249,14 @@ void Class_Tricycle_Chassis::chassisR_feedback_update()
     Right_Leg.phi1 = PI / 2.0f + Joint_Motor[0].motor.Get_Now_Angle();
     Right_Leg.phi4 = PI / 2.0f + Joint_Motor[1].motor.Get_Now_Angle();
 
-    myPithR = Boardc_BMI.Get_Rad_Pitch();
+    myPithR = -pitch_offset*DEG_TO_RAD+Boardc_BMI.Get_Rad_Pitch();
     myPithGyroR = Boardc_BMI.Get_Gyro_Pitch();
 
-    total_yaw = Boardc_BMI.QEKF_INS.YawTotalAngle;
+    turn_pid.Set_Now(total_yaw);
+    turn_pid.Set_Target(yaw_set);
+    turn_pid.TIM_Adjust_PeriodElapsedCallback();
+    turn_T = turn_pid.Get_Out();
+    total_yaw =- Boardc_BMI.QEKF_INS.YawTotalAngle;
 
     roll = Boardc_BMI.Get_Angle_Roll();
     leg_theta_err = 0.0f - (Right_Leg.theta + Left_Leg.theta);
@@ -266,13 +270,19 @@ void Class_Tricycle_Chassis::chassisR_feedback_update()
 float test_angle = PI / 2.0f;
 void Class_Tricycle_Chassis::chassisL_control_loop()
 {
+
+    static uint32_t chassisL_control_loop_cnt = 0;
+    static float chassisL_control_loop_dt = 0.0;
+
+    chassisL_control_loop_dt = DWT_GetDeltaT(&chassisL_control_loop_cnt);
+
     float temp_T = 0;  // 轮毂电机输出力矩
     float temp_Tp = 0; // 髋关节输出力矩
 
     Left_Leg.Set_Pitch(myPithL);
     Left_Leg.Set_Pitch_Gyro(myPithGyroL);
 
-    Left_Leg.VMC_calc_1(CHASSIS_DWT_Dt);
+    Left_Leg.VMC_calc_1(chassisL_control_loop_dt);
 
     // 得到LQR矩阵系数
     for (int i = 0; i < 12; i++)
@@ -281,47 +291,74 @@ void Class_Tricycle_Chassis::chassisL_control_loop()
     }
 
     // 根据系数计算输出量U（T，Tp）
-    temp_T = (Left_Leg.LQR_K[0] * (Left_Leg.theta) + Left_Leg.LQR_K[1] * (Left_Leg.d_theta) + Left_Leg.LQR_K[2] * (x_set - x_filter) + Left_Leg.LQR_K[3] * (v_set - v_filter) + Left_Leg.LQR_K[4] * (myPithL) + Left_Leg.LQR_K[5] * (myPithGyroL));
+    // 注意这里x和v的方向
+    temp_T = T_coefficient * (Left_Leg.LQR_K[0] * (Left_Leg.theta) + Left_Leg.LQR_K[1] * (Left_Leg.d_theta) + Left_Leg.LQR_K[2] * (x_set - x_filter) + Left_Leg.LQR_K[3] * (v_set - v_filter) + Left_Leg.LQR_K[4] * (myPithL) + Left_Leg.LQR_K[5] * (myPithGyroL));
 
-    temp_Tp = Left_Leg.Tp = (Left_Leg.LQR_K[6] * (Left_Leg.theta) + Left_Leg.LQR_K[7] * (Left_Leg.d_theta) + Left_Leg.LQR_K[8] * (x_set - x_filter) + Left_Leg.LQR_K[9] * (v_set - v_filter) + Left_Leg.LQR_K[10] * (myPithL) + Left_Leg.LQR_K[11] * (myPithGyroL));
+    Left_Leg.tp_x_out = (x_set - x_filter) * Left_Leg.LQR_K[8];
+    Left_Leg.tp_v_out = (v_set - v_filter) * Left_Leg.LQR_K[9];
+    Left_Leg.tp_myPith_out = myPithL * Left_Leg.LQR_K[10];
+    Left_Leg.tp_myPithGyro_out = myPithGyroL * Left_Leg.LQR_K[11];
+    Left_Leg.tp_theta_out = Left_Leg.theta * Left_Leg.LQR_K[6];
+    Left_Leg.tp_dtheta_out = Left_Leg.d_theta * Left_Leg.LQR_K[7];
 
-    Wheel_Motor[1].wheel_T = temp_T - turn_T;
-    mySaturate(&Wheel_Motor[1].wheel_T, -1.0f, 1.0f);
+    Left_Leg.t_x_out = Left_Leg.LQR_K[2] * (x_set - x_filter);
+    Left_Leg.t_v_out = Left_Leg.LQR_K[3] * (v_set - v_filter);
+    Left_Leg.t_myPith_out = Left_Leg.LQR_K[4] * (myPithL);
+    Left_Leg.t_myPithGyro_out = Left_Leg.LQR_K[5] * (myPithGyroL);
+    Left_Leg.t_theta_out = Left_Leg.LQR_K[0] * (Left_Leg.theta);
+    Left_Leg.t_dtheta_out = Left_Leg.LQR_K[1] * (Left_Leg.d_theta);
 
-    Left_Leg.Tp = temp_Tp + leg_tp;
+    temp_Tp = T_coefficient*(Left_Leg.LQR_K[6] * (Left_Leg.theta) + Left_Leg.LQR_K[7] * (Left_Leg.d_theta) + Left_Leg.LQR_K[8] * (x_set - x_filter) + Left_Leg.LQR_K[9] * (v_set - v_filter) + Left_Leg.LQR_K[10] * (myPithL) + Left_Leg.LQR_K[11] * (myPithGyroL));
 
-    Left_Leg.Tp = 0;
+    Wheel_Motor[1].wheel_T = temp_T + turn_T;
+    // mySaturate(&Wheel_Motor[1].wheel_T, -1.0f, 1.0f);
+
+    Left_Leg.Tp = 1.0f * temp_Tp + leg_tp;
+
+    //Left_Leg.Tp = 0;
 
     left_leg_length_pid.Set_Now(Left_Leg.L0);
     left_leg_length_pid.Set_Target(leg_set);
     left_leg_length_pid.TIM_Adjust_PeriodElapsedCallback();
-    Left_Leg.F0 = total_mg / 2.f * arm_cos_f32(Left_Leg.theta) + left_leg_length_pid.Get_Out(); //
+    Left_Leg.F0 = total_mg / 2.f /* * arm_cos_f32(Left_Leg.theta)*/ + left_leg_length_pid.Get_Out(); //
 
     test_left_leg_theta_pid.Set_Now(Left_Leg.phi0);
     test_left_leg_theta_pid.Set_Target(test_angle);
     test_left_leg_theta_pid.TIM_Adjust_PeriodElapsedCallback();
-  
-    Left_Leg.Tp =test_left_leg_theta_pid.Get_Out();
+
+    //Left_Leg.Tp = test_left_leg_theta_pid.Get_Out();
+
+    // Left_Leg.F0 = 0;
     /*******************************/
     Left_Leg.FN = Left_Leg.F0 * arm_cos_f32(Left_Leg.theta) + Left_Leg.Tp * arm_sin_f32(Left_Leg.theta) / Left_Leg.L0 + wheel_mg; // 腿部机构的力+轮子重力，这里忽略了轮子质量*驱动轮竖直方向运动加速度
 
     /*******************************/
 
+    mySaturate(&Left_Leg.torque_set[1], -torque_limition, torque_limition);
+    mySaturate(&Left_Leg.torque_set[0], -torque_limition, torque_limition);
+    mySaturate(&Left_Leg.Tp, -torque_limition, torque_limition);
+
     Left_Leg.VMC_calc_2(); // 计算期望的关节输出力矩
 
     Joint_Motor[2].motor.Set_Target_Torque(Left_Leg.torque_set[0]);
     Joint_Motor[3].motor.Set_Target_Torque(Left_Leg.torque_set[1]);
+    Wheel_Motor[1].motor.Set_Target_Current(Wheel_Motor[1].wheel_T / Wheel_Motor[1].motor.Get_KT());
 }
 
 void Class_Tricycle_Chassis::chassisR_control_loop()
 {
+    static uint32_t chassisR_control_loop_cnt = 0;
+    static float chassisR_control_loop_dt = 0.0;
+
+    chassisR_control_loop_dt = DWT_GetDeltaT(&chassisR_control_loop_cnt);
+
     float temp_T = 0;  // 轮毂电机输出力矩
     float temp_Tp = 0; // 髋关节输出力矩
 
     Right_Leg.Set_Pitch(myPithR);
     Right_Leg.Set_Pitch_Gyro(myPithGyroR);
 
-    Right_Leg.VMC_calc_1(CHASSIS_DWT_Dt);
+    Right_Leg.VMC_calc_1(chassisR_control_loop_dt);
 
     // 得到LQR矩阵系数
     for (int i = 0; i < 12; i++)
@@ -331,37 +368,58 @@ void Class_Tricycle_Chassis::chassisR_control_loop()
     // 根据系数计算输出量U（T，Tp）
 
     // 根据系数计算输出量U（T，Tp）
-    temp_T = (Right_Leg.LQR_K[0] * (Right_Leg.theta) + Right_Leg.LQR_K[1] * (Right_Leg.d_theta) + Right_Leg.LQR_K[2] * (x_set - x_filter) + Right_Leg.LQR_K[3] * (v_set - v_filter) + Right_Leg.LQR_K[4] * (myPithL) + Right_Leg.LQR_K[5] * (myPithGyroL));
+    temp_T = T_coefficient * (Right_Leg.LQR_K[0] * (Right_Leg.theta) + Right_Leg.LQR_K[1] * (Right_Leg.d_theta) + Right_Leg.LQR_K[2] * (x_filter - x_set) + Right_Leg.LQR_K[3] * (v_filter - v_set) + Right_Leg.LQR_K[4] * (myPithR) + Right_Leg.LQR_K[5] * (myPithGyroR));
 
-    temp_Tp = Right_Leg.Tp = (Right_Leg.LQR_K[6] * (Right_Leg.theta) + Right_Leg.LQR_K[7] * (Right_Leg.d_theta) + Right_Leg.LQR_K[8] * (x_set - x_filter) + Right_Leg.LQR_K[9] * (v_set - v_filter) + Right_Leg.LQR_K[10] * (myPithL) + Right_Leg.LQR_K[11] * (myPithGyroL));
+    Right_Leg.tp_theta_out = Right_Leg.theta * Right_Leg.LQR_K[6];
+    Right_Leg.tp_dtheta_out = Right_Leg.d_theta * Right_Leg.LQR_K[7];
+    Right_Leg.tp_x_out = (x_filter - x_set) * Right_Leg.LQR_K[8];
+    Right_Leg.tp_v_out = (v_filter - v_set) * Right_Leg.LQR_K[9];
+    Right_Leg.tp_myPith_out = myPithR * Right_Leg.LQR_K[10];
+    Right_Leg.tp_myPithGyro_out = myPithGyroR * Right_Leg.LQR_K[11];
 
-    Wheel_Motor[1].wheel_T = temp_T - turn_T;
-    mySaturate(&Wheel_Motor[1].wheel_T, -1.0f, 1.0f);
+    Right_Leg.t_x_out = Right_Leg.LQR_K[2] * (x_filter - x_set);
+    Right_Leg.t_v_out = Right_Leg.LQR_K[3] * (v_filter - v_set);
+    Right_Leg.t_myPith_out = Right_Leg.LQR_K[4] * (myPithR);
+    Right_Leg.t_myPithGyro_out = Right_Leg.LQR_K[5] * (myPithGyroR);
+    Right_Leg.t_theta_out = Right_Leg.LQR_K[0] * (Right_Leg.theta);
+    Right_Leg.t_dtheta_out = Right_Leg.LQR_K[1] * (Right_Leg.d_theta);
 
-    Right_Leg.Tp = temp_Tp + leg_tp;
+    temp_Tp = T_coefficient*(Right_Leg.LQR_K[6] * (Right_Leg.theta) + Right_Leg.LQR_K[7] * (Right_Leg.d_theta) + Right_Leg.LQR_K[8] * (x_filter - x_set) + Right_Leg.LQR_K[9] * (v_filter - v_set) + Right_Leg.LQR_K[10] * (myPithR) + Right_Leg.LQR_K[11] * (myPithGyroR));
 
-    Right_Leg.Tp = 0;
+    Wheel_Motor[0].wheel_T = temp_T + turn_T;
+    // mySaturate(&Wheel_Motor[0].wheel_T, -1.0f, 1.0f);
+
+    Right_Leg.Tp = 1.0f * temp_Tp + leg_tp;
+
+   // Right_Leg.Tp = 0;
 
     right_leg_length_pid.Set_Now(Right_Leg.L0);
     right_leg_length_pid.Set_Target(leg_set);
     right_leg_length_pid.TIM_Adjust_PeriodElapsedCallback();
 
-    Right_Leg.F0 = total_mg / 2.f * arm_cos_f32(Right_Leg.theta) + right_leg_length_pid.Get_Out(); //
+    Right_Leg.F0 = total_mg / 2.f /** arm_cos_f32(Right_Leg.theta) */ + right_leg_length_pid.Get_Out(); //
+
+    // Right_Leg.F0 = 0;
 
     test_right_leg_theta_pid.Set_Now(Right_Leg.phi0);
     test_right_leg_theta_pid.Set_Target(test_angle);
     test_right_leg_theta_pid.TIM_Adjust_PeriodElapsedCallback();
-  
-    Right_Leg.Tp = test_right_leg_theta_pid.Get_Out();
+
+   // Right_Leg.Tp = test_right_leg_theta_pid.Get_Out();
     /*******************************/
     Right_Leg.FN = Right_Leg.F0 * arm_cos_f32(Right_Leg.theta) + Right_Leg.Tp * arm_sin_f32(Right_Leg.theta) / Right_Leg.L0 + wheel_mg; // 腿部机构的力+轮子重力，这里忽略了轮子质量*驱动轮竖直方向运动加速度
 
     /*******************************/
 
+    mySaturate(&Right_Leg.torque_set[1], -torque_limition, torque_limition);
+    mySaturate(&Right_Leg.torque_set[0], -torque_limition, torque_limition);
+    mySaturate(&Right_Leg.Tp, -torque_limition, torque_limition);
+
     Right_Leg.VMC_calc_2(); // 计算期望的关节输出力矩
 
     Joint_Motor[0].motor.Set_Target_Torque(Right_Leg.torque_set[0]);
     Joint_Motor[1].motor.Set_Target_Torque(Right_Leg.torque_set[1]);
+    Wheel_Motor[0].motor.Set_Target_Current(Wheel_Motor[0].wheel_T / Wheel_Motor[0].motor.Get_KT());
 }
 
 /**
@@ -369,36 +427,53 @@ void Class_Tricycle_Chassis::chassisR_control_loop()
  *
  */
 float Power_Limit_K = 1.0f;
+uint64_t delta_time = 0;
+static uint64_t start_time = 0;
 void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status)
 {
 #ifdef C_IMU
 
 #endif
+    start_time = DWT_GetTimeline_us();
+    static uint8_t mod5 = 0;
+
     Yaw_Motor.Set_Target_Angle(test);
     Yaw_Motor.TIM_PID_PeriodElapsedCallback();
 
-    CHASSIS_DWT_Dt = DWT_GetDeltaT(&CHASSIS_DWT_Count);
+    CHASSIS_DWT_Dt = DWT_GetDeltaT(&CHASSIS_DWT_Count); // s
 
     Observe.TIM_Calculate_PeriodElapsedCallback(CHASSIS_DWT_Dt);
+    x_filter = Observe.x_filter;
+    v_filter = Observe.v_filter;
 
     chassisL_feedback_update();
     chassisR_feedback_update();
 
-    chassisL_control_loop();
-    chassisR_control_loop();
+    if (mod5 == 1 || mod5 == 3)
+    {
+        chassisL_control_loop();
+        chassisR_control_loop();
+    }
+
+    mod5++;
+    if (mod5 == 5)
+    {
+        mod5 = 0;
+    }
 
     for (uint8_t i = 0; i < 4; i++)
     {
-        Joint_Motor[i].motor.TIM_Process_PeriodElapsedCallback();
+        Joint_Motor[i].motor.Set_Target_Torque(0.0);
+        Joint_Motor[i]
+            .motor.TIM_Process_PeriodElapsedCallback();
     }
 
-    for(uint8_t i = 0; i < 2; i++)
+    for (uint8_t i = 0; i < 2; i++)
     {
+        Wheel_Motor[i].motor.Set_Target_Current(0.0f);
         Wheel_Motor[i].motor.Task_Process_PeriodElapsedCallback();
     }
-
-
-
+    delta_time = DWT_GetTimeline_us() - start_time;
 #ifdef SUPERCAP
 /****************************超级电容***********************************/
 #ifdef REFEREE

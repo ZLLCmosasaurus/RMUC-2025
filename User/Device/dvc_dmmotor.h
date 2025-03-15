@@ -49,6 +49,23 @@ enum Enum_DM_Motor_ID : uint8_t
 };
 
 /**
+ * @brief 达妙电机错误状态枚举
+ *
+ */
+enum Enum_DM_Motor_Error_Status : uint8_t
+{
+    DM_Motor_Error_Disable = 0x0,       // 失能
+    DM_Motor_Error_Enable = 0x1,        // 使能
+    DM_Motor_Error_OverVoltage = 0x8,   // 超压
+    DM_Motor_Error_UnderVoltage = 0x9,  // 欠压
+    DM_Motor_Error_OverCurrent = 0xA,   // 过电流
+    DM_Motor_Error_MOS_OverTemp = 0xB,  // MOS过温
+    DM_Motor_Error_Coil_OverTemp = 0xC, // 电机线圈过温
+    DM_Motor_Error_CommLost = 0xD,      // 通讯丢失
+    DM_Motor_Error_Overload = 0xE,      // 过载
+};
+
+/**
  * @brief 达妙电机控制状态
  *
  */
@@ -101,6 +118,7 @@ struct Struct_DM_Motor_Rx_Data
     uint16_t Pre_Position;
     int32_t Total_Position;
     int32_t Total_Round;
+    Enum_DM_Motor_Error_Status Error_Status;
 };
 
 /**
@@ -145,7 +163,7 @@ public:
 
 protected:
     // 初始化相关变量
-
+    uint16_t test_init_pos;
     // 绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object;
     // 收数据绑定的CAN ID, 控制帧是0xxa1~0xxaf
@@ -154,8 +172,8 @@ protected:
     uint8_t *CAN_Tx_Data;
     // 位置反馈偏移
     uint32_t Position_Offset;
-    //最大位置，rad
-    float Position_Max=12.5f;
+    // 最大位置，rad
+    float Position_Max = 3.1415926f;
     // 最大速度, 调参助手设置, 推荐20.94359, 也就是最大转速200rpm
     float Omega_Max;
     // 最大扭矩, 调参助手设置, 推荐7, 也就是最大输出7NM
@@ -165,7 +183,6 @@ protected:
     // 电机上电第一帧标志位
     uint8_t Start_Falg = 0;
     // 一圈位置刻度
-  
 
     // 内部变量
 

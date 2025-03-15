@@ -7,6 +7,7 @@ void Class_VMC::VMC_Init(void)
     l3 = 0.27f;
     l4 = 0.15f;
     l5 = 0.15f;
+    D_Theta_Filter.Init(-1000, 1000, Filter_Fourier_Type_LOWPASS, 5, 0, 200, 3);
 }
 //计算theta和d_theta给lqr用，同时也计算腿长L0 
 void Class_VMC::VMC_calc_1(float dt)
@@ -35,21 +36,26 @@ void Class_VMC::VMC_calc_1(float dt)
     L0 = sqrt((X_C - l5 / 2.0f) * (X_C - l5 / 2.0f) + Y_C * Y_C);
 
     phi0 = atan2f(Y_C, (X_C - l5 / 2.0f)); // phi0用于计算lqr需要的theta
-    // if (phi0 <= PI / 2.0f)
-    // {
+    if (phi0 <= PI / 2.0f)
+    {
         alpha = PI / 2.0f - phi0;
-    // }
-    // else if (phi0 > PI / 2.0f)
-    // {
-    //     alpha = PI / 2.0f * 5.0f - phi0;
-    // }
+    }
+    else if (phi0 > PI / 2.0f)
+    {
+        alpha = PI / 2.0f * 5.0f - phi0;
+    }
 
     if (first_flag == 0)
     {
         last_phi0 = phi0;
         first_flag = 1;
     }
-    d_phi0 = (phi0 - last_phi0) / dt; // 计算phi0变化率，d_phi0用于计算lqr需要的d_theta
+    raw_d_phi0 = (phi0 - last_phi0) / dt; // 计算phi0变化率，d_phi0用于计算lqr需要的d_theta
+    D_Theta_Filter.Set_Now(raw_d_phi0);
+    D_Theta_Filter.TIM_Adjust_PeriodElapsedCallback();
+    
+    d_phi0 = D_Theta_Filter.Get_Out();
+
     d_alpha = 0.0f - d_phi0;
 
     theta = PI / 2.0f - Pitch - phi0; // 得到状态变量1

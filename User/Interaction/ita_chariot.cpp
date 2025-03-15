@@ -900,9 +900,9 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
     mod10++;
 
     //轮流发使能帧 各自500hz
-    DM_Enable_Control_Index = (DM_Enable_Control_Index == 0) ? 1 : 0;           
-    Chassis.Joint_Motor[DM_Enable_Control_Index].motor.TIM_Alive_PeriodElapsedCallback();
-    Chassis.Joint_Motor[DM_Enable_Control_Index+2].motor.TIM_Alive_PeriodElapsedCallback();
+    // DM_Enable_Control_Index = (DM_Enable_Control_Index == 0) ? 1 : 0;           
+    // Chassis.Joint_Motor[DM_Enable_Control_Index].motor.TIM_Alive_PeriodElapsedCallback();
+    // Chassis.Joint_Motor[DM_Enable_Control_Index+2].motor.TIM_Alive_PeriodElapsedCallback();
 
     if (mod10 == 10)
     {

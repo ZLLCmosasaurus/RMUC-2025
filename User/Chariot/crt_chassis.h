@@ -93,9 +93,11 @@ public:
     void Pose_Calculate(void);
     float CHASSIS_DWT_Dt;
     uint32_t CHASSIS_DWT_Count;
-    // float total_mg = 181.75f;
     float total_mg = 0.0f;
+    // float total_mg = 3.5f;
     float wheel_mg = 11.0f;
+    float pitch_offset = 0.0f; // 角度制
+    float T_coefficient = 0.8f;
     Class_VMC Left_Leg;
     Class_VMC Right_Leg;
 
@@ -108,10 +110,10 @@ public:
     Class_PID roll_pid;
     Class_PID Tp_pid;
     Class_PID turn_pid;
-    
+
     Class_PID test_left_leg_theta_pid;
     Class_PID test_right_leg_theta_pid;
-    
+
     float v_set;
     float x_set;
     float v_ramp_set;
@@ -137,10 +139,10 @@ public:
     float total_yaw;
     float leg_theta_err;
 
-    float turn_T; // yaw轴补偿
+    float turn_T = 0.0f; // yaw轴补偿
     float roll_f0;
 
-    float leg_tp; // 防劈叉补偿
+    float leg_tp = 0.0f; // 防劈叉补偿
 
     uint8_t start_flag;
 
@@ -152,18 +154,19 @@ public:
 
     uint8_t suspend_flag[2];
 
-    float Poly_Coefficient[12][4] = {{-76.9979, 105.9114, -64.9616, 0.7344},
-                                     {3.7446, -2.2845, -4.4331, 0.1291},
-                                     {-27.2457, 29.3704, -11.3412, -0.1478},
-                                     {-28.2823, 30.9176, -12.6474, -0.2663},
-                                     {9.8085, 13.0682, -22.2879, 10.4822},
-                                     {4.9405, -2.2052, -1.4609, 1.4435},
-                                     {255.3113, -243.0448, 71.0275, 4.2785},
-                                     {20.4603, -22.1931, 8.0161, 0.1069},
-                                     {-6.7938, 19.4710, -15.8375, 5.1344},
-                                     {-9.2937, 22.5758, -17.5690, 5.7190},
-                                     {336.2836, -369.7908, 148.6145, -4.6627},
-                                     {42.4009, -48.4684, 20.6784, -1.3454}};
+    float Poly_Coefficient[12][4] = {
+        {-88.1534, 125.2998, -74.1340, 1.8289},
+        {6.3861, -3.7185, -4.4072, 0.2034},
+        {-39.3613, 42.7470, -16.4883, 0.8102},
+        {-43.1882, 47.4849, -19.0693, 0.8784},
+        {37.0012, -17.7708, -6.8888, 5.2527},
+        {6.9830, -4.9969, 0.2709, 0.5803},
+        {660.3231, -584.9106, 147.9053, 6.6636},
+        {57.1075, -58.9450, 19.6894, -0.0459},
+        {46.8967, -14.6628, -16.1135, 8.5542},
+        {58.9818, -23.2695, -15.7499, 9.5928},
+        {468.8504, -515.9310, 202.9000, -12.1699},
+        {45.2523, -52.6337, 22.2554, -2.1609}};
     Class_observe Observe;
     // Class_DJI_Motor_C620 Motor_Wheel[4];
 

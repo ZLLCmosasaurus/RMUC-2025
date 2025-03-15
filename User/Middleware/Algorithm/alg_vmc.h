@@ -4,6 +4,7 @@
 #include "main.h"
 #include "arm_math.h"
 
+#include "alg_filter.h"
 #define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 class Class_VMC
@@ -26,7 +27,7 @@ public:
     float d_alpha;
 
     float L_BD;
-
+float raw_d_phi0;
     float d_phi0;
     float last_phi0;
 
@@ -62,6 +63,23 @@ public:
     float MotionAccel_n;
     float Pitch;
     float PithGyro;
+
+    Class_Filter_Fourier D_Theta_Filter;
+    // 下面是测试变量。
+
+    float tp_theta_out;
+    float tp_dtheta_out;
+    float tp_x_out;
+    float tp_v_out;
+    float tp_myPith_out;
+    float tp_myPithGyro_out;
+
+    float t_theta_out;
+    float t_dtheta_out;
+    float t_x_out;
+    float t_v_out;
+    float t_myPith_out;
+    float t_myPithGyro_out;
 
     float aver[4];
     float aver_fn;

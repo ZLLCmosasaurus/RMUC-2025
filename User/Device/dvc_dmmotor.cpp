@@ -165,7 +165,6 @@ void Class_DM_Motor_J4310::Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_
     Torque_Max = __Torque_Max;
     CAN_Tx_Data = allocate_tx_data(hcan, __CAN_ID);
 }
-
 /**
  * @brief 数据处理过程
  *
@@ -182,7 +181,8 @@ void Class_DM_Motor_J4310::Data_Process()
     tmp_omega = (tmp_buffer->Omega_11_4 << 4) | (tmp_buffer->Omega_3_0_Torque_11_8 >> 4);
     tmp_torque = ((tmp_buffer->Omega_3_0_Torque_11_8 & 0x0f) << 8) | (tmp_buffer->Torque_7_0);
 
-    Data.CAN_ID = tmp_buffer->CAN_ID;
+    Data.CAN_ID = static_cast<Enum_DM_Motor_ID>(tmp_buffer->CAN_ID & 0x0f);
+    Data.Error_Status = static_cast<Enum_DM_Motor_Error_Status>(tmp_buffer->CAN_ID >> 4);
 
     // 计算圈数与总角度值
     delta_position = tmp_position - Data.Pre_Position;
@@ -205,7 +205,7 @@ void Class_DM_Motor_J4310::Data_Process()
     // Data.Now_Angle = (float)Data.Total_Position / (float)Position_Max * 2.0f * PI;
     // Data.Now_Omega = Math_Int_To_Float(tmp_omega, 0, (1 << 12) - 1, -Omega_Max, Omega_Max);
     // Data.Now_Torque = Math_Int_To_Float(tmp_torque, 0, (1 << 12) - 1, -Torque_Max, Torque_Max);
-
+    test_init_pos = CAN_Manage_Object->Rx_Buffer.Data[1] << 8 | CAN_Manage_Object->Rx_Buffer.Data[2];
     Data.Now_Angle = uint_to_float(tmp_position, -Position_Max, Position_Max, 16);
     Data.Now_Omega = uint_to_float(tmp_omega, -Omega_Max, Omega_Max, 12);
     Data.Now_Torque = uint_to_float(tmp_torque, -Torque_Max, Torque_Max, 12);
@@ -396,11 +396,16 @@ void Class_DM_Motor_J4310::TIM_Process_PeriodElapsedCallback()
     break;
     case (DM_Motor_Control_Method_MIT_TORQUE):
     {
-        uint16_t tmp_position = float_to_uint(Target_Angle, -PI, PI, 16);
-        uint16_t tmp_velocity = float_to_uint(Target_Omega, -Omega_Max, Omega_Max, 12);
+        uint16_t tmp_position = float_to_uint(0, -PI, PI, 16);
+        uint16_t tmp_velocity = float_to_uint(0, -Omega_Max, Omega_Max, 12);
         uint16_t tmp_k_p = float_to_uint(0, 0.0f, 500.0f, 12);
         uint16_t tmp_k_d = float_to_uint(0, 0.0f, 5.0f, 12);
         uint16_t tmp_torque = float_to_uint(Target_Torque, -Torque_Max, Torque_Max, 12);
+
+        if (Data.Error_Status != DM_Motor_Error_Enable)
+        {
+            tmp_torque = 0;
+        }
 
         Math_Endian_Reverse_16(&tmp_position);
         memcpy(&CAN_Tx_Data[0], &tmp_position, sizeof(uint16_t));

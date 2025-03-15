@@ -214,12 +214,12 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
 
     // 获取空闲邮箱数量
     //   do{ freeMailboxes = HAL_CAN_GetTxMailboxesFreeLevel(hcan);}
-    //		 while(freeMailboxes==0);
+    // 		 while(freeMailboxes==0);
 
     // 如果没有空闲邮箱，则返回错误码
-    while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0)
-    {
-    }
+    // while (HAL_CAN_GetTxMailboxesFreeLevel(hcan) == 0)
+    // {
+    // }
     //    if (freeMailboxes == 0)
     //    {
     //        return HAL_ERROR;
@@ -254,6 +254,7 @@ uint8_t enable_cmd[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC};
 void TIM_CAN_PeriodElapsedCallback()
 {
     static uint8_t init_flag = 0;
+    static uint8_t mod2 = 0;
     if (init_flag == 0)
     {
         init_flag = 1;
@@ -264,10 +265,32 @@ void TIM_CAN_PeriodElapsedCallback()
     }
     else
     {
-        CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8, CAN_ID_STD);
-        CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8, CAN_ID_STD);
-        CAN_Send_Data(&hcan2, 0x03, CAN2_0xxf3_Tx_Data, 8, CAN_ID_STD);
-        CAN_Send_Data(&hcan2, 0x04, CAN2_0xxf4_Tx_Data, 8, CAN_ID_STD);
+        if (mod2 == 0)
+        {
+        
+
+            CAN_Send_Data(&hcan1, 0x01, CAN1_0xxf1_Tx_Data, 8, CAN_ID_STD);
+            DWT_Delay(0.0002);
+            CAN_Send_Data(&hcan1, 0x02, CAN1_0xxf2_Tx_Data, 8, CAN_ID_STD);
+            CAN_Send_Data(&hcan2, 0x04, CAN2_0xxf4_Tx_Data, 8, CAN_ID_STD);
+            DWT_Delay(0.0002);
+            CAN_Send_Data(&hcan2, 0x03, CAN2_0xxf3_Tx_Data, 8, CAN_ID_STD);
+
+            CAN_Send_Data(&hcan1, (uint32_t)(CAN_PACKET_SET_CURRENT << 8 | 0x11), CAN1_0xx01_Tx_Data, 8, CAN_ID_EXT);
+            DWT_Delay(0.0002);
+            CAN_Send_Data(&hcan2, (uint32_t)(CAN_PACKET_SET_CURRENT << 8 | 0x12), CAN2_0xx02_Tx_Data, 8, CAN_ID_EXT);
+
+          
+        }
+        if (mod2 == 1)
+        {
+           
+        }
+        mod2++;
+        if (mod2 > 1)
+        {
+            mod2 = 0;
+        }
     }
     // CAN_Send_Data(&hcan1, 0x01, set_zero_point, 8, CAN_ID_STD);
     // CAN_Send_Data(&hcan1, 0x02, set_zero_point, 8, CAN_ID_STD);

@@ -199,7 +199,7 @@ public:
     Class_PID PID_Angle;
     // 斜坡函数加减速速度X
     Class_Slope Slope_Joint_Angle;
-    void Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID, Enum_AK_Motor_Control_Method __Control_Method = CAN_PACKET_SET_CURRENT, float __MIT_K_P = 12.0f, float __MIT_K_D = 0.8f,
+    void Init(CAN_HandleTypeDef *hcan, Enum_AK_Motor_ID __CAN_ID, Enum_AK_Motor_Control_Method __Control_Method = CAN_PACKET_SET_CURRENT, bool __Is_Diff=false, float __MIT_K_P = 12.0f, float __MIT_K_D = 0.8f,
               int32_t __Position_Offset = 0, float __Angle_Max = 12.5f, float __Omega_Max = 76.0f, float __Torque_Max = 12.0f, float __Slope_Angle = 0.1f);
 
     inline Enum_AK_Motor_Control_Status Get_AK_Motor_Control_Status();
@@ -235,7 +235,7 @@ public:
 
 protected:
     // 初始化相关变量
-
+    bool Is_Diff= false;    //电机是否与开源公式相反
     // 绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object;
     // 收数据绑定的CAN ID, 控制帧是0xxa1~0xxaf
@@ -251,6 +251,8 @@ protected:
     // 最大扭矩, 调参助手设置, 推荐7, 也就是最大输出7NM
     float Torque_Max;
 
+    float Delta_T = 0;
+    uint32_t Time_Cnt = 0;
     // 常量
 
     // 一圈位置刻度
@@ -264,7 +266,7 @@ protected:
     uint32_t Pre_Flag = 0;
 
     // 读变量
-    float KT = 0.09549f;
+    float KT = 0.105f;
     // 电机状态
     Enum_AK_Motor_Status AK_Motor_Status = AK_Motor_Status_DISABLE;
 
@@ -289,6 +291,7 @@ protected:
     // 目标的扭矩
     float Target_Torque = 0.0f;
 
+    uint8_t init_flag = 0;
     // 内部函数
 
     void Data_Process();

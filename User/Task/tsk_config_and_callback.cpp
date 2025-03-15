@@ -382,14 +382,13 @@ void Task1ms_TIM5_Callback()
         mod10 += 1;
 
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-        chariot.Chassis.Observe.TIM_Calculate_PeriodElapsedCallback(1);
-
-        // if(mod10%2==0)
+       
+ 
         chariot.TIM_Calculate_PeriodElapsedCallback();
 
         /****************************** 驱动层回调函数 1ms *****************************************/
         // 统一打包发送
-        // TIM_CAN_PeriodElapsedCallback();
+        TIM_CAN_PeriodElapsedCallback();
         //        TIM_UART_PeriodElapsedCallback();
         if (mod10 == 10)
         {
