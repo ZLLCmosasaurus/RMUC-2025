@@ -1,0 +1,93 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+
+# Executables
+*.exe
+*.out
+*.app
+=======
+=======
+>>>>>>> origin/gimbal
+
+workspace.code-workspace
+
+*.bak
+*.ddk
+*.edk
+*.lst
+*.lnp
+*.mpf
+*.mpj
+*.obj
+*.omf
+*.plg
+*.rpt
+*.tmp
+*.__i
+*.crf
+*.o
+*.d
+*.axf
+*.tra
+*.dep          
+JLinkLog.txt
+*.iex
+*.htm
+*.sct
+*.map
+*.Administrator
+*.uvopt
+*.uvguix.*
+
+*.rar
+*.ini
+*.scvd
+*.mxproject
+*.jdebug.*
+*.exf
+<<<<<<< HEAD
+=======
+*._2i
+*.json
+*.log
+
+>>>>>>> origin/gimbal
+
+!*.uvprojx
+!*.h
+!*.c
+!*.ioc
+!*.bin
+<<<<<<< HEAD
+!*.hex
+>>>>>>> origin/chassis
+=======
+!*.hex
+>>>>>>> origin/gimbal
