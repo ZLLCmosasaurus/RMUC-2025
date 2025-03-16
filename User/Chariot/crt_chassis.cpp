@@ -52,6 +52,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 #ifdef POWER_LIMIT
     // 超级电容初始化
     Supercap.Init(&hcan1, 45);
+    Power_Limit.Init();
 #endif
 
     // 电机PID批量初始化
@@ -70,7 +71,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x203);
     Motor_Wheel[3].Init(&hcan1, DJI_Motor_ID_0x204);
 
-    Power_Limit.Init();
+   
 }
 
 /**
@@ -170,7 +171,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Speed_Resolution();
 
 #ifdef POWER_LIMIT
-    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
+    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() /*+ Supercap.Get_Buffer_Power()*/;
     Power_Management.Actual_Power =Supercap.Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {
@@ -194,15 +195,15 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     }
 
     /****************************超级电容***********************************/
-    if (Referee->Get_Referee_Status() == Referee_Status_DISABLE)
-    {
-        Supercap.Set_Supercap_Mode(test_mode);
-        Supercap.Set_Limit_Power(test_power);
-    }
+    // if (Referee->Get_Referee_Status() == Referee_Status_DISABLE)
+    // {
+    //     Supercap.Set_Supercap_Mode(test_mode);
+    //     Supercap.Set_Limit_Power(test_power);
+    // }
 
-    else
+    // else
     {
-        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max()-10.0);
         Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
     }
        Supercap.TIM_Supercap_PeriodElapsedCallback();
