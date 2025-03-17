@@ -22,7 +22,12 @@ static inline float rpm2av(float rpm) { return rpm * (float)PI / 30.0f; }
 static inline float av2rpm(float av) { return av * 30.0f / (float)PI; }
 static inline float my_fmax(float a, float b) { return (a > b) ? a : b; }
 
-void Class_Power_Limit::Init()
+/**
+ * @brief
+ * @param __ErrorLow 低于Error会进行等比分配
+ * @param __ErrorUp 高于error，直接按error分配功率，防止功率乱吃，分配错误
+ */
+void Class_Power_Limit::Init(float __E_lower,float __E_upper)
 {
 #ifdef AGV
     float initParams_dir[2] = {k1_dir, k2_dir};
@@ -33,6 +38,8 @@ void Class_Power_Limit::Init()
     float initParams[2] = {k1, k2};
     rls.setParamVector(Matrixf<2, 1>(initParams));
 #endif
+    ErrorLow = __E_lower;
+    ErrorUp = __E_upper;
 }
 
 /**
@@ -225,6 +232,38 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
 }
 
 /**
+ * @brief 大P计算，计算每个电机分配的功率
+ * @param Motor_Data 电机结构体
+ * @param __Total_error 目标值与实际值绝对值误差加和
+ * @param Max_Power 限制的最大功率
+ * @param __Scale_Conffient 功率收缩因子
+ */
+void Class_Power_Limit::Calulate_Power_Allocate(Struct_Power_Motor_Data &Motor_Data, float __Total_error, float Max_Power, float __Scale_Conffient)
+{
+
+    if (__Total_error <= ErrorLow)
+    {
+        Motor_Data.scaled_power = Motor_Data.theoretical_power *
+                                  __Scale_Conffient;
+    }
+    else if (__Total_error >= ErrorUp)
+    {
+        Motor_Data.scaled_power = Max_Power *
+                                  (Motor_Data.omega_error / __Total_error);
+    }
+    else
+    { // 处于中间线性变化分配策略
+        float Kp = 0.0f;
+        Kp = (__Total_error - ErrorLow) / (ErrorUp - ErrorLow);
+
+        Motor_Data.scaled_power =
+            (1 - Kp) * Motor_Data.theoretical_power *
+                __Scale_Conffient +
+            Kp * Max_Power * (Motor_Data.omega_error / __Total_error);
+    }
+}
+
+/**
  * @brief 功率限制主任务
  *
  * @param power_management 功率管理结构体
@@ -358,10 +397,15 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
     // 应用收缩系数并更新输出
     for (uint8_t i = 0; i < 4; i++)
     {
-        power_management.Motor_Data[i].scaled_power =
-            power_management.Motor_Data[i].theoretical_power *
-            power_management.Scale_Conffient;
-
+        if (power_management.Max_Power < power_management.Theoretical_Total_Power)
+        {
+            Calulate_Power_Allocate(power_management.Motor_Data[i], power_management.Total_error,
+                                    power_management.Max_Power, power_management.Scale_Conffient);
+        }
+        else
+        {
+            power_management.Motor_Data[i].scaled_power = power_management.Motor_Data[i].theoretical_power;
+        }
         scaled_sum += power_management.Motor_Data[i].scaled_power;
 
         power_management.Motor_Data[i].output =
