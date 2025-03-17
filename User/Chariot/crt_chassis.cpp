@@ -171,7 +171,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Speed_Resolution();
 
 #ifdef POWER_LIMIT
-    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() /*+ Supercap.Get_Buffer_Power()*/;
+    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + Supercap.Get_Buffer_Power();
     Power_Management.Actual_Power =Supercap.Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {

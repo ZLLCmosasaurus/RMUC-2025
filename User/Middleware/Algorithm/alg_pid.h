@@ -15,6 +15,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "drv_math.h"
+#include "alg_filter.h"
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -71,7 +72,7 @@ protected:
     // 常量
 
     // 内部变量
-
+    Class_Filter_Fourier D_Filter;
     // 之前的当前值
     float Pre_Now = 0.0f;
     // 之前的目标值
@@ -122,6 +123,7 @@ protected:
     float P_Out = 0.0f;
     float I_Out = 0.0f;
     float D_Out = 0.0f;
+    float raw_out = 0.0f;
     // 内部函数
 };
 

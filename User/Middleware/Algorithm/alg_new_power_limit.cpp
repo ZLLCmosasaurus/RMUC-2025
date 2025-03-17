@@ -161,7 +161,7 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
  * @return float 限制后的扭矩值
  */
 
-uint8_t test_flag=0;
+uint8_t test_flag = 0;
 float solution1;
 float solution2;
 float test_cal;
@@ -187,14 +187,14 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
     if (torque * omega <= 0)
     {
         newTorqueCurrent = torque;
-        test_flag=0;
+        test_flag = 0;
     }
     else
     {
         if (floatEqual(delta, 0.0f))
         {
             newTorqueCurrent = -omega / (2.0f * k2);
-            test_flag=1;
+            test_flag = 1;
         }
         else if (delta > 0.0f)
         {
@@ -207,18 +207,18 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
 #endif
             newTorqueCurrent = (torque > 0) ? solution1 : solution2;
 
-            test_flag=2;
+            test_flag = 2;
 
-            test_cal=(omega) * torque +
-                     fabs((omega)) * k1 +
-                     torque * torque * k2 +
-                     k3;
-                     test_yuan=power;
+            test_cal = (omega)*torque +
+                       fabs((omega)) * k1 +
+                       torque * torque * k2 +
+                       k3;
+            test_yuan = power;
         }
         else
         {
             newTorqueCurrent = -omega / (2.0f * k2);
-            test_flag=3;
+            test_flag = 3;
         }
     }
     return newTorqueCurrent;
@@ -339,7 +339,7 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
         }
         else
         {
-            power_management.Motor_Data[i].theoretical_power=0;
+            power_management.Motor_Data[i].theoretical_power = 0;
         }
     }
     power_management.Theoretical_Total_Power = theoretical_sum;
@@ -375,7 +375,7 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
         {
             power_management.Motor_Data[i].output = 16384;
         }
-				        if ((power_management.Motor_Data[i].output) <= -16384)
+        if ((power_management.Motor_Data[i].output) <= -16384)
         {
             power_management.Motor_Data[i].output = -16384;
         }

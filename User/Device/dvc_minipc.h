@@ -336,12 +336,12 @@ protected:
 
 
     const float g = 9.8; // 重力加速度
-    const float bullet_v = 24.0; // 子弹速度  
+    const float bullet_v = 23.0; // 子弹速度  
 
     // 距离
     float Distance;
 
-    //写变量
+    //写变量	
 
     //迷你主机对外接口信息
     Struct_MiniPC_Tx_Data Data_MCU_To_NUC;
