@@ -70,8 +70,6 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[1].Init(&hcan1, DJI_Motor_ID_0x202);
     Motor_Wheel[2].Init(&hcan1, DJI_Motor_ID_0x203);
     Motor_Wheel[3].Init(&hcan1, DJI_Motor_ID_0x204);
-
-   
 }
 
 /**
@@ -171,8 +169,16 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Speed_Resolution();
 
 #ifdef POWER_LIMIT
-    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + Supercap.Get_Buffer_Power();
-    Power_Management.Actual_Power =Supercap.Get_Chassis_Power();
+	if(Supercap.Get_Supercap_Status()==Supercap_Mode_ENABLE)
+	{
+		Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + Supercap.Get_Buffer_Power();
+	}
+	else
+	{
+		Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
+	}
+    
+    Power_Management.Actual_Power = Supercap.Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {
         //        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Data().Now_Omega_Angle / 360.0f * 60.0f;
@@ -203,10 +209,11 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 
     // else
     {
-        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max()-10.0);
-        Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() - 10.0);
+        // Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+        Supercap.Set_Supercap_Mode(Supercap_Mode_MONITOR);
     }
-       Supercap.TIM_Supercap_PeriodElapsedCallback();
+    Supercap.TIM_Supercap_PeriodElapsedCallback();
 
     //    /*************************功率限制策略*******************************/
     //    if(__Sprint_Status==Sprint_Status_ENABLE)
