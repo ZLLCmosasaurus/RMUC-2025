@@ -52,7 +52,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 #ifdef POWER_LIMIT
     // 超级电容初始化
     Supercap.Init(&hcan1, 45);
-    Power_Limit.Init();
+    Power_Limit.Init(5*13,50*13);
 #endif
 
     // 电机PID批量初始化
@@ -181,15 +181,12 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Power_Management.Actual_Power = Supercap.Get_Chassis_Power();
     for (int i = 0; i < 4; i++)
     {
-        //        Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Data().Now_Omega_Angle / 360.0f * 60.0f;
-        //        Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Data().Now_Torque;
-        //        Power_Management.Motor_Data[i].torque = Motor_Wheel[i].PID_Omega.Get_Out() * M3508_CMD_CURRENT_TO_TORQUE;
-        //        Power_Management.Motor_Data[i].pid_output = Motor_Wheel[i].PID_Omega.Get_Out();
-
+        Power_Management.Motor_Data[i].omega_error = fabs(Motor_Wheel[i].Get_Target_Omega_Radian() - Motor_Wheel[i].Get_Now_Omega_Radian()) * RAD_TO_RPM * Motor_Wheel[i].Get_Gearbox_Rate();
         Power_Management.Motor_Data[i].feedback_omega = Motor_Wheel[i].Get_Now_Omega_Radian() * RAD_TO_RPM * Motor_Wheel[i].Get_Gearbox_Rate();
         Power_Management.Motor_Data[i].feedback_torque = Motor_Wheel[i].Get_Now_Torque() * M3508_CMD_CURRENT_TO_TORQUE;
         Power_Management.Motor_Data[i].torque = Motor_Wheel[i].PID_Omega.Get_Out() * M3508_CMD_CURRENT_TO_TORQUE;
         Power_Management.Motor_Data[i].pid_output = Motor_Wheel[i].PID_Omega.Get_Out();
+        Power_Management.Total_error += Power_Management.Motor_Data[i].omega_error;
     }
 
     Power_Limit.Power_Task(Power_Management);
