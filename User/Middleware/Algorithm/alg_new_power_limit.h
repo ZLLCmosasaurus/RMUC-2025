@@ -79,19 +79,19 @@ typedef struct
     __fp16 torque;           // pid输出的转子转矩,Nm
     float theoretical_power; // 理论功率
     float scaled_power;      // 功率（收缩后）
-    float omega_error;      // 转子转速误差(绝对值)
-    int16_t pid_output; // pid输出的扭矩电流控制值（16384）
-    int16_t output;     // 最终输出扭矩电流控制值（16384）
+    float omega_error;       // 转子转速误差(绝对值)
+    int16_t pid_output;      // pid输出的扭矩电流控制值（16384）
+    int16_t output;          // 最终输出扭矩电流控制值（16384）
 } Struct_Power_Motor_Data;
 
 typedef struct
 {
-    uint16_t Max_Power;            // 最大功率限制
-    float Scale_Conffient;         // 功率收缩系数
-    float Theoretical_Total_Power; // 理论总功率
-    float Scaled_Total_Power;      // 收缩后总功率
-    float Actual_Power;            // 实际总功率
-    float Total_error;             // 转子转速总误差（绝对值）
+    uint16_t Max_Power;                    // 最大功率限制
+    float Scale_Conffient;                 // 功率收缩系数
+    float Theoretical_Total_Power;         // 理论总功率
+    float Scaled_Total_Power;              // 收缩后总功率
+    float Actual_Power;                    // 实际总功率
+    float Total_error;                     // 转子转速总误差（绝对值）
     Struct_Power_Motor_Data Motor_Data[4]; // 舵轮底盘八个电机，分为四组，默认偶数索引值的电机为转向电机，奇数索引值的电机为动力电机
 
 } Struct_Power_Management;
@@ -121,8 +121,8 @@ public:
     inline void Set_K3_Mot(float _k3) { k3_mot = _k3; }
     inline void Set_K3_Dir(float _k3) { k3_dir = _k3; }
 #else
-        // 普通模式下的getter/setter
-        inline float Get_K1() const { return k1; }
+    // 普通模式下的getter/setter
+    inline float Get_K1() const { return k1; }
     inline float Get_K2() const { return k2; }
     inline float Get_K3() const { return k3; }
 
@@ -146,10 +146,10 @@ protected:
     RLS<2> rls_dir{1e-5f, 0.9999f}; // 转向电机RLS
 #else
     // 普通四电机底盘参数
-    float k1 = 0.0979778916;
-    float k2 = 1.52125859;
+    float k1 = 0.000249867036;
+    float k2 = 489.124512;
     float k3 = 2.52f / 4.0f;
-    RLS<2> rls{1e-5f, 0.99999f};
+    RLS<2> rls{1e-5f, 0.99f};
 #endif
     float ErrorLow = 0.0f;
     float ErrorUp = 0.0f;

@@ -65,7 +65,7 @@ float Class_Power_Limit::Calculate_Theoretical_Power(float omega, float torque, 
                      k3_use;
 #else
     float cmdPower = rpm2av(omega) * torque +
-                     fabs(rpm2av(omega)) * k1 +
+                     fabs(rpm2av(omega)) * fabs(rpm2av(omega)) * k1 +
                      torque * torque * k2 +
                      k3;
 #endif
@@ -146,14 +146,14 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
                 effectivePower += motor_data[i].feedback_torque *
                                   rpm2av(motor_data[i].feedback_omega);
             }
-            samples[0][0] += fabsf(rpm2av(motor_data[i].feedback_omega));
+            samples[0][0] += fabsf(rpm2av(motor_data[i].feedback_omega)) * fabsf(rpm2av(motor_data[i].feedback_omega));
             samples[1][0] += motor_data[i].feedback_torque *
                              motor_data[i].feedback_torque;
         }
 
         params = rls.update(samples, actual_power - effectivePower - 4 * k3);
-        k1 = my_fmax(params[0][0], 1e-5f);
-        k2 = my_fmax(params[1][0], 1e-5f);
+        k1 = my_fmax(params[0][0], 1e-7f);
+        k2 = my_fmax(params[1][0], 1e-7f);
     }
 #endif
 }
@@ -188,10 +188,11 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
 #ifdef AGV
     float delta = omega * omega - 4 * (k1_use * fabs(omega) + k3_use - power) * k2_use;
 #else
-    float delta = omega * omega - 4 * (k1 * fabs(omega) + k3 - power) * k2;
+    float delta = omega * omega - 4 * (k1 * fabs(omega) * fabs(omega) + k3 - power) * k2;
 #endif
 
-    if (torque * omega <= 0)
+    // if (torque * omega <= 0)
+    if (power <= 0)
     {
         newTorqueCurrent = torque;
         test_flag = 0;
@@ -217,7 +218,7 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
             test_flag = 2;
 
             test_cal = (omega)*torque +
-                       fabs((omega)) * k1 +
+                       fabs((omega)) * fabs(omega) * k1 +
                        torque * torque * k2 +
                        k3;
             test_yuan = power;
@@ -406,6 +407,10 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
         {
             power_management.Motor_Data[i].scaled_power = power_management.Motor_Data[i].theoretical_power;
         }
+        // power_management.Motor_Data[i].scaled_power =
+        //     power_management.Motor_Data[i].theoretical_power *
+        //     power_management.Scale_Conffient;
+
         scaled_sum += power_management.Motor_Data[i].scaled_power;
 
         power_management.Motor_Data[i].output =

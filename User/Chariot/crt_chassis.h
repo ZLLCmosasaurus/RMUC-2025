@@ -37,16 +37,15 @@
  */
 enum Enum_Sprint_Status : uint8_t
 {
-    Sprint_Status_DISABLE = 0, 
+    Sprint_Status_DISABLE = 0,
     Sprint_Status_ENABLE,
 };
-
 
 /**
  * @brief 底盘控制类型
  *
  */
-enum Enum_Chassis_Control_Type :uint8_t
+enum Enum_Chassis_Control_Type : uint8_t
 {
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
@@ -57,30 +56,33 @@ enum Enum_Chassis_Control_Type :uint8_t
  * @brief Specialized, 三轮舵轮底盘类
  *
  */
-//omnidirectional 全向轮
+// omnidirectional 全向轮
 class Class_Tricycle_Chassis
 {
 public:
-
-    //斜坡函数加减速速度X
+    // 斜坡函数加减速速度X
     Class_Slope Slope_Velocity_X;
-    //斜坡函数加减速速度Y
+    // 斜坡函数加减速速度Y
     Class_Slope Slope_Velocity_Y;
-    //斜坡函数加减速角速度
+    // 斜坡函数加减速角速度
     Class_Slope Slope_Omega;
 
     Class_Supercap Supercap;
-    #ifdef POWER_LIMIT
-    
-    //功率限制
+#ifdef POWER_LIMIT
+
+    // 功率限制
     Class_Power_Limit Power_Limit;
     Struct_Power_Management Power_Management;
-    
-    #endif
-    //裁判系统
+
+#ifdef POWER_LIMIT_BUFFER_LOOP
+    Class_PID Buffer_Loop_PID;//缓冲环PID
+#endif
+
+#endif
+    // 裁判系统
     Class_Referee *Referee;
 
-    //下方转动电机
+    // 下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 
     void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
@@ -114,105 +116,105 @@ public:
     void TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status);
 
 protected:
-    //初始化相关常量
+    // 初始化相关常量
 
-    //速度X限制
+    // 速度X限制
     float Velocity_X_Max;
-    //速度Y限制
+    // 速度Y限制
     float Velocity_Y_Max;
-    //角速度限制
+    // 角速度限制
     float Omega_Max;
-    //舵向电机功率上限比率
+    // 舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
-    //底盘小陀螺模式角速度
+    // 底盘小陀螺模式角速度
     float Spin_Omega = 1.5f;
-    //常量
+    // 常量
 
-    //电机理论上最大输出
+    // 电机理论上最大输出
     float Steer_Max_Output = 30000.0f;
     float Wheel_Max_Output = 16384.0f;
 
-    //内部变量
+    // 内部变量
 
-    //读变量
+    // 读变量
 
-    //当前总功率
+    // 当前总功率
     float Now_Power = 0.0f;
-    //当前舵向电机功率
+    // 当前舵向电机功率
     float Now_Steer_Power = 0.0f;
-    //可使用的舵向电机功率
+    // 可使用的舵向电机功率
     float Target_Steer_Power = 0.0f;
-    //当前轮向电机功率
+    // 当前轮向电机功率
     float Now_Wheel_Power = 0.0f;
-    //可使用的轮向电机功率
+    // 可使用的轮向电机功率
     float Target_Wheel_Power = 0.0f;
 
-    //写变量
+    // 写变量
 
-    //读写变量
+    // 读写变量
 
-    //底盘控制方法
+    // 底盘控制方法
     Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
-    //目标速度X
+    // 目标速度X
     float Target_Velocity_X = 0.0f;
-    //目标速度Y
+    // 目标速度Y
     float Target_Velocity_Y = 0.0f;
-    //目标角速度
+    // 目标角速度
     float Target_Omega = 0.0f;
-    //当前速度X
+    // 当前速度X
     float Now_Velocity_X = 0.0f;
-    //当前速度Y
+    // 当前速度Y
     float Now_Velocity_Y = 0.0f;
-    //当前角速度
+    // 当前角速度
     float Now_Omega = 0.0f;
 
-    //内部函数
+    // 内部函数
     void Speed_Resolution();
 };
 
 /* Exported variables --------------------------------------------------------*/
 
-//三轮车底盘参数
+// 三轮车底盘参数
 
-//轮组半径
+// 轮组半径
 const float WHEEL_RADIUS = 0.0520f;
 
-//轮距中心长度
+// 轮距中心长度
 const float WHEEL_TO_CORE_DISTANCE[3] = {0.23724f, 0.21224f, 0.21224f};
 
-//前心距中心长度
+// 前心距中心长度
 const float FRONT_CENTER_TO_CORE_DISTANCE = 0.11862f;
 
-//前后轮距
+// 前后轮距
 const float FRONT_TO_REAR_DISTANCE = WHEEL_TO_CORE_DISTANCE[0] + FRONT_CENTER_TO_CORE_DISTANCE;
 
-//前轮距前心
+// 前轮距前心
 const float FRONT_TO_FRONT_CENTER_DISTANCE = 0.176f;
 
-//轮组方位角
+// 轮组方位角
 const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE), atan2f(FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE)};
 
-//轮子直径 单位m
-const float WHELL_DIAMETER = 0.154f;	
+// 轮子直径 单位m
+const float WHELL_DIAMETER = 0.154f;
 
-//底盘半宽 单位m
-const float HALF_WIDTH = 0.18466f;		
+// 底盘半宽 单位m
+const float HALF_WIDTH = 0.18466f;
 
-//底盘半长 单位m
-const float HALF_LENGTH = 0.18466f;	
+// 底盘半长 单位m
+const float HALF_LENGTH = 0.18466f;
 
-//转速转角速度	1 rpm = 2pi/60 rad/s 
-const float RPM2RAD = 0.104720f;				
+// 转速转角速度	1 rpm = 2pi/60 rad/s
+const float RPM2RAD = 0.104720f;
 
-//转速转线速度	vel = rpn*pi*D/60  cm/s
-const float RPM2VEL = 0.806342f;			
+// 转速转线速度	vel = rpn*pi*D/60  cm/s
+const float RPM2VEL = 0.806342f;
 
-//线速度转转度  //1.240168							
-const float VEL2RPM = 1.240168f;				
+// 线速度转转度  //1.240168
+const float VEL2RPM = 1.240168f;
 
-//线速度转角速度 rad/s
-const float VEL2RAD = 1.0f/(WHELL_DIAMETER/2.0f);
-	
+// 线速度转角速度 rad/s
+const float VEL2RAD = 1.0f / (WHELL_DIAMETER / 2.0f);
+
 /* Exported function declarations --------------------------------------------*/
 
 /**
@@ -284,7 +286,6 @@ float Class_Tricycle_Chassis::Get_Target_Omega()
 {
     return (Target_Omega);
 }
-
 
 /**
  * @brief 获取小陀螺角速度
@@ -445,7 +446,6 @@ void Class_Tricycle_Chassis::Set_Velocity_X_Max(float __Velocity_X_Max)
 {
     Velocity_X_Max = __Velocity_X_Max;
 }
-
 
 #endif
 
