@@ -24,6 +24,7 @@
 #define POWER_LIMIT
 #ifdef POWER_LIMIT
 #define POWER_LIMIT_BUFFER_LOOP
+#define BIG_P_ALLOCATE
 //        #define POWER_LIMIT_NEW_CONTROL
 //        //#define POWER_LIMIT_OLD_CONTROL
 #endif
