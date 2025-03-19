@@ -435,10 +435,10 @@
     ]
   },
   "outDir": "build",
-  "deviceName": "STM32F407IGHx",
-  "packDir": ".pack/Keil/STM32F4xx_DFP.3.0.0",
+  "deviceName": null,
+  "packDir": null,
   "miscInfo": {
-    "uid": "1e54d312a48e72ab690929039bd80e88"
+    "uid": "557dd34d01cdb3dc7bd53a8816b09ce2"
   },
   "targets": {
     "infantry": {
@@ -562,32 +562,14 @@
         "bin": "",
         "baseAddr": "",
         "cpuInfo": {
-          "vendor": "ST",
-          "cpuName": "STM32F407IG"
+          "vendor": "null",
+          "cpuName": "null"
         },
         "proType": 1,
         "speed": 8000,
         "otherCmds": ""
       },
-      "uploadConfigMap": {
-        "JLink": {
-          "bin": "",
-          "baseAddr": "",
-          "cpuInfo": {
-            "vendor": "ST",
-            "cpuName": "STM32F407IG"
-          },
-          "proType": 1,
-          "speed": 8000,
-          "otherCmds": ""
-        },
-        "OpenOCD": {
-          "bin": "",
-          "target": "stm32f1x",
-          "interface": "stlink",
-          "baseAddr": "0x08000000"
-        }
-      },
+      "uploadConfigMap": {},
       "custom_dep": {
         "name": "default",
         "incList": [

@@ -48,6 +48,7 @@ void Class_PID::Init(float __K_P, float __K_I, float __K_D, float __K_F, float _
     I_Variable_Speed_B = __I_Variable_Speed_B;
     I_Separate_Threshold = __I_Separate_Threshold;
     D_First = __D_First;
+    D_Filter.Init(-__Out_Max, __Out_Max, Filter_Fourier_Type_LOWPASS, 10, 0, 1000, 3);
 }
 
 /**
@@ -153,6 +154,11 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
 
     f_out = (Target - Pre_Target) * K_F;
 
+    float raw_d_out = d_out;
+    D_Filter.Set_Now(raw_d_out);
+    D_Filter.TIM_Adjust_PeriodElapsedCallback();
+    d_out = D_Filter.Get_Out();
+
     // 计算总共的输出
     P_Out = p_out;
     I_Out = i_out;
@@ -163,7 +169,8 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     {
         Math_Constrain(&Out, -Out_Max, Out_Max);
     }
-    if(Out == isnan(Out)||Out== isinf(Out)){
+    if (Out == isnan(Out) || Out == isinf(Out))
+    {
         Out = 0.0f;
         Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
