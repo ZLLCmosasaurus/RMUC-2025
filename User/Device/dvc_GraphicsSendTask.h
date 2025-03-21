@@ -97,8 +97,8 @@ enum ARMOR_ID
 	ARMOR_ID_Sentry,
 };
 
-//ͼ�����ݽṹ��
-typedef __packed struct
+// ͼ�����ݽṹ��
+typedef __PACKED_STRUCT 
 {
 	uint8_t graphic_name[3];
 	uint32_t operate_tpye:3;
