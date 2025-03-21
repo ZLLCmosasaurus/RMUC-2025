@@ -51,30 +51,51 @@ public:
 };
 
 ////抬升机构类
-//class Class_RoRobotic_Arm_Uplift : public Class_DJI_Motor_C620
-//{
-//public:
-//	//变量
-//	float Target_Up_Length;
-//	float Actual_Up_Length;
-//	float K_Target = 5.0f;
-//    float K_Actual = 0.018f;
-//	//函数
-//    void Calculate_Actual_Up_Length(float Off_Set_Angle);
-//    void TIM_PID_PeriodElapsedCallback();
+class Class_Auxiliary_Arm_Uplift_Y : public Class_DJI_Motor_C620
+{
+public:
+	//变量
+	float Target_Up_Length;
+	float Actual_Up_Length;
+	float K_Target = 5.0f;
+    float K_Actual = 0.036f;
+	//函数
+    void Calculate_Actual_Up_Length(float Off_Set_Angle);
+    void TIM_PID_PeriodElapsedCallback();
 
-//};
+};
+////抬升机构类
+class Class_Auxiliary_Arm_Uplift_X : public Class_DJI_Motor_C610
+{
+public:
+	//变量
+	float Target_Up_Length;
+	float Actual_Up_Length;
+	float K_Target = 5.0f;
+    float K_Actual = 0.0475f;
+	//函数
+    void Calculate_Actual_Up_Length(float Off_Set_Angle);
+    void TIM_PID_PeriodElapsedCallback();
+
+};
 
 class Class_Chariot
 {
 public:
+    float Arm_Uplift_Offset_Angle[4];
     Class_Tricycle_Chassis chassis;
+    Class_Auxiliary_Arm_Uplift_X Auxiliary_Arm_Uplift_X_Lift;
+    Class_Auxiliary_Arm_Uplift_X Auxiliary_Arm_Uplift_X_Right;
+    Class_Auxiliary_Arm_Uplift_Y Auxiliary_Arm_Uplift_Y_Lift;
+    Class_Auxiliary_Arm_Uplift_Y Auxiliary_Arm_Uplift_Y_Right;
     void Init();
     void TIM_Control_Callback();
     void TIM_Chariot_PeriodElapsedCallback();
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void CAN_Chassis_Rx_Gimbal_Callback();
     void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+    bool Motor_Calibration();
+		uint8_t Now_status;
 protected:
     //初始化相关常量
 

@@ -60,19 +60,32 @@ enum Enum_Robotarm_Task_Status
 		Robotarm_Task_Status_Error=2,
 		Robotarm_Task_Status_Exchange=3,
 	
-    	Robotarm_Task_Status_Pick_First_Sliver=10,
-		Robotarm_Task_Status_First_Sliver_Test=90,//中期考核使用状态，后期去除
-			Robotarm_Task_Status_First_Sliver_Test_2=91,
-		Robotarm_Task_Status_Place_First_Sliver=11,
-		Robotarm_Task_Status_Pick_Second_Sliver=20,
-		Robotarm_Task_Status_Place_Second_Sliver=21,
-		Robotarm_Task_Status_Pick_Third_Sliver=30,
+    	Robotarm_Task_Status_Pick_First_Sliver=4,
+	
+		Robotarm_Task_Status_Place_First_Sliver=5,
+		Robotarm_Task_Status_Pick_Second_Sliver=6,
+		Robotarm_Task_Status_Place_Second_Sliver=7,
+		Robotarm_Task_Status_Pick_Third_Sliver=8,
 
-		Robotarm_Task_Status_Pick_First_Gold=110,
-		Robotarm_Task_Status_Place_First_Gold=111,
-		Robotarm_Task_Status_Pick_Second_Gold=120,
-		Robotarm_Task_Status_Place_Second_Gold=121,
-		Robotarm_Task_Status_Pick_Third_Gold=130,
+		Robotarm_Task_Status_Pick_First_Gold=9,
+		Robotarm_Task_Status_Place_First_Gold=10,
+		Robotarm_Task_Status_Pick_Second_Gold=11,
+		Robotarm_Task_Status_Place_Second_Gold=12,
+		Robotarm_Task_Status_Pick_Third_Gold=13,
+		Robotarm_Task_Status_First_Sliver_Test=14,//中期考核使用状态，后期去除
+		Robotarm_Task_Status_First_Sliver_Test_2=15,
+		Robotarm_Task_Status_Pick_Gold_1=21,
+		Robotarm_Task_Status_Pick_Gold_2=22,
+		Robotarm_Task_Status_Pick_Gold_3=23,
+		Robotarm_Task_Status_Pick_Gold_4=24,
+		Robotarm_Task_Status_Pick_Gold_5=25,
+		Robotarm_Task_Status_Pick_Gold_6=24,
+		Robotarm_Task_Status_Pick_Gold_7=25,
+	
+	
+		
+	
+	
 
 
 };
@@ -375,10 +388,21 @@ protected:
 		const float Angle_Place_Fisrt[6]={150,178,135,0,0,13};
     	const float Angle_Pick_Third[6]={3,140,170,0,0,0};
 		//取出金矿相关角度		
-		const float Angle_Pick_Gold[6]={50,175,40,0,90,5.0f};
+		const float Angle_Pick_Gold[6]={120,45,115,0,90,5.0f};
+		const float Angle_Pick_Gold_UP[6]={120,45,115,0,115,5.0f};
 		
+		const float Angle_Pick_Gold_1[6]={120.f,0.f,180.f,0.f,90.f,0.f};
+		
+		
+		
+		
+		
+		
+		
+		
+
 		//行进过程中角度			
-		const float Angle_On_The_Way[6] = {2.0f,175.0f,180.0f,0.0f,90.0f,0.0f};
+		const float Angle_On_The_Way[6] = {60.0f,210.0f,0.0f,0.0f,90.0f,0.0f};
     //关节角度限制
     const float Joint_Limit_Angle[2][5] = {{-90.00f,-179.85f,-121.8f,-90.0f,-40.6f},
 										   {91.22f,135.0f,109.88f,90.0f,207.541f}};

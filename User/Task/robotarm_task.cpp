@@ -39,7 +39,7 @@ void Class_Robotarm::Init()
     FSM_Alive_Control.Init(5, 0);
 	//机械臂解算任务初始化
 	Robotarm_Resolution.Robotarm = this;
-	Robotarm_Resolution.Init(9 , 0);
+	Robotarm_Resolution.Init(50 , 0);
 	//裁判系统初始化
 	Robotarm.Referee.Init(&huart6,0xA5);
 	//
@@ -57,13 +57,13 @@ void Class_Robotarm::Init()
 	#ifdef _CAN_PACKET_SET_POS_SPD
     //1轴电机
   	Motor_Joint1.Init(&hcan2, AK_Motor_ID_0x01, CAN_PACKET_SET_POS_SPD , 30.0f , 2.0f);
-		Motor_Joint1.Set_Target_Omega_SET_POS_SPD(800);
-		Motor_Joint1.Set_Target_Torque_SET_POS_SPD(150);
+		Motor_Joint1.Set_Target_Omega_SET_POS_SPD(1500);
+		Motor_Joint1.Set_Target_Torque_SET_POS_SPD(200);
 
 	//2轴电机
 	Motor_Joint2.Init(&hcan1, AK_Motor_ID_0x04, CAN_PACKET_SET_POS_SPD ,30.0f , 2.0f);
-		Motor_Joint2.Set_Target_Omega_SET_POS_SPD(1000);
-		Motor_Joint2.Set_Target_Torque_SET_POS_SPD(200);
+		Motor_Joint2.Set_Target_Omega_SET_POS_SPD(1800);
+		Motor_Joint2.Set_Target_Torque_SET_POS_SPD(250);
 
 	#endif
 
@@ -72,23 +72,24 @@ void Class_Robotarm::Init()
 
 	//4-5轴左2006电机初始化
 	Motor_Joint4.Init(&hcan1, DJI_Motor_ID_0x203,DJI_Motor_Control_Method_ANGLE); 
-	Motor_Joint4.PID_Angle.Init(kp_Angle, ki_Angle, kd_Angle, 0.0f, 500.0f, 180.0f);
-	Motor_Joint4.PID_Omega.Init(kp_Omega, ki_Omega, kd_Omega, 0.0f, 4000.0f, 4000.0f);
-	Motor_Joint4.Slope.Init(0.05f, 0.05f);
+	Motor_Joint4.PID_Angle.Init(kp_Angle, ki_Angle, kd_Angle, 0.0f, 500.0f, 500.0f);
+	Motor_Joint4.PID_Omega.Init(kp_Omega, ki_Omega, kd_Omega, 0.0f, 4000.0f, 10000.0f);
+	Motor_Joint4.Slope.Init(0.5f, 0.5f);
 	//4-5轴右2006电机初始化
 	Motor_Joint5.Init(&hcan1, DJI_Motor_ID_0x202,DJI_Motor_Control_Method_ANGLE);
-	Motor_Joint5.PID_Angle.Init(kp_Angle, ki_Angle, kd_Angle, 0.0f, 500.0f, 180.0f);
-	Motor_Joint5.PID_Omega.Init(kp_Omega, ki_Omega, kd_Omega,0.0f, 4000.0f, 4000.0f);
-	Motor_Joint5.Slope.Init(0.05f, 0.05f);
+	Motor_Joint5.PID_Angle.Init(kp_Angle, ki_Angle, kd_Angle, 0.0f, 500.0f, 500.0f);
+	Motor_Joint5.PID_Omega.Init(kp_Omega, ki_Omega, kd_Omega,0.0f, 4000.0f, 10000.0f);
+	Motor_Joint5.Slope.Init(0.5f, 0.5f);
 	//机械臂抬升初始化
 	Arm_Uplift.Init(&hcan2, DJI_Motor_ID_0x203, DJI_Motor_Control_Method_ANGLE);
-	Arm_Uplift.PID_Angle.Init(80.0f, 0.05f, 0.0f, 0.0f, 180.0f, 180.0f);
-	Arm_Uplift.PID_Omega.Init(100.0f, 0.01f, 0.0f, 0.0f, 2000.0f, 7000.0f);
+	Arm_Uplift.PID_Angle.Init(80.0f, 0.05f, 0.0f, 0.0f, 180.0f, 250.0f);
+	Arm_Uplift.PID_Omega.Init(100.0f, 0.01f, 0.0f, 0.0f, 2000.0f, 10000.0f);
 
 	Relay1.Init(GPIOE,GPIO_PIN_11);
 	Relay2.Init(GPIOE,GPIO_PIN_13);
 }
 /***********************************校准完后机械臂控制逻辑*********************************************/
+float test_dm_o=.f;
 void Class_Robotarm::Output()
 {
 	#ifdef _CAN_PACKET_SET_POS_SPD
@@ -103,7 +104,7 @@ void Class_Robotarm::Output()
 
 	// 关节3 达妙电机
 	Motor_Joint3.Set_Target_Angle((Jonit_AngleInit[2]) * DEG_TO_RAD);
-	Motor_Joint3.Set_Target_Omega(1.0f);
+	Motor_Joint3.Set_Target_Omega(test_dm_o);
 	Motor_Joint3.Set_DM_Control_Status(DM_Motor_Control_Status_ENABLE);
 
 	//左电机
@@ -336,6 +337,7 @@ void Class_Robotarm::Control_Chassis_Task()
 	
 }
 uint8_t Control_Type = 0;
+uint8_t Now_statu=0;
 void Class_Robotarm::CAN_Gimbal_Tx_Chassis()
 {
 	uint16_t tmp_chassis = 0;
@@ -347,6 +349,8 @@ void Class_Robotarm::CAN_Gimbal_Tx_Chassis()
 	memcpy(CAN2_Gimbal_Tx_Chassis_Data+4,&tmp_chassis,2);
 	Control_Type = (uint8_t)Chassis_control_type;
 	memcpy(CAN2_Gimbal_Tx_Chassis_Data+6,&Control_Type,1);
+	Now_statu=Robotarm_Resolution.Get_Now_Status_Serial();
+	memcpy(CAN2_Gimbal_Tx_Chassis_Data+7,&Now_statu,1);
 }
 
 /************************************机械臂校准逻辑*********************************************/
@@ -748,6 +752,7 @@ uint8_t Angle_Play_Flag =0;
 
 void Class_Robotarm_Resolution::Reload_Task_Status_PeriodElapsedCallback()
 {
+	static uint16_t mod;
 	if(Robotarm->Robotarm_Control_Type == Robotarm_Control_Type_NORMAL)
 	{
 		Status[Now_Status_Serial].Time++;
@@ -776,12 +781,77 @@ void Class_Robotarm_Resolution::Reload_Task_Status_PeriodElapsedCallback()
 				{
 					Set_Status(Robotarm_Task_Status_Pick_First_Sliver);
 				}
-				if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)//开始取矿石
+				if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)//开始取金矿石
 				{
-					Set_Status(Robotarm_Task_Status_Pick_First_Gold);
+					Set_Status(Robotarm_Task_Status_Pick_Gold_1);
 				}
 			}
 			break;
+			case(Robotarm_Task_Status_Pick_Gold_1):
+			{
+				Robotarm->Arm_Uplift.Target_Up_Length=25;
+				memcpy(Robotarm->Jonit_AngleInit, Robotarm->Angle_Pick_Gold_1, 6 * sizeof(float));
+					if(Math_Abs(Robotarm->Arm_Uplift.Actual_Up_Length-Robotarm->Arm_Uplift.Target_Up_Length)<2)
+				{
+					if(Robotarm->Robotarm_Angle_verification(Robotarm->Joint_World_Angle_Now,Robotarm->Jonit_AngleInit)==true)
+				{			
+						Set_Status(Robotarm_Task_Status_Pick_Gold_2);
+				}
+			
+				}
+		
+			}	
+			break;
+			case(Robotarm_Task_Status_Pick_Gold_2)://这个状态辅助机构x轴伸出
+			{
+					 if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_UP)
+					{Set_Status(Robotarm_Task_Status_Pick_Gold_3);}
+				 if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)
+				 {Set_Status(Robotarm_Task_Status_Pick_Gold_4);}
+				
+			}
+			break;
+			case(Robotarm_Task_Status_Pick_Gold_3)://过渡态，这个状态辅助机构抬起一点，把矿从槽里提起
+			{
+					 if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_MIDDLE)
+					{Set_Status(Robotarm_Task_Status_Pick_Gold_2);}
+			}
+			break;
+			case(Robotarm_Task_Status_Pick_Gold_4)://这个状态辅助机构x轴回收一半
+			{
+					 if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)
+					{
+						mod++;
+						if(mod==500)//按键消抖防止状态跳变
+					Set_Status(Robotarm_Task_Status_Pick_Gold_5);
+					}
+					else mod=0;
+			}
+			break;
+			case(Robotarm_Task_Status_Pick_Gold_5)://这个状态辅助机构x轴回收一半之后，大臂进入准备取出第三个金矿的姿态
+			{
+				
+				Robotarm->Arm_Uplift.Target_Up_Length=Robotarm->Angle_Pick_Gold[5];//优先高度
+				if(Math_Abs(Robotarm->Arm_Uplift.Actual_Up_Length-Robotarm->Arm_Uplift.Target_Up_Length)<6)
+				{
+						memcpy(Robotarm->Jonit_AngleInit, Robotarm->Angle_Pick_Gold, 6 * sizeof(float));
+						if(Robotarm->Robotarm_Angle_verification(Robotarm->Joint_World_Angle_Now,Robotarm->Jonit_AngleInit)==true)
+						{
+						if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN){
+						Set_Status(Robotarm_Task_Status_Exchange);}
+						if(Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_UP){
+						Robotarm->Arm_Uplift.Target_Up_Length+=3.5f;
+						memcpy(Robotarm->Jonit_AngleInit, Robotarm->Angle_Pick_Gold_UP, 6 * sizeof(float));}
+						}
+				}
+			}
+			break;
+			
+
+			
+			
+			
+			
 			case (Robotarm_Task_Status_Pick_First_Sliver):
 			{
 				//设置对应角度，使机械臂到达第一个矿石的指定位置
@@ -898,22 +968,7 @@ void Class_Robotarm_Resolution::Reload_Task_Status_PeriodElapsedCallback()
 			break;
 			case (Robotarm_Task_Status_Pick_First_Gold):
 			{
-			/* 			if(Angle_Play_Flag<10)
-				{	Robotarm->Arm_Uplift.Target_Up_Length=Robotarm->Angle_Pick_Fisrt_Gold[Angle_Play_Flag][5];//优先高度
-					if(Math_Abs(Robotarm->Arm_Uplift.Actual_Up_Length-Robotarm->Arm_Uplift.Target_Up_Length)<3)
-					{
-							memcpy(Robotarm->Jonit_AngleInit,&Robotarm->Angle_Pick_Fisrt_Gold[1], 6 * sizeof(float));
-							if(Robotarm->Robotarm_Angle_verification(Robotarm->Joint_World_Angle_Now,Robotarm->Jonit_AngleInit)==true)//在此再或上一个时间判断条件防止卡死
-							{
-							Angle_Play_Flag++;
-							}
-					}
-				}
-				if((Robotarm->DR16.Get_Left_Switch()==DR16_Switch_Status_UP)&&(Angle_Play_Flag>=9))
-				{
-					Set_Status(Robotarm_Task_Status_Place_First_Gold);
-					Angle_Play_Flag=0;
-				} */
+		
 				Robotarm->Arm_Uplift.Target_Up_Length=Robotarm->Angle_Pick_Gold[5];//优先高度
 				if(Math_Abs(Robotarm->Arm_Uplift.Actual_Up_Length-Robotarm->Arm_Uplift.Target_Up_Length)<1.2)
 				{
@@ -998,7 +1053,6 @@ void Class_Robotarm_Resolution::Reload_Task_Status_PeriodElapsedCallback()
 			}
 			break;
 	
-			break;
 			case (Robotarm_Task_Status_Exchange)://兑换模式
 			{
 			Robotarm->Arm_Uplift.Target_Up_Length=Robotarm->Angle_On_The_Way[5];	
