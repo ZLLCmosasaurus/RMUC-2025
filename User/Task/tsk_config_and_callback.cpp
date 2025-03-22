@@ -168,12 +168,12 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     {
     }
     break;
-    case (0x201):
+    case (0x202):
     {
         chariot.Booster.Motor_Friction_Left.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x202):
+    case (0x201):
     {
         chariot.Booster.Motor_Friction_Right.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
