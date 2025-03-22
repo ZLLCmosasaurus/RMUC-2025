@@ -82,6 +82,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 #ifdef CHASSIS
 // 控制类型字节
 uint8_t control_type;
+float offset_k = -0.06f;
 // 底盘和云台夹角（弧度制）
 float derta_angle;
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
@@ -113,14 +114,23 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 
     chassis_control_type = (Enum_Chassis_Control_Type)(control_type & 0x03);
     Sprint_Status = (Enum_Sprint_Status)(control_type >> 2 & 0x01);
-    Bulletcap_Status = (Enum_Bulletcap_Status)(control_type >> 3 & 0x01);
-    Fric_Status = (Enum_Fric_Status)(control_type >> 4 & 0x01);
+    // Bulletcap_Status = (Enum_Bulletcap_Status)(control_type >> 3 & 0x01);
+    Fric_Status = (Enum_Fric_Status)(control_type >> 3 & 0x01);
     MiniPC_Aim_Status = (Enum_MinPC_Aim_Status)(control_type >> 5 & 0x01);
     MiniPC_Status = (Enum_MiniPC_Status)(control_type >> 6 & 0x01);
     Referee_UI_Refresh_Status = (Enum_Referee_UI_Refresh_Status)(control_type >> 7 & 0x01);
 
     // 获取云台坐标系和底盘坐标系的夹角（弧度制）
     Chassis_Angle = Motor_Yaw.Get_Now_Radian();
+    if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
+    {
+        Offset_Angle = offset_k * Motor_Yaw.Get_Now_Radian();
+    }
+    else
+    {
+        Offset_Angle = 0.0f;
+    }
+
     derta_angle = Reference_Angle - Chassis_Angle + Offset_Angle;
     derta_angle = derta_angle < 0 ? (derta_angle + 2 * PI) : derta_angle;
 
@@ -218,7 +228,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     chassis_velocity_x = Chassis.Get_Target_Velocity_X();
     chassis_velocity_y = Chassis.Get_Target_Velocity_Y();
     chassis_omega = Chassis.Get_Target_Omega();
-    gimbal_pitch = Gimbal.Motor_Pitch_LK6010.Get_True_Angle_Pitch();
+    gimbal_pitch = Gimbal.Motor_Pitch.Get_True_Angle_Pitch();
     chassis_control_type = Chassis.Get_Chassis_Control_Type();
     control_type = (uint8_t)(Referee_UI_Refresh_Status << 7 | MiniPC_Status << 6 | MiniPC_Aim_Status << 5 | Fric_Status << 3 | Sprint_Status << 2 | chassis_control_type);
 
