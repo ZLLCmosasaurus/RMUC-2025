@@ -116,7 +116,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //Task_Loop();
+    Task_Loop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
