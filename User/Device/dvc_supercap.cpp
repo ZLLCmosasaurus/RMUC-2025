@@ -100,7 +100,7 @@ void Class_Supercap::Data_Process()
         memcpy(&temp_buffer_power, CAN_Manage_Object->Rx_Buffer.Data + 2, 2);
         memcpy(&temp_cap_percent, CAN_Manage_Object->Rx_Buffer.Data + 4, 2);
 
-        Supercap_Data.Chassis_Power = temp_chassis_power / 100.0f;
+        Supercap_Data.Chassis_Power = temp_chassis_power / 10.0f;
         Supercap_Data.Buffer_Power = temp_buffer_power / 100.0f;
         Supercap_Data.Cap_Percent = temp_cap_percent / 100.0f;
         Supercap_Data.Supercap_Status = static_cast<Enum_Supercap_Status>(CAN_Manage_Object->Rx_Buffer.Data[6]);
