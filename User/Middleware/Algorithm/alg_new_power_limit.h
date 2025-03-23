@@ -150,7 +150,7 @@ protected:
     float k1 = 0.000249867036;
     float k2 = 489.124512;
     float k3 = 2.52f / 4.0f;
-    RLS<2> rls{1e-5f, 0.99f};
+    RLS<2> rls{1e-5f, 0.9999f};
 #endif
     float ErrorLow = 0.0f;
     float ErrorUp = 0.0f;
