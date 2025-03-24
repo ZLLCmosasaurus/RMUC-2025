@@ -230,6 +230,14 @@ void Class_LK_Motor::Output(void)
         case(LK_Motor_Control_Shut_Down):
             CAN_Tx_Data[0] = LK_Motor_Control_Shut_Down;
         break;
+        case(LK_Motor_Control_Inter_IncrementAngle):
+        {
+            CAN_Tx_Data[0] = LK_Motor_Control_Inter_IncrementAngle;
+            CAN_Tx_Data[4] = (int32_t)Out; 
+            CAN_Tx_Data[5] = (int32_t)Out >> 8;
+            CAN_Tx_Data[6] = (int16_t)Out >> 16; 
+            CAN_Tx_Data[7] = (int16_t)Out >> 24;
+        }
         default:
         break;
     }   

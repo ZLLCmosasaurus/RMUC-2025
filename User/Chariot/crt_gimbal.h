@@ -19,6 +19,7 @@
 #include "dvc_minipc.h"
 #include "dvc_imu.h"
 #include "dvc_lkmotor.h"
+#include "alg_filter.h"
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -45,10 +46,11 @@ class Class_Gimbal_Yaw_Motor_GM6020 : public Class_DJI_Motor_GM6020
 public:
     //陀螺仪获取云台角速度
     Class_IMU *IMU;
- Class_Filter_Fourier filtered_target_angle;
+
     inline float Get_Trer_Rad_Yaw();
     inline float Get_True_Gyro_Yaw();
     inline float Get_True_Angle_Yaw();
+    inline float Get_True_Angle_YawTotal();
 
     void Transform_Angle();
     void Disable();
@@ -63,6 +65,7 @@ protected:
     float True_Rad_Yaw = 0.0f;
     float True_Angle_Yaw = 0.0f;
     float True_Gyro_Yaw = 0.0f;
+    float True_YawTotalAngle = 0.0f;
     //读变量
 
     //写变量
@@ -85,6 +88,11 @@ float Class_Gimbal_Yaw_Motor_GM6020::Get_True_Gyro_Yaw()
 float Class_Gimbal_Yaw_Motor_GM6020::Get_True_Angle_Yaw()
 {
     return (True_Angle_Yaw);
+}
+
+inline float Class_Gimbal_Yaw_Motor_GM6020::Get_True_Angle_YawTotal()
+{
+  return (True_YawTotalAngle);
 }
 
 /**
@@ -152,18 +160,18 @@ class Class_Gimbal_Pitch_Motor_LK6010 : public Class_LK_Motor
 public:
     //陀螺仪获取云台角速度
     Class_IMU* IMU;
-    
+
     inline float Get_True_Rad_Pitch();
     inline float Get_True_Gyro_Pitch();
     inline float Get_True_Angle_Pitch();
 
     void Transform_Angle();
+    void Disable();
 
     void TIM_PID_PeriodElapsedCallback();
 
 protected:
     //初始化相关变量
-
     //常量
 
     // 重力补偿
@@ -248,12 +256,12 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -15.0f;
+    float Min_Pitch_Angle = -40.0f;
     // pitch轴最大值
-    float Max_Pitch_Angle = 30.0f ; //多10°
+    float Max_Pitch_Angle = 40.0f ; //多10°
 
     //内部变量 
-
+    
     //读变量
 
     //写变量
@@ -264,9 +272,11 @@ protected:
     //读写变量
 
     // yaw轴角度
-    float Target_Yaw_Angle = 0.0f;
+    int8_t First_Flag = 1;          //记录是否是第一次进入，用来给遥控器数值做低通滤波
+    float Target_Yaw_Angle = 0.0f;         
+    float Pre_Target_Yaw_Angle = 0.0f;
     // pitch轴角度
-    float Target_Pitch_Angle = 0.0f;
+    float Target_Pitch_Angle = -6.0f;       //初始角度的偏移量  -6.0度
 
     //内部函数
 

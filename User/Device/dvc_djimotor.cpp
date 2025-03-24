@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_djimotor.h"
-#include "dvc_buzzer.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -201,6 +200,7 @@ void Class_DJI_Motor_GM6020::Data_Process()
     Math_Endian_Reverse_16((void *)&tmp_buffer->Encoder_Reverse, (void *)&tmp_encoder);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
+    Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
 
     //计算圈数与总编码器值
     if(Start_Falg==1)
@@ -228,12 +228,11 @@ void Class_DJI_Motor_GM6020::Data_Process()
     Data.Now_Omega_Radian = (float)tmp_omega * RPM_TO_RADPS;
     Data.Now_Omega_Angle = (float)tmp_omega * RPM_TO_DEG;  
     Data.Now_Torque = tmp_torque;
-    Data.Now_Temperature =CAN_Manage_Object->Rx_Buffer.Data[6] ;
+    Data.Now_Temperature = tmp_temperature + CELSIUS_TO_KELVIN;
 
     //存储预备信息
     Data.Pre_Encoder = tmp_encoder;
     Data.Pre_Total_Encoder = Data.Total_Encoder;
-    if(Start_Falg==0)  Start_Falg = 1;
 }
 
 /**
@@ -273,7 +272,6 @@ void Class_DJI_Motor_GM6020::TIM_Alive_PeriodElapsedCallback()
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
         PID_Torque.Set_Integral_Error(0.0f);
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -461,7 +459,6 @@ void Class_DJI_Motor_C610::TIM_Alive_PeriodElapsedCallback()
         DJI_Motor_Status = DJI_Motor_Status_DISABLE;
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
-         Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -604,8 +601,6 @@ void Class_DJI_Motor_C620::Disable()
     Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
     Set_Out(0.0f);
     Output();
-	//pidout也清零
-	PID_Omega.Set_Out(0);
 }
 
 /**
@@ -644,7 +639,6 @@ void Class_DJI_Motor_C620::TIM_Alive_PeriodElapsedCallback()
         DJI_Motor_Status = DJI_Motor_Status_DISABLE;
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
-         Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

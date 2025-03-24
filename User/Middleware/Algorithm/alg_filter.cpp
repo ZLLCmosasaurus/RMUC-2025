@@ -4,7 +4,7 @@
  * @brief 滤波器
  * @version 0.1
  * @date 2024-07-1 0.1 24赛季定稿
- * 
+ *
  * @copyright ZLLC 2024
  *
  */
@@ -42,18 +42,18 @@ void Class_Filter_Fourier::Init(float __Value_Constrain_Low, float __Value_Const
     Frequency_High = __Frequency_High;
     Sampling_Frequency = __Sampling_Frequency;
     Filter_Fourier_Order = __Filter_Fourier_Order;
-    
-    //平均数求法
+
+    // 平均数求法
     float system_function_sum = 0.0f;
-    //特征低角速度
+    // 特征低角速度
     float omega_low;
-    //特征高角速度
+    // 特征高角速度
     float omega_high;
 
     omega_low = 2.0f * PI * Frequency_Low / Sampling_Frequency;
     omega_high = 2.0f * PI * Frequency_High / Sampling_Frequency;
 
-    //计算滤波器系统
+    // 计算滤波器系统
 
     switch (Filter_Fourier_Type)
     {
@@ -117,7 +117,7 @@ void Class_Filter_Fourier::TIM_Adjust_PeriodElapsedCallback()
 
 /**
  * @brief 初始化Kalman滤波器
- * 
+ *
  * @param __Error_Measure 测量误差
  * @param __Value 当前值
  * @param __Error_Estimate 估计误差

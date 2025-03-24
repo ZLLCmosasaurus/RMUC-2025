@@ -89,7 +89,7 @@ void can_filter_mask_config(CAN_HandleTypeDef *hcan, uint8_t Object_Para, uint32
     //检测传参是否正确
     assert_param(hcan != NULL);
 
-	//CAN过滤器初始化结构体
+	   //CAN过滤器初始化结构体
     CAN_FilterTypeDef can_filter_init_structure;
     //滤波器序号, 0-27, 共28个滤波器
     can_filter_init_structure.FilterBank = Object_Para >> 3;
@@ -196,10 +196,7 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
     tx_header.RTR = 0;
     tx_header.DLC = Length;
 
-    if (HAL_ERROR == HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &used_mailbox))
-        return HAL_ERROR;
-    else
-        return HAL_OK;
+    return (HAL_CAN_AddTxMessage(hcan, &tx_header, Data, &used_mailbox));
 }
 
 /**
@@ -208,7 +205,6 @@ uint8_t CAN_Send_Data(CAN_HandleTypeDef *hcan, uint16_t ID, uint8_t *Data, uint1
  */
 void TIM_CAN_PeriodElapsedCallback()
 {
-
     #ifdef CHASSIS
     
     static uint8_t mod10 = 0;
@@ -216,40 +212,33 @@ void TIM_CAN_PeriodElapsedCallback()
     if (mod10 == 10)
     {
         mod10 = 0;
-        // CAN1超级电容
+        // CAN2超级电容
         CAN_Send_Data(&hcan1, 0x66, CAN_Supercap_Tx_Data, 8);
     }
 
-    // CAN1总线  四个底盘电机
-   //  memset(CAN1_0x200_Tx_Data, 0, sizeof(CAN1_0x200_Tx_Data));
+    // CAN1总线  四个底盘电机  
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
-    // memset(CAN2_Chassis_Tx_Gimbal_Data, 0, sizeof(CAN2_Chassis_Tx_Gimbal_Data));
     CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
 
-#elif defined (GIMBAL)
-    static int mod2 = 0;
-    static int mod5 = 0;
-    mod2++;
-    mod5++;
+    #elif defined (GIMBAL)
+    static uint8_t mod10 = 0;
+
     // CAN1 
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
-    CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch
+
+    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); //LK-Pitch
     
     // CAN2 
-    if (mod2 == 2)
-    {
-        mod2=0;
-        CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
+    //CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //  按照0x1ff ID 发送 可控制多个电机
+    CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //拨弹轮 yaw-GM6020
+
+    if(mod10 == 10){
         CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+        mod10 = 0;
     }
+    mod10++;
     
-    if (mod5 == 5)
-    {
-        mod5 = 0;
-        
-        CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮
-    }
     #endif
 }
 
