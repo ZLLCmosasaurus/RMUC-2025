@@ -76,7 +76,7 @@ public:
     Struct_Power_Management Power_Management;
 
 #ifdef POWER_LIMIT_BUFFER_LOOP
-    Class_PID Buffer_Loop_PID;//缓冲环PID
+    Class_PID Buffer_Loop_PID; // 缓冲环PID
 #endif
 
 #endif
@@ -128,7 +128,7 @@ protected:
     // 舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     // 底盘小陀螺模式角速度
-    float Spin_Omega = 2*PI*1.5f;
+    float Spin_Omega = 2 * PI * 0.5f;
     // 常量
 
     // 电机理论上最大输出

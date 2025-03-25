@@ -152,6 +152,7 @@ void Class_Tricycle_Chassis::Speed_Resolution()
 }
 Enum_Supercap_Mode test_mode = Supercap_Mode_ENABLE;
 float test_power = 58.0f;
+float compensate_max_power = 30.0f;
 /**
  * @brief TIM定时器中断计算回调函数
  *
@@ -174,21 +175,39 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Speed_Resolution();
 
 #ifdef POWER_LIMIT
-    if (Supercap.Get_Supercap_Status() == Supercap_Mode_ENABLE)
+#ifdef DISABLE_SUPEACAP
+    Supercap.Set_Supercap_Mode(Supercap_Mode_MONITOR);
+    Supercap.Set_Limit_Power(500);
+    Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
+#else
+    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+    Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+    
+    __Sprint_Status=Sprint_Status_ENABLE;
+    if (__Sprint_Status == Sprint_Status_ENABLE)
     {
         Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + Supercap.Get_Buffer_Power();
     }
     else
     {
-#ifdef POWER_LIMIT_BUFFER_LOOP
-        Buffer_Loop_PID.Set_Target(60.0f);
-        Buffer_Loop_PID.Set_Now(Referee->Get_Chassis_Energy_Buffer());
-        Buffer_Loop_PID.TIM_Adjust_PeriodElapsedCallback();
-        Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() - Buffer_Loop_PID.Get_Out();
-#elif
-        Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
-#endif
+        if (Supercap.Get_Buffer_Power() >= compensate_max_power)
+        {
+            Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + compensate_max_power;
+        }
+        else
+        {
+            Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
+        }
     }
+
+#endif
+
+#ifdef POWER_LIMIT_BUFFER_LOOP
+    Buffer_Loop_PID.Set_Target(60.0f);
+    Buffer_Loop_PID.Set_Now(Referee->Get_Chassis_Energy_Buffer());
+    Buffer_Loop_PID.TIM_Adjust_PeriodElapsedCallback();
+    Power_Management.Max_Power = Power_Management.Max_Power - Buffer_Loop_PID.Get_Out();
+#endif
 
     Power_Management.Total_error = 0;
     Power_Management.Actual_Power = Supercap.Get_Chassis_Power();
@@ -211,15 +230,6 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     }
 
     /****************************超级电容***********************************/
-
-   
-#ifdef DISABLE_SUPEACAP
-    Supercap.Set_Supercap_Mode(Supercap_Mode_MONITOR);
-    Supercap.Set_Limit_Power(500);
-    #else
-    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
-    Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
-#endif
 
     Supercap.TIM_Supercap_PeriodElapsedCallback();
 
