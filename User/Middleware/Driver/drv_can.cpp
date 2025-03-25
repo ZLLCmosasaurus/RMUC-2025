@@ -218,6 +218,7 @@ void TIM_CAN_PeriodElapsedCallback()
         mod10 = 0;
         // CAN1超级电容
         CAN_Send_Data(&hcan1, 0x66, CAN_Supercap_Tx_Data, 8);
+        CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
     }
 
     // CAN1总线  四个底盘电机
@@ -225,8 +226,7 @@ void TIM_CAN_PeriodElapsedCallback()
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
     // memset(CAN2_Chassis_Tx_Gimbal_Data, 0, sizeof(CAN2_Chassis_Tx_Gimbal_Data));
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
-
+    
 #elif defined (GIMBAL)
     static int mod2 = 0;
     static int mod5 = 0;
@@ -241,13 +241,13 @@ void TIM_CAN_PeriodElapsedCallback()
     {
         mod2=0;
         CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
-        CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+      
     }
     
     if (mod5 == 5)
     {
         mod5 = 0;
-        
+        CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); // 给底盘发送控制命令 按照0x77 ID 发送
         CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //拨弹轮
     }
     #endif

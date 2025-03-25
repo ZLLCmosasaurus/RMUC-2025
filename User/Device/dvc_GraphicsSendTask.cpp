@@ -446,6 +446,8 @@ void CharChange(uint8_t Init_Flag)
 	// 	}
 	// }
 
+	/*冲刺状态*/
+	
 	/*摩擦轮状态改变*/
 	static uint8_t FrictionChangeName[] = "mcl";
 	if (Init_Flag)

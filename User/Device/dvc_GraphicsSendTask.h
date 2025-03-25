@@ -188,6 +188,7 @@ typedef struct
 	uint8_t MiniPC_Aim_Status;
 	uint8_t Fric_Status;
 	uint8_t Supercap_Energy;
+	uint8_t Supercap_State;
 	uint8_t Supercap_Voltage;
 	float Pitch_Angle;
 } JudgeReceive_t;

@@ -39,7 +39,7 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
     Pack_Tx.windmill_type = Windmill_Type_Small;
     Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
-
+float camera_distance=0.16;
 /**
  * @brief 数据处理过程
  *
@@ -51,7 +51,7 @@ void Class_MiniPC::Data_Process()
 
     float tmp_yaw,tmp_pitch;
     
-    Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
+    Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z+camera_distance, &tmp_yaw, &tmp_pitch, &Distance);
 
     // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
     // Rx_Angle_Pitch = meanFilter(tmp_pitch);
