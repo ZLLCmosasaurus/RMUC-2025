@@ -182,7 +182,7 @@ public:
 
     // 底盘云台通讯变量
     // 冲刺
-    Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
+    Enum_Sprint_Status Sprint_Status = Sprint_Status_ENABLE;
     // 弹仓开关
     Enum_Bulletcap_Status Bulletcap_Status = Bulletcap_Status_CLOSE;
     // 摩擦轮开关
@@ -207,7 +207,7 @@ protected:
 
 #ifdef CHASSIS
     // 底盘标定参考正方向角度(数据来源yaw电机)S
-    float Reference_Angle = 4.18086481;
+    float Reference_Angle = 1.35834002;
     // 小陀螺云台坐标系稳定偏转角度 用于矫正
     float Offset_Angle = 0.0f * PI / 180.0; // 7.5°
     // 底盘转换后的角度（数据来源yaw电机）
