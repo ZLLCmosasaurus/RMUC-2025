@@ -29,7 +29,7 @@
  */
 float test_angle = 0;
 float Test_Target_Omega = 0;
-float last_angle=0;
+float last_angle = 0;
 void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 {
     switch (DJI_Motor_Control_Method)
@@ -72,11 +72,11 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     {
         // PID_Angle.Set_Target(Target_Angle);
         //  Target_Angle=test_angle;
-	    if(last_angle!=Target_Angle)
-	    {
-		    PID_Angle.Set_Target(Target_Angle);
-	    }
-        last_angle=Target_Angle;
+        if (last_angle != Target_Angle)
+        {
+            PID_Angle.Set_Target(Target_Angle);
+        }
+        last_angle = Target_Angle;
         if (IMU->Get_IMU_Status() != IMU_Status_DISABLE)
         {
             // 角度环
@@ -105,7 +105,6 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
 
         Target_Torque = PID_Omega.Get_Out();
         Set_Out(-PID_Omega.Get_Out());
-        
     }
     break;
     default:
@@ -343,14 +342,14 @@ void Class_Gimbal::Init()
     // yaw轴电机
     Motor_Yaw.filtered_target_angle.Init(-30, 40, Filter_Fourier_Type_LOWPASS, 20, 0, 1000, 4);
     // 250 300
-    Motor_Yaw.PID_Angle.Init(20.0f, 0.5f, 0.0f, 0.0f, 100, 1000, 0.0f, 0.0f, 0, 0.001f, 0.0f);
-    Motor_Yaw.PID_Omega.Init(100.0f, 2000.0f, 0.0f, 0.0f, 4000.0f, 20000.0f, 0.0f, 0.0f, 0.0f, 0.001f, 0.0f);
+    Motor_Yaw.PID_Angle.Init(10.0f, 1.0f, 1.0f, 10.0f, 100, 1000, 0.0f, 0.0f, 0, 0.001f, 0.0f, PID_D_First_ENABLE);
+    Motor_Yaw.PID_Omega.Init(150.0f, 1500.0f, 1.0f, 0.0f, 4000.0f, 20000.0f, 0.0f, 0.0f, 0.0f, 0.001f, 0.0f, PID_D_First_ENABLE);
     Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     // pitch轴电机
-    Motor_Pitch.PID_Angle.Init(40.0f, 0.1f, 0.0f, 0.0f, 10000000, 10000000);
+    Motor_Pitch.PID_Angle.Init(45.0f, 0.1f, 0.0f, 0.0f, 10000000, 10000000);
     Motor_Pitch.PID_Omega.Init(100.0f, 2000.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(), 0.0f, 0.0f, 0.0f, 0.001f, 0.8f);
     Motor_Pitch.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
     Motor_Pitch.IMU = &Boardc_BMI;
