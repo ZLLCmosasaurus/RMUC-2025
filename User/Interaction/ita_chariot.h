@@ -22,7 +22,7 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
-#include "dvc_buzzer.h"
+
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -210,16 +210,17 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-    float Reference_Angle =  5.6925f;
-    // 小陀螺云台坐标系稳定偏转角度 用于矫正
-    float Offset_Angle = 0.0f; // 7.5°
-    // 底盘转换后的角度（数据来源yaw电机）
-    float Chassis_Angle;
-    // 写变量
-    uint32_t Gimbal_Alive_Flag = 0;
-    uint32_t Pre_Gimbal_Alive_Flag = 0;
+        float Reference_Angle = 0.75f;
+        //小陀螺云台坐标系稳定偏转角度 用于矫正
+        float Offset_Angle = 0.0f;  //
+        //底盘转换后的角度（数据来源yaw电机）
+        float Chassis_Angle;
+        //写变量
+        uint32_t Gimbal_Alive_Flag = 0;
+        uint32_t Pre_Gimbal_Alive_Flag = 0;
 
-    Enum_Gimbal_Status Gimbal_Status = Gimbal_Status_DISABLE;
+        Enum_Gimbal_Status Gimbal_Status =  Gimbal_Status_DISABLE;
+
     #endif
 
     #ifdef GIMBAL
@@ -236,9 +237,9 @@ protected:
         float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float DR16_Yaw_Angle_Resolution = 0.025f * PI * 57.29577951308232;
+        float DR16_Yaw_Angle_Resolution = 0.045f * PI * 57.29577951308232;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
+        float DR16_Pitch_Angle_Resolution = 0.012f * PI * 57.29577951308232;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Resolution = 0.003f * PI;

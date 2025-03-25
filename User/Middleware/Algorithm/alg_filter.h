@@ -19,7 +19,7 @@
 /* Exported macros -----------------------------------------------------------*/
 
 //滤波器阶数
-#define FILTER_FOURIER_ORDER (50)
+#define FILTER_FOURIER_ORDER (4)
 //采样频率
 #define SAMPLING_FREQUENCY (1000.0f)
 

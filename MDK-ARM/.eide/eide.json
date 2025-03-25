@@ -258,9 +258,6 @@
           },
           {
             "path": "../User/Device/GraphicsSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_buzzer.cpp"
           }
         ],
         "folders": []
@@ -309,13 +306,10 @@
                 "path": "../User/Middleware/Algorithm/alg_MahonyAHRS.cpp"
               },
               {
-                "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
+                "path": "../User/Middleware/Algorithm/Matrix.hpp"
               },
               {
                 "path": "../User/Middleware/Algorithm/RLS.hpp"
-              },
-              {
-                "path": "../User/Middleware/Algorithm/Matrix.hpp"
               },
               {
                 "path": "../User/Middleware/Algorithm/alg_new_power_limit.cpp"
@@ -434,11 +428,11 @@
       }
     ]
   },
-  "outDir": "build",
-  "deviceName": null,
-  "packDir": null,
+  "outDir": ".",
+  "deviceName": "STM32F407IGHx",
+  "packDir": ".pack/Keil/STM32F4xx_DFP.2.14.0",
   "miscInfo": {
-    "uid": "557dd34d01cdb3dc7bd53a8816b09ce2"
+    "uid": "85c96ec307b268da1692ba450d60b381"
   },
   "targets": {
     "infantry": {
@@ -486,7 +480,7 @@
               "id": 1,
               "mem": {
                 "startAddr": "0x20000000",
-                "size": "0x20000"
+                "size": "0x1c000"
               },
               "isChecked": true,
               "noInit": false
@@ -495,8 +489,8 @@
               "tag": "IRAM",
               "id": 2,
               "mem": {
-                "startAddr": "0x10000000",
-                "size": "0x10000"
+                "startAddr": "0x2001c000",
+                "size": "0x4000"
               },
               "isChecked": true,
               "noInit": false
@@ -562,8 +556,8 @@
         "bin": "",
         "baseAddr": "",
         "cpuInfo": {
-          "vendor": "null",
-          "cpuName": "null"
+          "vendor": "ST",
+          "cpuName": "STM32F407IG"
         },
         "proType": 1,
         "speed": 8000,
@@ -573,6 +567,7 @@
       "custom_dep": {
         "name": "default",
         "incList": [
+          ".",
           "../Core/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc",
           "../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
@@ -607,14 +602,13 @@
           "beforeBuildTasks": [],
           "afterBuildTasks": [],
           "global": {
-            "use-microLIB": true,
-            "output-debug-info": "enable"
+            "output-debug-info": "enable",
+            "use-microLIB": true
           },
           "c/cpp-compiler": {
             "optimization": "level-0",
             "language-c": "c99",
             "language-cpp": "c++11",
-            "link-time-optimization": false,
             "one-elf-section-per-function": true,
             "short-enums#wchar": true,
             "warnings": "no-warnings"
@@ -624,10 +618,7 @@
           },
           "linker": {
             "output-format": "elf",
-            "misc-controls": "--diag_suppress=L6329",
-            "xo-base": "",
-            "ro-base": "",
-            "rw-base": ""
+            "misc-controls": "--diag_suppress=L6329"
           }
         }
       }

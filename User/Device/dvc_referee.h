@@ -1769,8 +1769,15 @@ uint16_t Class_Referee::Get_Chassis_Power_Max()
         // //超级对抗赛
         // return (150);
     }
+#else
+    if (Robot_Status.Chassis_Power_Limit == 0){
+        return (70);
+    }
+    else{
+        return (Robot_Status.Chassis_Power_Limit);
+    }
+    
 #endif
-    return (Robot_Status.Chassis_Power_Limit);
 }
 
 /**

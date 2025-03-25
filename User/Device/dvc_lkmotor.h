@@ -69,6 +69,8 @@ enum Enum_LK_Motor_Control_ID : uint8_t
     LK_Motor_Control_Stop = 0x81, //?????
     LK_Motor_Control_Run = 0x88,//???????
     LK_Motor_Control_Torque = 0xA1,//??????????
+
+    LK_Motor_Control_Inter_IncrementAngle = 0xA7,
 };
 
 /**
@@ -82,6 +84,8 @@ enum Enum_LK_Motor_Control_Method
     LK_Motor_Control_Method_ANGLE,
     LK_Motor_Control_Method_OMEGA,
     LK_Motor_Control_Method_TORQUE,
+
+    LK_Motor_InterControl_Method_IncrementAngle,        //电机内部自带单圈角度增量模式
 };
 
 /**
@@ -206,7 +210,7 @@ protected:
     Struct_LK_Motor_Rx_Data Data;
 
 
-    Enum_LK_Motor_Control_ID LK_Motor_Control_ID = LK_Motor_Control_Torque;
+    Enum_LK_Motor_Control_ID LK_Motor_Control_ID = LK_Motor_Control_Inter_IncrementAngle;
     
     Enum_LK_Motor_Control_Status LK_Motor_Control_Status = LK_Motor_Control_Status_DISABLE;
     

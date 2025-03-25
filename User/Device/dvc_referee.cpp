@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_referee.h"
-#include "dvc_buzzer.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -299,7 +298,6 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
     {
         //裁判系统断开连接
         Referee_Status = Referee_Status_DISABLE;
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

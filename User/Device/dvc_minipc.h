@@ -336,12 +336,13 @@ protected:
 
 
     const float g = 9.8; // 重力加速度
-    const float bullet_v = 23.0; // 子弹速度  
+    const float bullet_v = 28.0; // 子弹速度  
 
     // 距离
     float Distance;
+    float z_offset = 0.05;          //相机和枪管不在同一位置
 
-    //写变量	
+    //写变量
 
     //迷你主机对外接口信息
     Struct_MiniPC_Tx_Data Data_MCU_To_NUC;
@@ -676,7 +677,7 @@ void Class_MiniPC::Transform_Angle_Tx()
  */
 void Class_MiniPC::Transform_Angle_Rx()
 {
-    Rx_Angle_Pitch = -Pack_Rx.target_pitch;
+    Rx_Angle_Pitch = Pack_Rx.target_pitch;
     Rx_Angle_Yaw = Pack_Rx.target_yaw;
 }
 

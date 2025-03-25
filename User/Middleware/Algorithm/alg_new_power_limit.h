@@ -25,7 +25,7 @@
 
 /*3508参数*/
 #define M3508_REDUATION (3591.f / 187.f)                                                      // 3508标准减速比
-#define M3508_TORQUE_CONSTANT 0.3                                                             // 3508带标准减速箱的转矩常数
+#define M3508_TORQUE_CONSTANT 0.3f                                                             // 3508带标准减速箱的转矩常数
 #define M3508_CMD_CURRENT_TO_TORQUE_CURRENT (20.f / 16384.f)                                  // Icmd映射到Itorque
 #define M3508_Kt (M3508_TORQUE_CONSTANT / M3508_REDUATION)                                    // 3508转子的转矩常数
 #define M3508_CMD_CURRENT_TO_TORQUE (M3508_CMD_CURRENT_TO_TORQUE_CURRENT * M3508_Kt)          // 发送的电流控制值（16384）映射到转子扭矩
@@ -73,25 +73,27 @@
 
 typedef struct
 {
-    __fp16 feedback_omega;  // 反馈的转子转速,rpm
-    __fp16 feedback_torque; // 反馈的转子转矩,Nm
+    float feedback_omega;  // 反馈的转子转速,rpm
+    float feedback_torque; // 反馈的转子转矩,Nm
 
-    __fp16 torque;           // pid输出的转子转矩,Nm
+    float torque;           // pid输出的转子转矩,Nm
     float theoretical_power; // 理论功率
     float scaled_power;      // 功率（收缩后）
-    float omega_error;       // 转子转速误差(绝对值)
-    int16_t pid_output;      // pid输出的扭矩电流控制值（16384）
-    int16_t output;          // 最终输出扭矩电流控制值（16384）
+    float Target_error;      //目标值与当前值的误差绝对值
+
+    int16_t pid_output; // pid输出的扭矩电流控制值（16384）
+    int16_t output;     // 最终输出扭矩电流控制值（16384）
 } Struct_Power_Motor_Data;
 
 typedef struct
 {
-    uint16_t Max_Power;                    // 最大功率限制
-    float Scale_Conffient;                 // 功率收缩系数
-    float Theoretical_Total_Power;         // 理论总功率
-    float Scaled_Total_Power;              // 收缩后总功率
-    float Actual_Power;                    // 实际总功率
-    float Total_error;                     // 转子转速总误差（绝对值）
+    uint16_t Max_Power;            // 最大功率限制
+    float Scale_Conffient;         // 功率收缩系数
+    float Theoretical_Total_Power; // 理论总功率
+    float Scaled_Total_Power;      // 收缩后总功率
+    float Actual_Power;            // 实际总功率
+    float Total_error;              //
+
     Struct_Power_Motor_Data Motor_Data[4]; // 舵轮底盘八个电机，分为四组，默认偶数索引值的电机为转向电机，奇数索引值的电机为动力电机
 
 } Struct_Power_Management;
@@ -102,9 +104,10 @@ public:
     float Calculate_Theoretical_Power(float omega, float torque, uint8_t motor_index);
     float Calculate_Toque(float omega, float power, float torque, uint8_t motor_index);
     void Calculate_Power_Coefficient(float actual_power, const Struct_Power_Motor_Data *motor_data);
-    void Power_Task(Struct_Power_Management &power_management);
-    void Init(float __E_lower, float __E_upper);
     void Calulate_Power_Allocate(Struct_Power_Motor_Data &Motor_Data, float __Total_error, float Max_Power, float __Scale_Conffient);
+    void Power_Task(Struct_Power_Management &power_management);
+    void Init(uint8_t __ErrorLow = 5, uint8_t __ErrorUp = 50);
+
 #ifdef AGV
     // AGV模式下的getter/setter
     inline float Get_K1_Mot() const { return k1_mot; }
@@ -146,13 +149,14 @@ protected:
     RLS<2> rls_dir{1e-5f, 0.9999f}; // 转向电机RLS
 #else
     // 普通四电机底盘参数
-    float k1 = 0.000249867036;
-    float k2 = 489.124512;
+    uint8_t ErrorLow;               //低于Error会进行等比分配
+    uint8_t ErrorUp;                //高于error，直接按error分配功率，防止功率乱吃，分配错误
+
+    float k1 = 0.024246;
+    float k2 = 1.183594;
     float k3 = 2.52f / 4.0f;
-    RLS<2> rls{1e-5f, 0.99f};
+    RLS<2> rls{1e-5f, 0.99999f};
 #endif
-    float ErrorLow = 0.0f;
-    float ErrorUp = 0.0f;
 };
 
 #endif

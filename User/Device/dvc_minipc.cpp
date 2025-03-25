@@ -12,7 +12,6 @@
 /* includes ------------------------------------------------------------------*/
 
 #include "dvc_minipc.h"
-#include "dvc_buzzer.h"
 
 /* private macros ------------------------------------------------------------*/
 
@@ -55,9 +54,10 @@ void Class_MiniPC::Data_Process()
 
     // Rx_Angle_Yaw =  meanFilter(tmp_yaw);
     // Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = tmp_pitch;
+    Rx_Angle_Pitch = -tmp_pitch;
     Rx_Angle_Yaw = tmp_yaw;
-    Math_Constrain(&Rx_Angle_Pitch,-20.0f,34.0f);
+    Math_Constrain(&Rx_Angle_Pitch,-40.0f,30.0f);
+    Math_Constrain(&Rx_Angle_Yaw,-70.0f,70.0f);             //防止绞线，开了底盘记得删
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
@@ -79,7 +79,7 @@ void Class_MiniPC::Output()
 
 	Pack_Tx.target_id    = 0x08;
 	Pack_Tx.roll         = Tx_Angle_Roll;
-	Pack_Tx.pitch        = Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
+	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
 	Pack_Tx.yaw          = Tx_Angle_Yaw;
 	Pack_Tx.crc16        = 0xffff;
   Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
@@ -121,7 +121,6 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
     {
         //迷你主机断开连接
         MiniPC_Status =  MiniPC_Status_DISABLE;
-        // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
@@ -233,13 +232,13 @@ float Class_MiniPC::calc_distance(float x, float y, float z)
  * @param z 向量的z分量
  * @return 计算得到的俯仰角（以角度制表示）
  */
-
 float Class_MiniPC::calc_pitch(float x, float y, float z) 
 {
   // 根据 x、y 分量计算的平面投影的模长和 z 分量计算的反正切值，得到弧度制的俯仰角
+  z += z_offset;
   float pitch = atan2f(z, sqrtf(x * x + y * y));
-  // 使用重力加速度模型迭代更新俯仰角
-  for ( size_t i = 0; i < 20; i++) {
+  // 使用重力加速度模型迭代更新俯仰角       角度修正，不断对当前Pitch达到的落点进行补偿，计算出一个合理的Pitch以达到目标落点
+  for (size_t i = 0; i < 20; i++) {
     float v_x = bullet_v * cosf(pitch);
     float v_y = bullet_v * sinf(pitch);
     // 计算子弹飞行时间
@@ -256,7 +255,7 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
   }
 
   // 将弧度制的俯仰角转换为角度制
-  pitch = (pitch * 180 / PI); // 向上为负，向下为正
+  pitch = -(pitch * 180 / PI); // 向上为负，向下为正
 
   return pitch;
 }
