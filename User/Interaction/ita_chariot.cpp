@@ -421,14 +421,18 @@ void Class_Chariot::Control_Gimbal()
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); // 开启自瞄默认为四点
+
+            tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
+            tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
         }
         else
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
             // Transform_Mouse_Axis();
-            tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
-            tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
+         
         }
+        tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
+        tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         // R键按下 一键开关弹舱
         if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
@@ -516,6 +520,18 @@ void Class_Chariot::Control_Booster()
     /************************************键鼠控制逻辑*********************************************/
     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
+        if (DR16.Get_Keyboard_Key_B() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
+            {
+                Booster.Booster_User_Control_Type = Booster_User_Control_Type_MULTI;
+            }
+            else
+            {
+                Booster.Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
+            }
+        }
+
         // 自瞄模式+五点模式 左键变成单发
         if (Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_MINIPC &&
             Gimbal.MiniPC->Get_MiniPC_Type() == MiniPC_Type_Windmill)
@@ -524,8 +540,10 @@ void Class_Chariot::Control_Booster()
             if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED) &&
                 (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()))
             {
-                // 单发
-                Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
+                    Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_MULTI)
+                    Booster.Set_Booster_Control_Type(Booster_Control_Type_MULTI);
             }
         }
 
@@ -535,7 +553,10 @@ void Class_Chariot::Control_Booster()
                  (Booster.Motor_Driver.Get_Now_Radian() - Booster.Motor_Driver.Get_Target_Radian() < 0.1f)*/
         )
         {
-            Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+            if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
+                Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+            if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_MULTI)
+                Booster.Set_Booster_Control_Type(Booster_Control_Type_MULTI);
         }
         else
         {
@@ -546,11 +567,14 @@ void Class_Chariot::Control_Booster()
         {
             if (Booster.Get_Friction_Control_Type() == Friction_Control_Type_ENABLE)
             {
+
                 Booster.Set_Friction_Control_Type(Friction_Control_Type_DISABLE);
                 Fric_Status = Fric_Status_CLOSE;
+                // Booster.Booster_User_Control_Type = Booster_User_Control_Type_DISABLE;
             }
             else
             {
+
                 Booster.Set_Friction_Control_Type(Friction_Control_Type_ENABLE);
                 Fric_Status = Fric_Status_OPEN;
             }
