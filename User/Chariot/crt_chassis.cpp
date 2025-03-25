@@ -186,23 +186,25 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
         Supercap.Set_Limit_Power(45.0f);
     else
     {
-        float offset;
-        offset = (Referee->Get_Chassis_Energy_Buffer()-20.0f)/4;
-        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() + offset);
+        // float offset;
+        // offset = (Referee->Get_Chassis_Energy_Buffer()-20.0f)/4;
+        // Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() + offset);
+        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
     }
         
-    Supercap.TIM_Supercap_PeriodElapsedCallback();
+    // Supercap.TIM_Supercap_PeriodElapsedCallback();
+
 
     /*************************功率限制策略*******************************/
-    if(__Sprint_Status==Sprint_Status_ENABLE)
-    {
-        //功率限制  
-        Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max()*1.5f);
-    }
-    else
-    {
-        Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
-    }
+    // if(__Sprint_Status==Sprint_Status_ENABLE)
+    // {
+    //     //功率限制  
+    //     Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max()*1.5f);
+    // }
+    // else
+    // {
+    //     Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
+    // }
     //Power_Limit.Set_Power_Limit(45.0f);
     Power_Limit.Set_Motor(Motor_Wheel);   //添加四个电机的控制电流和当前转速
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
