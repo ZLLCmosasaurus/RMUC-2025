@@ -19,7 +19,7 @@
 #include "dvc_lkmotor.h"
 #include "dvc_minipc.h"
 #include "dvc_imu.h"
-
+#include "alg_fsm.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -105,116 +105,6 @@ float Class_Gimbal_Yaw_Motor_GM6020::Get_True_Angle_Yaw_From_Encoder()
 {
     return (EmcoderAngle_To_TrueAngle);
 }
-/**
- * @brief Specialized, pitch轴电机类
- *
- */
-class Class_Gimbal_Pitch_Motor_GM6020 : public Class_DJI_Motor_GM6020
-{
-public:
-    //陀螺仪获取云台角速度
-    Class_IMU* IMU;
-
-
-    inline float Get_True_Rad_Pitch();
-    inline float Get_True_Gyro_Pitch();
-    inline float Get_True_Angle_Pitch();
-
-    void Transform_Angle();
-
-    void TIM_PID_PeriodElapsedCallback();
-
-protected:
-    //初始化相关变量
-
-    //常量
-
-    // 重力补偿
-    float Gravity_Compensate = 0.0f;
-
-    //内部变量
-    float True_Rad_Pitch = 0.0f;
-    float True_Angle_Pitch = 0.0f;
-    float True_Gyro_Pitch = 0.0f;
-    //读变量
-
-    //写变量
-
-    //读写变量
-
-    //内部函数
-};
-
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Rad_Pitch()
-{
-    return (True_Rad_Pitch);
-}
-
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Angle_Pitch()
-{
-    return (True_Angle_Pitch);
-}
-
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Gyro_Pitch()
-{
-    return (True_Gyro_Pitch);
-}
-
-
-/**
- * @brief Specialized, pitch轴电机类
- *
- */
-class Class_Gimbal_Pitch_Motor_LK6010 : public Class_LK_Motor
-{
-public:
-    //陀螺仪获取云台角速度
-    Class_IMU* IMU;
-    
-    inline float Get_True_Rad_Pitch();
-    inline float Get_True_Gyro_Pitch();
-    inline float Get_True_Angle_Pitch();
-
-    void Transform_Angle();
-
-    void TIM_PID_PeriodElapsedCallback();
-
-protected:
-    //初始化相关变量
-
-    //常量
-
-    // 重力补偿
-float Gravity_Compensate = 0.0f;
-
-    //内部变量 
-   float True_Rad_Pitch = 0.0f;
-   float True_Angle_Pitch = 0.0f;
-   float True_Gyro_Pitch = 0.0f;
-    //读变量
-
-    //写变量
-
-    //读写变量
-
-    //内部函数
-};
-
-float Class_Gimbal_Pitch_Motor_LK6010::Get_True_Rad_Pitch()
-{
-    return (True_Rad_Pitch);
-}
-
-float Class_Gimbal_Pitch_Motor_LK6010::Get_True_Angle_Pitch()
-{
-    return (True_Angle_Pitch);
-}
-
-float Class_Gimbal_Pitch_Motor_LK6010::Get_True_Gyro_Pitch()
-{
-    return (True_Gyro_Pitch);
-
-}
 
 /**
  * @brief Specialized, pitch轴电机类
@@ -270,6 +160,7 @@ float Class_Gimbal_Pitch_Motor_M2006::Get_True_Gyro_Pitch()
     return (True_Gyro_Pitch);
 
 }
+
 /**
  * @brief Specialized, 云台类
  *
@@ -277,7 +168,6 @@ float Class_Gimbal_Pitch_Motor_M2006::Get_True_Gyro_Pitch()
 class Class_Gimbal
 {
 public:
-
     //imu对象
     Class_IMU Boardc_BMI;
 
@@ -287,12 +177,8 @@ public:
 
     // yaw轴电机
     Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw;
-
     // pitch轴电机
     Class_Gimbal_Pitch_Motor_M2006 Motor_Pitch;
-
-    // pithc轴电机
-    //Class_Gimbal_Pitch_Motor_LK6010 Motor_Pitch_LK6010;
 
     void Init();
 
@@ -343,7 +229,10 @@ protected:
     float Target_Yaw_Encoder_Angle = 0.0f;//编码器获取的相对角度值
     // pitch轴角度
     float Target_Pitch_Angle = 0.0f;
-
+    //图传roll轴角度
+    float Target_Image_Roll_Angle = 0.0f;
+    //图传pitch轴角度
+    float Target_Image_Pitch_Angle = 0.0f;
     //内部函数
 
     void Output();
@@ -377,7 +266,6 @@ float Class_Gimbal::Get_Target_Pitch_Angle()
 {
     return (Target_Pitch_Angle);
 }
-
 /**
  * @brief 获取云台控制类型
  *
@@ -426,7 +314,6 @@ void Class_Gimbal::Set_Target_Pitch_Angle(float __Target_Pitch_Angle)
 {
     Target_Pitch_Angle = __Target_Pitch_Angle;
 }
-
 
 #endif
 

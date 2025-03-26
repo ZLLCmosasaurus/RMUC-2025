@@ -83,6 +83,7 @@
         "../User/Chariot/crt_booster.cpp",
         "../User/Chariot/crt_chassis.cpp",
         "../User/Chariot/crt_gimbal.cpp",
+        "../User/Chariot/crt_image.cpp",
         "../User/Device/dvc_GraphicsSendTask.c",
         "../User/Device/dvc_boardc_bmi088.cpp",
         "../User/Device/dvc_boardc_ist8310.cpp",

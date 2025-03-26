@@ -333,7 +333,7 @@ enum Enum_Referee_Game_Status_Type
  * @brief 比赛阶段
  *
  */
-enum Enum_Referee_Game_Status_Stage
+enum Enum_Referee_Game_Status_Stage : uint8_t
 {
     Referee_Game_Status_Stage_NOT_STARTED = 0,
     Referee_Game_Status_Stage_READY,
@@ -655,16 +655,16 @@ struct Struct_Graphic_Integer
 struct Struct_Graphic_String
 {
     uint8_t Index[3];
-    uint32_t Operation_Enum : 3;
-    uint32_t Type_Enum : 3;
-    uint32_t Serial : 4;
-    uint32_t Color_Enum : 4;
-    uint32_t Font_Size : 9;
-    uint32_t Length : 9;
-    uint32_t Line_Width : 10;
-    uint32_t Start_X : 11;
-    uint32_t Start_Y : 11;
-    uint32_t Reserved;
+    uint32_t Operation_Enum : 3;// 1增添 2修改 3删除
+    uint32_t Type_Enum : 3;//0 直线 1矩形 2正圆 3椭圆 5浮点数 6整型数 7字符
+    uint32_t Serial : 4;//图层数
+    uint32_t Color_Enum : 4;//颜色：0己方颜色 1黄色 2绿色 3橙色 4紫红色 5粉色 6青色 7黑色 8白色
+    uint32_t Font_Size : 9;//字体大小
+    uint32_t Length : 9;//无作用
+    uint32_t Line_Width : 10;//线宽
+    uint32_t Start_X : 11;//起点或圆心坐标
+    uint32_t Start_Y : 11;//起点或圆心坐标
+    uint32_t Reserved;//
 } __attribute__((packed));
 
 /**
@@ -891,7 +891,7 @@ struct Struct_Referee_Rx_Data_Robot_Damage
 } __attribute__((packed));
 
 /**
- * @brief 裁判系统经过处理的数据, 0x0207子弹信息, 射击发生后发送
+ * @brief 裁判系统经过处理的数据, 0x0207子弹信息, 射击发生后发送Speed
  *
  */
 struct Struct_Referee_Rx_Data_Robot_Booster
@@ -1028,11 +1028,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_5
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic_1;
-    Union_Graphic Graphic_2;
-    Union_Graphic Graphic_3;
-    Union_Graphic Graphic_4;
-    Union_Graphic Graphic_5;
+    Union_Graphic Graphic[4];
 } __attribute__((packed));
 
 /**
@@ -1138,7 +1134,7 @@ class Class_Referee
 {
 public:
     void Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header = 0xa5);
-
+    
     inline Enum_Referee_Status Get_Referee_Status();
     inline Enum_Referee_Game_Status_Type Get_Game_Type();
     inline Enum_Referee_Game_Status_Stage Get_Game_Stage();
@@ -1228,14 +1224,17 @@ public:
     void Referee_UI_Draw_Circle(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Radius, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Float(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Integer(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, int32_t __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
-    void Referee_UI_Draw_String(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
-
+    void Referee_UI_Draw_String(uint8_t String_index,uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Circle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Radius, Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Line_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Rectangle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Float_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Packed_String();
 
     template <typename T>
     void Referee_UI_Packed_Data(T* __data);
 
-    void UART_Tx_Referee_UI();
+    void UART_Tx_Referee_UI(uint8_t __String_Index);
 
     void UART_RxCpltCallback(uint8_t *Rx_Data, uint16_t Size);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
@@ -1314,7 +1313,7 @@ protected:
     //画七个图形交互信息
     Struct_Referee_Tx_Data_Interaction_Graphic_7 Interaction_Graphic_7;
     //画字符图形交互信息
-    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String;
+    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[10];
     //雷达发送小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Radar_Send Interaction_Radar_Send;
 

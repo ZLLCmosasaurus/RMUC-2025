@@ -12,7 +12,7 @@ float DWT_GetTimeline_ms(void);
 uint64_t DWT_GetTimeline_us(void);
 void DWT_Delay(float Delay);
 void DWT_SysTimeUpdate(void);
-
+float FPS_Counter_Update();
 extern DWT_Time_t SysTime;
 extern uint32_t CPU_FREQ_Hz, CPU_FREQ_Hz_ms, CPU_FREQ_Hz_us;
 extern uint32_t CYCCNT_RountCount,CYCCNT_LAST,CYCCNT64;

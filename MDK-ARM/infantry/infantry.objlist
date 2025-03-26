@@ -43,6 +43,7 @@
 ./infantry/.obj/__/User/Chariot/crt_booster.o
 ./infantry/.obj/__/User/Chariot/crt_chassis.o
 ./infantry/.obj/__/User/Chariot/crt_gimbal.o
+./infantry/.obj/__/User/Chariot/crt_image.o
 ./infantry/.obj/__/User/Device/dvc_GraphicsSendTask.o
 ./infantry/.obj/__/User/Device/dvc_boardc_bmi088.o
 ./infantry/.obj/__/User/Device/dvc_boardc_ist8310.o

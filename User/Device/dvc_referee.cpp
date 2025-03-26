@@ -312,27 +312,27 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
  * @brief 裁判系统发送UI绘图数据
  *
  */
-void Class_Referee::UART_Tx_Referee_UI()
+void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
 {
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 500, "Chassis", (sizeof("chassis")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
-
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 800, "Gimbal", (sizeof("Gimbal")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
-
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 1200, "Fric", (sizeof("Fric")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
+    // static uint8_t String_Index;
+    // String_Index++;
+    // if (String_Index == 4)
+    //     String_Index = 0;
+    // Referee_UI_Draw_String(0, Get_ID(), Referee_UI_One, 0, 0x02, 0, 20, 2, 500, 300, "Chassis", (sizeof("Chassis") - 1), Referee_UI_ADD);
+    // Referee_UI_Draw_String(1, Get_ID(), Referee_UI_One, 0, 0x01, 0, 20, 2, 500, 350, "Gimbal", (sizeof("Gimbal") - 1), Referee_UI_ADD);
+    // Referee_UI_Draw_String(2, Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500, 400, "Fric  ", (sizeof("Fric  ") - 1), Referee_UI_ADD);
+    // Referee_UI_Draw_Line(Get_ID(), Referee_UI_Zero, 1, 0x03, 2, 3, 900, 500, 1000, 500, Referee_UI_ADD);
+    // Referee_UI_Draw_Line(Get_ID(), Referee_UI_One, 1, 0x04, 2, 3, 950, 450, 950, 550, Referee_UI_ADD);
+    
+    if (__String_Index < 5)
+        Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据
+    else if(__String_Index >=5 && __String_Index< 6)
+        Referee_UI_Packed_Data(&Interaction_Graphic_7); // 打包图形数据
+    else
+        Referee_UI_Packed_Data(&Interaction_Graphic_5);
+    
+    UART_Send_Data(&huart6, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
 }
-
 
 /**
  * @brief 裁判系统字符数据打包
@@ -373,22 +373,22 @@ void Class_Referee::Referee_UI_Packed_String()
  * @brief 绘制字符串
  *
  */
-void Class_Referee::Referee_UI_Draw_String(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type)
+void Class_Referee::Referee_UI_Draw_String(uint8_t String_index,uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type)
 {
-    Interaction_Graphic_String.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
-    Interaction_Graphic_String.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
+    Interaction_Graphic_String[String_index].Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_String[String_index].Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
 
-    memcpy(Interaction_Graphic_String.String, __String, __String_Length * sizeof(uint8_t));
-    Interaction_Graphic_String.Graphic_String.String.Serial = __Serial;
-    Interaction_Graphic_String.Graphic_String.String.Index[0] = __Index;
-    Interaction_Graphic_String.Graphic_String.String.Operation_Enum = __Operate_Type;
-    Interaction_Graphic_String.Graphic_String.String.Type_Enum = 7;
-    Interaction_Graphic_String.Graphic_String.String.Color_Enum = __Color;
-    Interaction_Graphic_String.Graphic_String.String.Font_Size = __Font_Size;
-    Interaction_Graphic_String.Graphic_String.String.Line_Width = __Line_Width;
-    Interaction_Graphic_String.Graphic_String.String.Start_X = __Start_X;
-    Interaction_Graphic_String.Graphic_String.String.Start_Y = __Start_Y;
-    Interaction_Graphic_String.Graphic_String.String.Length = __String_Length;
+    memcpy(Interaction_Graphic_String[String_index].String, __String, __String_Length * sizeof(uint8_t));
+    Interaction_Graphic_String[String_index].Graphic_String.String.Serial = __Serial;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Index[0] = __Index;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Type_Enum = 7;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Color_Enum = __Color;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Font_Size = __Font_Size;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Line_Width = __Line_Width;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Start_X = __Start_X;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Start_Y = __Start_Y;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Length = __String_Length;
 }
 
 /**
@@ -423,6 +423,24 @@ void Class_Referee::Referee_UI_Draw_Line(uint8_t __Robot_ID,Enum_Referee_UI_Grou
     Interaction_Graphic_7.Graphic[__Group_Index].Line.End_Y = __End_Y;
 }
 
+void Class_Referee::Referee_UI_Draw_Line_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type)
+{
+    Interaction_Graphic_5.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_5.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
+
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Serial = __Serial;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Index[0] = __Index;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Type_Enum = 0;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Color_Enum = __Color;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Line_Width = __Line_Width;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Start_X = __Start_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.Start_Y = __Start_Y;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.End_X = __End_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Line.End_Y = __End_Y;
+}
+
+
 /**
  * @brief 绘制矩形
  *
@@ -454,7 +472,22 @@ void Class_Referee::Referee_UI_Draw_Rectangle(uint8_t __Robot_ID,Enum_Referee_UI
     Interaction_Graphic_7.Graphic[__Group_Index].Rectangle.End_X = __End_X;
     Interaction_Graphic_7.Graphic[__Group_Index].Rectangle.End_Y = __End_Y;     
 }
+void Class_Referee::Referee_UI_Draw_Rectangle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type)
+{
+    Interaction_Graphic_5.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_5.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
 
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Serial = __Serial;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Index[0] = __Index;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Type_Enum = 1;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Color_Enum = __Color;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Line_Width = __Line_Width;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Start_X = __Start_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.Start_Y = __Start_Y; 
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.End_X = __End_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Rectangle.End_Y = __End_Y; 
+}
 /**
  * @brief 绘制椭圆
  *
@@ -515,7 +548,34 @@ void Class_Referee::Referee_UI_Draw_Circle(uint8_t __Robot_ID,Enum_Referee_UI_Gr
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_X = __Center_X;
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
 }
+/**
+ * @brief 绘制圆形
+ *  
+ * @param __Robot_ID 机器人ID
+ * @param __data_type 数据类型
+ * @param __Serial 序列号
+ * @param __Index 索引
+ * @param __Color 颜色
+ * @param __Line_Width 线宽
+ * @param __Center_X 中心点X坐标
+ * @param __Center_Y 中心点Y坐标
+ * @param __Radius 半径
+ * @param __Operate_Type 操作类型
+ */
+void Class_Referee::Referee_UI_Draw_Circle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Radius, Enum_Referee_UI_Operate_Type __Operate_Type)
+{
+    Interaction_Graphic_5.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_5.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
 
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Serial = __Serial;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Index[0] = __Index;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Type_Enum = 2;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Color_Enum = __Color;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Line_Width = __Line_Width;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_X = __Center_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
+}
 /**
  * @brief 绘制浮点数
  *
@@ -545,9 +605,24 @@ void Class_Referee::Referee_UI_Draw_Float(uint8_t __Robot_ID,Enum_Referee_UI_Gro
     Interaction_Graphic_7.Graphic[__Group_Index].Float.Line_Width = __Line_Width;
     Interaction_Graphic_7.Graphic[__Group_Index].Float.Start_X = __Start_X;
     Interaction_Graphic_7.Graphic[__Group_Index].Float.Start_Y= __Start_Y;
-    Interaction_Graphic_7.Graphic[__Group_Index].Float.Float = (int32_t)__Number*1000;      
+    Interaction_Graphic_7.Graphic[__Group_Index].Float.Float = (int32_t)(__Number*1000);      
 }
+void Class_Referee::Referee_UI_Draw_Float_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type)
+{
+    Interaction_Graphic_5.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_5.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
 
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Serial = __Serial;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Index[0] = __Index;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Type_Enum = 5;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Color_Enum = __Color;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Font_Size = __Font_Size;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Line_Width = __Line_Width;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Start_X = __Start_X;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Start_Y= __Start_Y;
+    Interaction_Graphic_5.Graphic[__Group_Index].Float.Float = (int32_t)(__Number*1000);      
+}
 /**
  * @brief 绘制整数
  *

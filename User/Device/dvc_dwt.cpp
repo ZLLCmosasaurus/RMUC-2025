@@ -86,3 +86,32 @@ void DWT_Delay(float Delay)
     {
     }
 }
+
+// 帧率计数器更新函数
+float FPS_Counter_Update() 
+{
+    static uint32_t last_cnt = 0;  // 保存上一次的 DWT 计数器值
+    static uint32_t interrupt_count = 0;
+    static float time_elapsed = 0;
+    static float frame_rate = 0.0f;  // 保存上一次的帧率值
+    float dt = DWT_GetDeltaT(&last_cnt);
+
+    // 累计触发次数和时间
+    interrupt_count++;
+    time_elapsed += dt;
+
+    // 计算帧率
+    float current_frame_rate = (float)interrupt_count / time_elapsed;
+
+    // 使用滑动平均或其他滤波算法平滑帧率变化
+    frame_rate = 0.8f * frame_rate + 0.2f * current_frame_rate;
+
+    // 如果累计时间超过 1 秒，重置计数器
+    if (time_elapsed >= 1.0f) 
+    {
+        interrupt_count = 0;
+        time_elapsed = 0.0f;
+    }
+
+    return frame_rate;
+}

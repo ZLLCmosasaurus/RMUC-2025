@@ -43,7 +43,6 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  * @brief 数据处理过程
  *
  */
-float Test_Rx_Angle_Pitch,Test_Rx_Angle_Yaw;
 void Class_MiniPC::Data_Process()
 {
     // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
@@ -61,11 +60,11 @@ void Class_MiniPC::Data_Process()
     Math_Constrain(&Rx_Angle_Pitch,-40.0f,5.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
+    Rx_Chassis_Vx = - Pack_Rx.Chassis_Vy;
+    Rx_Chassis_Vy = Pack_Rx.Chassis_Vx;
+
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
-    //debug
-    Test_Rx_Angle_Pitch = Rx_Angle_Pitch;
-    Test_Rx_Angle_Yaw = Rx_Angle_Yaw;
 }
 
 

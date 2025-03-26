@@ -42,7 +42,15 @@ enum Enum_Sprint_Status : uint8_t
     Sprint_Status_ENABLE,
 };
 
-
+/**
+ * @brief 底盘逻辑方向枚举
+ * 
+ */
+enum Enum_Chassis_Logics_Direction : uint8_t
+{
+    Chassis_Logic_Direction_Positive = 0,
+    Chassis_Logic_Direction_Negative,
+};
 /**
  * @brief 底盘控制类型
  *
@@ -51,7 +59,8 @@ enum Enum_Chassis_Control_Type :uint8_t
 {
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
-    Chassis_Control_Type_SPIN,
+    Chassis_Control_Type_SPIN_Positive,
+    Chassis_Control_Type_SPIN_Negative,
 };
 
 /**
@@ -580,10 +589,10 @@ protected:
     void AGV_DirectiveMotor_TargetStatus_To_MotorAngle_In_ChassisCoordinate();
     void Speed_Limitation();
 };
-#define MAX_MOTOR_SPEED 500    
+#define MAX_MOTOR_SPEED 636.62    //当速度为500rpm时，对应每个舵轮速度的最大值为3.14m/s左右 当速度为636.62rpm时，对应每个舵轮速度的最大值为4.09m/s左右
 #define wheel_diameter 0.12f   // m
-#define half_width   0.406f    //m     		//x方向为宽
-#define half_length 0.406f     //m
+#define half_width   0.203f   //m     		//两组相邻舵轮中心间距的一半
+#define half_length 0.203f     //m
 #define ROTATION_CENTER_OFFSET 0.0f // 旋转中心位置偏移量，现在只有y方向上的偏移，且向y负方向偏移，这个偏移量为绝对值
 
 #define THETA_A atan((half_length + ROTATION_CENTER_OFFSET) / half_width) // 转向轮在坐标系下与y轴的夹角（锐角）
@@ -591,10 +600,12 @@ protected:
 #define THETA_C atan((half_length - ROTATION_CENTER_OFFSET) / half_width) // 转向轮在坐标系下与y轴的夹角（锐角）
 #define THETA_D atan((half_length - ROTATION_CENTER_OFFSET) / half_width) // 转向轮在坐标系下与y轴的夹角（锐角）
 
-#define R_A half_width / cos(THETA_A) // 旋转中心与A舵轮的距离
-#define R_B half_width / cos(THETA_B) // 旋转中心与B舵轮的距离
-#define R_C half_width / cos(THETA_C) // 旋转中心与C舵轮的距离
-#define R_D half_width / cos(THETA_D) // 旋转中心与D舵轮的距离
+#define THETA (PI/4.0f)
+
+#define R_A half_width / cos(THETA) // 旋转中心与A舵轮的距离
+#define R_B half_width / cos(THETA) // 旋转中心与B舵轮的距离
+#define R_C half_width / cos(THETA) // 旋转中心与C舵轮的距离
+#define R_D half_width / cos(THETA) // 旋转中心与D舵轮的距离
 
 #define RAD_TO_8191 8191.0f / PI / 2
 #define VEL2RPM 60.0f/PI/wheel_diameter // //rpm = vel*60/π/D    vel(m/s)->rpm

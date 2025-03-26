@@ -83,24 +83,8 @@ Class_Serialplot serialplot;
  * @param CAN_RxMessage CAN1收到的消息
  */
 #ifdef CHASSIS
+ float Fps_supercap = 0;
 void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
-{
-    switch (CAN_RxMessage->Header.StdId)
-    {
-    case (0x888):
-    {
-    }
-    break;
-    }
-}
-#endif
-/**
- * @brief Chassis_CAN2回调函数
- *
- * @param CAN_RxMessage CAN2收到的消息
- */
-#ifdef CHASSIS
-void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
@@ -116,9 +100,23 @@ void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     break;
     case (0x67):  //留给超级电容
     {
+         Fps_supercap = FPS_Counter_Update();
         chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
+    }
+}
+#endif
+/**
+ * @brief Chassis_CAN2回调函数
+ *
+ * @param CAN_RxMessage CAN2收到的消息
+ */
+#ifdef CHASSIS
+void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
+{
+    switch (CAN_RxMessage->Header.StdId)
+    {
     case (0x206):
     {
         
@@ -157,7 +155,7 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Booster.Fric[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-	}
+    }
 }
 #endif
 /**
@@ -248,7 +246,6 @@ void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
-
     //底盘 云台 发射机构 的控制策略
     chariot.TIM_Control_Callback();
 	
@@ -381,8 +378,9 @@ extern "C" void Task_Init()
 
         //裁判系统
         //UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
-        __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
-	    HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
+         __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+	     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
+
         #ifdef POWER_LIMIT
         //旧版超电
         //UART_Init(&huart1, SuperCAP_UART1_Callback, 128);

@@ -92,6 +92,12 @@ void Class_Supercap::Data_Process()
 {
     //数据处理过程
     memcpy(&Supercap_Data, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Struct_Supercap_CAN_Data));    
+
+    Data.Chassis_Actual_Power = (float)Supercap_Data.Chassis_Actual_Power / 10.0f;
+    Data.Supercap_Buffer_Power = (float)Supercap_Data.Supercap_Buffer_Power / 100.0f;
+    Data.Supercap_Charge_Percentage = (float)Supercap_Data.Supercap_Charge_Percentage / 100.0f;
+    Data.Supercup_Control_Level_Status = Supercap_Data.Supercup_Control_Level_Status;
+    Data.Supercap_Current_Energy_Consumption = Supercap_Data.Supercap_Current_Energy_Consumption;
 }
 
 /**

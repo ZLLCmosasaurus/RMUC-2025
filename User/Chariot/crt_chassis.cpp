@@ -219,9 +219,8 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     #endif
 }
 #endif
-#define SPEED_SLOPE
-//#define NO_SPEED_SLOPE
-float slope_omega = 0.05;
+//#define SPEED_SLOPE
+#define NO_SPEED_SLOPE
 void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
     Velocity_X_Max = __Velocity_X_Max;
@@ -230,14 +229,14 @@ void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Steer_Power_Ratio = __Steer_Power_Ratio;
 
     //斜坡函数加减速速度X  控制周期1ms
-    Slope_Velocity_X.Init(0.04f,0.08f);
+    Slope_Velocity_X.Init(0.04f,0.5f);
     //斜坡函数加减速速度Y  控制周期1ms
-    Slope_Velocity_Y.Init(0.04f,0.08f);
+    Slope_Velocity_Y.Init(0.04f,0.5f);
     //斜坡函数加减速角速度
-    Slope_Omega.Init(slope_omega, slope_omega);
+    Slope_Omega.Init(0.04f,0.5f);
     
     // 超级电容初始化
-    Supercap.Init(&hcan2, 40.0f);
+    Supercap.Init(&hcan1, 0.0f);
 }
 
 void Class_Streeing_Chassis::Speed_Resolution()
@@ -249,7 +248,8 @@ void Class_Streeing_Chassis::Speed_Resolution()
         // 底盘失能 四舵轮输出转矩为0
     }
     break;
-    case (Chassis_Control_Type_SPIN):
+    case (Chassis_Control_Type_SPIN_Positive):
+    case (Chassis_Control_Type_SPIN_Negative):
     case (Chassis_Control_Type_FLLOW):
     {
         // 底盘限速
@@ -268,32 +268,32 @@ void Class_Streeing_Chassis::Speed_Resolution()
         #ifdef NO_SPEED_SLOPE
         // 速度换算，正运动学分解
         // 右下位置的舵轮
-        float Wheel_A_Vx = Target_Velocity_X - Target_Omega * R_A * sin(THETA_A);
-        float Wheel_A_Vy = Target_Velocity_Y - Target_Omega * R_A * cos(THETA_A);
+        float Wheel_A_Vx = Target_Velocity_X - Target_Omega * R_A * sin(THETA);
+        float Wheel_A_Vy = Target_Velocity_Y - Target_Omega * R_A * cos(THETA);
         // 左下位置的舵轮
-        float Wheel_B_Vx = Target_Velocity_X - Target_Omega * R_B * sin(THETA_B);
-        float Wheel_B_Vy = Target_Velocity_Y + Target_Omega * R_B * cos(THETA_B);
+        float Wheel_B_Vx = Target_Velocity_X - Target_Omega * R_B * sin(THETA);
+        float Wheel_B_Vy = Target_Velocity_Y + Target_Omega * R_B * cos(THETA);
         // 左上位置的舵轮
-        float Wheel_C_Vx = Target_Velocity_X + Target_Omega * R_C * sin(THETA_C);
-        float Wheel_C_Vy = Target_Velocity_Y + Target_Omega * R_C * cos(THETA_C);
+        float Wheel_C_Vx = Target_Velocity_X + Target_Omega * R_C * sin(THETA);
+        float Wheel_C_Vy = Target_Velocity_Y + Target_Omega * R_C * cos(THETA);
         // 右上位置的舵轮
-        float Wheel_D_Vx = Target_Velocity_X + Target_Omega * R_D * sin(THETA_D);
-        float Wheel_D_Vy = Target_Velocity_Y - Target_Omega * R_D * cos(THETA_D);
+        float Wheel_D_Vx = Target_Velocity_X + Target_Omega * R_D * sin(THETA);
+        float Wheel_D_Vy = Target_Velocity_Y - Target_Omega * R_D * cos(THETA);
         #endif
         #ifdef SPEED_SLOPE
         // 速度换算，正运动学分解
         // 右下位置的舵轮
-        float Wheel_A_Vx = Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * R_A * sin(THETA_A);
-        float Wheel_A_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_A * cos(THETA_A);
+        float Wheel_A_Vx = Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * R_A * sin(THETA);
+        float Wheel_A_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_A * cos(THETA);
         // 左下位置的舵轮
-        float Wheel_B_Vx = Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * R_B * sin(THETA_B);
-        float Wheel_B_Vy = Slope_Velocity_Y.Get_Out() + Slope_Omega.Get_Out() * R_B * cos(THETA_B);
+        float Wheel_B_Vx = Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * R_B * sin(THETA);
+        float Wheel_B_Vy = Slope_Velocity_Y.Get_Out() + Slope_Omega.Get_Out() * R_B * cos(THETA);
         // 左上位置的舵轮
-        float Wheel_C_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_C * sin(THETA_C);
-        float Wheel_C_Vy = Slope_Velocity_Y.Get_Out() + Slope_Omega.Get_Out() * R_C * cos(THETA_C);
+        float Wheel_C_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_C * sin(THETA);
+        float Wheel_C_Vy = Slope_Velocity_Y.Get_Out() + Slope_Omega.Get_Out() * R_C * cos(THETA);
         // 右上位置的舵轮
-        float Wheel_D_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_D * sin(THETA_D);
-        float Wheel_D_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_D * cos(THETA_D);
+        float Wheel_D_Vx = Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * R_D * sin(THETA);
+        float Wheel_D_Vy = Slope_Velocity_Y.Get_Out() - Slope_Omega.Get_Out() * R_D * cos(THETA);
         #endif
         
         wheel[0].ChassisCoordinate_Angle = My_atan(Wheel_A_Vy, Wheel_A_Vx) * RAD_TO_8191;
@@ -393,15 +393,6 @@ void Class_Streeing_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 
     // 1.底盘四舵轮驻车模式
     // 2.随动模式不进行移动状态下，为了正确设置四舵轮角度
-    // 3.地盘小陀螺不进行移动状态下，为了正确设置四舵轮角度
-    // if ((Target_Velocity_X != 0) && (Target_Velocity_Y != 0))
-    // {
-    //     break_mode = 0;
-    // }
-    // else
-    // {
-    //     break_mode = 1;
-    // }
     if ((Target_Velocity_X == 0) && (Target_Velocity_Y == 0) && (Target_Omega == 0))
     {
         break_mode = 1;

@@ -105,6 +105,9 @@
           },
           {
             "path": "../User/Chariot/crt_gimbal.cpp"
+          },
+          {
+            "path": "../User/Chariot/crt_image.cpp"
           }
         ],
         "folders": []

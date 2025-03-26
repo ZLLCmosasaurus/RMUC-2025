@@ -228,7 +228,8 @@ struct Pack_rx_t
 	float target_y;
 	float target_z;	
     uint8_t fire_permission;//0不允许拨弹  1允许拨弹
-	uint8_t UP_flag;
+    float Chassis_Vx;
+    float Chassis_Vy;
 	uint16_t crc16;
 }__attribute__((packed));
 
@@ -258,6 +259,8 @@ public:
     inline float Get_Rx_Yaw_Angle();
     inline float Get_Distance();
     inline uint8_t Get_Fire_Permission();
+    inline float Get_Chassis_Vx();
+    inline float Get_Chassis_Vy();
     inline Enum_MiniPC_Type Get_MiniPC_Type();
     inline Enum_MiniPC_Move_Control_Mode Get_Move_Control_Mode();
 
@@ -275,6 +278,7 @@ public:
     inline void Set_Outpost_Status(Enum_MiniPC_Data_Status __Outpost_Status);
     inline void Set_Outpost_Protect_Status(Enum_MiniPC_Data_Status __Outpost_Protect_Status);
     inline void Set_MiniPC_Type(Enum_MiniPC_Type __MiniPC_Type);
+    inline void Set_bullet_v(float __bullet_v);
 
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
@@ -334,10 +338,11 @@ protected:
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
+    float Rx_Chassis_Vx;
+    float Rx_Chassis_Vy;
 
-
-     float g = 12; // 重力加速度
-    const float bullet_v = 16.0;//28.0; // 子弹速度  
+    float g = 9.8f; // 重力加速度
+    float bullet_v = 15.0;//28.0; // 子弹速度  
 
     // 距离
     float Distance;
@@ -629,6 +634,10 @@ void Class_MiniPC::Set_MiniPC_Type(Enum_MiniPC_Type __MiniPC_Type)
     //Pack_Tx.target_type = __MiniPC_Type;
 }
 
+void Class_MiniPC::Set_bullet_v(float __bullet_v)
+{
+    bullet_v = __bullet_v;
+}
 /**
  * @brief 设定迷你主机类型
  *
@@ -686,6 +695,15 @@ void Class_MiniPC::Transform_Angle_Rx()
 uint8_t Class_MiniPC::Get_Fire_Permission()
 {
     return (Pack_Rx.fire_permission);
+}
+float Class_MiniPC::Get_Chassis_Vx()
+{
+    return (Rx_Chassis_Vx);
+}
+
+float Class_MiniPC::Get_Chassis_Vy()
+{
+    return (Rx_Chassis_Vy);
 }
 #endif
 #endif

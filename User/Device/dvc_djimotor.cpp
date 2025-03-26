@@ -571,7 +571,6 @@ void Class_DJI_Motor_C620::Data_Process()
     Math_Endian_Reverse_16((void *)&tmp_buffer->Omega_Reverse, (void *)&tmp_omega);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Torque_Reverse, (void *)&tmp_torque);
     Math_Endian_Reverse_16((void *)&tmp_buffer->Temperature, (void *)&tmp_temperature);
-    if(Start_Falg == 0)  Init_encoder = tmp_encoder;
     //计算圈数与总编码器值
     if(Start_Falg==1)
     {
@@ -587,7 +586,7 @@ void Class_DJI_Motor_C620::Data_Process()
             Data.Total_Round--;
         }        
     }
-    Data.Total_Encoder = Data.Total_Round * Encoder_Num_Per_Round + tmp_encoder - Init_encoder;
+    Data.Total_Encoder = Data.Total_Round * Encoder_Num_Per_Round + tmp_encoder;
 
     //计算电机本身信息
     Data.Now_Radian = (float)Data.Total_Encoder / (float)Encoder_Num_Per_Round * 2.0f * PI / Gearbox_Rate;

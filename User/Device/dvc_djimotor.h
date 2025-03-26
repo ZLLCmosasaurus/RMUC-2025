@@ -226,6 +226,7 @@ public:
 
     inline uint16_t Get_Output_Max();
     inline Enum_DJI_Motor_Status Get_DJI_Motor_Status();
+    inline int32_t Get_Now_Total_Encoder();
     inline float Get_Now_Angle();
     inline float Get_Now_Radian();
     inline float Get_Now_Omega_Angle();
@@ -675,7 +676,15 @@ Enum_DJI_Motor_Status Class_DJI_Motor_C610::Get_DJI_Motor_Status()
 {
     return (DJI_Motor_Status);
 }
-
+/** 
+ * @brief 获取当前的角度, 编码值
+ *
+ * @return int32_t 当前的角度, 编码值
+ */
+int32_t Class_DJI_Motor_C610::Get_Now_Total_Encoder()
+{
+    return (Data.Total_Encoder);
+}
 /**
  * @brief 获取当前的角度, °
  *

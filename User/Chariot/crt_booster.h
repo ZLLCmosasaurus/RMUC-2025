@@ -52,7 +52,6 @@ enum Enum_Friction_Control_Type
     Friction_Control_Type_ENABLE,
 };
 
-
 /**
  * @brief Specialized, 热量检测有限自动机
  *
@@ -122,12 +121,12 @@ public:
 
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
     inline Enum_Friction_Control_Type Get_Friction_Control_Type();
-
     inline void Set_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
     inline void Set_Friction_Control_Type(Enum_Friction_Control_Type __Friction_Control_Type);
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
     inline void Set_Drive_Count(uint16_t __Drvie_Count);
+    inline void Set_Friction_Motor_Live_Type();
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
@@ -142,7 +141,7 @@ protected:
     //摩擦轮单次判定发弹阈值, 超出被认为发射子弹
     uint16_t Friction_Torque_Threshold = 3300;
     //摩擦轮速度判定发弹阈值, 超出则说明已经开机
-    float Friction_Omega_Threshold = 600;
+    float Friction_Omega_Threshold = 4500;
 
     //内部变量
 
@@ -157,8 +156,8 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
-    int16_t Fric_High_Rpm = 4900;
-    int16_t Fric_Low_Rpm = 5050;
+    int16_t Fric_High_Rpm = 4825;//4900;
+    int16_t Fric_Low_Rpm = 4975;//5050;
 		//5150 5000
 		//5100 4950
 		//5000 4850
@@ -251,7 +250,6 @@ Enum_Friction_Control_Type Class_Booster::Get_Friction_Control_Type()
     return (Friction_Control_Type);
 
 }
-
 /**
  * @brief 设定摩擦轮角速度
  *
@@ -279,6 +277,7 @@ float Class_Booster::Get_Drvier_Angle()
 {
     return (Drvier_Angle);
 }
+
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

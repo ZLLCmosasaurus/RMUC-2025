@@ -83,7 +83,7 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART6_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
         __HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
-        //memset(UART6_Manage_Object.Rx_Buffer, 0, UART6_Manage_Object.Rx_Buffer_Length);
+        memset(UART6_Manage_Object.Rx_Buffer, 0, sizeof(UART6_Manage_Object.Rx_Buffer));
     }
 }
 
@@ -159,7 +159,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         UART6_Manage_Object.Callback_Function(UART6_Manage_Object.Rx_Buffer, Size);
 			memset(&UART6_Manage_Object.Rx_Buffer,0,UART6_Manage_Object.Rx_Buffer_Length);
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
-		__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
+		//__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
     }
 }
 

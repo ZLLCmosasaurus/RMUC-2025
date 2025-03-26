@@ -30,17 +30,35 @@ enum Enum_Supercap_Status
     Supercap_Status_DISABLE = 0,
     Supercap_Status_ENABLE,
 };
-
+enum Enum_Supercap_Control_Status : uint8_t
+{
+    Supercap_Control_Status_ENABLE = 0,
+    Supercap_Control_Status_DISABLE,
+};
 /**
  * @brief 超级电容源数据
- *
+ *Capacitor charge percentage
  */
 struct Struct_Supercap_CAN_Data
 {
-    float Chassis_Actual_Power;
-    uint8_t Supercup_Status;
+    int16_t Chassis_Actual_Power;
+    uint16_t Supercap_Buffer_Power;
+    uint16_t Supercap_Charge_Percentage;
+    uint8_t Supercup_Control_Level_Status;
+    uint8_t Supercap_Current_Energy_Consumption;
 } __attribute__((packed));
-
+/**
+ * @brief 超级电容源处理后的数据
+ *
+ */
+struct Struct_Supercap_Data
+{
+    float Chassis_Actual_Power;
+    float Supercap_Buffer_Power;
+    float Supercap_Charge_Percentage;
+    uint8_t Supercup_Control_Level_Status;
+    uint8_t Supercap_Current_Energy_Consumption;
+}__attribute__((packed));
 /**
  * @brief 超级电容发送的数据
  *
@@ -48,8 +66,7 @@ struct Struct_Supercap_CAN_Data
 struct Struct_Supercap_Tx_Data
 {
     float Limit_Power;
-    //float Now_Power;
-    //uint16_t Chassis_Power;
+    Enum_Supercap_Control_Status Supercap_Control_Status;
 }__attribute__((packed));
 
 /**
@@ -63,13 +80,14 @@ public:
     void Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_header = '*', uint8_t __fame_tail = ';', float __Limit_Power_Max = 45.0f);
 
     inline Enum_Supercap_Status Get_Supercap_Status();
-    inline float Get_Stored_Energy();
-    inline float Get_Now_Voltage();
 
     inline void Set_Limit_Power(float __Limit_Power);
-    inline void Set_Now_Power(float __Now_Power);
+    inline void Set_Supercap_Control_Status(Enum_Supercap_Control_Status __Supercap_Control_Status);
+    inline Enum_Supercap_Control_Status Get_Supercap_Control_Status();
     inline float Get_Chassis_Actual_Power();
     inline float Get_Limit_Power();
+    inline float Get_Supercap_Buffer_Power();
+    inline float Get_Supercap_Charge_Percentage();
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -108,7 +126,7 @@ protected:
     Enum_Supercap_Status Supercap_Status = Supercap_Status_DISABLE;
     //超级电容对外接口信息
     Struct_Supercap_CAN_Data Supercap_Data;
-
+    Struct_Supercap_Data Data;
     //写变量
     Struct_Supercap_Tx_Data Supercap_Tx_Data;
 
@@ -141,7 +159,15 @@ Enum_Supercap_Status Class_Supercap::Get_Supercap_Status()
 {
     return(Supercap_Status);
 }
-
+/**
+ * @brief 获取超级电容发送的缓冲功率
+ * 
+ * @return 超级电容发送的缓冲功率
+ */
+float Class_Supercap::Get_Supercap_Buffer_Power()
+{
+    return (Data.Supercap_Buffer_Power);
+}
 /**
  * @brief 获取存储的能量
  *
@@ -191,13 +217,25 @@ void Class_Supercap::Set_Limit_Power(float __Limit_Power)
 {
     Supercap_Tx_Data.Limit_Power = __Limit_Power;
 }
+void Class_Supercap::Set_Supercap_Control_Status(Enum_Supercap_Control_Status __Supercap_Control_Status)
+{
+    Supercap_Tx_Data.Supercap_Control_Status = __Supercap_Control_Status;
+}
+Enum_Supercap_Control_Status Class_Supercap::Get_Supercap_Control_Status()
+{
+    return (Supercap_Tx_Data.Supercap_Control_Status);
+}
 float Class_Supercap::Get_Chassis_Actual_Power()
 {
-    return (Supercap_Data.Chassis_Actual_Power);
+    return (Data.Chassis_Actual_Power);
 }
 float Class_Supercap::Get_Limit_Power()
 {
     return (Limit_Power);
+}
+float Class_Supercap::Get_Supercap_Charge_Percentage()
+{
+    return (Data.Supercap_Charge_Percentage);
 }
 #endif
 #endif

@@ -1,6 +1,0 @@
-r
-halt
-loadfile "d:\Users_RM\hero\hero_new\MDK-ARM\infantry\infantry.hex"
-r
-go
-exit

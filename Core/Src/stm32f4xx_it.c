@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "drv_uart.h"
 #include "tsk_config_and_callback.h"
+#include "config.h"
 #include "string.h"
 /* USER CODE END Includes */
 
@@ -504,6 +505,7 @@ void USART6_IRQHandler(void)
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
+  #ifdef CHASSIS
   if(RESET != __HAL_UART_GET_FLAG(&huart6, UART_FLAG_IDLE))
   {
     __HAL_UART_CLEAR_IDLEFLAG(&huart6);                       //��������жϱ��?
@@ -512,6 +514,7 @@ void USART6_IRQHandler(void)
     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
     memset(UART6_Manage_Object.Rx_Buffer, 0, 128);
   }
+  #endif
   /* USER CODE END USART6_IRQn 1 */
 }
 

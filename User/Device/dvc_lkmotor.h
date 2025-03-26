@@ -68,7 +68,7 @@ enum Enum_LK_Motor_Control_ID : uint8_t
     LK_Motor_Control_Shut_Down = 0x80,   //??????
     LK_Motor_Control_Stop = 0x81, //?????
     LK_Motor_Control_Run = 0x88,//???????
-    LK_Motor_Control_Torque = 0xA1,//??????????
+    LK_Motor_Control_Torque = 0xA0 ,//ms电机
 };
 
 /**
@@ -98,17 +98,17 @@ struct Struct_LK_Motor_CAN_Rx_Data
 } __attribute__((packed));
 
 /**
- * @brief ????????????????????, ???��????��??
+ * @brief 
  *
  */
 struct Struct_LK_Motor_Rx_Data
 {
-    Enum_LK_Motor_Control_ID CMD_ID;  //????????ID
-    float Now_Angle;  //��ǰ�Ƕ� ���Ƕ��ƣ�
-    float Now_Radian;  //��ǰ�Ƕ� �������ƣ�
-    float Now_Omega_Angle;  //��ǰ���ٶ� (�Ƕ���)
-    float Now_Omega_Radian;  //��ǰ���ٶ� (������)
-    float Now_Current;  
+    Enum_LK_Motor_Control_ID CMD_ID;
+    float Now_Angle;
+    float Now_Radian;
+    float Now_Omega_Angle;
+    float Now_Omega_Radian;
+    float Now_Current;
     float Now_Temperature; 
     uint16_t Pre_Encoder; 
     int32_t Total_Encoder;
@@ -117,9 +117,7 @@ struct Struct_LK_Motor_Rx_Data
 
 /**
  * @brief LK??????, ?????????????????
- * DM_Motor_Control_Method_POSITION_OMEGA????, ????????????????��???PI????, ????250??0
  * 
- * PMAX?????????????????3.141593, ??PI, ???????IMU???????????
  *
  */
 class Class_LK_Motor
@@ -182,7 +180,7 @@ protected:
     
     float Current_Max;
     
-    const int16_t Current_Max_Cmd = 2000;
+    const int16_t Current_Max_Cmd = 2048;
     
     float Out = 0.0f;
     
@@ -190,7 +188,7 @@ protected:
     const float Torque_Current = 0.3;  
 
     
-    uint32_t Position_Max = 16383;
+    uint32_t Position_Max = 65535;
 
 
     //����ϵ��һ֡��־λ
