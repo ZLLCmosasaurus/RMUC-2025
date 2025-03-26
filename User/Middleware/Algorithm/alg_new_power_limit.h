@@ -147,8 +147,8 @@ protected:
     RLS<2> rls_dir{1e-5f, 0.92f}; // 转向电机RLS
 #else
     // 普通四电机底盘参数
-    float k1 = 0.000249867036;
-    float k2 = 489.124512;
+    float k1 = 9.74917129e-05;
+    float k2 = 489.123322;
     float k3 = 2.52f / 4.0f;
     RLS<2> rls{1e-5f, 0.9999f};
 #endif
