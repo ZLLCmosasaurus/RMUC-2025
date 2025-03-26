@@ -34,8 +34,8 @@
 #endif  
 #ifdef STM32F407xx
 #include "stm32f4xx_hal.h"
-#endif  
-
+#endif 
+#include "drv_usb.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/

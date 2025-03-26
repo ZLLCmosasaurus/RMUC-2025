@@ -98,7 +98,7 @@ public:
       
     //功率限制
     Class_Power_Limit Power_Limit;
-    Struct_Power_Management Power_Management;
+    //Struct_Power_Management Power_Management;
     
     //裁判系统
     Class_Referee *Referee;
@@ -235,10 +235,10 @@ const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -F
 const float WHELL_DIAMETER = 0.13f;	
 
 //底盘半宽 单位m
-const float HALF_WIDTH = 0.15f;		
+const float HALF_WIDTH = 0.281f;		
 
 //底盘半长 单位m
-const float HALF_LENGTH = 0.15f;	
+const float HALF_LENGTH = 0.281f;	
 
 //线速度转角速度 rad/s
 const float VEL2RAD = 1.0f/(WHELL_DIAMETER/2.0f);

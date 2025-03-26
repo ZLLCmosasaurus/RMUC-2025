@@ -64,9 +64,9 @@ uint8_t CAN3_0xxf7_Tx_Data[8];
 uint8_t CAN3_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
-
 uint8_t CAN3_Chassis_Tx_Data_A[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_B[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_C[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
@@ -203,23 +203,63 @@ void can_filter_init(FDCAN_HandleTypeDef *hfdcan)
  */
 void CAN_Init(FDCAN_HandleTypeDef *hcan, CAN_Call_Back Callback_Function)
 {
+    FDCAN_FilterTypeDef fdcan_filter;
     if (hcan->Instance == FDCAN1)
     {
         CAN1_Manage_Object.CAN_Handler = hcan;
-        CAN1_Manage_Object.Callback_Function = Callback_Function;					
+        CAN1_Manage_Object.Callback_Function = Callback_Function;	
+	
+        fdcan_filter.IdType = FDCAN_STANDARD_ID;                       //标准ID
+        fdcan_filter.FilterIndex = 0;                                  //滤波器索引                   
+        fdcan_filter.FilterType = FDCAN_FILTER_MASK;                   
+        fdcan_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;           //过滤器0关联到FIFO0  
+        fdcan_filter.FilterID1 = 0x00;                               
+        fdcan_filter.FilterID2 = 0x00;
+
+        HAL_FDCAN_ConfigFilter(&hfdcan1,&fdcan_filter); 		 				  //接收ID2
+        //拒绝接收匹配不成功的标准ID和扩展ID,不接受远程帧
+        // HAL_FDCAN_ConfigGlobalFilter(&hfdcan1,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE);
+        // HAL_FDCAN_ConfigFifoWatermark(&hfdcan1, FDCAN_CFG_RX_FIFO0, 1);			
+        HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
     }
     else if (hcan->Instance == FDCAN2)
     {
         CAN2_Manage_Object.CAN_Handler = hcan;
         CAN2_Manage_Object.Callback_Function = Callback_Function;
+
+        fdcan_filter.IdType = FDCAN_STANDARD_ID;                       //标准ID
+        fdcan_filter.FilterIndex = 0;                                  //滤波器索引                   
+        fdcan_filter.FilterType = FDCAN_FILTER_MASK;                   
+        fdcan_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO1;           //过滤器0关联到FIFO0  
+        fdcan_filter.FilterID1 = 0x00;                               
+        fdcan_filter.FilterID2 = 0x00;
+
+        HAL_FDCAN_ConfigFilter(&hfdcan2,&fdcan_filter); 		 				  //接收ID2
+        //拒绝接收匹配不成功的标准ID和扩展ID,不接受远程帧
+        // HAL_FDCAN_ConfigGlobalFilter(&hfdcan2,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE);
+        // HAL_FDCAN_ConfigFifoWatermark(&hfdcan2, FDCAN_CFG_RX_FIFO1, 1);
+        HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
     }
     else if (hcan->Instance == FDCAN3)
     {
         CAN3_Manage_Object.CAN_Handler = hcan;
         CAN3_Manage_Object.Callback_Function = Callback_Function;
+
+        fdcan_filter.IdType = FDCAN_STANDARD_ID;                       //标准ID
+        fdcan_filter.FilterIndex = 0;                                  //滤波器索引                   
+        fdcan_filter.FilterType = FDCAN_FILTER_MASK;                   
+        fdcan_filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;           //过滤器0关联到FIFO0  
+        fdcan_filter.FilterID1 = 0x00;                               
+        fdcan_filter.FilterID2 = 0x00;
+
+        HAL_FDCAN_ConfigFilter(&hfdcan3,&fdcan_filter); 		 				  //接收ID2
+        //拒绝接收匹配不成功的标准ID和扩展ID,不接受远程帧
+        HAL_FDCAN_ConfigGlobalFilter(&hfdcan3,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE);
+        HAL_FDCAN_ConfigFifoWatermark(&hfdcan3, FDCAN_CFG_RX_FIFO0, 1);
+        HAL_FDCAN_ActivateNotification(&hfdcan3, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
     }
-    can_filter_init(hcan);
-    HAL_FDCAN_ActivateNotification(hcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+    // can_filter_init(hcan);
+    // HAL_FDCAN_ActivateNotification(hcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
     HAL_FDCAN_Start(hcan); //开启FDCAN
     
 }
@@ -276,46 +316,52 @@ void TIM_CAN_PeriodElapsedCallback()
     
     #ifdef CHASSIS
     
-    static uint8_t mod5 = 0,mod50 = 0;
-    mod5++, mod50++;
+    static uint8_t mod5 = 0,mod10 = 0;
+    mod5++, mod10++;
     if (mod5 == 5)
     {
         mod5 = 0;
         //3508    
-        // CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);
-        // //6020
-        // CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
+        CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8);
+        #ifdef AGV
+        //6020
+        CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8);
+        #endif
     }
     
-    if (mod50 == 50)
+    if (mod10 == 10)
     {
         //上板
         CAN_Send_Data(&hfdcan3, 0x88, CAN3_Chassis_Tx_Data_A, 8);
         CAN_Send_Data(&hfdcan3, 0x99, CAN3_Chassis_Tx_Data_B, 8);
+        CAN_Send_Data(&hfdcan3, 0x78, CAN3_Chassis_Tx_Data_C, 8);
+        //超电
+        CAN_Send_Data(&hfdcan3, 0x66, CAN_Supercap_Tx_Data, 8);
+        mod10 = 0;
     }
-
     #elif defined (GIMBAL)
 
     static uint8_t mod5 = 0,mod2 = 0;
     mod5++;
     mod2++;
-    //CAN1_0x1fe_Tx_Data[2] = test >> 8;//B_pitch
-    //CAN1_0x1fe_Tx_Data[3] = test;
-    CAN1_0x1fe_Tx_Data[0] = test >> 8;//B_Yaw
-    CAN1_0x1fe_Tx_Data[1] = test;
-    //CAN2_0x1fe_Tx_Data[2] = test >> 8;//A_pitch
-    //CAN2_0x1fe_Tx_Data[3] = test;
-    // CAN2_0x1fe_Tx_Data[0] = test >> 8;//A_Yaw
-    // CAN2_0x1fe_Tx_Data[1] = test;
+    
+//    CAN1_0x1fe_Tx_Data[2] = test >> 8;//B_pitch
+//    CAN1_0x1fe_Tx_Data[3] = test;
+//    CAN1_0x1fe_Tx_Data[0] = test >> 8;//B_Yaw
+//    CAN1_0x1fe_Tx_Data[1] = test;
+//    CAN2_0x1fe_Tx_Data[2] = test >> 8;//A_pitch
+//    CAN2_0x1fe_Tx_Data[3] = test;
+//    CAN2_0x1fe_Tx_Data[0] = test >> 8;//A_Yaw
+//    CAN2_0x1fe_Tx_Data[1] = test;
     if(mod5 == 5)
     {
         mod5 = 0;
-        //B
-        //  CAN_Send_Data(&hfdcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
-        //CAN_Send_Data(&hfdcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
+        //  B
+        CAN_Send_Data(&hfdcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //摩擦轮 按照0x1ff ID 发送 可控制多个电机
+        CAN_Send_Data(&hfdcan1, 0x1fe, CAN1_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
         //  A
         CAN_Send_Data(&hfdcan2, 0x1fe, CAN2_0x1fe_Tx_Data, 8); //GM6020  按照0x1fe ID 发送 可控制多个电机
-        CAN_Send_Data(&hfdcan2, 0x200, CAN2_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
+        CAN_Send_Data(&hfdcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); //摩擦轮 按照0x1ff ID 发送 可控制多个电机
 
         //  CAN3  下板 大yaw        
         CAN_Send_Data(&hfdcan3, 0x200, CAN3_0x200_Tx_Data, 8); //拨弹盘  按照0x200 ID 发送 可控制多个电机
@@ -324,7 +370,7 @@ void TIM_CAN_PeriodElapsedCallback()
     if(mod2 == 2)
     {
         mod2 = 0;
-        //CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
+        CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
     }   
     #endif
 
@@ -360,22 +406,22 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hcan, uint32_t RxFifo0ITs)
  *
  * @param hcan CAN编号
  */
-void HAL_CAN_RxFifo1MsgPendingCallback(FDCAN_HandleTypeDef *hcan)
+void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hcan,uint32_t RxFifo1ITs)
 {
     //选择回调函数
     if (hcan->Instance == FDCAN1)
     {
-        //HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN1_Manage_Object.Rx_Buffer.Header, CAN1_Manage_Object.Rx_Buffer.Data);
+        HAL_FDCAN_GetRxMessage(hcan, FDCAN_RX_FIFO1, &CAN1_Manage_Object.Rx_Buffer.Header, CAN1_Manage_Object.Rx_Buffer.Data);
         CAN1_Manage_Object.Callback_Function(&CAN1_Manage_Object.Rx_Buffer);
     }
     else if (hcan->Instance == FDCAN2)
     {
-        //HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN2_Manage_Object.Rx_Buffer.Header, CAN2_Manage_Object.Rx_Buffer.Data);
+        HAL_FDCAN_GetRxMessage(hcan, FDCAN_RX_FIFO1, &CAN2_Manage_Object.Rx_Buffer.Header, CAN2_Manage_Object.Rx_Buffer.Data);
         CAN2_Manage_Object.Callback_Function(&CAN2_Manage_Object.Rx_Buffer);
     }
     else if (hcan->Instance == FDCAN3)
     {
-        //HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &CAN3_Manage_Object.Rx_Buffer.Header, CAN3_Manage_Object.Rx_Buffer.Data);
+        HAL_FDCAN_GetRxMessage(hcan, FDCAN_RX_FIFO1, &CAN3_Manage_Object.Rx_Buffer.Header, CAN3_Manage_Object.Rx_Buffer.Data);
         CAN3_Manage_Object.Callback_Function(&CAN3_Manage_Object.Rx_Buffer);
     }
 }

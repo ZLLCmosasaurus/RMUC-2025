@@ -12,6 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_supercap.h"
+#include "Config.h"
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -39,6 +40,10 @@ void Class_Supercap::Init(FDCAN_HandleTypeDef *hcan, float __Limit_Power_Max)
     else if(hcan->Instance == FDCAN2)
     {
         CAN_Manage_Object = &CAN2_Manage_Object;
+    }
+    else if(hcan->Instance == FDCAN3)
+    {
+        CAN_Manage_Object = &CAN3_Manage_Object;
     }
     Supercap_Tx_Data.Limit_Power = __Limit_Power_Max;
     CAN_Tx_Data = CAN_Supercap_Tx_Data;
@@ -92,10 +97,20 @@ void Class_Supercap::Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_heade
  * @brief 
  * 
  */
+
 void Class_Supercap::Data_Process()
 {
     //数据处理过程
-    memcpy(&Supercap_Data, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Struct_Supercap_CAN_Data));    
+    switch(CAN_Manage_Object->Rx_Buffer.Header.Identifier){
+        case (0x67):{
+            memcpy(&CAN_Supercap_Rx_Data_Normal, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Supercap_Rx_Data_A));
+            break;
+        }
+        case (0x55):{
+            memcpy(&CAN_Supercap_Rx_Data_Error, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Supercap_Rx_Data_B));
+            break;
+        }
+    }   
 }
 
 /**
@@ -104,6 +119,12 @@ void Class_Supercap::Data_Process()
  */
 void Class_Supercap::Output()
 {
+    #if POWER_CONTROL == 1
+        Set_Working_Status(Working_Status_ON);
+    #else
+        Set_Working_Status(Working_Status_OFF);
+    #endif
+    Set_Working_Status(Working_Status_OFF);
     memcpy(CAN_Tx_Data, &Supercap_Tx_Data, sizeof(Struct_Supercap_Tx_Data));
 }
 /**
@@ -155,7 +176,6 @@ void Class_Supercap::CAN_RxCpltCallback(uint8_t *Rx_Data)
     Flag ++;
     Data_Process();
 }
-float power = 0;
 /**
  * @brief UART通信接收回调函数
  *
@@ -165,11 +185,6 @@ void Class_Supercap::UART_RxCpltCallback(uint8_t *Rx_Data)
 {
     Flag++;
     //Data_Process_UART();
-    if(UART10_Manage_Object.Rx_Buffer[0] == 0xB6)
-    {
-        memcpy(&power, &UART_Manage_Object->Rx_Buffer[1], sizeof(float));
-    }
-
 }
 
 /**

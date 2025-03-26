@@ -317,7 +317,7 @@ void Class_LK_Motor::TIM_Alive_PeriodElapsedCallback()
 
     Pre_Flag = Flag;
 }
-float test_omaga = 1,test_angle = 20;
+float test_omaga = 1,test_angle = 0;
 /**
  * @brief TIM定时器中断发送出去的回调函数
  *
@@ -334,7 +334,7 @@ void Class_LK_Motor::TIM_Process_PeriodElapsedCallback()
         case (LK_Motor_Control_Method_OMEGA):
         {
             PID_Omega.Set_Target(Target_Omega_Angle);
-            PID_Omega.Set_Now(Data.Now_Omega_Angle);
+            PID_Omega.Set_Now(Transform_Omega);
             PID_Omega.TIM_Adjust_PeriodElapsedCallback();
 
             Target_Current = PID_Omega.Get_Out();

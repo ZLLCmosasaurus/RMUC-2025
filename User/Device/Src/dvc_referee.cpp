@@ -59,6 +59,10 @@ void Class_Referee::Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header)
     {
         UART_Manage_Object = &UART7_Manage_Object;
     }
+    else if(huart->Instance == USART10)
+    {
+        UART_Manage_Object = &UART10_Manage_Object;
+    }
 
     Frame_Header = __Frame_Header;
 }

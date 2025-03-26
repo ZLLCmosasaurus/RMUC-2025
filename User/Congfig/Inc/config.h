@@ -20,9 +20,12 @@
 
 #define STEERING_WHEEL
 #define POWER_CONTROL 1 //启用功率控制
+//#define BIG_P_ALLOCATE
+//#define BUFFER_LOOP
 
 /* 兵种/底盘类型/舵小板选择 ------------------------------------------------------------*/
-#define AGV         //舵轮底盘
+//#define AGV           //舵轮底盘
+#define OMNI_WHEEL //全向轮底盘
 //#define INFANTRY    //步兵
 //#define HERO
 #define SENTRY //哨兵

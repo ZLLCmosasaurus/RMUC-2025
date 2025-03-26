@@ -119,6 +119,7 @@ public:
     inline float Get_Default_Driver_Omega();
     inline float Get_Friction_Omega();
     inline float Get_Friction_Omega_Threshold();
+    inline uint16_t Get_Heat();
     
 
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
@@ -130,6 +131,7 @@ public:
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
     inline void Set_Booster_Type(Enum_Booster_Type __Booster_Type);
+    inline void Set_Heat(uint16_t __Heat);
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
@@ -138,15 +140,17 @@ protected:
     //初始化相关常量
 
     //常量
+    uint16_t Heat_Max = 400;
 
     //拨弹盘堵转扭矩阈值, 超出被认为卡弹
-    uint16_t Driver_Torque_Threshold = 5500;
+    uint16_t Driver_Torque_Threshold = 8500;
     //摩擦轮单次判定发弹阈值, 超出被认为发射子弹
     uint16_t Friction_Torque_Threshold = 3300;
     //摩擦轮速度判定发弹阈值, 超出则说明已经开机
     float Friction_Omega_Threshold = 600;
 
     //内部变量
+    uint16_t Heat;
 
     //读变量
 
@@ -158,12 +162,11 @@ protected:
     //发射机构状态
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
-    Enum_Booster_Type Booster_Type ;
+    Enum_Booster_Type Booster_Type;
     //摩擦轮角速度
-    float Friction_Omega = 800.0f;
-		
+    float Friction_Omega = 700.0f;
     //拨弹盘实际的目标速度, 一圈八发子弹
-    float Driver_Omega = -2.0f * PI;
+    float Driver_Omega = -2.0f * PI * 2;
     //拨弹轮目标绝对角度 加圈数
     float Driver_Angle = 0.0f;
     //读写变量
@@ -180,6 +183,10 @@ protected:
 Enum_Booster_Type Class_Booster::Get_Booster_Type()
 {
     return (Booster_Type);
+}
+uint16_t Class_Booster::Get_Heat()
+{
+    return (Heat);
 }
 /**
  * @brief 获取拨弹盘默认速度, 一圈八发子弹, 此速度下与冷却均衡
@@ -210,7 +217,10 @@ float Class_Booster::Get_Friction_Omega_Threshold()
 {
     return (Friction_Omega_Threshold);
 }
-
+void Class_Booster::Set_Heat(uint16_t __Heat)
+{
+    Heat = __Heat;
+}
 /**
  * @brief 设定发射机构状态
  *

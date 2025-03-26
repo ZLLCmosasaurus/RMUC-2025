@@ -22,7 +22,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "tsk_config_and_callback.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -266,6 +266,13 @@ static int8_t CDC_Receive_HS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 11 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceHS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceHS);
+
+  memcpy(MiniPC_USB_Manage_Object.Rx_Buffer, Buf, *Len);
+  MiniPC_USB_Manage_Object.Rx_Buffer_Length = *Len;
+  MiniPC_USB_Manage_Object.Callback_Function(Buf, *Len);
+
+  //memcpy(USB_Rx_Buffer, Buf, *Len);
+
   return (USBD_OK);
   /* USER CODE END 11 */
 }

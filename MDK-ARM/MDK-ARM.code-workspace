@@ -12,7 +12,9 @@
             "cstddef": "cpp",
             "cstdint": "cpp",
             "initializer_list": "cpp",
-            "limits": "cpp"
+            "limits": "cpp",
+            "tsk_config_and_callback.h": "c",
+            "stm32h7xx_hal.h": "c"
         }
     },
     "extensions": {}

@@ -5,7 +5,7 @@
 **********************************************************************
 
 File          : D:/Embedded system/Project/RM/M57_New/test.jdebug
-Created       : 16 Jan 2025 14:31
+Created       : 26 Feb 2025 14:59
 Ozone Version : V3.24
 */
 
@@ -29,7 +29,7 @@ void OnProjectLoad (void) {
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M7F.svd");
-  Project.AddSvdFile ("$(InstallDir)/Config/Peripherals/STM32F407IG.svd");
+  Project.AddSvdFile ("D:/Embedded system/Project/RM/M57_New/STM32H723.svd");
   //
   // User settings
   //

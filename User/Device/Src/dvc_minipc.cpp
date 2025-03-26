@@ -45,7 +45,7 @@ void Class_MiniPC::Data_Process()
     memcpy(&Data_NUC_To_MCU, USB_Manage_Object->Rx_Buffer, sizeof(Struct_MiniPC_Rx_Data));
     Auto_aim(float(Data_NUC_To_MCU.Gimbal_Target_X_A / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Y_A / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Z_A / 100.f), &Rx_Angle_Yaw_A, &Rx_Angle_Pitch_A,&Distance_A);
     Auto_aim(float(Data_NUC_To_MCU.Gimbal_Target_X_B / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Y_B / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Z_B / 100.f), &Rx_Angle_Yaw_B, &Rx_Angle_Pitch_B, &Distance_B);
-
+    Rx_Angle_Yaw_Main = calc_yaw(float(Data_NUC_To_MCU.Gimbal_Target_X_A / 100.f), float(Data_NUC_To_MCU.Gimbal_Target_Y_A / 100.f) + 13.5f, float(Data_NUC_To_MCU.Gimbal_Target_Z_A / 100.f));
 }
 
 /**
@@ -54,25 +54,24 @@ void Class_MiniPC::Data_Process()
  */
 extern Referee_Rx_A_t CAN3_Chassis_Rx_Data_A;
 extern Referee_Rx_B_t CAN3_Chassis_Rx_Data_B;
-
-
+extern Referee_Rx_C_t CAN3_Chassis_Rx_Data_C;
 void Class_MiniPC::Output()
 {
 	Data_MCU_To_NUC.header                         = Frame_Header;
-  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_A       = int16_t((- IMU->Get_Angle_Pitch() + Now_Angle_Pitch_A) * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_A       = int16_t((Now_Angle_Pitch_A) * 100);
   Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_A         = int16_t( Now_Angle_Yaw_A * 100);
-  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_B       = int16_t((- IMU->Get_Angle_Pitch() + Now_Angle_Pitch_B) * 100);
+  Data_MCU_To_NUC.Gimbal_Now_Pitch_Angle_B       = int16_t((Now_Angle_Pitch_B) * 100);
   Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_B         = int16_t( Now_Angle_Yaw_B * 100);
   Data_MCU_To_NUC.Gimbal_Now_Yaw_Angle_Main      = int16_t( IMU->Get_Angle_Yaw() * 100);
   Data_MCU_To_NUC.Chassis_Now_yaw_Angle          = int16_t((IMU->Get_Angle_Yaw() + Now_Angle_Relative) * 100);
-  // Data_MCU_To_NUC.Game_process                   = can_rx1.game_process;
+  Data_MCU_To_NUC.Game_process                   = CAN3_Chassis_Rx_Data_A.game_process;
   Data_MCU_To_NUC.Self_blood                     = CAN3_Chassis_Rx_Data_A.self_blood;
-  // Data_MCU_To_NUC.Self_Outpost_HP                = can_rx1.self_outpost_HP;
-  // Data_MCU_To_NUC.Remaining_Time                 = can_rx1.time;
-  // Data_MCU_To_NUC.Oppo_Outpost_HP                = can_rx2.oppo_outpost_HP;
-  // Data_MCU_To_NUC.Self_Base_HP                   = can_rx2.self_base_HP;   
-  // Data_MCU_To_NUC.Color_Invincible_State         = ( can_rx2.color<<7 ) | can_rx2.invincible_state;
-  Data_MCU_To_NUC.Auto_Aim_Limit                 = Get_Auto_Limit_Status_A() << 1 | Get_Auto_Limit_Status_B();
+  Data_MCU_To_NUC.Self_Outpost_HP                = CAN3_Chassis_Rx_Data_A.self_outpost_HP;
+  Data_MCU_To_NUC.Remaining_Time                 = CAN3_Chassis_Rx_Data_A.remaining_time;
+  Data_MCU_To_NUC.Oppo_Outpost_HP                = CAN3_Chassis_Rx_Data_B.oppo_outpost_HP;
+  Data_MCU_To_NUC.Self_Base_HP                   = CAN3_Chassis_Rx_Data_B.self_base_HP;   
+  Data_MCU_To_NUC.Color_Invincible_State         = CAN3_Chassis_Rx_Data_A.color_invincible_state << 7 | CAN3_Chassis_Rx_Data_A.color_invincible_state << 5;
+  Data_MCU_To_NUC.Projectile_allowance           = CAN3_Chassis_Rx_Data_B.projectile_allowance_17mm;
   Data_MCU_To_NUC.crc16                          = 0xffff;
 
 	memcpy(USB_Manage_Object->Tx_Buffer, &Data_MCU_To_NUC, sizeof(Struct_MiniPC_Tx_Data));

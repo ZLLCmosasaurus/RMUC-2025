@@ -53,6 +53,9 @@ struct Struct_USB_Manage_Object
 	  USB_Call_Back Callback_Function;
 };
 
+// extern uint8_t USB_Tx_Buffer[8];
+// extern uint8_t USB_Rx_Buffer[64];
+
 /* Exported variables --------------------------------------------------------*/
 
 extern struct Struct_USB_Manage_Object MiniPC_USB_Manage_Object;

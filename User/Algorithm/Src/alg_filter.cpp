@@ -143,4 +143,38 @@ void Class_Filter_Kalman::Recv_Adjust_PeriodElapsedCallback()
     Error_Estimate = (1.0f - Kalman_Gain) * Error_Estimate;
 }
 
+// 初始化滤波器
+void init_filter(SpikeFilter* filter, int window_size) {
+    filter->window_size = window_size;
+    filter->current_index = 0;
+    filter->buffer = (float*)malloc(window_size * sizeof(float));
+    memset(filter->buffer, 0, window_size * sizeof(float));
+}
+
+// 快速排序比较函数（适配float）
+int compare(const void* a, const void* b) {
+    float diff = *(const float*)a - *(const float*)b;
+    return (diff > 0.0f) ? 1 : ((diff < 0.0f) ? -1 : 0);
+}
+
+// 滤波处理核心
+float process_sample(SpikeFilter* filter, float input) {
+    // 更新环形缓冲区
+    filter->buffer[filter->current_index] = input;
+    filter->current_index = (filter->current_index + 1) % filter->window_size;
+
+    // 创建临时排序数组
+    float sort_array[WINDOW_SIZE];
+    memcpy(sort_array, filter->buffer, filter->window_size * sizeof(float));
+    
+    // 快速排序取中值
+    qsort(sort_array, filter->window_size, sizeof(float), compare);
+    
+    return sort_array[filter->window_size / 2];
+}
+
+// 资源释放
+void free_filter(SpikeFilter* filter) {
+    free(filter->buffer);
+}
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

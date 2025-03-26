@@ -32,6 +32,37 @@ enum Enum_Supercap_Status
 };
 
 /**
+ * @brief 控制集状态
+ *
+ */
+enum Enum_Control_Status : uint8_t
+{
+    Control_Status_NORMAL = 1,
+    Control_Status_STANDBY,
+    Control_Status_LISTEN,
+    Control_Status_OVERLOAD
+};
+
+/**
+ * @brief 报警状态
+ *
+ */
+enum Enum_Warning_Status : uint8_t
+{
+    Warning_Status_OFF = 0,
+    Warning_Status_ON,
+};
+/**
+ * @brief 超电工作状态
+ *
+ */
+enum Enum_Working_Status : uint8_t
+{
+    Working_Status_ON = 0,
+    Working_Status_OFF,
+};
+
+/**
  * @brief 超级电容源数据
  *
  */
@@ -48,8 +79,22 @@ struct Struct_Supercap_CAN_Data
 struct Struct_Supercap_Tx_Data
 {
     float Limit_Power;
-    float Now_Power;
-    uint16_t Chassis_Power;
+    Enum_Working_Status Working_Status;
+}__attribute__((packed));
+
+struct Supercap_Rx_Data_A
+{
+    int16_t Chassis_Power;
+    uint16_t Buffer_Power;
+    uint16_t Cap_Proportion;
+    Enum_Control_Status Control_Status;
+    uint8_t Consuming_Power_Now;
+}__attribute__((packed));
+
+struct Supercap_Rx_Data_B
+{
+    Enum_Warning_Status Warning_Status;
+    float Overload_Power;
 }__attribute__((packed));
 
 /**
@@ -65,9 +110,14 @@ public:
     inline Enum_Supercap_Status Get_Supercap_Status();
     inline float Get_Stored_Energy();
     inline float Get_Now_Voltage();
+    inline int16_t Get_Chassis_Power();
+    inline Enum_Control_Status Get_Control_Status();
+    inline Enum_Warning_Status Get_Warning_Status();
+    
 
     inline void Set_Limit_Power(float __Limit_Power);
     inline void Set_Now_Power(float __Now_Power);
+    inline void Set_Working_Status(Enum_Working_Status __Working_Status);
 
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -101,7 +151,8 @@ protected:
     uint32_t Pre_Flag = 0;
 
     //读变量
-
+    Supercap_Rx_Data_A CAN_Supercap_Rx_Data_Normal;
+    Supercap_Rx_Data_B CAN_Supercap_Rx_Data_Error;
     //超级电容状态
     Enum_Supercap_Status Supercap_Status = Supercap_Status_DISABLE;
     //超级电容对外接口信息
@@ -139,6 +190,24 @@ Enum_Supercap_Status Class_Supercap::Get_Supercap_Status()
 {
     return(Supercap_Status);
 }
+/**
+ * @brief 获取控制级状态
+ * 
+ * @return Enum_Supercap_Status 控制级状态
+ */
+Enum_Control_Status Class_Supercap::Get_Control_Status()
+{
+    return(CAN_Supercap_Rx_Data_Normal.Control_Status);
+}
+/**
+ * @brief 获取报错状态
+ * 
+ * @return Enum_Supercap_Status 报错状态
+ */
+Enum_Warning_Status Class_Supercap::Get_Warning_Status()
+{
+    return(CAN_Supercap_Rx_Data_Error.Warning_Status);
+}
 
 /**
  * @brief 获取存储的能量
@@ -148,6 +217,11 @@ Enum_Supercap_Status Class_Supercap::Get_Supercap_Status()
 float Class_Supercap::Get_Stored_Energy()
 {
     return (Supercap_Data.Stored_Energy);
+}
+
+int16_t Class_Supercap::Get_Chassis_Power()
+{
+    return (CAN_Supercap_Rx_Data_Normal.Chassis_Power);
 }
 
 // /**
@@ -171,16 +245,6 @@ float Class_Supercap::Get_Now_Voltage()
 }
 
 /**
- * @brief 设置底盘当前的功率
- *
- * @return float 输入的功率
- */
-void Class_Supercap::Set_Now_Power(float __Now_Power)
-{
-    Supercap_Tx_Data.Now_Power = __Now_Power;
-}
-
-/**
  * @brief 设定绝对最大限制功率
  *
  * @param __Limit_Power 绝对最大限制功率
@@ -188,6 +252,10 @@ void Class_Supercap::Set_Now_Power(float __Now_Power)
 void Class_Supercap::Set_Limit_Power(float __Limit_Power)
 {
     Supercap_Tx_Data.Limit_Power = __Limit_Power;
+}
+void Class_Supercap::Set_Working_Status(Enum_Working_Status __Working_Status)
+{
+    Supercap_Tx_Data.Working_Status = __Working_Status;
 }
 
 #endif

@@ -50,42 +50,6 @@
         "folders": []
       },
       {
-        "name": "Device",
-        "files": [
-          {
-            "path": "../User/Device/Src/dvc_boardc_bmi088.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_djimotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dmmotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dr16.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dwt.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_imu.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_lkmotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_minipc.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_referee.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_supercap.cpp"
-          }
-        ],
-        "folders": []
-      },
-      {
         "name": "Driver",
         "files": [
           {
@@ -372,6 +336,42 @@
         "files": [
           {
             "path": "../Src/arm_cortexM7l_math.lib"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Device",
+        "files": [
+          {
+            "path": "../User/Device/Src/dvc_boardc_bmi088.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_djimotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dmmotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dr16.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dwt.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_imu.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_lkmotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_minipc.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_referee.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_supercap.cpp"
           }
         ],
         "folders": []

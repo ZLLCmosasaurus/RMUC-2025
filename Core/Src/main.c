@@ -62,7 +62,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t tmp_test = 0;
+uint8_t tmp_test[8];
 /* USER CODE END 0 */
 
 /**
@@ -109,14 +109,17 @@ int main(void)
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   Task_Init();
+	for(int i =0;i<8;i++){
+		tmp_test[i] = 1;
+	}
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    tmp_test++;
     Task_Loop();
+		HAL_UART_Transmit(&huart1,tmp_test, 8, 0xffff);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -146,8 +149,9 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 2;

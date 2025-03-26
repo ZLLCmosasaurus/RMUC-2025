@@ -24,23 +24,23 @@ class Class_Chariot;
 
 //设定当前车车
 
-#define HERO_1            1
-#define ENGINEER_2        2
-#define INFANTRY_3        3
-#define INFANTRY_4        4
-#define INFANTRY_5        5
-#define AERIAL_6          6
+// #define HERO_1            1
+// #define ENGINEER_2        2
+// #define INFANTRY_3        3
+// #define INFANTRY_4        4
+// #define INFANTRY_5        5
+// #define AERIAL_6          6
 #define SENTRY_7          7
-#define DART_8            8
-#define RADAR_9           9
-#define BASE_10           10
-#define OUTPOST_11        11
+// #define DART_8            8
+// #define RADAR_9           9
+// #define BASE_10           10
+// #define OUTPOST_11        11
 
 #define RED 0
 #define BLUE 100
 
 //只需修改这里 UI发送者ID
-#define ROBOT_ID    (INFANTRY_3 + BLUE)
+#define ROBOT_ID    (SENTRY_7 + BLUE)
 
 const unsigned char CRC8_INIT = 0xff;
 const unsigned char CRC8_TAB[256] =

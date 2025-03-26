@@ -41,6 +41,16 @@ enum Enum_Motor_Yaw_Type :uint8_t
     Yaw_B,
 };
 
+struct IMU_Data
+{
+    float Pitch;
+    float Roll;
+    float Yaw;
+    float Omega_X;
+    float Omega_Y;
+    float Omega_Z;
+};
+
 /**
  * @brief Specialized, yaw轴电机类
  *
@@ -265,12 +275,17 @@ public:
     void MiniPC_Update();
     void PID_Update();
 
+    IMU_Data IMU_Data_A;
+    IMU_Data IMU_Data_B;
+
+    
+
 protected:
     //初始化相关常量
     float Gimbal_Head_Angle;
     //常量
-    float CRUISE_SPEED_YAW = 45.f;
-    float CRUISE_SPEED_PITCH = 0.5f;
+    float CRUISE_SPEED_YAW = 100.f;
+    float CRUISE_SPEED_PITCH = 70.f;
     // yaw轴最小值
     float Min_Yaw_Angle = - 180.0f;
     float Min_Yaw_Angle_A = - 180.0f;
@@ -295,6 +310,9 @@ protected:
     float True_Angle_Pitch_A = 0.0f;
     float True_Angle_Pitch_B = 0.0f;
     float True_Angle_Yaw_Main = 0.0f;
+
+    uint16_t A_Cruise_Flag = 0,B_Cruise_Flag = 0;
+    uint16_t A_Invert_Flag = 0,B_Invert_Flag = 0;
 
     //读变量
 

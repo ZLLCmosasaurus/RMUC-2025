@@ -19,8 +19,8 @@ void Class_IMU::Init()
     HAL_Delay(100);
 
     // 初始化IST8310传感器
-//    IMU_IST8310.init(&hi2c3);
-//    HAL_Delay(100);
+    //  IMU_IST8310.init(&hi2c3);
+    //  HAL_Delay(100);
 
     // 初始化MahonyAHRS算法，并传入初始四元数
     IMU_MahonyAHRS.init(INS_Quat);
@@ -63,7 +63,7 @@ void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
     // 机体系基向量转换到导航坐标系，本例选取惯性系为导航系
     BodyFrameToEarthFrame(X_b, INS.xn, INS.q);
     BodyFrameToEarthFrame(Y_b, INS.yn, INS.q);
-    BodyFrameToEarthFrame(Z_b, INS.zn, INS.q); 
+    BodyFrameToEarthFrame(Z_b, INS.zn, INS.q);
 
     // 将重力从导航坐标系n转换到机体系b,随后根据加速度计数据计算运动加速度
     
@@ -112,7 +112,8 @@ void Class_IMU::Get_Angle()
 {
     cnt ++;
     // 获取最终数据
-    INS.Yaw = QEKF_INS.Yaw - accel * cnt;
+    //INS.Yaw = QEKF_INS.Yaw - accel * cnt;
+    INS.Yaw = QEKF_INS.Yaw;
     INS.Pitch = QEKF_INS.Pitch;
     INS.Roll = QEKF_INS.Roll;
     INS.YawTotalAngle = QEKF_INS.YawTotalAngle;

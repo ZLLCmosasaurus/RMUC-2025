@@ -25,6 +25,18 @@
 
 /* Exported types ------------------------------------------------------------*/
 
+#define WINDOW_SIZE 5  // 建议奇数窗口（3/5/7）
+
+typedef struct {
+    float* buffer;       // 单精度数据缓存
+    int window_size;     // 滤波窗口尺寸
+    int current_index;   // 环形缓冲区指针
+} SpikeFilter;
+
+void free_filter(SpikeFilter* filter);
+void init_filter(SpikeFilter* filter, int window_size);
+int compare(const void* a, const void* b);
+float process_sample(SpikeFilter* filter, float input);
 /**
  * @brief 滤波器类型
  *
