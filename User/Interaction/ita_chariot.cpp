@@ -82,7 +82,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 #ifdef CHASSIS
 // 控制类型字节
 uint8_t control_type;
-float offset_k = -0.06f;
+float offset_k = -0.0f;
 // 底盘和云台夹角（弧度制）
 float derta_angle;
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
@@ -417,7 +417,7 @@ void Class_Chariot::Control_Gimbal()
     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
         // 长按右键  开启自瞄
-        if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED)
+        if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); // 开启自瞄默认为四点

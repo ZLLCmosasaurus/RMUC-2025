@@ -256,12 +256,16 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
  * @param Length 长度
  */
 #ifdef GIMBAL
+uint8_t first_flag = 0;
 void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.DR16.Image_UART_RxCpltCallback(Buffer);
-
-    // 底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
+    if (first_flag == 1)
+    {
+        chariot.DR16.Image_UART_RxCpltCallback(Buffer);
+        // 底盘 云台 发射机构 的控制策略
+        chariot.TIM_Control_Callback();
+    }
+    first_flag = 1;
 }
 #endif
 
@@ -342,9 +346,9 @@ void Task100us_TIM2_Callback()
 #ifdef CHASSIS
     static uint16_t Referee_Sand_Cnt = 0;
     // //暂无云台tim4任务
-    if (Referee_Sand_Cnt % 50==1)
+    if (Referee_Sand_Cnt % 50 == 1)
     {
-       // Task_Loop();
+        // Task_Loop();
         Referee_Sand_Cnt = 0;
     }
 
@@ -354,10 +358,10 @@ void Task100us_TIM2_Callback()
     // 单给IMU消息开的定时器 ims
     chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 #endif
-	
-//	   static float start_time = DWT_GetTimeline_us();
-//        Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
-//	        delta_time = DWT_GetTimeline_us() - start_time;
+
+    //	   static float start_time = DWT_GetTimeline_us();
+    //        Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+    //	        delta_time = DWT_GetTimeline_us() - start_time;
 }
 
 /**
@@ -366,8 +370,6 @@ void Task100us_TIM2_Callback()
  */
 void Task1ms_TIM5_Callback()
 {
-
-  
 
     init_finished++;
     if (init_finished > 2000 && start_flag == 0)
@@ -386,10 +388,10 @@ void Task1ms_TIM5_Callback()
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
-	  
+
         /****************************** 驱动层回调函数 1ms *****************************************/
         // 统一打包发送
-         TIM_CAN_PeriodElapsedCallback();
+        TIM_CAN_PeriodElapsedCallback();
 
         // TIM_UART_PeriodElapsedCallback();
 
@@ -410,8 +412,6 @@ void Task1ms_TIM5_Callback()
             mod5 = 0;
         }
     }
-
-
 }
 
 /**
@@ -510,14 +510,14 @@ extern "C" void Task_Loop()
         JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                 // 摩擦轮
         JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                              // 自瞄是否离线
         JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                     // 自瞄是否瞄准
-       // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
+                                                                                            // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
         JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();     // 超级电容电压
         JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); // 底盘控制模式
         JudgeReceiveData.Supercap_State = chariot.Sprint_Status;
         if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
             Init_Cnt = 10;
         GraphicSendtask();
-//        DWT_Delay(0.1);
+        //        DWT_Delay(0.1);
     }
 
 #endif
