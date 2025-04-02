@@ -79,7 +79,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     // 判断死区
     if (abs_error < Dead_Zone)
     {
-        Target = Now;
+        //Target = Now;
         error = 0.0f;
         abs_error = 0.0f;
     }

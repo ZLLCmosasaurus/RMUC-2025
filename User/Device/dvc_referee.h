@@ -17,7 +17,7 @@
 #include "drv_uart.h"
 #include "limits.h"
 #include "string.h"
-
+#include "config.h""
 /* Exported macros -----------------------------------------------------------*/
 
 class Class_Chariot;
@@ -1199,11 +1199,17 @@ public:
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
 
+
+    //裁判系统状态
+    Enum_Referee_Status Referee_Status = Referee_Status_DISABLE;
+		
     #ifdef GIMBAL
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
     inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
+    inline void Set_Booster_Speed(float __booster_speed);
+		
     #endif
 
     void Referee_UI_Draw_Line(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
@@ -1246,8 +1252,6 @@ protected:
 
     //读变量
 
-    //裁判系统状态
-    Enum_Referee_Status Referee_Status = Referee_Status_DISABLE;
     //比赛状态
     Struct_Referee_Rx_Data_Game_Status Game_Status;
     //比赛结果
@@ -2243,6 +2247,11 @@ void Class_Referee::Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD
 void Class_Referee::Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max)
 {
     this->Robot_Status.Shooter_Barrel_Heat_Limit = __Booster_17mm_1_Heat_Max;
+}
+
+void Class_Referee::Set_Booster_Speed(float __booster_speed)
+{
+    Robot_Booster.Speed=__booster_speed;
 }
 #endif
 

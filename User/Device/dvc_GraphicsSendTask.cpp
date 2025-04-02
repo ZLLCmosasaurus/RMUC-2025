@@ -393,11 +393,8 @@ void CapDraw(float CapVolt, uint8_t Init_Flag)
 	}
 	else
 	{
-		if (CapVolt > 20.0f)
-		{
-			CapVolt = 20.0f;
-		}
-		Length = CapVolt / 20.0f * (0.3 * SCREEN_LENGTH);
+
+		Length = CapVolt / 100.0f * (0.3 * SCREEN_LENGTH);
 		P_graphic_data = Line_Draw(0, Op_Change, 0.35 * SCREEN_LENGTH, 0.125 * SCREEN_WIDTH, 0.35 * SCREEN_LENGTH + Length, 0.125 * SCREEN_WIDTH, 27, Green, CapName2);
 		memcpy(data_pack, (uint8_t *)P_graphic_data, DRAWING_PACK);
 		Send_UIPack(Drawing_Graphic1_ID, JudgeReceiveData.robot_id, JudgeReceiveData.robot_id + 0x100, data_pack, DRAWING_PACK);
