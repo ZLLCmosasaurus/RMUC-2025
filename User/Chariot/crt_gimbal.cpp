@@ -403,6 +403,7 @@ void Class_Gimbal::Output()
         {
             Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
             Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
+					
         }
 
         // 限制角度范围 处理yaw轴180度问题

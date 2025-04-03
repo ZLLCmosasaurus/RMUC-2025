@@ -67,7 +67,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Motor_Wheel[0]
         .PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
     Motor_Wheel[1].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
-    Motor_Wheel[2].PID_Omega.Init(2200.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
+    Motor_Wheel[2].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
     Motor_Wheel[3].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
 
     // 轮向电机ID初始化
@@ -183,7 +183,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
     Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
     
-    __Sprint_Status=Sprint_Status_ENABLE;
+   // __Sprint_Status=Sprint_Status_ENABLE;
     if (__Sprint_Status == Sprint_Status_ENABLE)
     {
         Power_Management.Max_Power = Referee->Get_Chassis_Power_Max() + Supercap.Get_Buffer_Power();

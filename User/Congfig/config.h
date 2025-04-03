@@ -16,14 +16,17 @@
 
 /* Exported macros -----------------------------------------------------------*/
 
-#define CHASSIS
-//  #define GIMBAL
+//#define CHASSIS
+#define GIMBAL
+
+#define BULLET_SPEED_PID
+
 
 #ifdef CHASSIS
 
 #define POWER_LIMIT
 #ifdef POWER_LIMIT
-#define POWER_LIMIT_BUFFER_LOOP
+#define POWER_LIMI//T_BUFFER_LOOP
 #define BIG_P_ALLOCATE
 //        #define POWER_LIMIT_NEW_CONTROL
 //        //#define POWER_LIMIT_OLD_CONTROL

@@ -101,7 +101,7 @@ public:
 
     // 裁判系统
     Class_Referee *Referee;
-
+	
     // 拨弹盘电机
     Class_DJI_Motor_C610 Motor_Driver;
 
@@ -110,6 +110,7 @@ public:
     // 摩擦轮电机右
     Class_DJI_Motor_C620 Motor_Friction_Right;
 
+    Class_PID Bullet_Speed;
     void Init();
 
     inline float Get_Default_Driver_Omega();
@@ -154,8 +155,8 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     // 摩擦轮角速度
-    float Friction_Omega = 660.0f;
-
+    float Friction_Omega = 700.0f;
+    float Target_Bullet_Speed=23.5f;
     // 拨弹盘实际的目标速度, 一圈八发子弹
     float Driver_Omega = 2.0f * PI;
     // 拨弹轮目标绝对角度 加圈数

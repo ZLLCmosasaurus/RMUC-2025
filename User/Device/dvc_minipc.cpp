@@ -39,7 +39,7 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
     Pack_Tx.windmill_type = Windmill_Type_Small;
     Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
-float camera_distance=0.16;
+float camera_distance=0.036;
 /**
  * @brief 数据处理过程
  *
@@ -240,9 +240,17 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
   float pitch = atan2f(z, sqrtf(x * x + y * y));
   // 使用重力加速度模型迭代更新俯仰角
   for ( size_t i = 0; i < 20; i++) {
-    float v_x = bullet_v * cosf(pitch);
-    float v_y = bullet_v * sinf(pitch);
-    // 计算子弹飞行时间
+		float v_x;
+		float v_y;
+		if (Referee->Get_Referee_Status() == Referee_Status_ENABLE&&Referee->Get_Shoot_Speed()>15)
+        {
+     v_x = Referee->Get_Shoot_Speed() * cosf(pitch);
+     v_y = Referee->Get_Shoot_Speed() * sinf(pitch);
+				} 
+else{
+			v_x = bullet_v * cosf(pitch);
+			v_y = bullet_v * sinf(pitch);
+}				// 计算子弹飞行时间
     float t = sqrtf(x * x + y * y) / v_x;
     float h = v_y * t - 0.5 * g * t * t;
     float dz = z - h;
@@ -268,8 +276,10 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
  * @param z 向量的z分量
  * @return 计算得到的目标角（以角度制表示）
  */
+
 void Class_MiniPC::Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance)
 {
+	
     *yaw = calc_yaw(x, y, z);
     *pitch = calc_pitch(x, y, z);
     *distance = calc_distance(x, y, z);
