@@ -680,7 +680,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 void Class_Chariot::Judge_DR16_Control_Type()
 {
     if (DR16.Get_Left_X() != 0 ||
-        // DR16.Get_Left_Y() != 0 ||
+         DR16.Get_Left_Y() != 0 ||
         DR16.Get_Right_X() != 0 ||
         DR16.Get_Right_Y() != 0)
     {

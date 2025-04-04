@@ -91,6 +91,7 @@ enum Enum_DR16_Control_Type
 {
     DR16_Control_Type_REMOTE = 0,
     DR16_Control_Type_KEYBOARD,
+	  DR16_Control_Type_NONE,
 };
 
 /**
@@ -268,14 +269,14 @@ protected:
     Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
 
     // 底盘 云台 发射机构 前一帧控制类型
-    Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+    Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_FLLOW;
     Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
     Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
 
     // 单发连发标志位
     uint8_t Shoot_Flag = 0;
     // DR16控制数据来源
-    Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
+    Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
     // 内部函数
 
     void Judge_DR16_Control_Type();
