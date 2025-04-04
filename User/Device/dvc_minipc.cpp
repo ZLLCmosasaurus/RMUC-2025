@@ -57,7 +57,6 @@ void Class_MiniPC::Data_Process()
     Rx_Angle_Pitch = -tmp_pitch;
     Rx_Angle_Yaw = tmp_yaw;
     Math_Constrain(&Rx_Angle_Pitch,-40.0f,30.0f);
-    Math_Constrain(&Rx_Angle_Yaw,-70.0f,70.0f);             //防止绞线，开了底盘记得删
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
