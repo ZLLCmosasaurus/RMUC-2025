@@ -424,13 +424,13 @@ void Class_Gimbal::Output()
         Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
 
         //设置目标角度 遥控器滤波
-        if(First_Flag){
-            First_Flag = 0;
-        }
-        else{
-            Target_Yaw_Angle = 0.4*Pre_Target_Yaw_Angle + 0.6*Target_Yaw_Angle;    
-        }
-        Pre_Target_Yaw_Angle = Target_Yaw_Angle;
+        // if(First_Flag){
+        //     First_Flag = 0;
+        // }
+        // else{
+        //     Target_Yaw_Angle = 0.4*Pre_Target_Yaw_Angle + 0.6*Target_Yaw_Angle;    
+        // }
+        // Pre_Target_Yaw_Angle = Target_Yaw_Angle;
 
         Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
         Motor_Pitch_LK6010.Set_Target_Angle(Target_Pitch_Angle);

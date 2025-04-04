@@ -174,6 +174,26 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     }
 
     #ifdef POWER_LIMIT
+
+    Supercap.Set_Now_Power(Referee->Get_Chassis_Power());
+    if(Referee->Get_Referee_Status()==Referee_Status_DISABLE)
+        Supercap.Set_Limit_Power(45.0f);
+    else
+    {
+        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+    }
+
+    Power_Limit.Set_Motor(Motor_Wheel);   //添加四个电机的控制电流和当前转速
+    Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
+
+    if(Supercap.Get_Supercap_Status()==Supercap_Status_DISABLE)
+        Power_Limit.Set_Supercap_Enegry(0.0f);
+    else
+        Power_Limit.Set_Supercap_Enegry(Supercap.Get_Stored_Energy());
+    
+    Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
+
+    #elif defined (POWER_LIMIT) 
     Power_Management.Max_Power = Referee->Get_Chassis_Power_Max();
     Power_Management.Actual_Power = Referee->Get_Chassis_Power();
     Power_Management.Total_error = 0.0f;
