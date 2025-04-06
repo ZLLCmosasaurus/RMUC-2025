@@ -91,6 +91,7 @@ enum Enum_DR16_Control_Type
 {
     DR16_Control_Type_REMOTE = 0,
     DR16_Control_Type_KEYBOARD,
+    DR16_Control_Type_NONE,
 };
 
 /**
@@ -205,87 +206,87 @@ protected:
     // 绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
 
-#ifdef CHASSIS
-    // 底盘标定参考正方向角度(数据来源yaw电机)S
-    float Reference_Angle = 4.74613667;
-    // 小陀螺云台坐标系稳定偏转角度 用于矫正
-    float Offset_Angle = 0.0f * PI / 180.0; // 7.5°
-    // 底盘转换后的角度（数据来源yaw电机）
-    float Chassis_Angle;
-    // 写变量
-    uint32_t Gimbal_Alive_Flag = 0;
-    uint32_t Pre_Gimbal_Alive_Flag = 0;
+    #ifdef CHASSIS
+        //底盘标定参考正方向角度(数据来源yaw电机)
+        float Reference_Angle = 0.520019531f;
+        //小陀螺云台坐标系稳定偏转角度 用于矫正
+        float Offset_Angle = 0.0f;  //7.5°
+        //底盘转换后的角度（数据来源yaw电机）
+        float Chassis_Angle;
+        //写变量
+        uint32_t Gimbal_Alive_Flag = 0;
+        uint32_t Pre_Gimbal_Alive_Flag = 0;
 
-    Enum_Gimbal_Status Gimbal_Status = Gimbal_Status_DISABLE;
-#endif
+        Enum_Gimbal_Status Gimbal_Status =  Gimbal_Status_DISABLE;
+    #endif
 
-#ifdef GIMBAL
-    // 遥控器拨动的死区, 0~1
-    float DR16_Dead_Zone;
-    // 常量
-    // 键鼠模式按住shift 最大速度缩放系数
-    float DR16_Mouse_Chassis_Shift = 2.0f;
-    // 舵机占空比 默认关闭弹舱
-    uint16_t Compare = 400;
-    // DR16底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-    float DR16_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
-    // DR16底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-    float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
+    #ifdef GIMBAL
+        //遥控器拨动的死区, 0~1
+        float DR16_Dead_Zone;
+        //常量
+        //键鼠模式按住shift 最大速度缩放系数
+        float DR16_Mouse_Chassis_Shift = 2.0f;
+        //舵机占空比 默认关闭弹舱
+        uint16_t Compare =400;
+        //DR16底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
+        float DR16_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
+        //DR16底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
+        float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
 
-    // DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-    float DR16_Yaw_Angle_Resolution = 0.025f * PI * 57.29577951308232;
-    // DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-    float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
+        //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
+        float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
+        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
+        float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
 
-    // DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-    float DR16_Yaw_Resolution = 0.003f * PI;
-    // DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-    float DR16_Pitch_Resolution = 0.003f * PI;
+        //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
+        float DR16_Yaw_Resolution = 0.003f * PI;
+        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
+        float DR16_Pitch_Resolution = 0.003f * PI;
 
-    // DR16鼠标云台yaw灵敏度系数, 不同鼠标不同参数
-    float DR16_Mouse_Yaw_Angle_Resolution = 57.8 * 4.0f;
-    // DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
-    float DR16_Mouse_Pitch_Angle_Resolution = 57.8f * 4.0f;
+        //DR16鼠标云台yaw灵敏度系数, 不同鼠标不同参数
+        float DR16_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
+        //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
+        float DR16_Mouse_Pitch_Angle_Resolution = 57.8f;
+        
+        //迷你主机云台pitch自瞄控制系数
+        float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
+        //迷你主机云台pitch自瞄控制系数
+        float MiniPC_Autoaiming_Pitch_Angle_Resolution = 0.003f;
 
-    // 迷你主机云台pitch自瞄控制系数
-    float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
-    // 迷你主机云台pitch自瞄控制系数
-    float MiniPC_Autoaiming_Pitch_Angle_Resolution = 0.003f;
+        //内部变量
+        //遥控器离线计数
+        uint16_t DR16_Offline_Cnt = 0;
+        //拨盘发射标志位
+        uint16_t Shoot_Cnt = 0;
+        //读变量
+        float True_Mouse_X;
+        float True_Mouse_Y;
+        float True_Mouse_Z;
+        //写变量
+        uint32_t Chassis_Alive_Flag = 0;
+        uint32_t Pre_Chassis_Alive_Flag = 0;
+        //读写变量
+        Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
 
-    // 内部变量
-    // 遥控器离线计数
-    uint16_t DR16_Offline_Cnt = 0;
-    // 拨盘发射标志位
-    uint16_t Shoot_Cnt = 0;
-    // 读变量
-    float True_Mouse_X;
-    float True_Mouse_Y;
-    float True_Mouse_Z;
-    // 写变量
-    uint32_t Chassis_Alive_Flag = 0;
-    uint32_t Pre_Chassis_Alive_Flag = 0;
-    // 读写变量
-    Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
+        //底盘 云台 发射机构 前一帧控制类型
+        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_FLLOW;
+        Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
+        Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
 
-    // 底盘 云台 发射机构 前一帧控制类型
-    Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_DISABLE;
-    Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
-    Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+        //单发连发标志位
+        uint8_t Shoot_Flag = 0;
+        //DR16控制数据来源
+        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
+        //内部函数
 
-    // 单发连发标志位
-    uint8_t Shoot_Flag = 0;
-    // DR16控制数据来源
-    Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
-    // 内部函数
+        void Judge_DR16_Control_Type();
 
-    void Judge_DR16_Control_Type();
+        void Control_Chassis();
+        void Control_Gimbal();
+        void Control_Booster();
 
-    void Control_Chassis();
-    void Control_Gimbal();
-    void Control_Booster();
-
-    void Transform_Mouse_Axis();
-#endif
+        void Transform_Mouse_Axis();
+    #endif
 };
 
 /* Exported variables --------------------------------------------------------*/

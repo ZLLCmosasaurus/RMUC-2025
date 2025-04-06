@@ -680,7 +680,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 void Class_Chariot::Judge_DR16_Control_Type()
 {
     if (DR16.Get_Left_X() != 0 ||
-        // DR16.Get_Left_Y() != 0 ||
+        DR16.Get_Left_Y() != 0 ||
         DR16.Get_Right_X() != 0 ||
         DR16.Get_Right_Y() != 0)
     {
@@ -692,7 +692,18 @@ void Class_Chariot::Judge_DR16_Control_Type()
              DR16.Get_Keyboard_Key_A() != 0 ||
              DR16.Get_Keyboard_Key_D() != 0 ||
              DR16.Get_Keyboard_Key_W() != 0 ||
-             DR16.Get_Keyboard_Key_S() != 0)
+             DR16.Get_Keyboard_Key_S() != 0 ||
+             DR16.Get_Keyboard_Key_Shift() != 0 ||
+             DR16.Get_Keyboard_Key_Ctrl() != 0 ||
+             DR16.Get_Keyboard_Key_Q() != 0 ||
+             DR16.Get_Keyboard_Key_E() != 0 ||
+             DR16.Get_Keyboard_Key_R() != 0 ||
+             DR16.Get_Keyboard_Key_F() != 0 ||
+             DR16.Get_Keyboard_Key_G() != 0 ||
+             DR16.Get_Keyboard_Key_Z() != 0 ||
+             DR16.Get_Keyboard_Key_C() != 0 ||
+             DR16.Get_Keyboard_Key_V() != 0 ||
+             DR16.Get_Keyboard_Key_B() != 0)
     {
         DR16_Control_Type = DR16_Control_Type_KEYBOARD;
     }
