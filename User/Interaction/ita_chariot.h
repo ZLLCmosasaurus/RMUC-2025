@@ -26,6 +26,7 @@
 
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
+#define PUSH_ROUND_TO_LENGTH 2e-3f // 2mm
 /* Exported types ------------------------------------------------------------*/
 
 enum Enum_Dart_FSM_Control_Status : uint8_t
@@ -156,24 +157,28 @@ public:
         //迷你主机状态
         Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
         //120.8496
-        float Servo_GM6020_Offeset[3]={131.699997,250.0,0};
-        float Servo_Init_1_Offeset=269;
-        float Servo_Init_2_Offeset=250;
+        float Servo_GM6020_Offeset[3]={132.209997,251.0,0};
+        float Servo_Init_1_Offeset=175;
+        float Servo_Init_2_Offeset=175;
         //初始267，放弹50
         // 2750 1号 131.699997
         // 5398 2号 250
         // 8137 3号 0
         float Servo_Init_3_Offeset=260;
-        float Servo_Load_1_Offeset=50;
-        float Servo_Load_2_Offeset=50;
+        float Servo_Load_1_Offeset=10;
+        float Servo_Load_2_Offeset=10;
         float Servo_Load_3_Offeset=50;
         float uart_tension_tare=0;
         // motor_yaw 6020的绝对角度每次左右旋转会有轻微的偏移
-        float Motor_Yaw_Left_Angle=122.9150390f;
-        float Motor_Yaw_Right_Angle=337.983398f;
+        float Motor_Yaw_Left_Angle=66.796875f;
+        float Motor_Yaw_Right_Angle=282.744141f;
         float Motor_Yaw_Angle=(Motor_Yaw_Right_Angle+Motor_Yaw_Left_Angle)/2;
         float Motor_Yaw_Angle_Offset=0;
-
+        float Push_Now_Length=0.0f;
+        float Push_Target_Length=0.0f;
+        float Push_Offset=0.0f;
+        inline void Caculate_Push_Now_Length();
+        float Angle_average[10]={0};
 protected:
 
         //每次拨弹前进距离
@@ -254,7 +259,7 @@ protected:
         // 电机校准目标角速度
         float Calibration_Motor_Yaw_Target_Omega_Angle = 0; // 角度制
         float Calibration_Motor_Up_Target_Omega_Radian = -10.0f; // 弧度制
-        float Calibration_Motor_Down_Target_Omega_Radian = -10.0f;       //向下运动
+        float Calibration_Motor_Down_Target_Omega_Radian = -50.0f;       //向下运动
 
         // 电机堵转校准阈值
         float Calibration_Motor_Yaw_Troque_Threshold = 500;
@@ -330,7 +335,10 @@ void Class_Chariot::Updata_Switch_Status(){
     Switch_Bool_Motor_Left = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_2);
     Switch_Bool_Motor_Right = HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_3);
 }
-
+void Class_Chariot::Caculate_Push_Now_Length()
+{
+    Push_Now_Length = Motor_Down.Get_Now_Radian() / 2.0f / PI * PUSH_ROUND_TO_LENGTH*1000-Push_Offset;//mm
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

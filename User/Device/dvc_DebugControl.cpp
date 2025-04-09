@@ -91,33 +91,32 @@ void Class_DebugControl::DebugControl_Data_Process(uint8_t *Buffer, uint16_t Len
             Debug_Start_Flag = 1;
         }
         memcpy(&DebugControl_RxData, UART_Manage_Object->Rx_Buffer, sizeof(Struct_DebugControl_RxData));
-        if(DebugControl_RxData.target_tension*10 < 1695.0f)
+        if(DebugControl_RxData.target_tension < 1.0f)
         {
-            DebugControl_RxData.target_tension = 1695.0f; 
+            DebugControl_RxData.target_tension = 1.0f; 
         }
-        else if(DebugControl_RxData.target_tension*10 > 1780.0f)
+        else if(DebugControl_RxData.target_tension > 700.0f)
         {
-            DebugControl_RxData.target_tension = 1780.0f;
+            DebugControl_RxData.target_tension = 700.0f;
         }
         else
         {
-            DebugControl_RxData.target_tension = DebugControl_RxData.target_tension*10;
+            DebugControl_RxData.target_tension = DebugControl_RxData.target_tension;
         }
-        // if(DebugControl_RxData.target_yaw < 122.9150390f)
-        // {
-        //     DebugControl_RxData.target_yaw = 122.9150390f;
+        if(DebugControl_RxData.target_yaw < 122.9150390f)
+        {
+            DebugControl_RxData.target_yaw = 122.9150390f;
        
-        // }
-        // else if(DebugControl_RxData.target_yaw > 337.983398f)
-        // {
-        //     DebugControl_RxData.target_yaw = 337.983398f;
+        }
+        else if(DebugControl_RxData.target_yaw > 337.983398f)
+        {
+            DebugControl_RxData.target_yaw = 337.983398f;
        
-        // }
-        // else
-        // {
-        //     DebugControl_RxData.target_yaw = DebugControl_RxData.target_yaw;  
-        // }
-        DebugControl_RxData.target_yaw=230.1f;
+        }
+        else
+        {
+            DebugControl_RxData.target_yaw = DebugControl_RxData.target_yaw;  
+        }
     }        
 }
 
