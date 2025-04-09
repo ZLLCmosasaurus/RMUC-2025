@@ -43,11 +43,11 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Steer_Power_Ratio = __Steer_Power_Ratio;
 
     // 斜坡函数加减速速度X  控制周期1ms
-    Slope_Velocity_X.Init(0.016f, 0.064f);
+    Slope_Velocity_X.Init(0.064f, 0.128f);
     // 斜坡函数加减速速度Y  控制周期1ms
-    Slope_Velocity_Y.Init(0.016f, 0.064f);
+    Slope_Velocity_Y.Init(0.064f, 0.128f);
     // 斜坡函数加减速角速度
-    Slope_Omega.Init(0.05f, 0.05f);
+    Slope_Omega.Init(0.1f, 0.1f);
 
 #ifdef POWER_LIMIT
     // 超级电容初始化

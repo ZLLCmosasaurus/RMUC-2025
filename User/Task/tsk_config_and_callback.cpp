@@ -259,13 +259,11 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 uint8_t first_flag = 0;
 void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    if (first_flag == 1)
-    {
+
         chariot.DR16.Image_UART_RxCpltCallback(Buffer);
         // 底盘 云台 发射机构 的控制策略
         chariot.TIM_Control_Callback();
-    }
-    first_flag = 1;
+
 }
 #endif
 
@@ -280,7 +278,6 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 {
 
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
-
     // 底盘 云台 发射机构 的控制策略
     chariot.TIM_Control_Callback();
 }
