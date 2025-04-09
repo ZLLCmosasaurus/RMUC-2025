@@ -10,10 +10,10 @@ void Class_Chariot::Init()
     Auxiliary_Arm_Uplift_X_Right.PID_Angle.Init(100.0f, 0.05f, 0.0f, 0.0f, 180.0f, 250.0f);
     Auxiliary_Arm_Uplift_X_Right.PID_Omega.Init(40.0f, 0.1f, 0.0f, 0.0f, 2000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_Y_Lift.Init(&hcan1, DJI_Motor_ID_0x208, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_Y_Lift.PID_Angle.Init(1600.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
+    Auxiliary_Arm_Uplift_Y_Lift.PID_Angle.Init(1900.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
     Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(30.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_Y_Right.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(1600.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
+    Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(1900.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
     Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(30.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
     
 }
@@ -93,7 +93,7 @@ bool Class_Chariot::Motor_Calibration()
 	
 			Arm_Uplift_Offset_Angle[2] = Auxiliary_Arm_Uplift_Y_Lift.Get_Now_Angle();
 			Auxiliary_Arm_Uplift_Y_Lift.Set_Target_Angle(Auxiliary_Arm_Uplift_Y_Lift.Get_Now_Angle());
-						Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=7;
+						Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3;
             Calibration_Flag |= (1<<3);
 		}	
 	}
@@ -113,7 +113,7 @@ bool Class_Chariot::Motor_Calibration()
 			Auxiliary_Arm_Uplift_Y_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
 			Arm_Uplift_Offset_Angle[3] = Auxiliary_Arm_Uplift_Y_Right.Get_Now_Angle();
 			Auxiliary_Arm_Uplift_Y_Right.Set_Target_Angle(Auxiliary_Arm_Uplift_Y_Right.Get_Now_Angle());
-					Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-7;
+					Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3;
         Calibration_Flag |= (1<<4);
 		}	
 	}
@@ -140,16 +140,21 @@ void Class_Chariot::TIM_Control_Callback()
 }
 void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
 {
-    static uint8_t gimbal_alive_cnt = 0;
-    gimbal_alive_cnt++;
+
         for (auto i = 0; i < 4; i++)
         {
             chassis.Motor_Wheel[i].TIM_Alive_PeriodElapsedCallback();
         }
-//        if(gimbal_alive_cnt%10==0){
-            TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
-            gimbal_alive_cnt = 0;
-//        }
+				Auxiliary_Arm_Uplift_X_Lift.TIM_Alive_PeriodElapsedCallback();
+				Auxiliary_Arm_Uplift_Y_Lift.TIM_Alive_PeriodElapsedCallback();
+				if((Auxiliary_Arm_Uplift_X_Lift.Get_DJI_Motor_Status()==DJI_Motor_Status_DISABLE)&&(Auxiliary_Arm_Uplift_Y_Lift.Get_DJI_Motor_Status()==DJI_Motor_Status_DISABLE))
+				{
+					
+					init_finish_flag=false;
+				}
+				
+				
+        TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
         if(Gimbal_Status == Gimbal_Status_DISABLE)
         {
             chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
@@ -158,6 +163,8 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 {
     Gimbal_Alive_Flag++;
+	
+		static uint8_t mod50;
     //云台坐标系的目标速度
 	float gimbal_velocity_x, gimbal_velocity_y;
     //底盘坐标系的目标速度
@@ -172,7 +179,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     memcpy(&tmp_velocity_y,&CAN_Manage_Object->Rx_Buffer.Data[2],sizeof(uint16_t));
     memcpy(&tmp_omega,&CAN_Manage_Object->Rx_Buffer.Data[4],sizeof(uint16_t));
 		memcpy(&chassis_control_type,&CAN_Manage_Object->Rx_Buffer.Data[6],1);
-		memcpy(&Now_status,&CAN_Manage_Object->Rx_Buffer.Data[7],1);
+		memcpy(&New_status,&CAN_Manage_Object->Rx_Buffer.Data[7],1);
     gimbal_velocity_x = Math_Int_To_Float(tmp_velocity_x,0,0xFFFF,-1 * chassis.Get_Velocity_X_Max(),chassis.Get_Velocity_X_Max());
     gimbal_velocity_y = Math_Int_To_Float(tmp_velocity_y,0,0xFFFF,-1 * chassis.Get_Velocity_Y_Max(),chassis.Get_Velocity_Y_Max());
     chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFFFF,-1 * chassis.Get_Omega_Max(),chassis.Get_Omega_Max());
@@ -180,6 +187,22 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     chassis_velocity_x = gimbal_velocity_x;
     chassis_velocity_y = gimbal_velocity_y;
 		chassis.Set_Chassis_Control_Type(chassis_control_type);
+		
+		if(New_status!=Now_status)
+		{
+		mod50++;
+		if(mod50>=50)
+		{
+		Now_status=New_status;
+		mod50=0;}
+		
+		}else
+		{
+		mod50=0;
+		}
+		
+		
+		
     if(chassis_control_type==Chassis_Control_Type_FLLOW){
     //设定底盘目标速度
     chassis.Set_Target_Velocity_X(-chassis_velocity_x);

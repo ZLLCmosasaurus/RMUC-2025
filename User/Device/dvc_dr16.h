@@ -210,6 +210,8 @@ public:
     void Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2);
 
     inline Enum_DR16_Status Get_DR16_Status();
+    inline Enum_Image_Status Get_Image_Status();
+    inline Enum_Image_Status Get_Image_Key_Status();
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
     inline float Get_Right_X();
     inline float Get_Right_Y();
@@ -240,7 +242,7 @@ public:
     inline Enum_DR16_Key_Status Get_Keyboard_Key_C();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_V();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_B();
-    inline Enum_Image_Status Get_Image_Status();
+
     inline float Get_Yaw();
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -283,11 +285,18 @@ protected:
     //前一时刻的遥控器接收flag
     uint32_t Pre_DR16_Flag = 0;
 
-    //当前时刻的遥控器接收flag
+    //当前时刻的自定义控制器接收flag
     uint32_t Image_Flag = 0;
 		
     //前一时刻的遥控器接收flag
     uint32_t Pre_Image_Flag = 0;
+		
+		//当前时刻的图传链路键鼠接收flag
+    uint32_t Image_Key_Flag = 0;
+		
+    //前一时刻的遥控器接收flag
+    uint32_t Pre_Image_Key_Flag = 0;
+		
 
     //当前时刻的遥控器接收flag
     uint32_t Image_Flag_Customer_controller = 0;
@@ -304,6 +313,8 @@ protected:
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
 		//图传链路自定义控制器状态
 		Enum_Image_Status Image_Status=Image_Status_ENABLE;
+			//图传链路自定义控制器状态
+		Enum_Image_Status Image_Key_Status=Image_Status_ENABLE;
     //遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
     // DR16对外接口信息
@@ -340,6 +351,15 @@ Enum_DR16_Status Class_DR16::Get_DR16_Status()
 }
 /**
  * @brief 获取自定义控制器在线状态
+ *
+ * @return Enum_DR16_Status 自定义控制器在线状态
+ */
+Enum_Image_Status Class_DR16::Get_Image_Key_Status()
+{
+return (Image_Key_Status);
+}
+/**
+ * @brief 获图传链路键鼠在线状态
  *
  * @return Enum_DR16_Status 自定义控制器在线状态
  */

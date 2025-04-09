@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../User/Chariot;../User/Device;../User/Interaction;../User/Middleware/Algorithm;../User/Middleware/Driver;../User/Task;../USB_DEVICE/App;../USB_DEVICE/Target;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Core/Src;../Middlewares/ST/ARM/DSP/Inc;../Drivers/CMSIS/DSP/Include;../User/Congfig</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../User/Chariot;../User/Device;../User/Interaction;../User/Middleware/Algorithm;../User/Middleware/Driver;../User/Task;../USB_DEVICE/App;../USB_DEVICE/Target;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src;../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;../Middlewares/ST/STM32_USB_Device_Library/Core/Src;../Middlewares/ST/ARM/DSP/Inc;../Drivers/CMSIS/DSP/Include;../User/Congfig;..\User\UI</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1001,6 +1001,36 @@
                 </CommonProperty>
                 <FileArmAds/>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>UI</GroupName>
+          <Files>
+            <File>
+              <FileName>ui_default_group1_0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\UI\ui_default_group1_0.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_default_group1_1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\UI\ui_default_group1_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_default_group1_2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\UI\ui_default_group1_2.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_interface.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\UI\ui_interface.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\User\UI\ui.h</FilePath>
             </File>
           </Files>
         </Group>

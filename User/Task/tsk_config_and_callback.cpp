@@ -44,6 +44,8 @@
 #include "usbd_cdc_if.h"
 #include "robotarm_task.h"
 #include "dvc_message.h"
+#include "ui.h"
+
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -61,8 +63,7 @@ Struct_Offline_Controller_Data Offline_Controller_Data;
 //Publisher UART1_Controller_Data = Message_Manager.PubRegister("Controller_Data", sizeof(Struct_Offline_Controller_Data));
 
 /* Private function declarations ---------------------------------------------*/
-float tmp_1_5_angle[5] = {60.f,210.0f,0.0f,0.0f,90.0f};
-float a=0.15;
+
 
 /* Function prototypes -------------------------------------------------------*/
 
@@ -160,9 +161,6 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 }
 
 
-
-
-
 /**
  * @brief UART3遥控器回调函数
  *
@@ -173,8 +171,20 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 {
     Robotarm.DR16.DR16_UART_RxCpltCallback(Buffer);
-}
 
+}
+/**
+ * @brief UART1图传回调函数
+ *
+ * @param Buffer UART1收到的消息
+ * @param Length 长度
+ */
+void Image_UART1_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    Robotarm.DR16.Image_UART_RxCpltCallback(Buffer);
+	
+	
+}
 
 /**
  * @brief IIC磁力计回调函数
@@ -217,21 +227,7 @@ void UART1_Offline_Controller_Callback(uint8_t *Buffer, uint16_t Length)
         }
     }
 }
-/**
- * @brief UART1图传回调函数
- *
- * @param Buffer UART1收到的消息
- * @param Length 长度
- */
-void Image_UART1_Callback(uint8_t *Buffer, uint16_t Length)
-{
-    Robotarm.DR16.Image_UART_RxCpltCallback(Buffer);
-//    for(uint8_t i=0; i<5; i++)
-//    {
-//        Customize_Controller_Data.Angle[i] = Robotarm.DR16.Get_Angle_Image(i);
-//    }
 
-}
 /**
  * @brief USB MiniPC回调函数
  *
@@ -255,183 +251,71 @@ void Task100us_TIM4_Callback()
      Robotarm.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();     
 }
 
+
+//注册订阅者
+Subscriber Task_Sub_Joint5_angle = Message_Manager.SubRegister("Joint5_angle", sizeof(float));
+
+
+
 /**
  * @brief TIM5任务回调函数
  *
  */
-#define DEBUG_REMOTE
-#define IMAGE_REMOTE
-//#define OFFLINE_REMOTE
-#define DEBUG_REMOTE_SPEED_1 1.f
-#define DEBUG_REMOTE_SPEED_2 1.f
-//注册订阅者
-Subscriber Task_Sub_Joint5_angle = Message_Manager.SubRegister("Joint5_angle", sizeof(float));
-float debug_test_angle[5];
-float debug_test_k = 1.0f;
-
-void Set_Joint_1_5_Angle_Init_Data()
-{		
-	 
-    #ifdef OFFLINE_REMOTE
-    for (auto  i = 0; i < 5; i++)
-    {
-        Robotarm.Jonit_AngleInit[i] = Offline_Controller_Data.Angle[i];
-    }
-    #endif
-    #ifdef IMAGE_REMOTE
-    for (auto  i = 0; i < 5; i++)
-    {
-        Robotarm.Jonit_AngleInit[i] = Robotarm.DR16.Customize_Controller_Data.Angle[i];
-    }
-	//	Robotarm.Jonit_AngleInit[4]=Robotarm.Jonit_AngleInit[4]*2;
-    #endif
-   //  memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
-    #ifdef DEBUG_REMOTE
-
-    #endif
-    if((Robotarm.Relay1.Get_Open_flag()==1)&&(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN))
-    Math_Constrain(Robotarm.Jonit_AngleInit[0], 20.f, 177.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[1], 3.f, 177.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[2], -25.f, 205.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[3], 0.f, 180.f);
-    Math_Constrain(Robotarm.Jonit_AngleInit[4], 0.f, 180.f);
-}
-float kp_o=22;
-float kp_a=25;
 
 void Task1ms_TIM5_Callback()
 {
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
     static uint8_t TIM1msMod50 = 0;
-	
+	  static uint8_t TIM1msMod100 = 0;
+		TIM1msMod100++;
     TIM1msMod50++;
     if (TIM1msMod50 == 50)
     {
-        Robotarm.Task_Alive_PeriodElapsedCallback();//to do ：加入裁判系统
-				Robotarm.Referee.UART_Tx_Referee_UI();
+        Robotarm.Task_Alive_PeriodElapsedCallback();
         TIM1msMod50 = 0;
+				Robotarm.Robotarm_Referee_UI_Tx_Callback(Robotarm.Referee_UI_Refresh_Status);
+			
     }
-	
-    // 遥控器控制
-    switch (Robotarm.DR16.Get_DR16_Status())
-    {
-    case DR16_Status_ENABLE:
-    {
-
-        if (!Robotarm.init_finished)
-			{ Robotarm.init_finished = Robotarm.Robotarm_Calibration();
+		if((Robotarm.DR16.Get_DR16_Status()==DR16_Status_DISABLE)&&(Robotarm.DR16.Get_Image_Status()==Image_Status_DISABLE))//遥控器与图传链路均失联
+		{
+		    Robotarm.TIM_Robotarm_Disable_PeriodElapsedCallback();
+          Robotarm.init_finished = false;
+		}
+		else
+		{
+				
+			Robotarm.Judge_DR16_Control_Type();// 判断DR16控制数据来源
+			Robotarm.Control_Chassis_Task();//底盘控制   不校准完也可操纵底盘
+			if (!Robotarm.init_finished)
+			{Robotarm.init_finished = Robotarm.Robotarm_Calibration();
 			Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Calibration);
+			Robotarm.Referee.UART_Tx_Referee_UI();	
 			}
         else if (Robotarm.init_finished)
-        {
-            switch (Robotarm.DR16.Get_Right_Switch())
-            {
-            case (DR16_Switch_Status_DOWN): // 当遥控器右拨杆朝下的时候使能自定义控制器控制
-            {			
-//									Robotarm.Motor_Joint4.PID_Angle.Set_K_P(18);
-//									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(16);
-//									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(18);
-//									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(16);
-									Robotarm.Motor_Joint4.PID_Angle.Set_K_P(kp_a);
-									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(kp_o);
-									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(kp_a);
-									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(kp_o);
-							if(Robotarm.DR16.Get_Image_Status()==Image_Status_ENABLE)
-							{Set_Joint_1_5_Angle_Init_Data();}
-							else
-							{  memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));}	
-									if (huart1.ErrorCode)
-                                    {
-										#ifdef OFFLINE_REMOTE
-										UART_Init(&huart1, UART1_Offline_Controller_Callback, 12);//如果串口错误，重启使能串口
-								    #endif
-										#ifdef IMAGE_REMOTE
-										UART_Init(&huart1, Image_UART1_Callback, 40);//如果串口错误，重启使能串口
-										#endif
-										}
-									if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_UP)//抬升高度控制，在自定义控制器控制模式下通过左拨杆控制抬升高度
-									{Robotarm.Arm_Uplift.Target_Up_Length+=0.0025;}
-									else if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_DOWN)
-									{Robotarm.Arm_Uplift.Target_Up_Length-=0.0025;}
-									if(Robotarm.DR16.Get_Left_Switch()==DR16_Switch_Status_MIDDLE)
-  									{Robotarm.Arm_Uplift.Target_Up_Length=Robotarm.Arm_Uplift.Actual_Up_Length;}
-									
-									Math_Constrain(Robotarm.Arm_Uplift.Target_Up_Length,0.f,28.f);
-										
-						}
-            break;
-            case (DR16_Switch_Status_UP): // 当遥控器右拨杆朝上的时候使能miniPC控制
-            {
-//                if (Robotarm.MiniPc.Get_MiniPC_Status() == MiniPC_Status_DISABLE)
-//                    memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 5 * sizeof(float));
-//                else
-//                    Robotarm.MiniPc.Transform_Angle_Rx(Robotarm.Jonit_AngleInit);
-//							
-									Robotarm.Motor_Joint4.PID_Angle.Set_K_P(25);
-									Robotarm.Motor_Joint4.PID_Omega.Set_K_P(22);
-									Robotarm.Motor_Joint5.PID_Angle.Set_K_P(25);
-									Robotarm.Motor_Joint5.PID_Omega.Set_K_P(22);
-									Robotarm.Robotarm_Resolution.Reload_Task_Status_PeriodElapsedCallback();//状态机调试入口
-							
-
-            }
-            break;
-            case (DR16_Switch_Status_MIDDLE)://右拨杆为中时保持行进姿态
-            {
-                Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Wait_Order);
-                 memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
-                Robotarm.Arm_Uplift.Target_Up_Length=0;
-            }
-            break;
-            default:
-            {
-             memcpy(Robotarm.Jonit_AngleInit, tmp_1_5_angle, 6 * sizeof(float));
-             Robotarm.Arm_Uplift.Target_Up_Length=0;
-            }
-            break;
-            }
-					if(Robotarm.DR16.Get_Right_Y()>0.8)//气泵继电器临时控制
-                    {Robotarm.Relay1.Set_Open_flag(1);}
-                    else if(Robotarm.DR16.Get_Right_Y()<-0.8)
-                    {Robotarm.Relay1.Set_Open_flag(0);}
-					if(Robotarm.Relay1.Get_Open_flag()==1)
-					{HAL_GPIO_WritePin(GPIOE,GPIO_PIN_11,GPIO_PIN_SET);}
-					else 
-					{HAL_GPIO_WritePin(GPIOE,GPIO_PIN_11,GPIO_PIN_RESET);}
-						
-						
-						
+			{
+			Robotarm.TIM_Control_Callback();	
 			Robotarm.Output();
-		} 
-        // 控制底盘任务
-        Robotarm.Judge_DR16_Control_Type();
-        Robotarm.Control_Chassis_Task();
-     
-	}
-    break;
-    case DR16_Status_DISABLE:
-    {
-        Robotarm.TIM_Robotarm_Disable_PeriodElapsedCallback();
-        Robotarm.init_finished = false;
-    }
-     break;
-	}
-
+			} 
+		}
+		
+		
+			if (huart1.ErrorCode)
+			UART_Init(&huart1, Image_UART1_Callback, 40);//如果串口错误，重启使能串口
 
     // 机械臂任务善后函数
     Robotarm.TIM_Robotarm_Task_PeriodElapsedCallback();
-	   Robotarm.CAN_Gimbal_Tx_Chassis();
+		Robotarm.CAN_Gimbal_Tx_Chassis();
+		//继电器任务善后函数
+		Robotarm.Relays.Relay_Control();
     // 发送CAN数据
     TIM_CAN_PeriodElapsedCallback();
-
-    // 订阅者获取消息
-    // Message_Manager.SubGet_Message<float>(Task_Sub_Joint5_angle, joint5_test_angle);
-
-    /****************************** 交互层回调函数 1ms *****************************************/
-
-    /****************************** 驱动层回调函数 1ms *****************************************/
-    // 统一打包发送
-    //    TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+     //USB统一打包发送	
+		if (TIM1msMod100 == 100)
+    {
+        TIM1msMod100 = 0;
+			Robotarm.MiniPc.Output_en(Robotarm.Joint_World_Angle_Now,Robotarm.Arm_Uplift.Actual_Up_Length,Exchange_Status_ENABLE);
+    }
+     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
 
 
 }
@@ -474,7 +358,7 @@ extern "C" void Task_Init()
     //定时器循环任务
     TIM_Init(&htim4, Task100us_TIM4_Callback);
     TIM_Init(&htim5, Task1ms_TIM5_Callback);
-	HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
 
     /********************************* 设备层初始化 *********************************/
 
@@ -574,25 +458,14 @@ void Chariot_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 }
 enum Enum_Robotarm_Task_Status
 {
-  	  	Robotarm_Task_Status_Calibration = 0,
-		Robotarm_Task_Status_Wait_Order=1,
-		Robotarm_Task_Status_Error=2,
-		Robotarm_Task_Status_Exchange=3,
+  	  	Robotarm_Task_Status_Calibration = 1,
+		Robotarm_Task_Status_Wait_Order=2,
+		Robotarm_Task_Status_Error=3,
+		Robotarm_Task_Status_Exchange=4,
 	
-    Robotarm_Task_Status_Pick_First_Sliver=4,
-	
-		Robotarm_Task_Status_Place_First_Sliver=5,
-		Robotarm_Task_Status_Pick_Second_Sliver=6,
-		Robotarm_Task_Status_Place_Second_Sliver=7,
-		Robotarm_Task_Status_Pick_Third_Sliver=8,
-
-		Robotarm_Task_Status_Pick_First_Gold=9,
-		Robotarm_Task_Status_Place_First_Gold=10,
-		Robotarm_Task_Status_Pick_Second_Gold=11,
-		Robotarm_Task_Status_Place_Second_Gold=12,
-		Robotarm_Task_Status_Pick_Third_Gold=13,
-		Robotarm_Task_Status_First_Sliver_Test=14,//中期考核使用状态，后期去除
-		Robotarm_Task_Status_First_Sliver_Test_2=15,
+    	Robotarm_Task_Status_Pick_Sliver_1=11,
+		Robotarm_Task_Status_Pick_Sliver_2=12,//中期考核使用状态，后期去除
+		Robotarm_Task_Status_Pick_Sliver_3=13,
 		Robotarm_Task_Status_Pick_Gold_1=21,
 		Robotarm_Task_Status_Pick_Gold_2=22,
 		Robotarm_Task_Status_Pick_Gold_3=23,
@@ -600,28 +473,28 @@ enum Enum_Robotarm_Task_Status
 		Robotarm_Task_Status_Pick_Gold_5=25,
 		Robotarm_Task_Status_Pick_Gold_6=24,
 		Robotarm_Task_Status_Pick_Gold_7=25,
+	
 
 };
-
 uint16_t mod50_cnt = 0;
 uint8_t mod50_cnt_2 = 0;
 float angle_test;
-bool init_finish_flag;
+
 void Task1ms_TIM5_Callback()
 {
-    if(init_finish_flag==false)
+    if(chariot.init_finish_flag==false)
     {
-         init_finish_flag=chariot.Motor_Calibration();
+         chariot.init_finish_flag=chariot.Motor_Calibration();
 
     }
 			mod50_cnt++;
 			mod50_cnt_2++;
-		if((init_finish_flag==true)||(mod50_cnt_2%200==0)){
+		if(chariot.init_finish_flag==true){
 	
 		switch(chariot.Now_status)
 		{
 			case(Robotarm_Task_Status_Calibration):
-			{
+			{			
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3;
 						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.5;
@@ -633,8 +506,8 @@ void Task1ms_TIM5_Callback()
 			{
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=0.2;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.2;
+						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.5;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.5;
 						
 			}
 			break;
@@ -650,8 +523,8 @@ void Task1ms_TIM5_Callback()
 			
 			case(Robotarm_Task_Status_Pick_Gold_3):
 			{
-						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3.5;
-						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3.5;
+						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3;
+						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3;
 						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=34;
 						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-34;
 						
@@ -659,11 +532,11 @@ void Task1ms_TIM5_Callback()
 			break;
 				case(Robotarm_Task_Status_Pick_Gold_4):
 			{
-						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3.5;
-						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3.5;
-				if(	(chariot.Auxiliary_Arm_Uplift_Y_Lift.Actual_Up_Length>2.5)||(	chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length<-2.5))
-				{chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=15;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-15;}
+						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3;
+						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3;
+				if(	(chariot.Auxiliary_Arm_Uplift_Y_Lift.Actual_Up_Length>2.5)&&(	chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length<-2.5))
+				{chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=12;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-10;}
 						
 			}
 			break;
@@ -671,8 +544,8 @@ void Task1ms_TIM5_Callback()
 			{
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=0.2;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.2;
+						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.5;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.5;
 						
 			}
 			break;
@@ -680,8 +553,8 @@ void Task1ms_TIM5_Callback()
 			{
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=0.2;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.2;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.2;
+						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=0.5;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-0.5;
 						
 			}
 			break;

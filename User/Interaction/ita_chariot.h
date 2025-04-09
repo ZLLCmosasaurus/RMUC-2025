@@ -82,6 +82,7 @@ public:
 class Class_Chariot
 {
 public:
+		bool init_finish_flag;
     float Arm_Uplift_Offset_Angle[4];
     Class_Tricycle_Chassis chassis;
     Class_Auxiliary_Arm_Uplift_X Auxiliary_Arm_Uplift_X_Lift;
@@ -96,6 +97,7 @@ public:
     void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
     bool Motor_Calibration();
 		uint8_t Now_status;
+	 uint8_t New_status;
 protected:
     //初始化相关常量
 

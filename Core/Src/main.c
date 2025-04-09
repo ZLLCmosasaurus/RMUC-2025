@@ -115,9 +115,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//    Task_Loop();
-		//HAL_GPIO_WritePin(GPIOE,GPIO_PIN_13,GPIO_PIN_RESET);
-		//HAL_GPIO_WritePin(GPIOE,GPIO_PIN_11,GPIO_PIN_SET);
+   // Task_Loop();
+		 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
