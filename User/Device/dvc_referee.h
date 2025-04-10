@@ -1126,6 +1126,7 @@ public:
     void Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header = 0xa5);
 
     inline Enum_Referee_Status Get_Referee_Status();
+    inline uint16_t Get_Circle_Index(uint16_t index){return (index%UART_Manage_Object->Rx_Buffer_Length);}
     inline Enum_Referee_Game_Status_Type Get_Game_Type();
     inline Enum_Referee_Game_Status_Stage Get_Game_Stage();
     inline uint16_t Get_Remaining_Time();
