@@ -59,6 +59,12 @@ enum Enum_DR16_Status
     DR16_Status_ENABLE,
 };
 
+enum Enum_Image_Status
+{
+    Image_Status_DISABLE = 0,
+    Image_Status_ENABLE,
+};
+
 /**
  * @brief 遥控器数据更新状态
  *
@@ -164,6 +170,7 @@ public:
     void Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2);
 
     inline Enum_DR16_Status Get_DR16_Status();
+    inline Enum_Image_Status Get_Image_Status();
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
     inline float Get_Right_X();
     inline float Get_Right_Y();
@@ -235,13 +242,15 @@ protected:
     uint32_t Pre_Image_Flag = 0;
 
     //遥控器50ms离线次数
-    uint16_t Unline_Cnt = 0;
+    uint16_t DR16_Unline_Cnt = 0;
+	uint16_t Image_Unline_Cnt = 0;
     //遥控器50ms串口错误次数
     uint16_t Error_Cnt = 0;
     //读变量
 
     //遥控器状态
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
+    Enum_Image_Status Image_Status	=	Image_Status_DISABLE;
     //遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
     // DR16对外接口信息
@@ -272,6 +281,10 @@ protected:
 Enum_DR16_Status Class_DR16::Get_DR16_Status()
 {
     return (DR16_Status);
+}
+Enum_Image_Status Class_DR16::Get_Image_Status()
+{
+    return (Image_Status);
 }
 
 /**

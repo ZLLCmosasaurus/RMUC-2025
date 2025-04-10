@@ -73,5 +73,7 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "cortex-debug.armToolchainPath": "C:\\ARM-GNU-TOOLCHIAN\\BIN",
+  "cortex-debug.openocdPath": "G:\\MounRiver_Studio\\toolchain\\OpenOCD\\bin\\openocd.EXE"
 }
