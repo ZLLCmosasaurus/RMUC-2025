@@ -39,6 +39,12 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
         Chassis.Referee = &Referee;
         Chassis.Init();
 
+        #ifdef FLYING_SLOPE
+
+        Chassis.Flying_Slope.IMU = &Chassis.Boardc_BMI;
+
+        #endif
+
         //底盘随动PID环初始化
         PID_Chassis_Fllow.Init(-8.5f, 0.0f, 0.0f, 0.0f, 10.0f, 16.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
 

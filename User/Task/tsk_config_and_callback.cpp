@@ -344,7 +344,11 @@ void Task100us_TIM4_Callback()
         // //暂无云台tim4任务
         // if(Referee_Sand_Cnt%10)
         //     Task_Loop();
-
+        #ifdef FLYING_SLOPE
+        
+        chariot.Chassis.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
+        
+        #endif
     #elif defined(GIMBAL)
         // 单给IMU消息开的定时器 ims
         chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();     
@@ -421,6 +425,13 @@ extern "C" void Task_Init()
 
         //裁判系统
         UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+
+        #ifdef FLYING_SLOPE
+
+            //c板陀螺仪spi外设
+            SPI_Init(&hspi1,Device_SPI1_Callback);
+
+        #endif
         
 
         #ifdef POWER_LIMIT

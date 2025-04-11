@@ -323,6 +323,7 @@ public:
     //功率限制友元函数
     friend class Class_Power_Limit;
     friend class Class_Tricycle_Chassis;
+    friend class Class_Flying_Slope;
 
     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 13.933f, float __Torque_Max = 16384.0f);
 

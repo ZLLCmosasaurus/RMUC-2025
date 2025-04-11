@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "alg_slope.h"
+#include "alg_flying_slope.h"
+#include "dvc_imu.h"
 #include "dvc_sampler.h"
 #include "dvc_referee.h"
 #include "dvc_djimotor.h"
@@ -71,6 +73,14 @@ public:
     Class_Slope Slope_Omega;
 
     Class_Supercap Supercap;
+
+    #ifdef FLYING_SLOPE
+
+    Class_IMU Boardc_BMI;
+    Class_Flying_Slope Flying_Slope;
+
+    #endif
+
     #ifdef POWER_LIMIT
     
     //功率限制
