@@ -95,6 +95,7 @@ enum Enum_DR16_Control_Type
 {
     DR16_Control_Type_REMOTE = 0,
     DR16_Control_Type_KEYBOARD,
+    DR16_Control_Type_NONE,
 };
 
 /**
@@ -139,6 +140,8 @@ public:
         Class_Gimbal Gimbal;
         //发射机构
         Class_Booster Booster;
+        //图传
+        Class_Image Image;
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
@@ -178,7 +181,7 @@ public:
         inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
 
-        void CAN_Gimbal_Rx_Chassis_Callback();
+        void CAN_Gimbal_Rx_Chassis_Callback(uint8_t *Rx_Data);
         void CAN_Gimbal_Tx_Chassis_Callback();
         
         void TIM_Control_Callback();
@@ -199,7 +202,7 @@ public:
     Enum_Bulletcap_Status Bulletcap_Status = Bulletcap_Status_CLOSE;
     //摩擦轮开关
     Enum_Fric_Status Fric_Status = Fric_Status_CLOSE;
-    //自瞄锁住状态
+    //超级电容超级放电状态
     Enum_Supercap_Control_Status  Supercap_Control_Status = Supercap_Control_Status_DISABLE;
     //迷你主机状态
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
@@ -220,7 +223,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 1.75679159;
+        float Reference_Angle = 1.07800508f;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;//12.0f;
         //底盘转换后的角度（数据来源yaw电机）
@@ -284,14 +287,14 @@ protected:
         Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
 
         //底盘 云台 发射机构 前一帧控制类型
-        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_FLLOW;
         Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
         Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
 
         //单发连发标志位
         uint8_t Shoot_Flag = 0;
         //DR16控制数据来源
-        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
+        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
         //内部函数
 
         void Judge_DR16_Control_Type();

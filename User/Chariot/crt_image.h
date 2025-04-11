@@ -10,7 +10,6 @@ class Class_Image;
 enum Enum_Image_Control_Type :uint8_t
 {
     Image_Control_Type_DISABLE = 0,
-    Image_Control_Type_ENABLE,
     Image_Control_Type_CALIBRATE,//校准模式
     Image_Control_Type_NORMAL,//正常模式
 };
@@ -28,7 +27,7 @@ public:
     //图传roll轴电机
     Class_DJI_Motor_C610 Motor_Image_Roll;
     //图传pitch轴电机
-    Class_LK_Motor Motor_Image_Pitch;
+    Class_DJI_Motor_C610 Motor_Image_Pitch;
     //图传有限状态机
     Class_FSM_Image_Control FSM_Image_Control;
     friend class Class_FSM_Image_Control;
@@ -37,12 +36,15 @@ public:
     inline float Get_Target_Image_Roll_Angle();
     inline float Get_Target_Image_Pitch_Angle();
     inline float get_Image_Roll_Calibrate_Speed();
+    inline float get_Image_Pitch_Calibrate_Offset();
     inline float get_Image_Roll_Calibrate_Offset();
     inline void Set_Target_Image_Roll_Angle(float __Target_Image_Roll_Angle);
     inline void Set_Target_Image_Pitch_Angle(float __Target_Image_Pitch_Angle);
     inline void Set_Image_Control_Type(Enum_Image_Control_Type __Image_Control_Type);
     inline void Set_Image_Roll_Calibrate_Offset(float __Image_Roll_Calibrate_Offset);
+    inline void Set_Image_Pitch_Calibrate_Offset(float __Image_Pitch_Calibrate_Offset);
     inline void Set_Set_Image_Roll_Calibrate_Speed(float __Image_Roll_Calibrate_Speed);
+    bool Motor_Calibration(Class_DJI_Motor_C610 *motor,float *Cali_Offset,float Cali_Omega,float Cali_Max_Out);
     void TIM_Calculate_PeriodElapsedCallback();
 protected:
 
@@ -54,10 +56,16 @@ protected:
     float Target_Image_Pitch_Angle = 0.0f;//待定
     //图传roll轴校准速度rad/s
     float Image_Roll_Calibrate_Speed = 3.5f;
+    //图传pitch轴校准速度rad/s 
+    float Image_Pitch_Calibrate_Speed = 3.5f;
     //图传roll轴校准完后相对位置
     float Image_Roll_Calibrate_Offset = 0.0f;
+    //图传pitch轴校准完后相对位置
+    float Image_Pitch_Calibrate_Offset = 0.0f;
     //图传roll轴校准临界力矩
     float Image_Roll_Calibrate_Stiffness = 510.0f;
+    //图传pitch轴校准临界力矩
+    float Image_Pitch_Calibrate_Stiffness = 510.0f;
     //内部函数
     void Output();
 };
@@ -84,6 +92,14 @@ float Class_Image::Get_Target_Image_Pitch_Angle()
 float Class_Image::get_Image_Roll_Calibrate_Speed()
 {
     return (Image_Roll_Calibrate_Speed);
+}
+/**
+ * @brief 获取图传roll轴校准完后相对位置
+ * 
+ */
+float Class_Image::get_Image_Pitch_Calibrate_Offset()
+{
+    return (Image_Pitch_Calibrate_Offset);
 }
 /**
  * @brief 获取图传roll轴校准完后相对位置
@@ -123,6 +139,15 @@ void Class_Image::Set_Image_Control_Type(Enum_Image_Control_Type __Image_Control
 void Class_Image::Set_Image_Roll_Calibrate_Offset(float __Image_Roll_Calibrate_Offset)
 {
     Image_Roll_Calibrate_Offset = __Image_Roll_Calibrate_Offset;
+}
+
+/**
+ * @brief 设定图传roll轴校准完后相对位置
+ * 
+ */
+void Class_Image::Set_Image_Pitch_Calibrate_Offset(float __Image_Pitch_Calibrate_Offset)
+{
+    Image_Pitch_Calibrate_Offset = __Image_Pitch_Calibrate_Offset;
 }
 
 /**

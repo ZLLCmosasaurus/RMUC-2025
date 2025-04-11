@@ -17,7 +17,7 @@
 #include "drv_uart.h"
 #include "limits.h"
 #include <string.h>
-
+#include "config.h"
 #ifdef __cplusplus
 
 /* Exported macros -----------------------------------------------------------*/
@@ -238,10 +238,14 @@ enum Enum_Referee_Command_ID : uint16_t
     Referee_Command_ID_ROBOT_REMAINING_AMMO,
     Referee_Command_ID_ROBOT_RFID,
     Referee_Command_ID_ROBOT_DART_COMMAND,
+    Referee_Command_ID_ROBOT_LOCATION,
+    Referee_Command_ID_ROBOT_RADAR_PROCESS,
+    Referee_Command_ID_ROBOT_SENTRY_DECISION,
+    Referee_Command_ID_ROBOT_RADAR_DECISION,
     Referee_Command_ID_INTERACTION = 0x0301,
     Referee_Command_ID_INTERACTION_CUSTOM_CONTROLLER,
-    Referee_Command_ID_INTERACTION_RADAR_SEND,
-    Referee_Command_ID_INTERACTION_REMOTE_CONTROL,
+    Referee_Command_ID_INTERACTION_CUSTOM_MAP,
+    Referee_Command_ID_INTERACTION_REMOTE_CONTROLLER,
     Referee_Command_ID_INTERACTION_Client_RECEIVE,
 };
 
@@ -1209,9 +1213,12 @@ public:
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
 
+    inline uint16_t Get_Circle_Index(uint16_t index);
+
     #ifdef GIMBAL
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
     inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
+    inline void Set_Shoot_Speed(float __Shoot_Speed);
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
     inline void Set_Booster_42mm_1_Heat_CD(uint16_t __Booster_42mm_1_Heat_CD);
@@ -2228,6 +2235,11 @@ float Class_Referee::Get_Radar_Send_Coordinate_Y()
 }
 
 
+uint16_t Class_Referee::Get_Circle_Index(uint16_t index)
+{
+    return (index%UART_Manage_Object->Rx_Buffer_Length);
+}
+
 /**
  * @brief 设置机器人ID
  *
@@ -2250,6 +2262,10 @@ void Class_Referee::Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID)
 void Class_Referee::Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage)
 {
     this->Game_Status.Stage_Enum = __Game_Stage;
+}
+void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
+{
+    this->Robot_Booster.Speed = __Shoot_Speed;
 }
 #endif
 

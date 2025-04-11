@@ -7740,3 +7740,2546 @@ These source files will be recompiled
 [2025-03-26 20:16:40]	[done]
 	build successfully !
 
+[2025-03-26 22:43:54]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-26 22:43:55]	[done]
+	build successfully !
+
+[2025-03-26 22:48:08]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-26 22:48:09]	[done]
+	build successfully !
+
+[2025-03-26 22:48:12]	[done]
+	build successfully !
+
+[2025-03-26 22:50:50]	[done]
+	build successfully !
+
+[2025-03-27 16:54:06]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-27 16:54:07]	[done]
+	build successfully !
+
+[2025-03-27 16:54:10]	[done]
+	build successfully !
+
+[2025-03-27 16:54:18]	[done]
+	build successfully !
+
+[2025-03-27 17:25:03]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 17:25:05]	[done]
+	build successfully !
+
+[2025-03-27 17:28:18]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 17:28:19]	[done]
+	build successfully !
+
+[2025-03-27 17:29:17]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 17:29:19]	[done]
+	build successfully !
+
+[2025-03-27 21:41:52]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-27 21:41:52]	[done]
+	build successfully !
+
+[2025-03-27 21:56:50]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 21:56:52]	[done]
+	build successfully !
+
+[2025-03-27 21:59:32]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 21:59:33]	[done]
+	build successfully !
+
+[2025-03-27 22:00:37]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+
+[2025-03-27 22:00:38]	[done]
+	build successfully !
+
+[2025-03-27 22:01:21]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-27 22:01:22]	[done]
+	build successfully !
+
+[2025-03-27 22:24:33]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-27 22:24:35]	[done]
+	build successfully !
+
+[2025-03-27 22:27:22]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-27 22:27:23]	[done]
+	build successfully !
+
+[2025-03-27 22:27:56]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-27 22:27:57]	[done]
+	build successfully !
+
+[2025-03-27 22:45:16]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-27 22:45:18]	[done]
+	build successfully !
+
+[2025-03-27 22:49:10]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-27 22:49:11]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:176:25: error: use of undeclared identifier 'CAN_Manage_Object'
+  176 |         memcpy(&robo_id,CAN_Manage_Object->Rx_Buffer.Data,sizeof(uint8_t));
+      |                         ^
+./../User/Task/tsk_config_and_callback.cpp:177:28: error: use of undeclared identifier 'CAN_Manage_Object'
+  177 |         memcpy(&game_stage,CAN_Manage_Object->Rx_Buffer.Data+1,sizeof(uint8_t));
+      |                            ^
+2 errors generated.
+
+[2025-03-27 22:50:03]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-03-27 22:50:03]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:177:28: error: use of undeclared identifier 'CAN_Manage_Object'
+  177 |         memcpy(&game_stage,CAN_Manage_Object->Data+1,sizeof(uint8_t));
+      |                            ^
+1 error generated.
+
+[2025-03-27 22:50:10]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-03-27 22:50:11]	[done]
+	build successfully !
+
+[2025-03-27 22:50:30]	[done]
+	build successfully !
+
+[2025-03-27 23:30:39]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-27 23:30:40]	[done]
+	build successfully !
+
+[2025-03-27 23:54:45]	[done]
+	build successfully !
+
+[2025-03-27 23:54:57]	[done]
+	build successfully !
+
+[2025-03-28 00:09:52]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 00:09:52]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:344:17: error: no matching function for call to 'memset'
+  344 |                 memset(Rx_Data[7],0,sizeof(Struct_Image_UART_Data));
+      |                 ^~~~~~
+D:\Keil_v5\ARM\ARMCLANG\bin\..\include\string.h:321:22: note: candidate function not viable: no known conversion from 'uint8_t' (aka 'unsigned char') to 'void *' for 1st argument; take the address of the argument with &
+  321 | extern _ARMABI void *memset(void * /*s*/, int /*c*/, size_t /*n*/) __attribute__((__nonnull__(1)));
+      |                      ^      ~~~~~~
+1 error generated.
+
+[2025-03-28 00:10:30]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 00:10:31]	[done]
+	build successfully !
+
+[2025-03-28 00:10:49]	[done]
+	build successfully !
+
+[2025-03-28 00:23:21]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 00:23:23]	[done]
+	build successfully !
+
+[2025-03-28 00:26:47]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 00:26:48]	[done]
+	build successfully !
+
+[2025-03-28 12:48:07]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-28 12:48:08]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:697:36: error: invalid operands to binary expression ('float' and 'float (float) __attribute__((nothrow))')
+  697 |         Chassis_Actual_Limit_Power += (fabsf)Chassis.Supercap.Get_Supercap_Buffer_Power();
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~
+./../User/Interaction/ita_chariot.cpp:697:46: error: expected ';' after expression
+  697 |         Chassis_Actual_Limit_Power += (fabsf)Chassis.Supercap.Get_Supercap_Buffer_Power();
+      |                                              ^
+      |                                              ;
+./../User/Interaction/ita_chariot.cpp:698:5: error: expected expression
+  698 |     else
+      |     ^
+3 errors generated.
+
+[2025-03-28 12:49:09]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-03-28 12:49:10]	[done]
+	build successfully !
+
+[2025-03-28 13:02:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 13:02:58]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:679:33: error: expected ';' after top level declarator
+  679 | float Chassis_Actual_Limit_Power
+      |                                 ^
+      |                                 ;
+1 error generated.
+
+[2025-03-28 13:03:08]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+
+[2025-03-28 13:03:09]	[done]
+	build successfully !
+
+[2025-03-28 13:05:33]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-28 13:05:34]	[done]
+	build successfully !
+
+[2025-03-28 13:28:23]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-28 13:28:25]	[done]
+	build successfully !
+
+[2025-03-28 20:47:08]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_booster.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_booster.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_booster.h' has been changed.
+
+[2025-03-28 20:47:15]	[done]
+	build successfully !
+
+[2025-03-28 21:53:13]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-28 21:53:14]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:218:1: error: expected unqualified-id
+  218 | }
+      | ^
+1 error generated.
+
+[2025-03-28 21:59:10]	[info] incremental build: 8 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+
+[2025-03-28 21:59:18]	[done]
+	build successfully !
+
+[2025-03-28 22:02:18]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-28 22:02:19]	[done]
+	build successfully !
+
+[2025-03-28 22:02:48]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-28 22:02:50]	[done]
+	build successfully !
+
+[2025-03-28 22:04:56]	[done]
+	build successfully !
+
+[2025-03-28 22:18:22]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-28 22:18:24]	[done]
+	build successfully !
+
+[2025-03-28 22:20:29]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-28 22:20:31]	[done]
+	build successfully !
+
+[2025-03-29 01:07:40]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-29 01:07:42]	[done]
+	build successfully !
+
+[2025-03-29 01:30:55]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 01:30:56]	[done]
+	build successfully !
+
+[2025-03-29 02:17:12]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-29 02:17:14]	[done]
+	build successfully !
+
+[2025-03-29 02:19:03]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-29 02:19:05]	[done]
+	build successfully !
+
+[2025-03-29 02:22:20]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-29 02:22:21]	[done]
+	build successfully !
+
+[2025-03-29 02:22:31]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-29 02:22:31]	[done]
+	build successfully !
+
+[2025-03-29 02:26:47]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-03-29 02:26:48]	[done]
+	build successfully !
+
+[2025-03-29 02:29:16]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-03-29 02:29:17]	[done]
+	build successfully !
+
+[2025-03-29 21:10:02]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-03-29 21:10:04]	[done]
+	build successfully !
+
+[2025-03-29 21:15:32]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 21:15:33]	[done]
+	build successfully !
+
+[2025-03-29 21:51:27]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 21:51:28]	[done]
+	build successfully !
+
+[2025-03-29 21:52:07]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 21:52:08]	[done]
+	build successfully !
+
+[2025-03-29 21:52:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 21:52:27]	[done]
+	build successfully !
+
+[2025-03-29 22:16:13]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 22:16:14]	[done]
+	build successfully !
+
+[2025-03-29 22:22:23]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-03-29 22:22:24]	[done]
+	build successfully !
+
+[2025-03-29 22:22:44]	[done]
+	build successfully !
+
+[2025-04-03 22:12:17]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-03 22:12:25]	[done]
+	build successfully !
+
+[2025-04-03 22:24:45]	[info] incremental build: 6 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+
+[2025-04-03 22:24:47]	[done]
+	build successfully !
+
+[2025-04-03 22:28:45]	[done]
+	build successfully !
+
+[2025-04-05 00:29:53]	[info] incremental build: 16 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_booster.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_boardc_bmi088.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:29:54]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_imu.o -MMD ./../User/Device/dvc_imu.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+In file included from ./../User/Chariot/crt_booster.h:23:
+../User/Device\dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+./../User/Chariot/crt_booster.h:159:1: error: version control conflict marker in file
+  159 | <<<<<<< HEAD
+      | ^
+2 errors generated.
+In file included from ./../User/Chariot/crt_chassis.cpp:20:
+In file included from ./../User/Chariot/crt_chassis.h:25:
+../User/Device\dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+1 error generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:20:
+In file included from ../User/Device/dvc_imu.h:18:
+../User/Device/dvc_boardc_bmi088.h:39:1: error: version control conflict marker in file
+   39 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_boardc_bmi088.h:143:1: error: version control conflict marker in file
+  143 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:21:
+../User/Device/dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:1219:1: error: version control conflict marker in file
+ 1219 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:2262:1: error: version control conflict marker in file
+ 2262 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+../User/Device\dvc_minipc.h:294:1: error: version control conflict marker in file
+  294 | <<<<<<< HEAD
+      | ^
+6 errors generated.
+In file included from ./../User/Device/dvc_GraphicsSendTask.c:12:
+./../User/Device/dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+1 error generated.
+In file included from ./../User/Device/dvc_boardc_bmi088.cpp:1:
+./../User/Device/dvc_boardc_bmi088.h:39:1: error: version control conflict marker in file
+   39 | <<<<<<< HEAD
+      | ^
+./../User/Device/dvc_boardc_bmi088.h:143:1: error: version control conflict marker in file
+  143 | <<<<<<< HEAD
+      | ^
+2 errors generated.
+In file included from ./../User/Device/dvc_imu.cpp:17:
+In file included from ./../User/Device/dvc_imu.h:18:
+./../User/Device/dvc_boardc_bmi088.h:39:1: error: version control conflict marker in file
+   39 | <<<<<<< HEAD
+      | ^
+./../User/Device/dvc_boardc_bmi088.h:143:1: error: version control conflict marker in file
+  143 | <<<<<<< HEAD
+      | ^
+2 errors generated.
+
+[2025-04-05 00:30:03]	[info] incremental build: 13 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:30:04]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_chassis.o -MMD ./../User/Chariot/crt_chassis.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+In file included from ./../User/Chariot/crt_booster.h:23:
+../User/Device\dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+./../User/Chariot/crt_booster.h:159:1: error: version control conflict marker in file
+  159 | <<<<<<< HEAD
+      | ^
+2 errors generated.
+In file included from ./../User/Device/dvc_GraphicsSendTask.c:12:
+./../User/Device/dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+1 error generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:20:
+In file included from ../User/Device/dvc_imu.h:18:
+../User/Device/dvc_boardc_bmi088.h:136:1: error: version control conflict marker in file
+  136 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:21:
+../User/Device/dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:1219:1: error: version control conflict marker in file
+ 1219 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:2262:1: error: version control conflict marker in file
+ 2262 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+../User/Device\dvc_minipc.h:294:1: error: version control conflict marker in file
+  294 | <<<<<<< HEAD
+      | ^
+5 errors generated.
+In file included from ./../User/Chariot/crt_chassis.cpp:20:
+In file included from ./../User/Chariot/crt_chassis.h:25:
+../User/Device\dvc_referee.h:20:1: error: version control conflict marker in file
+   20 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:31:13]	[info] incremental build: 13 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:31:13]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_gimbal.o -MMD ./../User/Chariot/crt_gimbal.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_chassis.cpp:20:
+In file included from ./../User/Chariot/crt_chassis.h:25:
+../User/Device\dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device\dvc_referee.h:2258:1: error: version control conflict marker in file
+ 2258 | <<<<<<< HEAD
+      | ^
+2 errors generated.
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+In file included from ./../User/Chariot/crt_booster.h:23:
+../User/Device\dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device\dvc_referee.h:2258:1: error: version control conflict marker in file
+ 2258 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+./../User/Chariot/crt_booster.h:159:1: error: version control conflict marker in file
+  159 | <<<<<<< HEAD
+      | ^
+3 errors generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:20:
+In file included from ../User/Device/dvc_imu.h:18:
+../User/Device/dvc_boardc_bmi088.h:136:1: error: version control conflict marker in file
+  136 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:21:
+../User/Device/dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:2258:1: error: version control conflict marker in file
+ 2258 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+../User/Device\dvc_minipc.h:294:1: error: version control conflict marker in file
+  294 | <<<<<<< HEAD
+      | ^
+4 errors generated.
+
+[2025-04-05 00:31:23]	[info] incremental build: 13 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:31:24]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_chassis.o -MMD ./../User/Chariot/crt_chassis.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+In file included from ./../User/Chariot/crt_booster.h:23:
+../User/Device\dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device\dvc_referee.h:2258:21: error: out-of-line definition of 'Set_Shoot_Speed' does not match any declaration in 'Class_Referee'
+ 2258 | void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
+      |                     ^~~~~~~~~~~~~~~
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+./../User/Chariot/crt_booster.h:159:1: error: version control conflict marker in file
+  159 | <<<<<<< HEAD
+      | ^
+3 errors generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:20:
+In file included from ../User/Device/dvc_imu.h:18:
+../User/Device/dvc_boardc_bmi088.h:136:1: error: version control conflict marker in file
+  136 | <<<<<<< HEAD
+      | ^
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:21:
+../User/Device/dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device/dvc_referee.h:2258:21: error: out-of-line definition of 'Set_Shoot_Speed' does not match any declaration in 'Class_Referee'
+ 2258 | void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
+      |                     ^~~~~~~~~~~~~~~
+3 errors generated.
+In file included from ./../User/Chariot/crt_chassis.cpp:20:
+In file included from ./../User/Chariot/crt_chassis.h:25:
+../User/Device\dvc_referee.h:1215:1: error: version control conflict marker in file
+ 1215 | <<<<<<< HEAD
+      | ^
+../User/Device\dvc_referee.h:2258:21: error: out-of-line definition of 'Set_Shoot_Speed' does not match any declaration in 'Class_Referee'
+ 2258 | void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
+      |                     ^~~~~~~~~~~~~~~
+2 errors generated.
+
+[2025-04-05 00:32:12]	[info] incremental build: 13 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:32:13]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_gimbal.o -MMD ./../User/Chariot/crt_gimbal.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+./../User/Chariot/crt_booster.h:159:1: error: version control conflict marker in file
+  159 | <<<<<<< HEAD
+      | ^
+1 error generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:20:
+In file included from ../User/Device/dvc_imu.h:18:
+../User/Device/dvc_boardc_bmi088.h:136:1: error: version control conflict marker in file
+  136 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:32:27]	[info] incremental build: 11 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:32:28]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:280:1: error: version control conflict marker in file
+  280 | <<<<<<< HEAD
+      | ^
+1 error generated.
+In file included from ./../User/Interaction/ita_chariot.cpp:14:
+./../User/Interaction/ita_chariot.h:182:1: error: version control conflict marker in file
+  182 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:213:1: error: version control conflict marker in file
+  213 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:937:1: error: version control conflict marker in file
+  937 | <<<<<<< HEAD
+      | ^
+3 errors generated.
+
+[2025-04-05 00:32:37]	[info] incremental build: 5 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:32:37]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_minipc.o -MMD ./../User/Device/dvc_minipc.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:280:1: error: version control conflict marker in file
+  280 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:32:45]	[info] incremental build: 5 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:32:46]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:913:1: error: version control conflict marker in file
+  913 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:32:53]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-05 00:32:54]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:167:1: error: version control conflict marker in file
+  167 | <<<<<<< HEAD
+      | ^
+./../User/Task/tsk_config_and_callback.cpp:175:1: error: version control conflict marker in file
+  175 | <<<<<<< HEAD
+      | ^
+./../User/Task/tsk_config_and_callback.cpp:178:48: error: too few arguments to function call, single argument 'Rx_Data' was not specified
+  178 |         chariot.CAN_Gimbal_Rx_Chassis_Callback();
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+../User/Interaction\ita_chariot.h:182:14: note: 'CAN_Gimbal_Rx_Chassis_Callback' declared here
+  182 |         void CAN_Gimbal_Rx_Chassis_Callback(uint8_t *Rx_Data);
+      |              ^                              ~~~~~~~~~~~~~~~~
+3 errors generated.
+
+[2025-04-05 00:33:29]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-04-05 00:33:29]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:167:1: error: version control conflict marker in file
+  167 | <<<<<<< HEAD
+      | ^
+./../User/Task/tsk_config_and_callback.cpp:175:1: error: version control conflict marker in file
+  175 | <<<<<<< HEAD
+      | ^
+./../User/Task/tsk_config_and_callback.cpp:178:48: error: too few arguments to function call, single argument 'Rx_Data' was not specified
+  178 |         chariot.CAN_Gimbal_Rx_Chassis_Callback();
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+../User/Interaction\ita_chariot.h:182:14: note: 'CAN_Gimbal_Rx_Chassis_Callback' declared here
+  182 |         void CAN_Gimbal_Rx_Chassis_Callback(uint8_t *Rx_Data);
+      |              ^                              ~~~~~~~~~~~~~~~~
+3 errors generated.
+
+[2025-04-05 00:34:57]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-04-05 00:35:04]	[done]
+	build successfully !
+
+[2025-04-05 00:36:37]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-05 00:36:38]	[done]
+	build successfully !
+
+[2025-04-05 00:39:28]	[done]
+	build successfully !
+
+[2025-04-05 00:39:43]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-05 00:39:44]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Middleware/Driver/drv_can.o -MMD ./../User/Middleware/Driver/drv_can.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:51:1: error: version control conflict marker in file
+   51 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:179:1: error: version control conflict marker in file
+  179 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:626:1: error: version control conflict marker in file
+  626 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:697:1: error: version control conflict marker in file
+  697 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:717:1: error: version control conflict marker in file
+  717 | <<<<<<< HEAD
+      | ^
+5 errors generated.
+./../User/Middleware/Driver/drv_can.cpp:277:1: error: version control conflict marker in file
+  277 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:39:57]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': object (.o) file not exist
+
+[2025-04-05 00:39:57]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Interaction/ita_chariot.o -MMD ./../User/Interaction/ita_chariot.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Interaction/ita_chariot.cpp:677:1: error: version control conflict marker in file
+  677 | <<<<<<< HEAD
+      | ^
+./../User/Interaction/ita_chariot.cpp:697:5: error: use of undeclared identifier 'Chassis_Actual_Limit_Power'; did you mean 'Chassis_Actual_Power'?
+  697 |     Chassis_Actual_Limit_Power = Power_Max + Buffer_Power;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |     Chassis_Actual_Power
+./../User/Interaction/ita_chariot.cpp:686:11: note: 'Chassis_Actual_Power' declared here
+  686 |     float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
+      |           ^
+./../User/Interaction/ita_chariot.cpp:700:9: error: use of undeclared identifier 'Chassis_Actual_Limit_Power'; did you mean 'Chassis_Actual_Power'?
+  700 |         Chassis_Actual_Limit_Power += ((Chassis.Supercap.Get_Supercap_Buffer_Power() > 0)? Chassis.Supercap.Get_Supercap_Buffer_Power() : 0);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         Chassis_Actual_Power
+./../User/Interaction/ita_chariot.cpp:686:11: note: 'Chassis_Actual_Power' declared here
+  686 |     float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
+      |           ^
+./../User/Interaction/ita_chariot.cpp:702:9: error: use of undeclared identifier 'Chassis_Actual_Limit_Power'; did you mean 'Chassis_Actual_Power'?
+  702 |         Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         Chassis_Actual_Power
+./../User/Interaction/ita_chariot.cpp:686:11: note: 'Chassis_Actual_Power' declared here
+  686 |     float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
+      |           ^
+./../User/Interaction/ita_chariot.cpp:702:38: error: use of undeclared identifier 'Chassis_Actual_Limit_Power'; did you mean 'Chassis_Actual_Power'?
+  702 |         Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                      Chassis_Actual_Power
+./../User/Interaction/ita_chariot.cpp:686:11: note: 'Chassis_Actual_Power' declared here
+  686 |     float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
+      |           ^
+./../User/Interaction/ita_chariot.cpp:716:33: error: use of undeclared identifier 'Chassis_Actual_Limit_Power'; did you mean 'Chassis_Actual_Power'?
+  716 |     memcpy(CAN1_0x01E_Tx_Data, &Chassis_Actual_Limit_Power, sizeof(float));
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                 Chassis_Actual_Power
+./../User/Interaction/ita_chariot.cpp:686:11: note: 'Chassis_Actual_Power' declared here
+  686 |     float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
+      |           ^
+6 errors generated.
+
+[2025-04-05 00:40:24]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': object (.o) file not exist
+
+[2025-04-05 00:40:25]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../User/Task -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Middleware/Driver/drv_can.o -MMD ./../User/Middleware/Driver/drv_can.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Middleware/Driver/drv_can.cpp:277:1: error: version control conflict marker in file
+  277 | <<<<<<< HEAD
+      | ^
+1 error generated.
+
+[2025-04-05 00:40:31]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': object (.o) file not exist
+
+[2025-04-05 00:40:32]	[done]
+	build successfully !
+
+[2025-04-05 00:47:35]	[done]
+	build successfully !
+
+[2025-04-05 16:57:44]	[done]
+	build successfully !
+
+[2025-04-05 17:01:36]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-05 17:01:37]	[done]
+	build successfully !
+
+[2025-04-05 17:01:57]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-05 17:02:00]	[done]
+	build successfully !
+
+[2025-04-05 17:06:06]	[done]
+	build successfully !
+
+[2025-04-05 17:14:22]	[done]
+	build successfully !
+
+[2025-04-05 17:50:19]	[info] incremental build: 86 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\can.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\dma.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\gpio.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\i2c.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\main.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\spi.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_hal_msp.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\system_stm32f4xx.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\tim.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_exti.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pcd_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usb_device.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_cdc_if.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\App\usbd_desc.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\USB_DEVICE\Target\usbd_conf.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_ist8310.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_buzzer.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dmmotor.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dwt.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_sampler.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_servo.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\PID.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\QuaternionEKF.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_MahonyAHRS.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_filter.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_fsm.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_slope.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\kalman_filter.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\user_lib.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_dwt.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_i2c.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_math.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_spi.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_tim.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_usb.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': compiler options has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': compiler options has been changed.
+
+[2025-04-05 17:50:24]	[done]
+	build successfully !
+
+[2025-04-05 20:59:33]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-05 20:59:34]	[done]
+	build successfully !
+
+[2025-04-05 21:24:09]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-04-05 21:24:09]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_minipc.o -MMD ./../User/Device/dvc_minipc.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:344:15: error: default initialization of an object of const type 'const float'
+  344 |   const float Booster_Length;//发射转轴到枪口实际距离
+      |               ^             
+      |                              = 0.0
+./../User/Device/dvc_minipc.cpp:345:15: error: default initialization of an object of const type 'const float'
+  345 |   const float Object_Length;//激光相较于发射转轴水平距离
+      |               ^            
+      |                             = 0.0
+2 errors generated.
+
+[2025-04-05 21:24:28]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-04-05 21:24:29]	[done]
+	build successfully !
+
+[2025-04-06 22:59:44]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+
+[2025-04-06 22:59:45]	[done]
+	build successfully !
+
+[2025-04-06 23:51:53]	[done]
+	build successfully !
+
+[2025-04-07 16:01:02]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 16:01:04]	[done]
+	build successfully !
+
+[2025-04-07 16:07:19]	[info] incremental build: 12 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_imu.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_lkmotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_pid.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Algorithm\alg_pid.h' has been changed.
+
+[2025-04-07 16:07:21]	[done]
+	build successfully !
+
+[2025-04-07 16:10:52]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-07 16:10:53]	[done]
+	build successfully !
+
+[2025-04-07 16:14:07]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 16:14:08]	[done]
+	build successfully !
+
+[2025-04-07 20:21:08]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 20:21:11]	[done]
+	build successfully !
+
+[2025-04-07 20:21:47]	[done]
+	build successfully !
+
+[2025-04-07 20:22:54]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 20:22:55]	[done]
+	build successfully !
+
+[2025-04-07 20:26:30]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 20:26:31]	[done]
+	build successfully !
+
+[2025-04-07 20:27:41]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 20:27:42]	[done]
+	build successfully !
+
+[2025-04-07 20:35:53]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 20:35:55]	[done]
+	build successfully !
+
+[2025-04-07 20:36:54]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 20:36:56]	[done]
+	build successfully !
+
+[2025-04-07 20:46:46]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_chassis.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 20:46:48]	[done]
+	build successfully !
+
+[2025-04-07 20:58:20]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 20:58:22]	[done]
+	build successfully !
+
+[2025-04-07 21:10:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 21:10:27]	[done]
+	build successfully !
+
+[2025-04-07 21:15:28]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 21:15:29]	[done]
+	build successfully !
+
+[2025-04-07 21:17:37]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-07 21:17:38]	[done]
+	build successfully !
+
+[2025-04-07 21:27:06]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-07 21:27:06]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_referee.o -MMD ./../User/Device/dvc_referee.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_referee.cpp:90:27: error: use of undeclared identifier 'FPS_Counter_Update'
+   90 |                     FPS = FPS_Counter_Update();
+      |                           ^
+1 error generated.
+
+[2025-04-07 21:27:31]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-07 21:27:32]	[done]
+	build successfully !
+
+[2025-04-07 22:01:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+
+[2025-04-07 22:01:58]	compilation failed at : "d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc -std=c99 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/Core/Src/stm32f4xx_it.o -MMD ./../Core/Src/stm32f4xx_it.c
+   at unify_builder.Program.Main(String[] args_)
+---
+./../Core/Src/stm32f4xx_it.c:512:76: error: no member named 'NDTR' in 'USART_TypeDef'
+  512 |     UART6_Manage_Object.Rx_Length = UART6_Manage_Object.Rx_Buffer_Length - __HAL_DMA_GET_COUNTER(&huart6);             
+      |                                                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Drivers/STM32F4xx_HAL_Driver/Inc\stm32f4xx_hal_dma.h:635:68: note: expanded from macro '__HAL_DMA_GET_COUNTER'
+  635 | #define __HAL_DMA_GET_COUNTER(__HANDLE__) ((__HANDLE__)->Instance->NDTR)
+      |                                            ~~~~~~~~~~~~~~~~~~~~~~  ^
+1 error generated.
+
+[2025-04-07 22:02:28]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': object (.o) file not exist
+
+[2025-04-07 22:02:35]	[done]
+	build successfully !
+
+[2025-04-07 22:03:12]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-07 22:03:13]	[done]
+	build successfully !
+
+[2025-04-07 22:10:46]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+
+[2025-04-07 22:10:48]	[done]
+	build successfully !
+
+[2025-04-07 22:10:53]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+
+[2025-04-07 22:10:54]	[done]
+	build successfully !
+
+[2025-04-07 22:13:59]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+
+[2025-04-07 22:14:00]	[done]
+	build successfully !
+
+[2025-04-07 22:31:32]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+
+[2025-04-07 22:31:33]	[done]
+	build successfully !
+
+[2025-04-07 22:41:53]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-07 22:41:54]	[done]
+	build successfully !
+
+[2025-04-07 23:00:23]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': source file has been changed.
+
+[2025-04-07 23:00:24]	[done]
+	build successfully !
+
+[2025-04-07 23:18:52]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-07 23:18:54]	[done]
+	build successfully !
+
+[2025-04-07 23:19:16]	[info] incremental build: 15 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_manifold.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_serialplot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_witahrs.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_uart.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Middleware\Driver\drv_uart.h' has been changed.
+
+[2025-04-07 23:19:19]	[done]
+	build successfully !
+
+[2025-04-07 23:43:35]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 23:43:36]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_booster.o -MMD ./../User/Chariot/crt_booster.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+In file included from ./../User/Chariot/crt_chassis.cpp:20:
+In file included from ./../User/Chariot/crt_chassis.h:25:
+../User/Device\dvc_referee.h:2236:5: error: use of undeclared identifier 'retrun'
+ 2236 |     retrun (index%UART_Manage_Object->Rx_Buffer_Length);
+      |     ^
+1 error generated.
+In file included from ./../User/Chariot/crt_gimbal.cpp:14:
+In file included from ./../User/Chariot/crt_gimbal.h:20:
+In file included from ../User/Device\dvc_minipc.h:21:
+../User/Device/dvc_referee.h:2236:5: error: use of undeclared identifier 'retrun'
+ 2236 |     retrun (index%UART_Manage_Object->Rx_Buffer_Length);
+      |     ^
+1 error generated.
+In file included from ./../User/Chariot/crt_booster.cpp:14:
+In file included from ./../User/Chariot/crt_booster.h:23:
+../User/Device\dvc_referee.h:2236:5: error: use of undeclared identifier 'retrun'
+ 2236 |     retrun (index%UART_Manage_Object->Rx_Buffer_Length);
+      |     ^
+1 error generated.
+
+[2025-04-07 23:43:53]	[info] incremental build: 12 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-07 23:43:55]	[done]
+	build successfully !
+
+[2025-04-07 23:47:34]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-07 23:47:35]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_referee.o -MMD ./../User/Device/dvc_referee.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_referee.cpp:96:26: error: no member named 'vector' in namespace 'std'
+   96 |                     std::vector<uint8_t> data_temp(data_length);
+      |                     ~~~~~^
+./../User/Device/dvc_referee.cpp:96:33: error: unexpected type name 'uint8_t': expected expression
+   96 |                     std::vector<uint8_t> data_temp(data_length);
+      |                                 ^
+./../User/Device/dvc_referee.cpp:96:42: error: use of undeclared identifier 'data_temp'
+   96 |                     std::vector<uint8_t> data_temp(data_length);
+      |                                          ^
+./../User/Device/dvc_referee.cpp:98:25: error: use of undeclared identifier 'data_temp'
+   98 |                         data_temp[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index+7+i)];
+      |                         ^
+./../User/Device/dvc_referee.cpp:100:42: error: use of undeclared identifier 'data_temp'
+  100 |                     memcpy(&Game_Status, data_temp.data(), sizeof(Struct_Referee_Rx_Data_Game_Status));
+      |                                          ^
+5 errors generated.
+
+[2025-04-07 23:47:46]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': object (.o) file not exist
+
+[2025-04-07 23:47:47]	[done]
+	build successfully !
+
+[2025-04-07 23:50:16]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-07 23:50:17]	[done]
+	build successfully !
+
+[2025-04-07 23:51:01]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-07 23:51:02]	[done]
+	build successfully !
+
+[2025-04-07 23:56:57]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-07 23:56:57]	[done]
+	build successfully !
+
+[2025-04-07 23:57:22]	[done]
+	build successfully !
+
+[2025-04-08 00:04:19]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-08 00:04:20]	[done]
+	build successfully !
+
+[2025-04-08 00:10:10]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-08 00:10:11]	[done]
+	build successfully !
+
+[2025-04-08 00:10:22]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+
+[2025-04-08 00:10:23]	[done]
+	build successfully !
+
+[2025-04-08 00:13:17]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 00:13:18]	[done]
+	build successfully !
+
+[2025-04-08 00:14:19]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 00:14:20]	[done]
+	build successfully !
+
+[2025-04-08 00:38:13]	[info] incremental build: 8 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_referee.h' has been changed.
+
+[2025-04-08 00:38:15]	[done]
+	build successfully !
+
+[2025-04-08 00:38:40]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 00:38:41]	[done]
+	build successfully !
+
+[2025-04-08 00:55:27]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-08 00:55:28]	[done]
+	build successfully !
+
+[2025-04-08 01:16:37]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 01:16:38]	[done]
+	build successfully !
+
+[2025-04-08 01:28:01]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 01:28:01]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_referee.o -MMD ./../User/Device/dvc_referee.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_referee.cpp:98:22: error: use of undeclared identifier 'constant'; did you mean 'const_cast'?
+   98 |                 case constant Referee_Command_ID_GAME_STATUS:
+      |                      ^~~~~~~~
+      |                      const_cast
+./../User/Device/dvc_referee.cpp:98:30: error: expected '<' after 'const_cast'
+   98 |                 case constant Referee_Command_ID_GAME_STATUS:
+      |                              ^
+      |                              <
+2 errors generated.
+
+[2025-04-08 01:28:13]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': object (.o) file not exist
+
+[2025-04-08 01:28:14]	[done]
+	build successfully !
+
+[2025-04-08 01:34:33]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 01:34:34]	[done]
+	build successfully !
+
+[2025-04-08 01:39:16]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 01:39:16]	[done]
+	build successfully !
+
+[2025-04-08 14:31:25]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 14:31:25]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_referee.o -MMD ./../User/Device/dvc_referee.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_referee.cpp:86:13: error: use of undeclared identifier 'Math_Constrain'
+   86 |             Math_Constrain(&data_length,(uint16_t)0,(uint16_t)(128));  //限制数据段最大长度
+      |             ^
+1 error generated.
+
+[2025-04-08 14:31:45]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': object (.o) file not exist
+
+[2025-04-08 14:31:46]	[done]
+	build successfully !
+
+[2025-04-08 14:32:05]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-08 14:32:06]	[done]
+	build successfully !
+
+[2025-04-08 20:15:04]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-08 20:15:06]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_minipc.o -MMD ./../User/Device/dvc_minipc.cpp
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:63:31: error: no member named 'Chassis_Vy' in 'Pack_rx_t'
+   63 |     Rx_Chassis_Vx = - Pack_Rx.Chassis_Vy;
+      |                       ~~~~~~~ ^
+./../User/Device/dvc_minipc.cpp:64:29: error: no member named 'Chassis_Vx' in 'Pack_rx_t'
+   64 |     Rx_Chassis_Vy = Pack_Rx.Chassis_Vx;
+      |                     ~~~~~~~ ^
+2 errors generated.
+
+[2025-04-08 20:17:13]	[info] incremental build: 6 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-08 20:17:16]	[done]
+	build successfully !
+
+[2025-04-08 20:29:53]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-04-08 20:29:55]	[done]
+	build successfully !
+
+[2025-04-08 20:30:37]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-04-08 20:30:37]	[done]
+	build successfully !
+
+[2025-04-08 20:31:16]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+
+[2025-04-08 20:31:18]	[done]
+	build successfully !
+
+[2025-04-08 21:09:10]	[done]
+	build successfully !
+
+[2025-04-08 22:06:45]	[info] incremental build: 16 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-08 22:06:46]	[done]
+	build successfully !
+
+[2025-04-08 22:42:32]	[done]
+	build successfully !
+
+[2025-04-10 20:41:01]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': source file has been changed.
+
+[2025-04-10 20:41:02]	[done]
+	build successfully !
+
+[2025-04-10 21:31:30]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:31:30]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:39:67: error: no member named 'get_Image_Pitch_Calibrate_Offset' in 'Class_Image'
+   39 |         Image->Set_Target_Image_Pitch_Angle(target_pitch + Image->get_Image_Pitch_Calibrate_Offset());
+      |                                                            ~~~~~  ^
+./../User/Chariot/crt_image.cpp:61:68: error: too many arguments to function call, expected at most 5, have 6
+   61 |     Motor_Image_Pitch.Init(&hcan1, DJI_Motor_ID_0x206,0.0f,0,33.0f,LK_Motor_Control_Method_ANGLE);
+      |     ~~~~~~~~~~~~~~~~~~~~~~                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../User/Device\dvc_djimotor.h:225:10: note: 'Init' declared here
+  225 |     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 36.0f, float __Torque_Max = 10000.0f);
+      |          ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:72:27: error: no member named 'Set_LK_Motor_Control_Method' in 'Class_DJI_Motor_C610'
+   72 |         Motor_Image_Pitch.Set_LK_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+      |         ~~~~~~~~~~~~~~~~~ ^
+./../User/Chariot/crt_image.cpp:107:23: error: no member named 'TIM_Process_PeriodElapsedCallback' in 'Class_DJI_Motor_C610'
+  107 |     Motor_Image_Pitch.TIM_Process_PeriodElapsedCallback();
+      |     ~~~~~~~~~~~~~~~~~ ^
+4 errors generated.
+
+[2025-04-10 21:32:28]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:32:29]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:61:68: error: too many arguments to function call, expected at most 5, have 6
+   61 |     Motor_Image_Pitch.Init(&hcan1, DJI_Motor_ID_0x206,0.0f,0,33.0f,LK_Motor_Control_Method_ANGLE);
+      |     ~~~~~~~~~~~~~~~~~~~~~~                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../User/Device\dvc_djimotor.h:225:10: note: 'Init' declared here
+  225 |     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 36.0f, float __Torque_Max = 10000.0f);
+      |          ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:72:27: error: no member named 'Set_LK_Motor_Control_Method' in 'Class_DJI_Motor_C610'
+   72 |         Motor_Image_Pitch.Set_LK_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+      |         ~~~~~~~~~~~~~~~~~ ^
+./../User/Chariot/crt_image.cpp:107:23: error: no member named 'TIM_Process_PeriodElapsedCallback' in 'Class_DJI_Motor_C610'
+  107 |     Motor_Image_Pitch.TIM_Process_PeriodElapsedCallback();
+      |     ~~~~~~~~~~~~~~~~~ ^
+3 errors generated.
+
+[2025-04-10 21:32:48]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:32:48]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:61:68: error: too many arguments to function call, expected at most 5, have 6
+   61 |     Motor_Image_Pitch.Init(&hcan1, DJI_Motor_ID_0x206,0.0f,0,33.0f,DJI_Motor_Control_Method_ANGLE);
+      |     ~~~~~~~~~~~~~~~~~~~~~~                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../User/Device\dvc_djimotor.h:225:10: note: 'Init' declared here
+  225 |     void Init(CAN_HandleTypeDef *__hcan, Enum_DJI_Motor_ID __CAN_ID, Enum_DJI_Motor_Control_Method __Control_Method = DJI_Motor_Control_Method_OMEGA, float __Gearbox_Rate = 36.0f, float __Torque_Max = 10000.0f);
+      |          ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:72:27: error: no member named 'Set_LK_Motor_Control_Method' in 'Class_DJI_Motor_C610'
+   72 |         Motor_Image_Pitch.Set_LK_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+      |         ~~~~~~~~~~~~~~~~~ ^
+./../User/Chariot/crt_image.cpp:107:23: error: no member named 'TIM_Process_PeriodElapsedCallback' in 'Class_DJI_Motor_C610'
+  107 |     Motor_Image_Pitch.TIM_Process_PeriodElapsedCallback();
+      |     ~~~~~~~~~~~~~~~~~ ^
+3 errors generated.
+
+[2025-04-10 21:33:09]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:33:10]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:72:27: error: no member named 'Set_LK_Motor_Control_Method' in 'Class_DJI_Motor_C610'
+   72 |         Motor_Image_Pitch.Set_LK_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+      |         ~~~~~~~~~~~~~~~~~ ^
+./../User/Chariot/crt_image.cpp:107:23: error: no member named 'TIM_Process_PeriodElapsedCallback' in 'Class_DJI_Motor_C610'
+  107 |     Motor_Image_Pitch.TIM_Process_PeriodElapsedCallback();
+      |     ~~~~~~~~~~~~~~~~~ ^
+2 errors generated.
+
+[2025-04-10 21:33:19]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:33:19]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:107:23: error: no member named 'TIM_Process_PeriodElapsedCallback' in 'Class_DJI_Motor_C610'
+  107 |     Motor_Image_Pitch.TIM_Process_PeriodElapsedCallback();
+      |     ~~~~~~~~~~~~~~~~~ ^
+1 error generated.
+
+[2025-04-10 21:33:26]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Interaction\ita_chariot.h' has been changed.
+
+[2025-04-10 21:33:27]	[done]
+	build successfully !
+
+[2025-04-10 21:36:14]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-10 21:36:15]	[done]
+	build successfully !
+
+[2025-04-10 21:44:54]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+
+[2025-04-10 21:44:54]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:29:25: error: no member named 'Motor_Image_pitch' in 'Class_Image'; did you mean 'Motor_Image_Pitch'?
+   29 |             fabs(Image->Motor_Image_pitch.Get_Now_Omega_Radian()) < 0.01f*PI)
+      |                         ^~~~~~~~~~~~~~~~~
+      |                         Motor_Image_Pitch
+./../User/Chariot/crt_image.h:30:26: note: 'Motor_Image_Pitch' declared here
+   30 |     Class_DJI_Motor_C610 Motor_Image_Pitch;
+      |                          ^
+1 error generated.
+
+[2025-04-10 21:45:17]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+
+[2025-04-10 21:45:18]	[done]
+	build successfully !
+
+[2025-04-10 22:02:45]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_image.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_image.h' has been changed.
+
+[2025-04-10 22:02:45]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Chariot/crt_image.o -MMD ./../User/Chariot/crt_image.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Chariot/crt_image.cpp:16:53: error: too many arguments to function call, expected 0, have 4
+   16 |             Cali_Flag[0] = Image->Motor_Calibration(&Image->Motor_Image_Pitch,
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   17 |                                                     &Image->Image_Pitch_Calibrate_Offset,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 |                                                     Image->Image_Pitch_Calibrate_Speed,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   19 |                                                     Image->Image_Pitch_Calibrate_Stiffness);
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.h:69:10: note: 'Motor_Calibration' declared here
+   69 |     void Motor_Calibration();
+      |          ^
+./../User/Chariot/crt_image.cpp:16:28: error: assigning to 'uint8_t' (aka 'unsigned char') from incompatible type 'void'
+   16 |             Cali_Flag[0] = Image->Motor_Calibration(&Image->Motor_Image_Pitch,
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   17 |                                                     &Image->Image_Pitch_Calibrate_Offset,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 |                                                     Image->Image_Pitch_Calibrate_Speed,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   19 |                                                     Image->Image_Pitch_Calibrate_Stiffness);
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:24:53: error: too many arguments to function call, expected 0, have 4
+   24 |             Cali_Flag[1] = Image->Motor_Calibration(&Image->Motor_Image_Roll,
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~
+   25 |                                                     &Image->Image_Roll_Calibrate_Offset,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   26 |                                                     Image->Image_Roll_Calibrate_Speed,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   27 |                                                     Image->Image_Roll_Calibrate_Stiffness);
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.h:69:10: note: 'Motor_Calibration' declared here
+   69 |     void Motor_Calibration();
+      |          ^
+./../User/Chariot/crt_image.cpp:24:28: error: assigning to 'uint8_t' (aka 'unsigned char') from incompatible type 'void'
+   24 |             Cali_Flag[1] = Image->Motor_Calibration(&Image->Motor_Image_Roll,
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   25 |                                                     &Image->Image_Roll_Calibrate_Offset,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   26 |                                                     Image->Image_Roll_Calibrate_Speed,
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   27 |                                                     Image->Image_Roll_Calibrate_Stiffness);
+      |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:49:20: error: out-of-line definition of 'Motor_Calibration' does not match any declaration in 'Class_Image'
+   49 | bool  Class_Image::Motor_Calibration(Class_DJI_Motor_C610 *motor,float *Cali_Offset,float Cali_Omega,float Cali_Max_Out)
+      |                    ^~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.cpp:113:27: error: too many arguments to function call, expected 0, have 4
+  113 |         Motor_Calibration(&Motor_Image_Roll,&Image_Roll_Calibrate_Offset,Image_Roll_Calibrate_Speed,Image_Roll_Calibrate_Stiffness);
+      |         ~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.h:69:10: note: 'Motor_Calibration' declared here
+   69 |     void Motor_Calibration();
+      |          ^
+./../User/Chariot/crt_image.cpp:114:27: error: too many arguments to function call, expected 0, have 4
+  114 |         Motor_Calibration(&Motor_Image_Pitch,&Image_Pitch_Calibrate_Offset,Image_Pitch_Calibrate_Speed,Image_Pitch_Calibrate_Stiffness);
+      |         ~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./../User/Chariot/crt_image.h:69:10: note: 'Motor_Calibration' declared here
+   69 |     void Motor_Calibration();
+      |          ^
+7 errors generated.
+
+[2025-04-10 22:03:24]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_image.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Chariot\crt_image.h' has been changed.
+
+[2025-04-10 22:03:26]	[done]
+	build successfully !
+
+[2025-04-10 22:08:56]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+
+[2025-04-10 22:08:57]	[done]
+	build successfully !
+
+[2025-04-10 22:28:27]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+
+[2025-04-10 22:28:28]	[done]
+	build successfully !
+

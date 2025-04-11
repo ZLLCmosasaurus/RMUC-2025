@@ -211,6 +211,7 @@ struct Pack_tx_t
 	float roll;
 	float pitch;
 	float yaw;
+    uint8_t radar_enable_control;//雷达使能标志位 0 关闭雷达 1 打开雷达
 	uint16_t crc16;
 }__attribute__((packed));
 
@@ -224,12 +225,13 @@ struct Pack_rx_t
 	uint8_t header;
 	float target_yaw;
 	float target_pitch;
-	float target_x;
-	float target_y;
-	float target_z;	
-    uint8_t fire_permission;//0不允许拨弹  1允许拨弹
-    float Chassis_Vx;
-    float Chassis_Vy;
+	float target_x;//自瞄目标x坐标
+	float target_y;//自瞄目标y坐标
+	float target_z;//自瞄目标z坐标
+    float radar_target_x;//雷达目标x坐标
+    float radar_target_y;//雷达目标y坐标
+    float radar_target_z;//雷达目标z坐标
+    uint8_t radar_enable_status;//雷达状态 0 雷达未开启 1 雷达已开启
 	uint16_t crc16;
 }__attribute__((packed));
 
@@ -258,9 +260,6 @@ public:
     inline float Get_Rx_Pitch_Angle();
     inline float Get_Rx_Yaw_Angle();
     inline float Get_Distance();
-    inline uint8_t Get_Fire_Permission();
-    inline float Get_Chassis_Vx();
-    inline float Get_Chassis_Vy();
     inline Enum_MiniPC_Type Get_MiniPC_Type();
     inline Enum_MiniPC_Move_Control_Mode Get_Move_Control_Mode();
 
@@ -291,13 +290,14 @@ public:
     float calc_distance(float x, float y, float z) ;
     float calc_pitch(float x, float y, float z) ;
     void Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance);
-
+    float Get_Shoot_Speed();
     float meanFilter(float input);
 
     void USB_RxCpltCallback(uint8_t *Rx_Data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
-
+    void Remote_Controlled_Shot();
+    
     Class_IMU *IMU;
     Class_Referee *Referee;
 
@@ -338,8 +338,6 @@ protected:
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
-    float Rx_Chassis_Vx;
-    float Rx_Chassis_Vy;
 
     float g = 9.8f; // 重力加速度
     float bullet_v = 15.0;//28.0; // 子弹速度  
@@ -690,21 +688,7 @@ void Class_MiniPC::Transform_Angle_Rx()
     Rx_Angle_Pitch = Pack_Rx.target_pitch;
     Rx_Angle_Yaw = Pack_Rx.target_yaw;
 }
-/// @brief 获取是否允许开火指令
-/// @return 指令
-uint8_t Class_MiniPC::Get_Fire_Permission()
-{
-    return (Pack_Rx.fire_permission);
-}
-float Class_MiniPC::Get_Chassis_Vx()
-{
-    return (Rx_Chassis_Vx);
-}
 
-float Class_MiniPC::Get_Chassis_Vy()
-{
-    return (Rx_Chassis_Vy);
-}
 #endif
 #endif
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

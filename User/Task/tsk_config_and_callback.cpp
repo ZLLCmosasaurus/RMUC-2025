@@ -83,7 +83,6 @@ Class_Serialplot serialplot;
  * @param CAN_RxMessage CAN1收到的消息
  */
 #ifdef CHASSIS
- float Fps_supercap = 0;
 void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
@@ -100,7 +99,6 @@ void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     break;
     case (0x67):  //留给超级电容
     {
-         Fps_supercap = FPS_Counter_Update();
         chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
@@ -155,6 +153,16 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Booster.Fric[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
+    case (0x205):
+    {
+        chariot.Image.Motor_Image_Roll.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
+    case (0x206):
+    {
+        chariot.Image.Motor_Image_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
     }
 }
 #endif
@@ -164,13 +172,28 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
  * @param CAN_RxMessage CAN2收到的消息
  */
 #ifdef GIMBAL
+float Shoot;
 void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x88):   //留给下板通讯
+    case (0x51):   //留给下板通讯
     {
-        chariot.CAN_Gimbal_Rx_Chassis_Callback();
+        //chariot.CAN_Gimbal_Rx_Chassis_Callback(CAN_RxMessage->Data);
+        Enum_Referee_Data_Robots_ID robo_id;
+        Enum_Referee_Game_Status_Stage game_stage;
+        float shoot_speed;
+        memcpy(&robo_id,CAN_RxMessage->Data,sizeof(uint8_t));
+        memcpy(&game_stage,CAN_RxMessage->Data+1,sizeof(uint8_t));
+        memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(float));
+        chariot.Referee.Set_Robot_ID(robo_id);
+        chariot.Referee.Set_Game_Stage(game_stage);
+        chariot.Referee.Set_Shoot_Speed(shoot_speed);
+        Math_Constrain(&shoot_speed,5.0f,17.0f);
+        //chariot.MiniPC.Set_bullet_v(shoot_speed);
+        
+        //Shoot = chariot.MiniPC.Get_Shoot_Speed();
+
     }
     break;
     case (0x207):
@@ -377,9 +400,10 @@ extern "C" void Task_Init()
         CAN_Init(&hcan2, Chassis_Device_CAN2_Callback);
 
         //裁判系统
-        //UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+        // UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
          __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
-	     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
+	     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 256);
+         UART6_Manage_Object.Rx_Buffer_Length = 256;
 
         #ifdef POWER_LIMIT
         //旧版超电
@@ -402,7 +426,7 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-		UART_Init(&huart6, Image_UART6_Callback, 40);
+		UART_Init(&huart1, Image_UART6_Callback, 40);
 
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
@@ -430,7 +454,7 @@ extern "C" void Task_Init()
 }
 extern "C" void Task_Loop()
 {
-    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,128);
+    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,64);
 }
 
 /**
