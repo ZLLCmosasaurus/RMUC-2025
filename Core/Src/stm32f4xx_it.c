@@ -72,6 +72,7 @@ extern DMA_HandleTypeDef hdma_usart1_rx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern DMA_HandleTypeDef hdma_usart6_tx;
+extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 /* USER CODE BEGIN EV */
@@ -357,6 +358,20 @@ void TIM4_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART3 global interrupt.
   */
 void USART3_IRQHandler(void)
@@ -508,11 +523,11 @@ void USART6_IRQHandler(void)
   #ifdef CHASSIS
   if(RESET != __HAL_UART_GET_FLAG(&huart6, UART_FLAG_IDLE))
   {
-    __HAL_UART_CLEAR_IDLEFLAG(&huart6);                       //��������жϱ��?
+    __HAL_UART_CLEAR_IDLEFLAG(&huart6);              
 		HAL_UART_DMAStop(&huart6);
     Task_Loop();
-    HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
-    memset(UART6_Manage_Object.Rx_Buffer, 0, 128);
+    HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 256);
+    // memset(UART6_Manage_Object.Rx_Buffer, 0, 128);
   }
   #endif
   /* USER CODE END USART6_IRQn 1 */

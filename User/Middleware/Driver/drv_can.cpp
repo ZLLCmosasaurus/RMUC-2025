@@ -274,9 +274,17 @@ void TIM_CAN_PeriodElapsedCallback()
         mod50 = 0;
         // CAN1超级电容
         CAN_Send_Data(&hcan1, 0x66, CAN_Supercap_Tx_Data, 8);
-        // CAN1 发送报文给上板
-        //CAN_Send_Data(&hcan1, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
     }
+
+    static uint16_t mod500 = 0;
+    mod500++;
+    if(mod500 == 500)
+    {
+        mod500 = 0;
+        // CAN1 发送报文给上板
+        CAN_Send_Data(&hcan1, 0x51, CAN2_Chassis_Tx_Gimbal_Data, 8);
+    }
+
     static uint8_t mod5 = 0;
     mod5++;
     if (mod5 == 5)
@@ -302,10 +310,10 @@ void TIM_CAN_PeriodElapsedCallback()
         can_tx_status[0] = CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); // 摩擦轮*4
         mod = 0;
     }
-    // if(mod % 3 == 1)
-    //     can_tx_status[1] = CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); // 图传roll
-    // if(mod % 3 == 2)
-    //     can_tx_status[2] = CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); // 图传pitch
+    else
+    {
+        can_tx_status[1] = CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); // 图传roll pitch
+    }
     // CAN2 yaw-0x205  pitch-0x206   拨弹盘0x207
     //if (mod % 2 == 1)
     can_tx_status[2] = CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8);

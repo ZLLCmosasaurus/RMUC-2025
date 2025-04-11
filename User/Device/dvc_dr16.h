@@ -60,6 +60,26 @@ enum Enum_DR16_Status
 };
 
 /**
+ * @brief dt7存活状态
+ *
+ */
+enum Enum_DT7_Status
+{
+    DT7_Status_DISABLE,
+    DT7_Status_ENABLE,
+};
+
+/**
+ * @brief image存活状态
+ *
+ */
+enum Enum_Image_Status
+{
+    Image_Status_DISABLE,
+    Image_Status_ENABLE,
+};
+
+/**
  * @brief 遥控器数据更新状态
  *
  */
@@ -165,6 +185,8 @@ public:
 
     inline Enum_DR16_Status Get_DR16_Status();
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
+    inline Enum_Image_Status Get_Image_Status() {return (Image_Status);};
+    inline Enum_DT7_Status Get_DT7_Status() {return (DT7_Status);};
     inline float Get_Right_X();
     inline float Get_Right_Y();
     inline float Get_Left_X();
@@ -244,6 +266,10 @@ protected:
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
     //遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
+    //图传存活状态
+    Enum_Image_Status Image_Status = Image_Status_DISABLE;
+    //dt7存活状态
+    Enum_DT7_Status DT7_Status = DT7_Status_DISABLE;
     // DR16对外接口信息
     Struct_DR16_Data Data;
 

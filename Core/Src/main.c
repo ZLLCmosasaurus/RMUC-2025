@@ -52,7 +52,7 @@
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
@@ -64,12 +64,12 @@ void SystemClock_Config(void);
 
 /* USER CODE END 0 */
 
-/**																																												`
+/**
   * @brief  The application entry point.
   * @retval int
   */
 int main(void)
-	{
+{
 
   /* USER CODE BEGIN 1 */
 //yaw -2.27->-4.10 579s 
@@ -101,7 +101,6 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USART6_UART_Init();
   MX_I2C3_Init();
-	
   MX_SPI1_Init();
   MX_TIM10_Init();
   MX_TIM4_Init();

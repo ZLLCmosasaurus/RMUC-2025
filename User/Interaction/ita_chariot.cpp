@@ -39,7 +39,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
     // 底盘
     Chassis.Referee = &Referee;
-    Chassis.Init();
+    Chassis.Init(Chassis_Velocity_Max,Chassis_Velocity_Max);
 
     // 底盘随动PID环初始化
     PID_Chassis_Fllow.Init(3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.001f);
@@ -48,11 +48,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Motor_Yaw.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE, 2);
 
     //底盘缓冲能量处理
-    PID_Chassis_Buffer_Power.Init(2.0f, 0.01f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 0.0f, 0.001f);
+    PID_Chassis_Buffer_Power.Init(2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 0.0f, 0.001f);
 #elif defined(GIMBAL)
-    // 设置底盘速度
-    Chassis.Set_Velocity_X_Max(4.0f);
-    Chassis.Set_Velocity_Y_Max(4.0f);
+
     // 遥控器离线控制 状态机
     FSM_Alive_Control.Chariot = this;
     FSM_Alive_Control.Init(5, 0);
@@ -61,6 +59,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     DR16.Init(&huart3, &huart1);
     DR16_Dead_Zone = __DR16_Dead_Zone;
 
+    //底盘初始化限制速度
+    Chassis.Init(Chassis_Velocity_Max,Chassis_Velocity_Max);
+
     // 云台
     Gimbal.Init();
     Gimbal.MiniPC = &MiniPC;
@@ -68,6 +69,10 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     // 发射机构
     Booster.Referee = &Referee;
     Booster.Init();
+
+    //图传
+    Image.Init();
+    
     // 上位机
     MiniPC.Init(&MiniPC_USB_Manage_Object);
     MiniPC.IMU = &Gimbal.Boardc_BMI;
@@ -149,7 +154,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN_Positive||
         Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN_Negative)
     {
-        //Offset_Angle = Motor_Yaw.Get_Now_Omega_Radian();
+        //Offset_Angle = fabs(Motor_Yaw.Get_Now_Omega_Radian()/2.0f) * 0.01f;
         Offset_Angle = 15.0f * DEG_TO_RAD;
     }
     else
@@ -172,6 +177,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 
 void Class_Chariot::Control_Chassis_Omega_TIM_PeriodElapsedCallback()
 {
+	
     // 目标角速度
     float chassis_omega;
 
@@ -202,27 +208,18 @@ void Class_Chariot::Control_Chassis_Omega_TIM_PeriodElapsedCallback()
  *
  */
 #ifdef GIMBAL
-void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback()
+Enum_Referee_Data_Robots_ID robo_id;
+Enum_Referee_Game_Status_Stage game_stage;
+void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback(uint8_t *Rx_Data)
 {
     Chassis_Alive_Flag++;
-
-    Enum_Referee_Data_Robots_ID robo_id;
-    Enum_Referee_Game_Status_Stage game_stage;
-    uint16_t Shooter_Barrel_Cooling_Value;
-    uint16_t Shooter_Barrel_Heat_Limit;
-    robo_id = (Enum_Referee_Data_Robots_ID)CAN_Manage_Object->Rx_Buffer.Data[0];
-    game_stage = (Enum_Referee_Game_Status_Stage)CAN_Manage_Object->Rx_Buffer.Data[1];
-    //memcpy(&Shooter_Barrel_Heat_Limit, CAN_Manage_Object->Rx_Buffer.Data + 2, sizeof(uint16_t));
-    //memcpy(&Shooter_Barrel_Cooling_Value, CAN_Manage_Object->Rx_Buffer.Data + 4, sizeof(uint16_t));
-    memcpy(&Shoot_Speed,CAN_Manage_Object->Rx_Buffer.Data + 2, sizeof(float));
-    Math_Constrain(&Shoot_Speed, 14.0f, 16.0f);
-    //MiniPC.Set_bullet_v(Shoot_Speed);
+    float shoot_speed;
+    memcpy(&robo_id,CAN_Manage_Object->Rx_Buffer.Data,sizeof(uint8_t));
+    memcpy(&game_stage,CAN_Manage_Object->Rx_Buffer.Data+1,sizeof(uint8_t));
+    memcpy(&shoot_speed,CAN_Manage_Object->Rx_Buffer.Data+2,sizeof(float));
     Referee.Set_Robot_ID(robo_id);
-    //Referee.Set_Booster_42mm_1_Heat_CD(Shooter_Barrel_Cooling_Value);
-    //Referee.Set_Booster_42mm_1_Heat_Max(Shooter_Barrel_Heat_Limit);
     Referee.Set_Game_Stage(game_stage);
-
-
+    Referee.Set_Shoot_Speed(shoot_speed);
 }
 #endif
 
@@ -624,16 +621,20 @@ void Class_Chariot::Control_Booster()
 }
 #endif
 #ifdef CHASSIS
+uint8_t robot_id,game_state;
 void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
 {
-    uint16_t Shooter_Barrel_Cooling_Value;
-    uint16_t Shooter_Barrel_Heat_Limit;
-    Shooter_Barrel_Heat_Limit = Referee.Get_Booster_42mm_Heat_Max();
-    Shooter_Barrel_Cooling_Value = Referee.Get_Booster_42mm_Heat_CD();
-    float shoot_speed = Referee.Get_Shoot_Speed();
+    // uint16_t Shooter_Barrel_Cooling_Value;
+    // uint16_t Shooter_Barrel_Heat_Limit;
+    // Shooter_Barrel_Heat_Limit = Referee.Get_Booster_42mm_Heat_Max();
+    // Shooter_Barrel_Cooling_Value = Referee.Get_Booster_42mm_Heat_CD();
     //发送数据给云台
-    CAN2_Chassis_Tx_Gimbal_Data[0] = Referee.Get_ID();
-    CAN2_Chassis_Tx_Gimbal_Data[1] = Referee.Get_Game_Stage();
+//    uint8_t robot_id,game_state;
+    float shoot_speed = Referee.Get_Shoot_Speed();
+    robot_id = Referee.Get_ID();
+    game_state = Referee.Get_Game_Stage();
+    memcpy(CAN2_Chassis_Tx_Gimbal_Data,&robot_id,sizeof(uint8_t));
+    memcpy(CAN2_Chassis_Tx_Gimbal_Data + 1,&game_state,sizeof(uint8_t));
     memcpy(CAN2_Chassis_Tx_Gimbal_Data + 2, &shoot_speed, sizeof(float));
     // memcpy(CAN2_Chassis_Tx_Gimbal_Data + 2, &Shooter_Barrel_Heat_Limit, sizeof(uint16_t));
     // memcpy(CAN2_Chassis_Tx_Gimbal_Data + 4, &Shooter_Barrel_Cooling_Value, sizeof(uint16_t));
@@ -678,6 +679,7 @@ void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
 #ifdef CHASSIS
 float supercap_target_power;
 float Buffer_Power;
+float Chassis_Actual_Limit_Power;
 void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
 {  
     //读取底盘限制功率
@@ -689,22 +691,23 @@ void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
     PID_Chassis_Buffer_Power.Set_Now(Chassis.Referee->Get_Chassis_Energy_Buffer());
     PID_Chassis_Buffer_Power.TIM_Adjust_PeriodElapsedCallback();
     Buffer_Power = -PID_Chassis_Buffer_Power.Get_Out();
-    //针对于超电损耗额外功率的缓冲环
-    // const Supercap_Buffer_Max  = 30;
-    // float Supercap_Buffer = (Power_Max - Chassis_Actual_Power) * 2.0f;
-    // Math_Constrain(&Supercap_Buffer,-Supercap_Buffer_Max,Supercap_Buffer_Max);
     
-     float Chassis_Actual_Limit_Power = Power_Max + Buffer_Power;
+    Chassis_Actual_Limit_Power = Power_Max + Buffer_Power;
 
-    if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE)
-        Chassis_Actual_Limit_Power += Chassis.Supercap.Get_Supercap_Buffer_Power();
+    if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE && Supercap_Control_Status == Supercap_Control_Status_ENABLE)
+        Chassis_Actual_Limit_Power += ((Chassis.Supercap.Get_Supercap_Buffer_Power() > 0)? Chassis.Supercap.Get_Supercap_Buffer_Power() : 0);
     else
         Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
+    // //处理超电低电压保护
+    // if( Chassis.Supercap.Get_Supercap_Buffer_Power() == 0.0f)
+    //     Power_Max = Power_Max+fabs(Buffer_Power) + 5.0f;
+    // else
+    //     Power_Max = Power_Max;
 
-    //发送给超电控制数据
+    //控制发送给超电的功率上限数据
     supercap_target_power = (Buffer_Power>0)?0:Buffer_Power;
-    Chassis.Supercap.Set_Limit_Power(Power_Max + supercap_target_power);
-		Chassis.Supercap.Set_Limit_Power(Power_Max);
+    Chassis.Supercap.Set_Limit_Power(Power_Max + supercap_target_power + 5.0f);
+    //控制超电一直处于使能状态
     Chassis.Supercap.Set_Supercap_Control_Status((Enum_Supercap_Control_Status)SuperCap);
 
     memcpy(CAN1_0x01E_Tx_Data, &Chassis_Actual_Limit_Power, sizeof(float));
@@ -771,11 +774,11 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         
         if(MiniPC_Status == MiniPC_Status_ENABLE)
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-300,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-300,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
         }
 
         if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
@@ -805,7 +808,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         //超电
         Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*0), 45, Referee_UI_ADD);
         //自瞄
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-300,960+300,540+300,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
         //超电
         Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_ADD);
         //pitch
@@ -866,10 +869,11 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //超电通信
         Chassis.Supercap.TIM_Supercap_PeriodElapsedCallback();
 #elif defined(GIMBAL)
-
+    
     // 各个模块的分别解算
     Gimbal.TIM_Calculate_PeriodElapsedCallback();
     Booster.TIM_Calculate_PeriodElapsedCallback();
+    Image.TIM_Calculate_PeriodElapsedCallback();
     // 传输数据给上位机
     MiniPC.TIM_Write_PeriodElapsedCallback();
     // 给下板发送数据
@@ -888,7 +892,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 void Class_Chariot::Judge_DR16_Control_Type()
 {
     if (DR16.Get_Left_X() != 0 ||
-        // DR16.Get_Left_Y() != 0 ||
+        DR16.Get_Left_Y() != 0 ||
         DR16.Get_Right_X() != 0 ||
         DR16.Get_Right_Y() != 0)
     {
@@ -917,6 +921,14 @@ void Class_Chariot::Judge_DR16_Control_Type()
     }
 }
 #endif
+
+#ifdef GIMBAL
+void Class_Chariot::Control_Image()
+{
+
+}
+#endif
+
 /**
  * @brief 控制回调函数
  *
@@ -970,6 +982,8 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         Gimbal.Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
         Gimbal.Boardc_BMI.TIM1msMod50_Alive_PeriodElapsedCallback();
         Booster.Motor_Driver.TIM_Alive_PeriodElapsedCallback();
+        Image.Motor_Image_Pitch.TIM_Alive_PeriodElapsedCallback();
+        Image.Motor_Image_Roll.TIM_Alive_PeriodElapsedCallback();
         for (auto i = 0; i < 4; i++)
         {
             Booster.Fric[i].TIM_Alive_PeriodElapsedCallback();

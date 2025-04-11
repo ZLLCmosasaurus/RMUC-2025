@@ -538,7 +538,7 @@ protected:
     //舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     //底盘小陀螺模式角速度
-    float Spin_Omega = 5.0f;
+    float Spin_Omega = Chassis_Spin_Omega;
     //常量
 
     //电机理论上最大输出
@@ -589,7 +589,7 @@ protected:
     void AGV_DirectiveMotor_TargetStatus_To_MotorAngle_In_ChassisCoordinate();
     void Speed_Limitation();
 };
-#define MAX_MOTOR_SPEED 636.62    //当速度为500rpm时，对应每个舵轮速度的最大值为3.14m/s左右 当速度为636.62rpm时，对应每个舵轮速度的最大值为4.09m/s左右
+#define MAX_MOTOR_SPEED 796.06f    //当速度为500rpm时，对应每个舵轮速度的最大值为3.14m/s左右 当速度为636.62rpm时，对应每个舵轮速度的最大值为4.09m/s左右 当速度为796.06rpm时，对应每个舵轮速度的最大值为5m/s左右
 #define wheel_diameter 0.12f   // m
 #define half_width   0.203f   //m     		//两组相邻舵轮中心间距的一半
 #define half_length 0.203f     //m

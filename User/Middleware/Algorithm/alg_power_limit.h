@@ -1,17 +1,16 @@
 /**
  * @file alg_power_limit.h
- * @author yssickjgd (1345578933@qq.com)
- * @brief power_limit
- * @version 0.1
- * @date 2023-08-29 0.1 23��������
+ * @author lez 
+ * @brief 功率限制算法
+ * @version 1.1
+ * @date 2024-07-1 0.1 24赛季定稿
  *
- * @copyright Copyright (c) 2023
+ * @copyright ZLLC 2024
  *
  */
 
 #ifndef ALG_POWER_LIMIT_H
 #define ALG_POWER_LIMIT_H
-#ifdef __cplusplus
 
 /* Includes ------------------------------------------------------------------*/
 
@@ -43,6 +42,7 @@ class Class_Power_Limit
     void Set_Motor(Class_DJI_Motor_C620 (&Motor)[4]);
     //输出功率限制之后的电流到电机缓冲区
     void Output(Class_DJI_Motor_C620 (&Motor)[4]);
+    float Calculate_Limit_K(float omega[],float torque[],float power_limit,uint8_t motor_nums);
 
     void TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&Motor)[4]);
     
@@ -50,11 +50,17 @@ class Class_Power_Limit
 
     float Limit_K = 1.0f;
     float Chassis_Buffer;
-    const float Min_Buffer = 10.0f; 
+    float Buffer_K = 1.5;
+    float Buffer_power_limit = 45.f;
+    float Buffer_power;
+    const float Min_Buffer = 30.0f; 
     const float Protected_Buffer = 30.0f;
 
     //转矩系数 rad转rpm系数
 	float Toque_Coefficient = 1.99688994e-6f * (3591/187) / 13.93f;  // (20/16384)*(0.3)*(187/3591)/9.55
+
+    float current_to_torqure = (20.f/16384.f)*(0.3f);
+    float rpm_to_omega = (PI/30.f)/13.92f;
 
     //电机模型参数
 	float k1 = 1.3;		// k1 
@@ -74,13 +80,13 @@ class Class_Power_Limit
     float equation_b;
     float equation_c;
 
-    //四电机输入目标力矩电流
-    float Input_Torque_Current[4];  
-    //四电机输出目标力矩电流
-    float Output_Torque_Current[4];  
-    //四电机当前电流值
-    float Torque_Torque_Current_Now[4];  
-    //四电机当前角速度
+    //四电机输入目标力矩
+    float Input_Torque[4];  
+    //四电机输出目标力矩
+    float Output_Torque[4];  
+    //四电机当前力矩
+    float Torque_Now[4];  
+    //四电机当前输出轴角速度 rad/s
     float Omega[4];	 
     //底盘总功率限制
     float Total_Power_Limit;  
@@ -142,5 +148,5 @@ void Class_Power_Limit::Set_Supercap_Print_Flag(uint8_t __flag)
 /* Exported types ------------------------------------------------------------*/
 
 #endif
-#endif
+
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

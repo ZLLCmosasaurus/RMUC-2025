@@ -45,24 +45,18 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  */
 void Class_MiniPC::Data_Process()
 {
-    // memcpy(&Data_NUC_To_MCU, ((Struct_MiniPC_USB_Data *)USB_Manage_Object->Rx_Buffer)->Data, sizeof(Struct_MiniPC_Rx_Data));
     memcpy(&Pack_Rx,(Pack_rx_t*)USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length);
-
-    float tmp_yaw,tmp_pitch;
-    
-    Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &tmp_yaw, &tmp_pitch, &Distance);
-
-    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
-    Rx_Angle_Pitch = tmp_pitch;//已跑通，弹道解算需要修改参数
-    Rx_Angle_Yaw = tmp_yaw;//待定
-    //Rx_Angle_Yaw =  meanFilter(tmp_yaw);
-    //Rx_Angle_Pitch = meanFilter(tmp_pitch);
+    //利用坐标系转换计算目标的yaw和pitch和距离
+    if(Pack_Rx.radar_enable_status == 1 && Pack_Tx.radar_enable_control == 1)//当上位机反馈的雷达已处于运行状态&下位机使能开启雷达
+    {
+      Self_aim(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+    }
+    else
+    {
+      Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+    }
+    //pitch角度限幅
     Math_Constrain(&Rx_Angle_Pitch,-40.0f,5.0f);
-    // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
-
-    Rx_Chassis_Vx = - Pack_Rx.Chassis_Vy;
-    Rx_Chassis_Vy = Pack_Rx.Chassis_Vx;
-
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
 }
@@ -86,6 +80,7 @@ void Class_MiniPC::Output()
 	Pack_Tx.roll         = Tx_Angle_Roll;
 	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
 	Pack_Tx.yaw          = Tx_Angle_Yaw;
+  Pack_Tx.radar_enable_control = 1; //雷达使能标志位 0 关闭雷达 1 打开雷达
 	Pack_Tx.crc16        = 0xffff;
   Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
 	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx,sizeof(Pack_Tx));
@@ -277,6 +272,43 @@ void Class_MiniPC::Self_aim(float x,float y,float z,float *yaw,float *pitch,floa
     *pitch = calc_pitch(x, y, z);
     *distance = calc_distance(x, y, z);
 }
+uint8_t Shoot_Num = 0;
+float Class_MiniPC::Get_Shoot_Speed()
+{
+  static float Pre_Shoot_Speed;
+  static float Shoot_Speed_Sum = 0.0f;
+  // static uint8_t Shoot_Num = 0;
+  static float Shoot_Speed_arr[10];
+  float Cale_Shoot_Speed;
+  if(Pre_Shoot_Speed != bullet_v)
+  { 
+    Shoot_Speed_arr[Shoot_Num%10] = bullet_v;
+    Shoot_Num++;
+  }
+
+  if(Shoot_Num < 10)//数量小于10
+  {
+    for (auto i = 0; i < Shoot_Num; i++)
+    {
+      /* code */
+      Shoot_Speed_Sum += Shoot_Speed_arr[i];
+    }
+    Cale_Shoot_Speed = Shoot_Speed_Sum/Shoot_Num;
+  }
+  else//10
+  {
+    for (auto i = 0; i < 10; i++)
+    {
+      /* code */
+      Shoot_Speed_Sum += Shoot_Speed_arr[i];
+    }
+    Cale_Shoot_Speed = Shoot_Speed_Sum/10;
+  }
+  
+  Pre_Shoot_Speed = bullet_v;
+
+  return Cale_Shoot_Speed;
+}
 
 float Class_MiniPC::meanFilter(float input) 
 {
@@ -298,5 +330,15 @@ float Class_MiniPC::meanFilter(float input)
     // Return the mean of the buffer's values
     return sum / 5.0;
 }
-
+void Class_MiniPC::Remote_Controlled_Shot()
+{
+  //接收雷达的yaw角度与相对基地装甲板距离
+  static float Remote_yaw,Remote_length;
+  //思路：
+  //在雷达的辅助下瞄准优先瞄准yaw轴 其次计算枪口到装甲板水平实际距离 最后解算pitch角
+  const float Booster_Length = 0.1f;//发射转轴到枪口实际距离
+  const float Object_Length = 0.1f;//激光相较于发射转轴水平距离
+  float Actual_Length = Remote_length - Booster_Length * cos(Rx_Angle_Pitch) - Object_Length;
+  
+}
 /************************ copyright(c) ustc-robowalker **************************/

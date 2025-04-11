@@ -25,16 +25,17 @@
         "../User/Chariot",
         "../User/Device",
         "../User/Interaction",
-        "../User/Task",
         "../Middlewares/ST/ARM/DSP/Inc",
         "../User/Middleware/Algorithm",
         "../User/Middleware/Driver",
+        "../User/Task",
         "RTE/_infantry"
     ],
     "libDirs": [],
     "defines": [
         "USE_HAL_DRIVER",
-        "STM32F407xx"
+        "STM32F407xx",
+        "ARM_MATH_CM4"
     ],
     "sourceList": [
         "../Core/Src/can.c",

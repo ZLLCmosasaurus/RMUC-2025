@@ -95,6 +95,18 @@
         ]
       },
       {
+        "name": "Task",
+        "files": [
+          {
+            "path": "../User/Task/config.c"
+          },
+          {
+            "path": "../User/Task/tsk_config_and_callback.cpp"
+          }
+        ],
+        "folders": []
+      },
+      {
         "name": "Chariot",
         "files": [
           {
@@ -263,30 +275,9 @@
         ]
       },
       {
-        "name": "Task",
-        "files": [
-          {
-            "path": "../User/Task/tsk_config_and_callback.cpp"
-          },
-          {
-            "path": "../User/Task/config.c"
-          }
-        ],
-        "folders": []
-      },
-      {
         "name": "Drivers",
         "files": [],
         "folders": [
-          {
-            "name": "CMSIS",
-            "files": [
-              {
-                "path": "../Core/Src/system_stm32f4xx.c"
-              }
-            ],
-            "folders": []
-          },
           {
             "name": "STM32F4xx_HAL_Driver",
             "files": [
@@ -361,6 +352,15 @@
               }
             ],
             "folders": []
+          },
+          {
+            "name": "CMSIS",
+            "files": [
+              {
+                "path": "../Core/Src/system_stm32f4xx.c"
+              }
+            ],
+            "folders": []
           }
         ]
       },
@@ -408,11 +408,6 @@
             ]
           }
         ]
-      },
-      {
-        "name": "::CMSIS",
-        "files": [],
-        "folders": []
       }
     ]
   },
@@ -567,16 +562,17 @@
           "../User/Chariot",
           "../User/Device",
           "../User/Interaction",
-          "../User/Task",
           "../Middlewares/ST/ARM/DSP/Inc",
           "../User/Middleware/Algorithm",
           "../User/Middleware/Driver",
+          "../User/Task",
           "RTE/_infantry"
         ],
         "libList": [],
         "defineList": [
           "USE_HAL_DRIVER",
-          "STM32F407xx"
+          "STM32F407xx",
+          "ARM_MATH_CM4"
         ]
       },
       "builderOptions": {
