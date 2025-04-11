@@ -268,8 +268,10 @@ extern "C" void Control_Task_Callback()
         if(chariot.DebugControl.Debug_Start_Flag)
         {
             //20hz
+            // chariot.DebugControl.DebugControl_Tx_Callback(chariot.Motor_Yaw.Get_Now_Angle(),
+            //                                               chariot.Tension_Meter.Get_Tension_Meter()/10.0f);
             chariot.DebugControl.DebugControl_Tx_Callback(chariot.Motor_Yaw.Get_Now_Angle(),
-                                                          chariot.Tension_Meter.Get_Tension_Meter()/10.0f);
+                                                          chariot.Push_Now_Length);
             TIM_UART_PeriodElapsedCallback();
             tx_cnt = 0;            
         }
@@ -302,12 +304,12 @@ void Motor_Callback()
             chariot.Motor_Down.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         } 
         break;
-        case (0x203):
+        case (0x204):
         {
             chariot.Motor_Left.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }
         break;
-        case (0x204):
+        case (0x203):
         {
             chariot.Motor_Right.CAN_RxCpltCallback(CAN1_Manage_Object.Rx_Buffer.Data);
         }

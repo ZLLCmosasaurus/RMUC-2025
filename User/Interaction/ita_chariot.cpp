@@ -34,8 +34,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     //拉力电机canid初始化
     Motor_Down.Init(&hcan1, DJI_Motor_ID_0x202);
     Motor_Up.Init(&hcan1, DJI_Motor_ID_0x201);
-    Motor_Left.Init(&hcan1, DJI_Motor_ID_0x203);
-    Motor_Right.Init(&hcan1, DJI_Motor_ID_0x204);
+    Motor_Left.Init(&hcan1, DJI_Motor_ID_0x204);
+    Motor_Right.Init(&hcan1, DJI_Motor_ID_0x203);
 
     // PID 初始化
     //拉力环 速度环
@@ -47,21 +47,21 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Motor_Down.PID_Omega.Init(1200.0f, 1000.0f, 0.0, 0.0f, 8000.0f,16000.0f,0.0,0.0,0.0,0.001,0.1);
 
     // 上膛电机 速度环即可
-    Motor_Left.PID_Angle.Init(0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
-    Motor_Right.PID_Angle.Init(3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
+    Motor_Left.PID_Angle.Init(3.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
+    Motor_Right.PID_Angle.Init(3.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     Motor_Left.PID_Omega.Init(2000.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     Motor_Right.PID_Omega.Init(2000.0f, 150.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
     // yaw电机 角度环 速度环
-    Motor_Yaw.PID_Omega.Init(2.0f, 0.05f, 0.0f, 0.0f, 0.0f, 20000.0f);
-    Motor_Yaw.PID_Angle.Init(10.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20000.0f);
+    Motor_Yaw.PID_Omega.Init(18.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20000.0f);
+    Motor_Yaw.PID_Angle.Init(100.0f, 0.0f, 0.0f, 0.0f, 0.0f, 2500.0f);
     // 推镖电机 速度环即可
     Motor_Up.PID_Omega.Init(1500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 16000.0f);
 
     //TensionMeter初始化
     Tension_Meter.Init(GPIOI, GPIO_PIN_5, GPIOF, GPIO_PIN_0);
     //舵机初始化
-    Servo_Load_1.Init(&htim5,TIM_CHANNEL_1,500,2500,270.0f);
-    Servo_Load_2.Init(&htim5,TIM_CHANNEL_2,500,2500,270.0f);
+    Servo_Load_1.Init(&htim5,TIM_CHANNEL_1,500,2500,180.0f);
+    Servo_Load_2.Init(&htim5,TIM_CHANNEL_2,500,2500,180.0f);
     Servo_Load_3.Init(&htim5,TIM_CHANNEL_3,500,2500,270.0f);
     //Servo_Load_4.Init(&htim5,TIM_CHANNEL_4,500,2500,180.0f);
     Servo_GM6020.Init(&htim5,TIM_CHANNEL_4,1080,1920,360.0f);
@@ -98,6 +98,11 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
  */
 bool Class_Chariot::Calibrate()
 {
+    //暂时不需要校准
+    // return true;
+
+
+
     static bool Calibration_Motor_Yaw_Flag = false;
     static bool Calibration_Motor_Up_Flag = false;
     static bool Calibration_Motor_Left_Flag = false;
@@ -111,26 +116,17 @@ bool Class_Chariot::Calibrate()
 
     if(!Calibration_Motor_Yaw_Flag)
     {
-        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Yaw.Set_Target_Omega_Radian(Calibration_Motor_Yaw_Target_Omega_Angle);
-        if(fabs(Motor_Yaw.Get_Now_Torque())>Calibration_Motor_Yaw_Troque_Threshold)
-        {
-            Times_Motor_Yaw ++;
-            if(Times_Motor_Yaw > 20){
-                Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-                Calibration_Motor_Yaw_Angle_Offset = Motor_Yaw.Get_Now_Angle(); // 记录上电校准后电机初始offset角度 角度制
-                Motor_Yaw.Set_Target_Radian(Calibration_Motor_Yaw_Angle_Offset*DEG_TO_RAD); // 电机初始位置
-                Calibration_Motor_Yaw_Flag = true; // 退出校准
-            }        
-        }
-        else{
-            Times_Motor_Yaw = 0;
-        }
+        // Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        // Motor_Yaw.Set_Target_Omega_Radian(Calibration_Motor_Yaw_Target_Omega_Angle);
+        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        // Calibration_Motor_Yaw_Angle_Offset = Motor_Yaw.Get_Now_Angle(); // 记录上电校准后电机初始offset角度 角度制
+        Motor_Yaw.Set_Target_Angle(Motor_Yaw_Angle); // 电机初始位置
+        Calibration_Motor_Yaw_Flag = true; // 退出校准
     }
 
     if(!Calibration_Motor_Left_Flag){
         Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Left.Set_Target_Omega_Radian(-Target_Speed_Motor_Left);
+        Motor_Left.Set_Target_Omega_Radian(Target_Speed_Motor_Left);
         if(Switch_Bool_Motor_Left){
             Motor_Left.Set_Target_Omega_Radian(0);
             Calibration_Motor_Left_Radian_Offset = Motor_Left.Get_Now_Radian();
@@ -185,10 +181,13 @@ bool Class_Chariot::Calibrate()
         }
     }
 
-    Calibration_Finish = Calibration_Motor_Down_Flag && Calibration_Motor_Right_Flag;
+    Calibration_Finish = Calibration_Motor_Down_Flag &&Calibration_Motor_Left_Flag&&Calibration_Motor_Right_Flag&&Calibration_Motor_Yaw_Flag;
     Tension_Meter.Set_Tension_Meter_Tare(Tension_Meter.Get_Tension_Meter());
-    // Calibration_Finish = Calibration_Motor_Left_Flag && Calibration_Motor_Right_Flag && Calibration_Motor_Down_Flag;
+    Calibration_Finish = Calibration_Motor_Left_Flag
+                      &&Calibration_Motor_Yaw_Flag
+                      && Calibration_Motor_Down_Flag;
     return  Calibration_Finish;
+
 }
 
 /**
@@ -201,6 +200,16 @@ void Class_Chariot::Updata_Distance_Angle()
     Now_Distance_Motor_Right = (Motor_Right.Get_Now_Radian() - Calibration_Motor_Right_Radian_Offset)/(PI*2.0f) * Radian_To_Distance_Motor_LR;
     Now_Distance_Motor_Up = (Motor_Up.Get_Now_Radian()-Calibration_Motor_Up_Radian_Offset)/(PI*2.0f) * Radian_To_Distance_Motor_Up;
     Now_Angle_Yaw = (Motor_Yaw.Get_Now_Angle()-Calibration_Motor_Yaw_Angle_Offset) / Reduction_Ratio;
+    for(int i=0;i<10;i++)
+    {
+        Angle_average[i] = Now_Angle_Yaw;
+    }
+    for(int i=0;i<10;i++)
+    {
+        Now_Angle_Yaw = (Now_Angle_Yaw + Angle_average[i])/2;
+    }
+   
+    
 }
 
 
@@ -396,7 +405,7 @@ void Class_Chariot::Servo_Lock(){
 }
 
 void Class_Chariot::Servo_Unlock(){
-    Servo_Trigger.Set_Target_Angle(40);
+    Servo_Trigger.Set_Target_Angle(10);
 }
 void Class_Chariot::Servo_GM6020_Init()
 {
@@ -404,259 +413,331 @@ void Class_Chariot::Servo_GM6020_Init()
 }
 void Class_FSM_Dart_Control::Reload_TIM_Status_PeriodElapsedCallback()
 {
-    //First,Second....对应四发飞镖
+    // First,Second....对应四发飞镖
 
     //
     static int16_t Times = 0;
     static bool Times_flag = false;
-
+    Chariot->Caculate_Push_Now_Length();
     Status[Now_Status_Serial].Time++;
     switch (Now_Status_Serial)
     {
-        case Dart_Init_Status:
+    case Dart_Init_Status:
+    {
+        Chariot->Servo_Init();
+        Chariot->Servo_GM6020_Init();
+        // 初始化完成 进入准备状态
+        if (Chariot->Calibrate())
         {
-            Chariot->Servo_Init();
-            Chariot->Servo_GM6020_Init();
-            // 初始化完成 进入准备状态
-            if(Chariot->Calibrate())
+            // 校准停下后，速度不会立马为零，当速度为零时更新一下
+            if (Chariot->Motor_Right.Get_Now_Omega_Radian() == 0.0f && Chariot->Motor_Down.Get_Now_Omega_Radian() == 0.0f)
             {
-                //校准停下后，速度不会立马为零，当速度为零时更新一下
-                if(Chariot->Motor_Right.Get_Now_Omega_Radian() == 0.0f && Chariot->Motor_Down.Get_Now_Omega_Radian() == 0.0f){
-                    Chariot->Calibration_Motor_Right_Radian_Offset = Chariot->Motor_Right.Get_Now_Radian();
-                    Chariot->Calibration_Motor_Down_Radian_Offset = Chariot->Motor_Down.Get_Now_Radian();
-                    Set_Status(Dart_Ready_Status);
-                    Status[Now_Status_Serial].Time = 0;
-                }
-                
-            }
-        }
-        break;
-        case Dart_Ready_Status:
-        {
-
-            // debubg模式
-            if(Chariot->DebugControl.Debug_Start_Flag)
-            {
+                Chariot->Push_Offset = Chariot->Push_Now_Length;
+                Chariot->Calibration_Motor_Right_Radian_Offset = Chariot->Motor_Right.Get_Now_Radian();
+                Chariot->Calibration_Motor_Down_Radian_Offset = Chariot->Motor_Down.Get_Now_Radian();
+                Set_Status(Dart_Ready_Status);
                 Status[Now_Status_Serial].Time = 0;
-                Set_Status(Dart_Debug_Status);
             }
         }
-        break;
-        case Dart_First_Status:
-        {
-            Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            // 3508上膛
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
-            // 已经上膛 失能3508
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Left.Set_Out(0);
-            // 2006电机控制拉力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
-            // 达到目标拉力 2006失能无力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Down.Set_Out(0);
-            // 扳机舵机发射
-            Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
-        }
-        break;
-        case Dart_Second_Status:
-        {
-            // 装弹
-            Chariot->Servo_Reload(1);
-            // 3508上膛
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
-            // 失能3508 恢复舵机位置
-            Chariot->Servo_Init();
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Left.Set_Out(0);
-            // 2006电机控制拉力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
-            // 达到目标拉力 2006失能无力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Down.Set_Out(0);
-            // 扳机舵机发射
-            Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
-        }
-        break;
-        case Dart_Third_Status:
-        {
-            // 2006推弹
-            Chariot->Motor_Up.Set_Target_Radian(Chariot->Target_Speed_Motor_Up);
-            // 舵机装弹
-            Chariot->Servo_Reload(2);
-            // 3508上膛
-            Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
-            // 失能3508 恢复舵机位置
-            Chariot->Servo_Init();
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Left.Set_Out(0);
-            // 2006电机控制拉力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
-            // 达到目标拉力 2006失能无力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Down.Set_Out(0);
-            // 扳机舵机发射
-            Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
-        }
-        break;
-        case Dart_Fourth_Status:
-        {
-            // 2006推弹
-            Chariot->Motor_Up.Set_Target_Radian(Chariot->Target_Speed_Motor_Up);
-            // 舵机装弹
-            Chariot->Servo_Reload(3);
-            // 3508上膛
-            Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
-            // 失能3508 恢复舵机位置
-            Chariot->Servo_Init();
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Left.Set_Out(0);
-            // 2006电机控制拉力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-            Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
-            // 达到目标拉力 2006失能无力
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Down.Set_Out(0);
-            // 扳机舵机发射
-            Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
-        }
-        break;
-        case Dart_Debug_Status:
-        {
-            //Chariot->Servo_GM6020.Set_Target_Angle(120);
-            // Chariot->Servo_GM6020_Init();
-            // Chariot->Servo_Load_1.Set_Target_Angle(Chariot->Servo_Load_1_Offeset);
-            // Chariot->Servo_Load_2.Set_Target_Angle(Chariot->Servo_Load_2_Offeset);
-            // Chariot->Servo_Load_3.Set_Target_Angle(Chariot->Servo_Load_3_Offeset);
-            // 调试模式
-            Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-            Chariot->Motor_Yaw.PID_Angle.Set_Target(Chariot->DebugControl.Get_Target_Yaw());
-            static int Load_Count=0;
-            static int Shoot_Count=1;
-            static bool shift_flag = false;
+    }
+    break;
+    case Dart_Ready_Status:
+    {
 
-            static uint8_t Status = 0;
-            
-            // 所有状态 状态时间
-            static uint8_t Debug_Status = 0;
-            static uint16_t Status_Time[5] = {0};
-            Status_Time[Debug_Status]++;
-            switch (Debug_Status)
+        // debubg模式
+        if (Chariot->DebugControl.Debug_Start_Flag)
+        {
+            Status[Now_Status_Serial].Time = 0;
+            Set_Status(Dart_Debug_Status);
+        }
+    }
+    break;
+    case Dart_First_Status:
+    {
+        Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        // 3508上膛
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
+        // 已经上膛 失能3508
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Left.Set_Out(0);
+        // 2006电机控制拉力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
+        // 达到目标拉力 2006失能无力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Down.Set_Out(0);
+        // 扳机舵机发射
+        Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+    }
+    break;
+    case Dart_Second_Status:
+    {
+        // 装弹
+        Chariot->Servo_Reload(1);
+        // 3508上膛
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
+        // 失能3508 恢复舵机位置
+        Chariot->Servo_Init();
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Left.Set_Out(0);
+        // 2006电机控制拉力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
+        // 达到目标拉力 2006失能无力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Down.Set_Out(0);
+        // 扳机舵机发射
+        Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+    }
+    break;
+    case Dart_Third_Status:
+    {
+        // 2006推弹
+        Chariot->Motor_Up.Set_Target_Radian(Chariot->Target_Speed_Motor_Up);
+        // 舵机装弹
+        Chariot->Servo_Reload(2);
+        // 3508上膛
+        Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
+        // 失能3508 恢复舵机位置
+        Chariot->Servo_Init();
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Left.Set_Out(0);
+        // 2006电机控制拉力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
+        // 达到目标拉力 2006失能无力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Down.Set_Out(0);
+        // 扳机舵机发射
+        Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+    }
+    break;
+    case Dart_Fourth_Status:
+    {
+        // 2006推弹
+        Chariot->Motor_Up.Set_Target_Radian(Chariot->Target_Speed_Motor_Up);
+        // 舵机装弹
+        Chariot->Servo_Reload(3);
+        // 3508上膛
+        Chariot->Motor_Left.Set_Target_Radian(Chariot->Target_Speed_Motor_Left);
+        // 失能3508 恢复舵机位置
+        Chariot->Servo_Init();
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Left.Set_Out(0);
+        // 2006电机控制拉力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Chariot->PID_Tension.Set_Target(Chariot->Target_Tension);
+        // 达到目标拉力 2006失能无力
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Down.Set_Out(0);
+        // 扳机舵机发射
+        Chariot->Servo_Trigger.Set_Target_Angle(Chariot->Shoot_Angle_Trigger);
+    }
+    break;
+    case Dart_Debug_Status:
+    {
+        // Chariot->Servo_GM6020.Set_Target_Angle(120);
+        //  Chariot->Servo_GM6020_Init();
+        //  Chariot->Servo_Load_1.Set_Target_Angle(Chariot->Servo_Load_1_Offeset);
+        //  Chariot->Servo_Load_2.Set_Target_Angle(Chariot->Servo_Load_2_Offeset);
+        //  Chariot->Servo_Load_3.Set_Target_Angle(Chariot->Servo_Load_3_Offeset);
+        //  调试模式
+        Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
+        Chariot->Motor_Yaw.PID_Angle.Set_Target(Chariot->DebugControl.Get_Target_Yaw());
+        static int Load_Count = 0;
+        static int Shoot_Count = 1;
+        static bool shift_flag = false;
+        static uint16_t Tension_Achieve_Count = 0;
+        static uint8_t Status = 0;
+
+        // 所有状态 状态时间
+        static uint8_t Debug_Status = 0;
+        static uint16_t Status_Time[5] = {0};
+        Status_Time[Debug_Status]++;
+        switch (Debug_Status)
+        {
+        case 0:
+            // 初始状态
+            Chariot->Servo_Unlock();
+            if (Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_TENSION)
             {
-                case 0:
-                    //初始状态
-                    Chariot->Servo_Unlock();
-                    if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_TENSION){
-                        Status_Time[Debug_Status] = 0;
-                        Debug_Status = 1;
-                    }
-                    break;
-                case 1:
-                    //上膛逻辑
-                    static uint16_t success_cnt = 0; //记录上膛成功后的延时时间
+                Status_Time[Debug_Status] = 0;
+                Debug_Status = 1;
+            }
+            break;
+        case 1:
+            // 上膛逻辑
+            static uint16_t success_cnt = 0; // 记录上膛成功后的延时时间
+            static bool count_start = false;
+            Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+            Chariot->Motor_Right.Set_Target_Omega_Radian(-Chariot->Target_Speed_Motor_Right); // 不确定正负
+            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+            Chariot->Motor_Left.Set_Target_Omega_Radian(-Chariot->Target_Speed_Motor_Left);
+            if (Chariot->Switch_Bool_Trigger)
+            {
+                count_start = true;
+            }
+            if (count_start)
+            {
+                success_cnt++;
+                if (success_cnt > 100)
+                {
+                    Chariot->Motor_Right.Set_Target_Omega_Radian(0);
+                    Chariot->Motor_Left.Set_Target_Omega_Radian(0);
+                }
+            }
+            if (success_cnt > 100)
+            {
+                if (success_cnt > 100)
+                {
+                    Chariot->Servo_Lock();
+                }
+                if (success_cnt > 400)
+                {
+                    success_cnt = 0;
+                    count_start = false;
+                    Status_Time[Debug_Status] = 0;
+                    Debug_Status = 2;
+                }
+                break;
+            case 2:
+                // 拉力环调整拉力逻辑
+                static bool Motor_Left_Stop = false;
+                // if (fabs(Chariot->Tension_Meter.Get_Tension_Meter() - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                // {
+                //     Tension_Achieve_Count++;
+                // }
+
+                // Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                // Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
+                // Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
+                // Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
+                // Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
+                // Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
+
+                //跑行程环
+                if(fabs(Chariot->Push_Now_Length - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                {
+                    Tension_Achieve_Count++;
+                }
+                Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
+                Chariot->PID_Tension.Set_Now(Chariot->Push_Now_Length);
+                Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
+                Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
+                Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
+                // 上膛3508反向
+                // if(!Chariot->Switch_Bool_Motor_Left)
+                {
                     Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                    Chariot->Motor_Right.Set_Target_Omega_Radian(-Chariot->Target_Speed_Motor_Right); //不确定正负
-                    if(Chariot->Switch_Bool_Trigger){
-                        success_cnt++;
-                        Chariot->Motor_Right.Set_Target_Omega_Radian(0);
-                    }
-                    if(success_cnt>500){
-                        Chariot->Servo_Lock();
-                    }
-                    if(success_cnt>1000){
-                        success_cnt = 0;
-                        Status_Time[Debug_Status] = 0;
-                        Debug_Status = 2;
-                    }
-                    break;
-                case 2:
-                    // 拉力环调整拉力逻辑
-                    Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                    Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
-                    Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
-                    Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
-                    Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
-                    Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
-
-                    // 上膛3508反向
-                    Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                    Chariot->Motor_Right.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Right); //反向移动
-                    // 碰到微动开关就或者堵转就停下|| Chariot->Motor_Right.Get_Now_Torque()>500
-                    if(Chariot->Switch_Bool_Motor_Right ){
-                        Chariot->Motor_Right.Set_Target_Omega_Radian(0); 
-
-                        //等待3508结束后，才能切换状态
-                        if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_RELOAD){
-                            Status_Time[Debug_Status] = 0;
-                            Debug_Status =3;
-                        }
-
-                    }
-                    break;
-                case 3:
-                    // 拉力环调整拉力逻辑
-                    Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-                    Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
-                    Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
-                    Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
-                    Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
-                    
-                    //换弹逻辑
-                    if(shift_flag == false) 
+                    Chariot->Motor_Right.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Right); // 反向移动
+                    Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                    Chariot->Motor_Left.Set_Target_Omega_Radian(Chariot->Target_Speed_Motor_Left);
+                }
+                // 碰到微动开关就或者堵转就停下|| Chariot->Motor_Right.Get_Now_Torque()>500
+                if (Chariot->Switch_Bool_Motor_Left)
+                {
+                    Motor_Left_Stop = true;
+                }
+                if (Motor_Left_Stop)
+                {
+                    Chariot->Motor_Left.Set_Target_Omega_Radian(0);
+                    Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                    Chariot->Motor_Left.Set_Out(0);
+                    // 等待3508结束后，才能切换状态
+                    if (Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_RELOAD)
                     {
-                        Shoot_Count = 0;
-                        Load_Count=(Load_Count==3)?1:Load_Count+1; 
-                        shift_flag = true;
-                    } 
-                   //装弹
-                   Chariot->Servo_Reload(Load_Count);
-
-                    if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_SHOOT
-                        &&Status_Time[Debug_Status]>3000
-                        &&fabs(Chariot->Tension_Meter.Get_Tension_Meter()-Chariot->DebugControl.Get_Target_Tension())<0.5){
+                        Motor_Left_Stop = false;
                         Status_Time[Debug_Status] = 0;
-                        Debug_Status = 4;
+                        Debug_Status = 3;
                     }
-                    break;
-                case 4:
-                    //发射逻辑
-                    Chariot->Servo_Unlock();
-                    shift_flag = false; //用于下一次换弹
+                }
+                break;
+            case 3:
+                // 拉力环调整拉力逻辑
+                if (fabs(Chariot->Tension_Meter.Get_Tension_Meter() - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                {
+                    Tension_Achieve_Count++;
+                }
 
-                    if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_TENSION 
-                        &&Status_Time[Debug_Status]>1000){
-                        Chariot->Servo_Init();
-                        Status_Time[Debug_Status] = 0;
-                        Debug_Status = 1;    
-                    }
-                    break;            
-                default:
-                    break;
+                // Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                // Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
+                // Chariot->PID_Tension.Set_Now(Chariot->Tension_Meter.Get_Tension_Meter());
+                // Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
+                // Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
+                // Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
+                
+                //跑行程环
+                Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+                Chariot->PID_Tension.Set_Target(Chariot->DebugControl.Get_Target_Tension());
+                Chariot->PID_Tension.Set_Now(Chariot->Push_Now_Length);
+                Chariot->PID_Tension.TIM_Adjust_PeriodElapsedCallback();
+                Chariot->Motor_Down.Set_Target_Omega_Radian(Chariot->PID_Tension.Get_Out());
+                Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
+                // 换弹逻辑
+                if (shift_flag == false)
+                {
+                    Shoot_Count = 0;
+                    Load_Count = (Load_Count == 3) ? 1 : Load_Count + 1;
+                    shift_flag = true;
+                }
+                // 装弹
+                Chariot->Servo_Reload(Load_Count);
+
+                //if (fabs(Chariot->Tension_Meter.Get_Tension_Meter() - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                if(fabs(Chariot->Push_Now_Length - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                {
+                    Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+                    Chariot->Motor_Down.Set_Out(0);
+                    Chariot->Motor_Down.TIM_PID_PeriodElapsedCallback();
+                }
+                //if(Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_RELOAD)
+                //拉力环逻辑
+                // if (Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_SHOOT && Status_Time[Debug_Status] > 3000 && fabs(Chariot->Tension_Meter.Get_Tension_Meter() - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                if (Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_SHOOT && Status_Time[Debug_Status] > 3000 && fabs(Chariot->Push_Now_Length - Chariot->DebugControl.Get_Target_Tension()) < 0.5)
+                {
+                    Tension_Achieve_Count = 0;
+                    Status_Time[Debug_Status] = 0;
+                    Debug_Status = 4;
+                }
+                break;
+            case 4:
+                // 发射逻辑
+                Chariot->Servo_Unlock();
+                shift_flag = false; // 用于下一次换弹
+
+                if (Chariot->DebugControl.Get_DebugControl_Status() == DebugControl_Control_Status_TENSION && Status_Time[Debug_Status] > 1000)
+                {
+                    Chariot->Servo_Init();
+                    Status_Time[Debug_Status] = 0;
+                    Debug_Status = 0;
+                }
+                break;
+            default:
+                break;
             }
         }
         break;
-        case Dart_Disable_Status:
-        {
-            // 失能模式有待商榷
-            Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Up.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
-            Chariot->Motor_Yaw.Set_Out(0);
-            Chariot->Motor_Down.Set_Out(0);
-            Chariot->Motor_Right.Set_Out(0);
-            Chariot->Motor_Up.Set_Out(0);
-            Chariot->Motor_Left.Set_Out(0);
-        }
+    case Dart_Disable_Status:
+    {
+        // 失能模式有待商榷
+        Chariot->Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Up.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Down.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        Chariot->Motor_Yaw.Set_Out(0);
+        Chariot->Motor_Down.Set_Out(0);
+        Chariot->Motor_Right.Set_Out(0);
+        Chariot->Motor_Up.Set_Out(0);
+        Chariot->Motor_Left.Set_Out(0);
+    }
+    break;
+    default:
         break;
-        default:
-        break;
+    }
     }
 }
 
