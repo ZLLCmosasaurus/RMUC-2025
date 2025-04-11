@@ -558,6 +558,7 @@ void Class_Chariot::Control_Image()
 
     Image.Set_Target_Image_Pitch_Angle(tmp_image_pitch + Image.get_Image_Pitch_Calibrate_Offset());
     Image.Set_Target_Image_Roll_Angle(tmp_image_roll + Image.get_Image_Roll_Calibrate_Offset());
+    
 }
 #endif
 
