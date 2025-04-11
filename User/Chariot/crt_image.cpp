@@ -33,14 +33,14 @@ void Class_FSM_Image_Control::Reload_TIM_Status_PeriodElapsedCallback()
     break;
     case (1)://正常状态
     {
-        Image->Set_Target_Image_Roll_Angle(target_roll + Image->get_Image_Roll_Calibrate_Offset());
-        Image->Set_Target_Image_Pitch_Angle(target_pitch + Image->get_Image_Pitch_Calibrate_Offset());
         Image->Set_Image_Control_Type(Image_Control_Type_NORMAL);
+        Image->Output();
         if (Image->Motor_Image_Roll.Get_DJI_Motor_Status() == DJI_Motor_Status_DISABLE ||
             Image->Motor_Image_Pitch.Get_DJI_Motor_Status() == DJI_Motor_Status_DISABLE)
         {
             Set_Status(0);//电机失能后从新校准
         }
+        
     }
     break;
     }
@@ -127,8 +127,6 @@ void Class_Image::Output()
 
 void Class_Image::TIM_Calculate_PeriodElapsedCallback()
 {
-    Output();
-
     FSM_Image_Control.Reload_TIM_Status_PeriodElapsedCallback();
 
     Motor_Image_Pitch.TIM_PID_PeriodElapsedCallback();

@@ -531,6 +531,37 @@ void Class_Chariot::Control_Gimbal()
 }
 
 #endif
+
+
+#ifdef GIMBAL
+/**
+ * @brief 图传控制逻辑
+ *
+ */
+void Class_Chariot::Control_Image()
+{
+    //设置pitch yaw角度
+    float tmp_image_pitch = 0.0f, tmp_image_roll = 0.0f;
+    if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
+    {
+        if(DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            tmp_image_pitch = 0.0f;
+            tmp_image_roll = 0.0f;
+        }
+        else
+        {
+            tmp_image_pitch = 0.0f;
+            tmp_image_roll = 0.0f;
+        }
+    }
+
+    Image.Set_Target_Image_Pitch_Angle(tmp_image_pitch + Image.get_Image_Pitch_Calibrate_Offset());
+    Image.Set_Target_Image_Roll_Angle(tmp_image_roll + Image.get_Image_Roll_Calibrate_Offset());
+}
+#endif
+
+
 /**
  * @brief 发射机构控制逻辑
  *
@@ -922,12 +953,6 @@ void Class_Chariot::Judge_DR16_Control_Type()
 }
 #endif
 
-#ifdef GIMBAL
-void Class_Chariot::Control_Image()
-{
-
-}
-#endif
 
 /**
  * @brief 控制回调函数
@@ -943,6 +968,7 @@ void Class_Chariot::TIM_Control_Callback()
     Control_Chassis();
     Control_Gimbal();
     Control_Booster();
+    Control_Image();
 }
 #endif
 /**

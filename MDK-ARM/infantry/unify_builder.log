@@ -10283,3 +10283,20 @@ These source files will be recompiled
 [2025-04-10 22:28:28]	[done]
 	build successfully !
 
+[2025-04-11 21:45:24]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-11 21:45:26]	[done]
+	build successfully !
+
+[2025-04-11 21:46:03]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-11 21:46:04]	[done]
+	build successfully !
+
