@@ -2990,9 +2990,9 @@ Section Cross References
     ita_chariot.o(.ARM.exidx.text._ZN13Class_Chariot14Control_GimbalEv) refers to ita_chariot.o(.text._ZN13Class_Chariot14Control_GimbalEv) for [Anonymous Symbol]
     ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN13Class_Chariot21Get_DR16_Control_TypeEv) for Class_Chariot::Get_DR16_Control_Type()
     ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN10Class_DR1618Get_Keyboard_Key_QEv) for Class_DR16::Get_Keyboard_Key_Q()
-    ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv) for Class_Image::Get_Target_Image_Pitch_Angle()
+    ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv) for Class_Image::get_Image_Pitch_Calibrate_Offset()
     ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf) for Class_Image::Set_Target_Image_Pitch_Angle(float)
-    ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv) for Class_Image::Get_Target_Image_Roll_Angle()
+    ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv) for Class_Image::get_Image_Roll_Calibrate_Offset()
     ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf) for Class_Image::Set_Target_Image_Roll_Angle(float)
     ita_chariot.o(.ARM.exidx.text._ZN13Class_Chariot13Control_ImageEv) refers to Unwind-EHABI.cpp.o(.text.__aeabi_unwind_cpp_pr0) for __aeabi_unwind_cpp_pr0
     ita_chariot.o(.ARM.exidx.text._ZN13Class_Chariot13Control_ImageEv) refers to ita_chariot.o(.text._ZN13Class_Chariot13Control_ImageEv) for [Anonymous Symbol]
@@ -5205,9 +5205,9 @@ Section Cross References
     ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Keyboard_Key_CEv) refers to ita_chariot.o(.text._ZN10Class_DR1618Get_Keyboard_Key_CEv) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Keyboard_Key_QEv) refers to ita_chariot.o(.text._ZN10Class_DR1618Get_Keyboard_Key_QEv) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf) refers to ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf) for [Anonymous Symbol]
-    ita_chariot.o(.ARM.exidx.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv) refers to ita_chariot.o(.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv) for [Anonymous Symbol]
+    ita_chariot.o(.ARM.exidx.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv) refers to ita_chariot.o(.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf) refers to ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf) for [Anonymous Symbol]
-    ita_chariot.o(.ARM.exidx.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv) refers to ita_chariot.o(.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv) for [Anonymous Symbol]
+    ita_chariot.o(.ARM.exidx.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv) refers to ita_chariot.o(.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN13Class_Booster24Set_Booster_Control_TypeE25Enum_Booster_Control_Type) refers to ita_chariot.o(.text._ZN13Class_Booster24Set_Booster_Control_TypeE25Enum_Booster_Control_Type) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN10Class_DR167Get_YawEv) refers to ita_chariot.o(.text._ZN10Class_DR167Get_YawEv) for [Anonymous Symbol]
     ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Mouse_Left_KeyEv) refers to ita_chariot.o(.text._ZN10Class_DR1618Get_Mouse_Left_KeyEv) for [Anonymous Symbol]
@@ -8324,9 +8324,9 @@ Removing Unused input sections from the image.
     Removing ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Keyboard_Key_CEv), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Keyboard_Key_QEv), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf), (8 bytes).
-    Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv), (8 bytes).
+    Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf), (8 bytes).
-    Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv), (8 bytes).
+    Removing ita_chariot.o(.ARM.exidx.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN13Class_Booster24Set_Booster_Control_TypeE25Enum_Booster_Control_Type), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN10Class_DR167Get_YawEv), (8 bytes).
     Removing ita_chariot.o(.ARM.exidx.text._ZN10Class_DR1618Get_Mouse_Left_KeyEv), (8 bytes).
@@ -9275,10 +9275,10 @@ Image Symbol Table
     [Anonymous Symbol]                       0x08011532   Section        0  cxa_exception.cpp.o(.text._ZN10__cxxabiv1L22__cxa_end_cleanup_implEv)
     [Anonymous Symbol]                       0x08011594   Section        0  crt_image.o(.text._ZN11Class_Image17Motor_CalibrationEP20Class_DJI_Motor_C610Pfff)
     [Anonymous Symbol]                       0x0801165c   Section        0  crt_image.o(.text._ZN11Class_Image22Set_Image_Control_TypeE23Enum_Image_Control_Type)
-    [Anonymous Symbol]                       0x08011674   Section        0  ita_chariot.o(.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv)
-    [Anonymous Symbol]                       0x08011684   Section        0  ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf)
-    [Anonymous Symbol]                       0x08011698   Section        0  ita_chariot.o(.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv)
-    [Anonymous Symbol]                       0x080116a8   Section        0  ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf)
+    [Anonymous Symbol]                       0x08011674   Section        0  ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf)
+    [Anonymous Symbol]                       0x08011688   Section        0  ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf)
+    [Anonymous Symbol]                       0x0801169c   Section        0  ita_chariot.o(.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv)
+    [Anonymous Symbol]                       0x080116ac   Section        0  ita_chariot.o(.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv)
     [Anonymous Symbol]                       0x080116bc   Section        0  crt_image.o(.text._ZN11Class_Image35TIM_Calculate_PeriodElapsedCallbackEv)
     [Anonymous Symbol]                       0x080116e4   Section        0  crt_image.o(.text._ZN11Class_Image4InitEv)
     [Anonymous Symbol]                       0x08011858   Section        0  crt_image.o(.text._ZN11Class_Image6OutputEv)
@@ -10243,10 +10243,10 @@ Image Symbol Table
     __cxxabiv1::__isOurExceptionClass(_Unwind_Control_Block const*) 0x0801150b   Thumb Code    40  cxa_exception.cpp.o(.text._ZN10__cxxabiv121__isOurExceptionClassEPK21_Unwind_Control_Block)
     Class_Image::Motor_Calibration(Class_DJI_Motor_C610*, float*, float, float) 0x08011595   Thumb Code   196  crt_image.o(.text._ZN11Class_Image17Motor_CalibrationEP20Class_DJI_Motor_C610Pfff)
     Class_Image::Set_Image_Control_Type(Enum_Image_Control_Type) 0x0801165d   Thumb Code    22  crt_image.o(.text._ZN11Class_Image22Set_Image_Control_TypeE23Enum_Image_Control_Type)
-    Class_Image::Get_Target_Image_Roll_Angle() 0x08011675   Thumb Code    14  ita_chariot.o(.text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv)
-    Class_Image::Set_Target_Image_Roll_Angle(float) 0x08011685   Thumb Code    20  ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf)
-    Class_Image::Get_Target_Image_Pitch_Angle() 0x08011699   Thumb Code    14  ita_chariot.o(.text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv)
-    Class_Image::Set_Target_Image_Pitch_Angle(float) 0x080116a9   Thumb Code    20  ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf)
+    Class_Image::Set_Target_Image_Roll_Angle(float) 0x08011675   Thumb Code    20  ita_chariot.o(.text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf)
+    Class_Image::Set_Target_Image_Pitch_Angle(float) 0x08011689   Thumb Code    20  ita_chariot.o(.text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf)
+    Class_Image::get_Image_Roll_Calibrate_Offset() 0x0801169d   Thumb Code    14  ita_chariot.o(.text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv)
+    Class_Image::get_Image_Pitch_Calibrate_Offset() 0x080116ad   Thumb Code    14  ita_chariot.o(.text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv)
     Class_Image::TIM_Calculate_PeriodElapsedCallback() 0x080116bd   Thumb Code    38  crt_image.o(.text._ZN11Class_Image35TIM_Calculate_PeriodElapsedCallbackEv)
     Class_Image::Init()                      0x080116e5   Thumb Code   344  crt_image.o(.text._ZN11Class_Image4InitEv)
     Class_Image::Output()                    0x08011859   Thumb Code   272  crt_image.o(.text._ZN11Class_Image6OutputEv)
@@ -11361,12 +11361,12 @@ Memory Map of the image
     0x08011594   0x000000c8   Code   RO         2143    .text._ZN11Class_Image17Motor_CalibrationEP20Class_DJI_Motor_C610Pfff  crt_image.o
     0x0801165c   0x00000016   Code   RO         2163    .text._ZN11Class_Image22Set_Image_Control_TypeE23Enum_Image_Control_Type  crt_image.o
     0x08011672   0x00000002   PAD
-    0x08011674   0x0000000e   Code   RO         2985    .text._ZN11Class_Image27Get_Target_Image_Roll_AngleEv  ita_chariot.o
-    0x08011682   0x00000002   PAD
-    0x08011684   0x00000014   Code   RO         2983    .text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf  ita_chariot.o
-    0x08011698   0x0000000e   Code   RO         2981    .text._ZN11Class_Image28Get_Target_Image_Pitch_AngleEv  ita_chariot.o
-    0x080116a6   0x00000002   PAD
-    0x080116a8   0x00000014   Code   RO         2979    .text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf  ita_chariot.o
+    0x08011674   0x00000014   Code   RO         2983    .text._ZN11Class_Image27Set_Target_Image_Roll_AngleEf  ita_chariot.o
+    0x08011688   0x00000014   Code   RO         2979    .text._ZN11Class_Image28Set_Target_Image_Pitch_AngleEf  ita_chariot.o
+    0x0801169c   0x0000000e   Code   RO         2985    .text._ZN11Class_Image31get_Image_Roll_Calibrate_OffsetEv  ita_chariot.o
+    0x080116aa   0x00000002   PAD
+    0x080116ac   0x0000000e   Code   RO         2981    .text._ZN11Class_Image32get_Image_Pitch_Calibrate_OffsetEv  ita_chariot.o
+    0x080116ba   0x00000002   PAD
     0x080116bc   0x00000026   Code   RO         2149    .text._ZN11Class_Image35TIM_Calculate_PeriodElapsedCallbackEv  crt_image.o
     0x080116e2   0x00000002   PAD
     0x080116e4   0x00000174   Code   RO         2147    .text._ZN11Class_Image4InitEv  crt_image.o
