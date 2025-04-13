@@ -57,8 +57,9 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     //电机PID批量初始化
     for (int i = 0; i < 4; i++)
     {
-        Motor_Wheel[i].PID_Omega.Init(1500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
+        Motor_Wheel[i].PID_Omega.Init(1800.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
     }
+		// Motor_Wheel[2].PID_Omega.Init(2200.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
 
     //轮向电机ID初始化
     Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x201);
@@ -100,15 +101,15 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             //底盘限速
             if (Velocity_X_Max != 0)
             {
-                Math_Constrain(Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
+                Math_Constrain(&Target_Velocity_X, -Velocity_X_Max, Velocity_X_Max);
             }
             if (Velocity_Y_Max != 0)
             {
-                Math_Constrain(Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
+                Math_Constrain(&Target_Velocity_Y, -Velocity_Y_Max, Velocity_Y_Max);
             }
             if (Omega_Max != 0)
             {
-                Math_Constrain(Target_Omega, -Omega_Max, Omega_Max);
+                Math_Constrain(&Target_Omega, -Omega_Max, Omega_Max);
             }
 
             #ifdef SPEED_SLOPE 
@@ -132,10 +133,10 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             float motor3_temp_rad = motor3_temp_linear_vel * VEL2RAD;
             float motor4_temp_rad = motor4_temp_linear_vel * VEL2RAD;
             //速度限幅
-            Math_Constrain(motor1_temp_rad,-Max_Omega,Max_Omega);
-            Math_Constrain(motor2_temp_rad,-Max_Omega,Max_Omega);
-            Math_Constrain(motor3_temp_rad,-Max_Omega,Max_Omega);
-            Math_Constrain(motor4_temp_rad,-Max_Omega,Max_Omega);
+            Math_Constrain(&motor1_temp_rad,-Max_Omega,Max_Omega);
+            Math_Constrain(&motor2_temp_rad,-Max_Omega,Max_Omega);
+            Math_Constrain(&motor3_temp_rad,-Max_Omega,Max_Omega);
+            Math_Constrain(&motor4_temp_rad,-Max_Omega,Max_Omega);
              //角速度*减速比  设定目标 直接给到电机输出轴
 						temp_test_1 = motor1_temp_rad;
 						temp_test_2 = motor2_temp_rad;
@@ -173,11 +174,13 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     //速度解算
     Speed_Resolution();
  // 各个电机具体PID
+	
+   
     for (int i = 0; i < 4; i++)
     {
         Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
     }
-   
+   Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

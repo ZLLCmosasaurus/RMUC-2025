@@ -84,7 +84,15 @@ enum Enum_MiniPC_Status :uint8_t
     MiniPC_Status_DISABLE = 0,
     MiniPC_Status_ENABLE,
 };
-
+/**
+ * @brief 
+ *
+ */
+enum Enum_Exchange_Status :uint8_t
+{
+    Exchange_Status_DISABLE = 0,
+    Exchange_Status_ENABLE,
+};
 /**
  * @brief 裁判系统UI刷新状态
  *
@@ -215,14 +223,29 @@ struct Pack_tx_t
 	uint16_t crc16;
 }__attribute__((packed));
 
-
+/**
+ * @brief 发送数据包//工程专用
+ *
+ */
+struct Pack_tx_en_t_
+{
+		uint8_t header;
+		Enum_Exchange_Status status; // uint8_t disable:0 enable:1
+    float Joint_Uplift_Angle;// 待测
+    float Jonit_1_Angle;    // 0-180 
+    float Jonit_2_Angle;    // 0-180
+    float Jonit_3_Angle;    // 0-180
+    float Jonit_4_Angle;    //roll 0-180
+    float Jonit_5_Angle;    //pitch 0-180
+		uint16_t crc16;
+}__attribute__((packed));
 /**
  * @brief 接收数据包
  *
  */
 struct Pack_rx_t    // Jonit_1-5关节角度（°）均符合右手螺旋定则
 {
-	uint8_t header;      // 帧头 0x5A
+		uint8_t header;      // 帧头 0x
     Enum_MiniPC_Status status; // uint8_t disable:0 enable:1
     float Joint_Uplift_Angle;// 待测
     float Jonit_1_Angle;    // 0-180 
@@ -295,7 +318,8 @@ public:
 
     Class_IMU *IMU;
     Class_Referee *Referee;
-
+		Enum_Exchange_Status Exchange_Status=Exchange_Status_DISABLE;
+		void Output_en(float *angle,float uplift_high,Enum_Exchange_Status exchange_status);
 protected:
     //初始化相关常量
     
@@ -320,11 +344,14 @@ protected:
 
     //迷你主机状态
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
+		
+
     //迷你主机对外接口信息
     Struct_MiniPC_Rx_Data Data_NUC_To_MCU;
 
     Pack_tx_t Pack_Tx;
     Pack_rx_t Pack_Rx;
+		Pack_tx_en_t_ Pack_Tx_en;
 
 	float Tx_Angle_Roll;
 	float Tx_Angle_Pitch;
@@ -352,6 +379,9 @@ protected:
 
     void Data_Process();
     void Output();
+		//工程专用
+		void Data_Process_en();
+	
 };
 /* Exported variables --------------------------------------------------------*/
 

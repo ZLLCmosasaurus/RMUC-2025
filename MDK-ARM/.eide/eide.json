@@ -422,6 +422,27 @@
         "folders": []
       },
       {
+        "name": "UI",
+        "files": [
+          {
+            "path": "../User/UI/ui_default_group1_0.c"
+          },
+          {
+            "path": "../User/UI/ui_default_group1_1.c"
+          },
+          {
+            "path": "../User/UI/ui_default_group1_2.c"
+          },
+          {
+            "path": "../User/UI/ui_interface.c"
+          },
+          {
+            "path": "../User/UI/ui.h"
+          }
+        ],
+        "folders": []
+      },
+      {
         "name": "::CMSIS",
         "files": [],
         "folders": []
@@ -587,6 +608,7 @@
           "../Middlewares/ST/ARM/DSP/Inc",
           "../Drivers/CMSIS/DSP/Include",
           "../User/Congfig",
+          "../User/UI",
           "RTE/_infantry"
         ],
         "libList": [],

@@ -13,7 +13,7 @@
 
 #include "alg_power_limit.h"
 #include "dvc_djimotor.h"
-
+#include "drv_math.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -22,7 +22,7 @@
 
 /* Private function declarations ---------------------------------------------*/
 
-
+#define POWER_LIMIT_NEW_CONTROL
 /**
  * @brief ��ȡ���Ť�ص���
  *
@@ -31,7 +31,54 @@
  */
 float Class_Power_Limit::Get_Torque_Current(uint8_t num)
 {
-    return Output_Torque_Current[num];
+    return Output_Torque[num];
+}
+
+float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float power_limit, uint8_t motor_nums)
+{
+    float limit_k = 1.; // 输出伸缩因子k
+
+    float tmp_predict;
+
+    float torque_square_sum;
+    float omega_square_sum;
+    float torque_multi_omega_sum;
+
+    float func_a, func_b, func_c;
+    float delta;
+
+    for (int i = 0; i < motor_nums; i++)
+    {
+        torque_square_sum += torque[i] * torque[i];
+        omega_square_sum += omega[i] * omega[i];
+        torque_multi_omega_sum += fabs(omega[i] * torque[i]);
+
+        tmp_predict += fabs(omega[i] * torque[i]) +
+                       k1 * torque[i] * torque[i] +
+                       k2 * omega[i] * omega[i] +
+                       Alpha;
+    }
+    Total_Predict_Power = tmp_predict;
+
+    if (tmp_predict > power_limit)
+    {
+        func_a = k1 * torque_square_sum;
+        func_b = torque_multi_omega_sum;
+        func_c = k2 * omega_square_sum - power_limit + Alpha * motor_nums;
+
+        delta = func_b * func_b - 4 * func_a * func_c; // b*b-4*a*c
+
+        if (delta >= 0)
+        {
+            limit_k = (-func_b + sqrtf(delta)) / (2 * func_a); // 求根公式
+        }
+        else
+        {
+            limit_k = 1;
+        }
+    }
+
+    return (limit_k > 1) ? 1 : limit_k;
 }
 
 
@@ -57,80 +104,17 @@ void Class_Power_Limit::TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&
 	}
 	// else use motor model to predict and limit the power
 	#elif defined (POWER_LIMIT_NEW_CONTROL)
-		float temp_current[4];
-		//predict 4 motor's power and calculate the sum_power of predict and power_scale
-		float tmp_total_power = 0;
-		Output_Torque_Current[0] = Output_Torque_Current[1] = Output_Torque_Current[2] = Output_Torque_Current[3] =0.;
-		for(int i=0;i<4;i++)
-		{
-			Predict_Power[i] = fabs(Omega[i] * (Torque_Torque_Current_Now[i]*CMD_CURRENT_TO_TORQUE) / Tansfer_Coefficient) + 
-							   k1 * (Torque_Torque_Current_Now[i]*CMD_CURRENT_TO_TORQUE) * (Torque_Torque_Current_Now[i]*CMD_CURRENT_TO_TORQUE) +
-			                   k2 * Omega[i] * Omega[i] + 
-							   Alpha;
-			tmp_total_power += Predict_Power[i];
-		}
-		Total_Predict_Power = tmp_total_power;
-
-		//if the total predict power is bigger than the total power limit, scale the power
-		if(Total_Predict_Power > Total_Power_Limit)
-		{
-			Power_Scale = Total_Power_Limit / Total_Predict_Power;		
-			//calculate 4 motor's limit_power
-			for(int i=0;i<4;i++)
-			{
-				Scaled_Give_Power[i] = Predict_Power[i] * Power_Scale;		
-
-				//according to equation to calculate the torque_current_limit
-				equation_a = k1 * CMD_CURRENT_TO_TORQUE* CMD_CURRENT_TO_TORQUE;
-				equation_b = (Omega[i]*RAD_TO_RPM)*CMD_CURRENT_TO_TORQUE / Tansfer_Coefficient;
-				equation_c = k2 * (Omega[i]*RAD_TO_RPM) * (Omega[i]*RAD_TO_RPM) - Scaled_Give_Power[i];
-				
-				//if the equation has no solution, return
-				if((equation_b*equation_b - 4*equation_a*equation_c)<0)
-					return;
-				//if the equation has solution
-				else
-				{
-					//answer = -b + sqrt(b*b - 4*a*c) / 2*a  or  -b - sqrt(b*b - 4*a*c) / 2*a
-					if(Input_Torque_Current[i]>0)
-					{
-						temp_current[i] = (-equation_b + sqrt(equation_b*equation_b - 4*equation_a*equation_c)) / (2*equation_a);
-						if(temp_current[i]>16000.0f)
-						{
-							Output_Torque_Current[i] = 16000;
-						}
-						else if(temp_current[i]<0)
-						{
-							Output_Torque_Current[i] = 0;
-						}
-						else
-						{
-							Output_Torque_Current[i] = temp_current[i];
-						}
-					}
-					else
-					{
-						temp_current[i] = (-equation_b - sqrt(equation_b*equation_b - 4*equation_a*equation_c)) / (2*equation_a);
-						if(temp_current[i]<-16000)
-						{
-							Output_Torque_Current[i] = -16000;
-						}
-						else if(temp_current[i]>0)
-						{
-							Output_Torque_Current[i] = 0;
-						}
-						else
-						{
-							Output_Torque_Current[i] = temp_current[i];
-						}
-					}
-				}
-			}
-			//set limit current_cmd to motor
-			Output(Motor);	
-		}
-		else
-			Power_Scale = 1.0f;
+		//计算缓冲能量
+		//Buffer_power = (Chassis_Buffer-Min_Buffer)*Buffer_K;
+		Buffer_power=0;
+		Math_Constrain(&Buffer_power,-Buffer_power_limit,Buffer_power_limit);
+		//收集电机参数
+		Set_Motor(Motor);
+        //跑功率限制
+		float power_limit_sum = fabs(Total_Power_Limit + Buffer_power);
+        Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4);
+        // 设置输出
+		Output(Motor);	
 
 	#elif defined (POWER_LIMIT_OLD_CONTROL)
 	float Power_Limit;
@@ -217,8 +201,9 @@ void Class_Power_Limit::Output(Class_DJI_Motor_C620 (&Motor)[4])
 {
     for(int i=0;i<4;i++)
 	{
-        Motor[i].CAN_Tx_Data[0] = (int16_t)Output_Torque_Current[i] >> 8;
-        Motor[i].CAN_Tx_Data[1] = (int16_t)Output_Torque_Current[i];
+		int16_t out_limit = Motor[i].Get_Out()*Limit_K;
+        Motor[i].CAN_Tx_Data[0] = (int16_t)out_limit >> 8;
+        Motor[i].CAN_Tx_Data[1] = (int16_t)out_limit;
     }
 }
 
@@ -230,9 +215,9 @@ void Class_Power_Limit::Set_Motor(Class_DJI_Motor_C620 (&Motor)[4])
 {
     for(int i=0;i<4;i++)
     {
-        Input_Torque_Current[i] = Motor[i].Get_Out();
+        Input_Torque[i] = Motor[i].Get_Out()*current_to_torqure;
         Omega[i] = Motor[i].Get_Now_Omega_Radian();
-		Torque_Torque_Current_Now[i] = Motor[i].Get_Now_Torque();
+		Torque_Now[i] = Motor[i].Get_Now_Torque()/19.20321f*current_to_torqure;//除以减速比
     }
 }
 
