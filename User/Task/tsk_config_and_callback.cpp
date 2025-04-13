@@ -253,13 +253,8 @@ void Task100us_TIM4_Callback()
 
 
 //注册订阅者
-//Subscriber Task_Sub_Joint5_angle = Message_Manager.SubRegister("Joint5_angle", sizeof(float));
-float servo_angle_picth=100;
-float servo_angle_yaw=90;
-uint16_t GetCCRFromAngle(float InputAngle){
-float Ret=InputAngle/180 * 2000 +500;
-return Ret;
-}
+Subscriber Task_Sub_Joint5_angle = Message_Manager.SubRegister("Joint5_angle", sizeof(float));
+
 
 
 /**
@@ -281,7 +276,7 @@ void Task1ms_TIM5_Callback()
 				Robotarm.Robotarm_Referee_UI_Tx_Callback(Robotarm.Referee_UI_Refresh_Status);
 			
     }
-		if((Robotarm.DR16.Get_DR16_Status()==DR16_Status_DISABLE))//遥控器与图传链路均失联//&&(Robotarm.DR16.Get_Image_Key_Status()==Image_Status_DISABLE)
+		if((Robotarm.DR16.Get_DR16_Status()==DR16_Status_DISABLE)&&(Robotarm.DR16.Get_Image_Status()==Image_Status_DISABLE))//遥控器与图传链路均失联
 		{
 		    Robotarm.TIM_Robotarm_Disable_PeriodElapsedCallback();
           Robotarm.init_finished = false;
@@ -294,6 +289,7 @@ void Task1ms_TIM5_Callback()
 			if (!Robotarm.init_finished)
 			{Robotarm.init_finished = Robotarm.Robotarm_Calibration();
 			Robotarm.Robotarm_Resolution.Set_Status(Robotarm_Task_Status_Calibration);
+			Robotarm.Referee.UART_Tx_Referee_UI();	
 			}
         else if (Robotarm.init_finished)
 			{
@@ -317,13 +313,10 @@ void Task1ms_TIM5_Callback()
 		if (TIM1msMod100 == 100)
     {
         TIM1msMod100 = 0;
-	
-		__HAL_TIM_SET_COMPARE(&htim8,TIM_CHANNEL_3,GetCCRFromAngle(servo_angle_picth));
-		__HAL_TIM_SET_COMPARE(&htim8,TIM_CHANNEL_2,GetCCRFromAngle(servo_angle_yaw));
-			
 			Robotarm.MiniPc.Output_en(Robotarm.Joint_World_Angle_Now,Robotarm.Arm_Uplift.Actual_Up_Length,Exchange_Status_ENABLE);
     }
      TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+
 
 }
 /**
@@ -366,8 +359,6 @@ extern "C" void Task_Init()
     TIM_Init(&htim4, Task100us_TIM4_Callback);
     TIM_Init(&htim5, Task1ms_TIM5_Callback);
 		HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
-		HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_2);
-		HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_3);
 
     /********************************* 设备层初始化 *********************************/
 
@@ -524,8 +515,8 @@ void Task1ms_TIM5_Callback()
 			{
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=0.5;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-0.5;
-						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=25;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-24.5;
+						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=34;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-34;
 						
 			}
 			break;
@@ -534,8 +525,8 @@ void Task1ms_TIM5_Callback()
 			{
 						chariot.Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length=3;
 						chariot.Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length=-3;
-						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=25;
-						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-24.5;
+						chariot.Auxiliary_Arm_Uplift_X_Lift.Target_Up_Length=34;
+						chariot.Auxiliary_Arm_Uplift_X_Right.Target_Up_Length=-34;
 						
 			}
 			break;
@@ -582,6 +573,7 @@ void Task1ms_TIM5_Callback()
 	}
 		
 		
+		
 
 		if(mod50_cnt%500==0)
 		{
@@ -600,7 +592,6 @@ extern "C" void Task_Init()
     TIM_Init(&htim5,Task1ms_TIM5_Callback);
     //交互层
     chariot.Init();
-	
 	HAL_TIM_Base_Start_IT(&htim5);
 }
 #endif

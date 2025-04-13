@@ -89,7 +89,6 @@ public:
     Class_Auxiliary_Arm_Uplift_X Auxiliary_Arm_Uplift_X_Right;
     Class_Auxiliary_Arm_Uplift_Y Auxiliary_Arm_Uplift_Y_Lift;
     Class_Auxiliary_Arm_Uplift_Y Auxiliary_Arm_Uplift_Y_Right;
-	
     void Init();
     void TIM_Control_Callback();
     void TIM_Chariot_PeriodElapsedCallback();

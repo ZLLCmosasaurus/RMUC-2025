@@ -14,11 +14,7 @@ void Class_Chariot::Init()
     Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(30.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_Y_Right.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_ANGLE);
     Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(1900.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
-    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(25.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
-	
-		chassis.Power_Limit.Set_Power_Limit(100);
-	
-	
+    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(30.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
     
 }
 uint8_t Calibration_Flag__test;
@@ -248,7 +244,7 @@ void Class_Chariot::TIM_Chariot_PeriodElapsedCallback()
     Auxiliary_Arm_Uplift_Y_Lift.TIM_PID_PeriodElapsedCallback();
     Auxiliary_Arm_Uplift_X_Right.TIM_PID_PeriodElapsedCallback();
     Auxiliary_Arm_Uplift_Y_Right.TIM_PID_PeriodElapsedCallback();
-	
+
 }
 
 void Class_Auxiliary_Arm_Uplift_Y::Calculate_Actual_Up_Length(float Off_Set_Angle)

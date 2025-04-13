@@ -74,7 +74,7 @@ enum Enum_DR16_Control_Type
  */
 enum Enum_Robotarm_Task_Status
 {
-  	Robotarm_Task_Status_Calibration = 1,
+  	  	Robotarm_Task_Status_Calibration = 1,
 		Robotarm_Task_Status_Wait_Order=2,
 		Robotarm_Task_Status_Error=3,
 		Robotarm_Task_Status_Exchange=4,
