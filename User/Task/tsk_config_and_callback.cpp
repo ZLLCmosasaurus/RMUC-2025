@@ -347,7 +347,7 @@ void Task100us_TIM4_Callback()
         #ifdef FLYING_SLOPE
         
         chariot.Chassis.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
-        
+
         #endif
     #elif defined(GIMBAL)
         // 单给IMU消息开的定时器 ims
@@ -361,8 +361,8 @@ void Task100us_TIM4_Callback()
  * @brief TIM5任务回调函数
  *
  */
-float Target_Radian = 0.0f;
-
+float Target_Omega_Radian = 0.0f;
+int pp = 2;
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -381,6 +381,16 @@ void Task1ms_TIM5_Callback()
         #endif
 
         chariot.TIM_Calculate_PeriodElapsedCallback();
+        // chariot.Chassis.Motor_Wheel[pp].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        // chariot.Chassis.Motor_Wheel[pp].Set_Target_Omega_Radian(Target_Omega_Radian);
+        // chariot.Chassis.Motor_Wheel[pp].TIM_PID_PeriodElapsedCallback();
+        // for(int i =0;i<4;i++){
+        //     if(i != pp){
+        //         chariot.Chassis.Motor_Wheel[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        //         chariot.Chassis.Motor_Wheel[i].Set_Out(0.0f);
+        //         chariot.Chassis.Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
+        //     }
+        // }
 
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
@@ -430,6 +440,8 @@ extern "C" void Task_Init()
 
             //c板陀螺仪spi外设
             SPI_Init(&hspi1,Device_SPI1_Callback);
+            //磁力计iic外设
+            IIC_Init(&hi2c3, Ist8310_IIC3_Callback);
 
         #endif
         

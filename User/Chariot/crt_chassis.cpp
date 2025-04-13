@@ -66,10 +66,10 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     // {
     //     Motor_Wheel[i].PID_Omega.Init(1500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
     // }
-    Motor_Wheel[0].PID_Omega.Init(2500.0f, 0.0f, 0.8f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
-    Motor_Wheel[1].PID_Omega.Init(2500.0f, 0.0f, 0.8f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
-    Motor_Wheel[2].PID_Omega.Init(2500.0f, 0.0f, 0.8f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
-    Motor_Wheel[3].PID_Omega.Init(2500.0f, 0.0f, 0.8f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
+    Motor_Wheel[0].PID_Omega.Init(2000.0f, 38.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
+    Motor_Wheel[1].PID_Omega.Init(2000.0f, 16.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
+    Motor_Wheel[2].PID_Omega.Init(2000.0f, 37.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
+    Motor_Wheel[3].PID_Omega.Init(2000.0f, 16.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
 
     //轮向电机ID初始化
     Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x201);
@@ -139,9 +139,9 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             float motor4_temp_rad = motor4_temp_linear_vel * VEL2RAD;
             //角速度*减速比  设定目标 直接给到电机输出轴        根据结算对应车轮编号
             Motor_Wheel[0].Set_Target_Omega_Radian(  motor4_temp_rad);
-            Motor_Wheel[1].Set_Target_Omega_Radian(  motor2_temp_rad);
+            Motor_Wheel[1].Set_Target_Omega_Radian(- motor3_temp_rad);
             Motor_Wheel[2].Set_Target_Omega_Radian(- motor1_temp_rad);
-            Motor_Wheel[3].Set_Target_Omega_Radian(- motor3_temp_rad);
+            Motor_Wheel[3].Set_Target_Omega_Radian(  motor2_temp_rad);
 
             //各个电机具体PID
             for (int i = 0; i < 4; i++){
@@ -179,7 +179,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     if(Get_Chassis_Control_Type() != Chassis_Control_Type_DISABLE){
         Flying_Slope.Transform_Angle();
         Flying_Slope.TIM_Calcualte_Feekback();
-        Flying_Slope.Output();
+        //Flying_Slope.Output();
     }
 
     #endif

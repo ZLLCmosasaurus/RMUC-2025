@@ -755,6 +755,11 @@
               <FileType>8</FileType>
               <FilePath>..\User\Middleware\Algorithm\alg_power_limit.cpp</FilePath>
             </File>
+            <File>
+              <FileName>alg_flying_slope.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Middleware\Algorithm\alg_flying_slope.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

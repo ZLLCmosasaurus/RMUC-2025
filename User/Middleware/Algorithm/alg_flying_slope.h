@@ -10,9 +10,9 @@
 
 //依据车体状态更改
 #define Gravity        100                                         //整车重量*G == 重力 N
-#define CHASSIS_L      30                                         //底盘长  cm
-#define CHASSIS_W      20                                         //宽      cm
-#define CHASSIS_R      7                                         //车轮半径 cm
+#define CHASSIS_L      0.391f                                         //底盘长  m
+#define CHASSIS_W      0.38f                                         //宽      m
+#define CHASSIS_R      0.0705f                                         //车轮半径 m
 
 #define M3508_REDUATION (3591.f / 187.f)                                                      // 3508标准减速比
 #define M3508_TORQUE_CONSTANT 0.3f                                                             // 3508带标准减速箱的转矩常数
@@ -33,6 +33,7 @@ class Class_Flying_Slope{
   protected:
     float Feekback_Value[4];    //0-3顺时针对应四个轮子
     float Slope_Angle = 0.0f;
+    float Slope_Radian = 0.0f;
     float Roll_Angle = 0.0f;      //车体侧身角度
 
 };

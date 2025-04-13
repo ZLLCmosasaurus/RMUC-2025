@@ -131,9 +131,9 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
    derta_angle = derta_angle<0?(derta_angle+2*PI):derta_angle;  
 
    //云台坐标系的目标速度转为底盘坐标系的目标速度
-   //derta_angle = 0;     //记得删，装上Motor_Yaw后
-   chassis_velocity_x =  1.0f * ((float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle)));
-   chassis_velocity_y = -1.0f * ((float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle)));
+   derta_angle = 0;     //记得删，装上Motor_Yaw后
+   chassis_velocity_x = -1.0f * ((float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle)));
+   chassis_velocity_y =  1.0f * ((float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle)));
 
     //设定底盘控制类型
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
@@ -282,7 +282,7 @@ void Class_Chariot::Control_Chassis()
         if (DR16.Get_Left_Switch()==DR16_Switch_Status_UP)  //左上 小陀螺模式
         {
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN);
-            chassis_omega = -Chassis.Get_Spin_Omega();
+            chassis_omega = Chassis.Get_Spin_Omega();
             if(DR16.Get_Right_Switch()== DR16_Switch_Status_DOWN)  //右下 小陀螺反向
             {
                 chassis_omega = Chassis.Get_Spin_Omega();
@@ -602,9 +602,9 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     // 小陀螺 随动计算角速度
     if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN)
     {
-        //Chassis.Set_Target_Omega(Chassis.Get_Spin_Omega());
+        Chassis.Set_Target_Omega(Chassis.Get_Spin_Omega());
         //没有滑环，只能随动
-        Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        //Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
     }
     else if (Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_FLLOW)
     {
@@ -625,7 +625,8 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         PID_Chassis_Fllow.Set_Target(temp_reference);
         PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
-        Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());
+        Chassis.Set_Target_Omega(0.0f);
+        //Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());            没装yaw电机
     }
     // 底盘解算任务
     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
