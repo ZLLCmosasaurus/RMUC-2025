@@ -56,7 +56,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     FSM_Alive_Control.Init(5, 0);
 
     // 遥控器
-    DR16.Init(&huart3, &huart1);
+    DR16.Init(&huart3, &huart6);
     DR16_Dead_Zone = __DR16_Dead_Zone;
 
     //底盘初始化限制速度
@@ -77,6 +77,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.Init(&MiniPC_USB_Manage_Object);
     MiniPC.IMU = &Gimbal.Boardc_BMI;
     MiniPC.Referee = &Referee;
+    MiniPC.Init_UART(&UART6_Manage_Object);
 #endif
 }
 

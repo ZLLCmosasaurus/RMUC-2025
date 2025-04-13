@@ -2,8 +2,8 @@
 #define _CONFIG_H_
 
 //云台底盘代码切换
-//#define GIMBAL
-#define CHASSIS
+#define GIMBAL
+//#define CHASSIS
 //底盘X轴Y轴最大速度
 #define Chassis_Velocity_Max 5.0f //m/s
 //底盘小陀螺转速(最大限制为8)

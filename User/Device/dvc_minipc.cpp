@@ -38,7 +38,16 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
     //Pack_Tx.windmill_type = Windmill_Type_Small;
     //Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
-
+/**
+ * @brief 迷你主机初始化
+ *
+ * @param __frame_header 数据包头标
+ */
+void Class_MiniPC::Init_UART(Struct_UART_Manage_Object* __UART_Manage_Object, uint8_t __frame_header)
+{
+    UART_Manage_Object = __UART_Manage_Object;
+    Frame_Header = __frame_header;
+}
 /**
  * @brief 数据处理过程
  *
@@ -60,7 +69,6 @@ void Class_MiniPC::Data_Process()
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
 }
-
 
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区
@@ -87,7 +95,41 @@ void Class_MiniPC::Output()
 	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx));
   USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
 }
+/**
+ * @brief 迷你主机发送数据输出到串口发送缓冲区
+ *
+ */
+void Class_MiniPC::Data_Process_UART(uint8_t *Rx_Data)
+{
+  if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
+  {
+    memcpy(&Pack_Rx,UART_Manage_Object->Rx_Buffer,sizeof(Pack_rx_t));
+  }
+}
+void Class_MiniPC::Output_UART()
+{
+  if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
+  {
+    Pack_Tx.header = Frame_Header;
 
+    // 根据referee判断红蓝方
+    // if(Referee->Get_ID()>=101)
+    //   Pack_Tx.detect_color = 101;
+    // else
+    Pack_Tx.detect_color = 0;
+
+    Pack_Tx.target_id = 0x08;
+    Pack_Tx.roll = Tx_Angle_Roll;
+    Pack_Tx.pitch = -Tx_Angle_Pitch; // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
+    Pack_Tx.yaw = Tx_Angle_Yaw;
+    Pack_Tx.radar_enable_control = 1; // 雷达使能标志位 0 关闭雷达 1 打开雷达
+    Pack_Tx.crc16 = 0xffff;
+    Pack_Tx.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
+    memcpy(UART_Manage_Object->Tx_Buffer, &Pack_Tx, sizeof(Pack_Tx));
+    Append_CRC16_Check_Sum(UART_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
+    UART_Send_Data(UART_Manage_Object->UART_Handler, USB_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
+  }
+}
 /**
  * @brief tim定时器中断增加数据到发送缓冲区
  *
@@ -96,6 +138,7 @@ void Class_MiniPC::TIM_Write_PeriodElapsedCallback()
 {
   Transform_Angle_Tx();
   Output();
+  Output_UART();
 }
 
 /**
@@ -109,7 +152,17 @@ void Class_MiniPC::USB_RxCpltCallback(uint8_t *rx_data)
   Flag += 1;
   Data_Process();
 }
-
+/**
+ * @brief uart通信接收回调函数
+ *
+ * @param rx_data 接收的数据
+ */
+void Class_MiniPC::UART_RxCpltCallback(uint8_t *rx_data)
+{
+  //滑动窗口, 判断迷你主机是否在线
+  UART_Flag += 1;
+  Data_Process_UART(rx_data);
+}
 /**
  * @brief tim定时器中断定期检测迷你主机是否存活
  *
@@ -121,14 +174,28 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
     {
         //迷你主机断开连接
         MiniPC_Status =  MiniPC_Status_DISABLE;
+        Minipc_USB_Status =  MiniPC_USB_Status_DISABLE;
     }
     else
     {
         //迷你主机保持连接
-        MiniPC_Status =  MiniPC_Status_ENABLE ;
+        MiniPC_Status =  MiniPC_Status_ENABLE;
+        Minipc_USB_Status =  MiniPC_USB_Status_ENABLE;
+    }
+
+    if(UART_Flag == Pre_UART_Flag)
+    {
+        //迷你主机uart断开连接
+        Minipc_USB_Status =  MiniPC_USB_Status_DISABLE;
+    }
+    else
+    {
+        //迷你主机uart保持连接
+        Minipc_USB_Status =  MiniPC_USB_Status_ENABLE;
     }
 
     Pre_Flag = Flag;
+    Pre_UART_Flag = UART_Flag;
 }
 
 /**

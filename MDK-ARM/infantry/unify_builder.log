@@ -10321,3 +10321,504 @@ These source files will be recompiled
 [2025-04-11 21:59:14]	[done]
 	build successfully !
 
+[2025-04-12 19:20:33]	[info] incremental build: 14 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-12 19:20:35]	[done]
+	build successfully !
+
+[2025-04-12 21:21:16]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-12 21:21:17]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_minipc.o -MMD ./../User/Device/dvc_minipc.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:130:40: error: no member named 'huart' in 'Struct_UART_Manage_Object'
+  130 |     UART_Send_Data(UART_Manage_Object->huart, USB_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
+      |                    ~~~~~~~~~~~~~~~~~~  ^
+./../User/Device/dvc_minipc.cpp:182:30: error: assigning to 'Enum_Minipc_USB_Status' from incompatible type 'Enum_MiniPC_Status'
+  182 |         Minipc_USB_Status =  MiniPC_Status_ENABLE;
+      |                              ^~~~~~~~~~~~~~~~~~~~
+2 errors generated.
+
+[2025-04-12 21:21:45]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-12 21:21:45]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_minipc.o -MMD ./../User/Device/dvc_minipc.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_minipc.cpp:182:30: error: assigning to 'Enum_Minipc_USB_Status' from incompatible type 'Enum_MiniPC_Status'
+  182 |         Minipc_USB_Status =  MiniPC_Status_ENABLE;
+      |                              ^~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+[2025-04-12 21:21:58]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-12 21:21:59]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Task/tsk_config_and_callback.o -MMD ./../User/Task/tsk_config_and_callback.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Task/tsk_config_and_callback.cpp:444:9: error: no matching function for call to 'UART_Init'
+  444 |         UART_Init(&huart6, MiniPC_UART_Callback, MiniPC_Rx_Data_Length);   
+      |         ^~~~~~~~~
+../User/Middleware/Driver\drv_uart.h:68:6: note: candidate function not viable: no known conversion from 'void (uint8_t *, uint32_t)' (aka 'void (unsigned char *, unsigned int)') to 'UART_Call_Back' (aka 'void (*)(unsigned char *, unsigned short)') for 2nd argument
+   68 | void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint16_t Rx_Buffer_Length);
+      |      ^                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+[2025-04-12 21:22:59]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': object (.o) file not exist
+
+[2025-04-12 21:23:06]	[done]
+	build successfully !
+
+[2025-04-12 21:35:38]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_minipc.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-12 21:35:40]	[done]
+	build successfully !
+
+[2025-04-12 21:38:26]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': source file has been changed.
+
+[2025-04-12 21:38:27]	[done]
+	build successfully !
+
+[2025-04-12 21:50:26]	[done]
+	build successfully !
+
+[2025-04-12 22:29:03]	[info] incremental build: 5 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:29:03]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:366:13: error: use of undeclared identifier 'Math_Constrain'
+  366 |             Math_Constrain(&data_length,(uint16_t)0,(uint16_t)(40));  //限制数据段最大长度
+      |             ^
+./../User/Device/dvc_dr16.cpp:375:17: error: use of undeclared identifier 'Verify_CRC8_Check_Sum'
+  375 |             if (Verify_CRC8_Check_Sum(data_temp, 5) == 1) //校验帧头
+      |                 ^
+./../User/Device/dvc_dr16.cpp:381:21: error: use of undeclared identifier 'Verify_CRC16_Check_Sum'
+  381 |                 if (Verify_CRC16_Check_Sum(sum_data, data_length + 9) == 1) //校验整个帧
+      |                     ^
+./../User/Device/dvc_dr16.cpp:391:44: error: cannot initialize a parameter of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'Struct_Image_UART_Data *'
+  391 |                         Image_Data_Process(&Now_UART_Image_Rx_Data);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~
+./../User/Device/dvc_dr16.cpp:282:46: note: passing argument to parameter '__rx_buffer' here
+  282 | void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
+      |                                              ^
+4 errors generated.
+
+[2025-04-12 22:29:19]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:29:20]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:376:17: error: use of undeclared identifier 'Verify_CRC8_Check_Sum'
+  376 |             if (Verify_CRC8_Check_Sum(data_temp, 5) == 1) //校验帧头
+      |                 ^
+./../User/Device/dvc_dr16.cpp:382:21: error: use of undeclared identifier 'Verify_CRC16_Check_Sum'
+  382 |                 if (Verify_CRC16_Check_Sum(sum_data, data_length + 9) == 1) //校验整个帧
+      |                     ^
+./../User/Device/dvc_dr16.cpp:392:44: error: cannot initialize a parameter of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'Struct_Image_UART_Data *'
+  392 |                         Image_Data_Process(&Now_UART_Image_Rx_Data);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~
+./../User/Device/dvc_dr16.cpp:283:46: note: passing argument to parameter '__rx_buffer' here
+  283 | void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
+      |                                              ^
+3 errors generated.
+
+[2025-04-12 22:30:34]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:30:35]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:17:10: fatal error: 'referee.h' file not found
+   17 | #include "referee.h"
+      |          ^~~~~~~~~~~
+1 error generated.
+
+[2025-04-12 22:30:44]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:30:44]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:393:44: error: cannot initialize a parameter of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'Struct_Image_UART_Data *'
+  393 |                         Image_Data_Process(&Now_UART_Image_Rx_Data);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~
+./../User/Device/dvc_dr16.cpp:284:46: note: passing argument to parameter '__rx_buffer' here
+  284 | void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
+      |                                              ^
+1 error generated.
+
+[2025-04-12 22:30:58]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:30:58]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:393:44: error: cannot initialize a parameter of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'Struct_Image_UART_Data *'
+  393 |                         Image_Data_Process(&Now_UART_Image_Rx_Data);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~
+./../User/Device/dvc_dr16.cpp:284:46: note: passing argument to parameter '__rx_buffer' here
+  284 | void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
+      |                                              ^
+1 error generated.
+
+[2025-04-12 22:31:25]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:31:26]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:393:44: error: cannot initialize a parameter of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'Struct_Image_UART_Data *'
+  393 |                         Image_Data_Process(&Now_UART_Image_Rx_Data);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~
+./../User/Device/dvc_dr16.cpp:284:46: note: passing argument to parameter '__rx_buffer' here
+  284 | void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
+      |                                              ^
+1 error generated.
+
+[2025-04-12 22:32:23]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:32:24]	[done]
+	build successfully !
+
+[2025-04-12 22:59:47]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\dma.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\Core\Src\usart.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\MDK-ARM\startup_stm32f407xx.s': source file has been changed.
+
+[2025-04-12 22:59:48]	[done]
+	build successfully !
+
+[2025-04-12 23:03:16]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+
+[2025-04-12 23:03:17]	[done]
+	build successfully !
+
+[2025-04-12 23:05:27]	[done]
+	build successfully !
+
+[2025-04-12 23:07:18]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-12 23:07:19]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:389:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  389 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:07:59]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-12 23:07:59]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:08:34]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-12 23:08:34]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:09:04]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-12 23:09:04]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:09:55]	[info] incremental build: 2 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+
+[2025-04-12 23:09:56]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:10:14]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+
+[2025-04-12 23:10:14]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:389:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  389 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:11:29]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+
+[2025-04-12 23:11:30]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:389:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  389 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:12:37]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+
+[2025-04-12 23:12:38]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:13:05]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_dr16.h' has been changed.
+
+[2025-04-12 23:13:07]	[done]
+	build successfully !
+
+[2025-04-12 23:13:45]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+
+[2025-04-12 23:13:45]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'DWT_GetTimeline_ms'
+  390 |                         FPS = DWT_GetTimeline_ms();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:18:50]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+
+[2025-04-12 23:18:50]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_dr16.o -MMD ./../User/Device/dvc_dr16.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_dr16.cpp:390:31: error: use of undeclared identifier 'FPS_Counter_Update'
+  390 |                         FPS = FPS_Counter_Update();
+      |                               ^
+1 error generated.
+
+[2025-04-12 23:18:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': object (.o) file not exist
+
+[2025-04-12 23:18:59]	[done]
+	build successfully !
+
+[2025-04-12 23:20:16]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+
+[2025-04-12 23:20:17]	[done]
+	build successfully !
+
+[2025-04-12 23:20:33]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+
+[2025-04-12 23:20:34]	[done]
+	build successfully !
+
+[2025-04-12 23:27:03]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+
+[2025-04-12 23:27:04]	[done]
+	build successfully !
+
+[2025-04-13 10:29:24]	[done]
+	build successfully !
+
+[2025-04-13 10:39:42]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': source file has been changed.
+
+[2025-04-13 10:39:43]	[done]
+	build successfully !
+
