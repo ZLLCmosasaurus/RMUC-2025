@@ -314,38 +314,13 @@ void Class_DR16::Image_Data_Process_Customer_controller(uint8_t* __rx_buffer)
     Struct_Image_UART_Data_Customer_controller *tmp_buffer = (Struct_Image_UART_Data_Customer_controller *)__rx_buffer;
 
     /*源数据转为对外数据*/
-//    for (int i = 0; i < 5; i++)
-//    {
-//    memcpy(&Angle_Image[i],&tmp_buffer[3*i],2);
-//    memcpy(&total_round[i],&tmp_buffer[3*i+2],1);
-//    Angle_Image[i]=Angle_Image[i]/100.f;
-//    }
-//	        for(uint8_t i=0; i<5; i++)
-//        {
-//            int16_t temp = (tmp_buffer->Data[3*i+1]<<8) | tmp_buffer->Data[3*i];
-//            Angle_Image[i] = temp/100.f;
-//        }
-//	    
-	
-	
-//	int16_t IntAngle;
-//    int8_t total_round;
-//	for(uint8_t i=0;i<5;i++)
-//  {
 
-//		memcpy(&IntAngle,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i],2);
-//    memcpy(&total_round,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i+2],1);
-//		Angle_Image[i]=(float)(IntAngle/100.f);
-
-//  }
-	for(uint8_t i=0; i<5; i++)
+				for(uint8_t i=0; i<5; i++)
         {
             int16_t temp = (Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+2]<<8) | Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+1];
             Angle_Image[i] = temp/100.f;
         }
-	
-    //memcpy(&Customer_controller,&tmp_buffer,15);
-   
+				Control_Key=Now_UART_Image_Rx_Data_Customer_controller.Data[10];
 }
 /**
  * @brief UART通信接收回调函数
@@ -395,8 +370,9 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
             int16_t temp = (Rx_Data[2*i+8]<<8) | (Rx_Data[2*i+7]);
             Customize_Controller_Data.Angle[i] = float(temp/100.f);
         }
+						Control_Key=Rx_Data[17];
             Image_Flag_Customer_controller += 1;
-            Image_Data_Process_Customer_controller(&Rx_Data[7]);
+            //Image_Data_Process_Customer_controller(&Rx_Data[7]);
             //保留上一次数据
             memcpy(&Pre_UART_Image_Rx_Data_Customer_controller, &Rx_Data[7], sizeof(Struct_Image_UART_Data_Customer_controller));     
         }
@@ -410,6 +386,8 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
  */
 void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
 {
+	static uint8_t mod10;
+	mod10++;
     //判断该时间段内是否接收过遥控器数据
     if (DR16_Flag == Pre_DR16_Flag )
     {
@@ -422,7 +400,7 @@ void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
         //遥控器保持连接
         DR16_Status = DR16_Status_ENABLE;
     }
-		
+		if(mod10>=10){
     //判断该时间段内是否接收过自定义控制器数据
 		if(Image_Flag == Pre_Image_Flag)
 		{
@@ -441,9 +419,13 @@ void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
 		 {
 		 Image_Key_Status = Image_Status_ENABLE;
 		 }
-		Pre_Image_Key_Flag=Image_Key_Flag;
+		 	Pre_Image_Key_Flag=Image_Key_Flag;
+		  Pre_Image_Flag = Image_Flag;
+		  mod10=0;
+	 }
+	
     Pre_DR16_Flag = DR16_Flag;
-    Pre_Image_Flag = Image_Flag;
+   
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

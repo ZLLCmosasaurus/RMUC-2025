@@ -273,6 +273,8 @@ public:
 class Class_Robotarm
 {
 public:
+	float servo_angle_picth=100;
+	float servo_angle_yaw=90;
 	//1-5轴关节初始化角度+抬升机构长度
 	float Jonit_AngleInit[6]={0,0,0,0,0,0};
 		//Joint坐标系角度

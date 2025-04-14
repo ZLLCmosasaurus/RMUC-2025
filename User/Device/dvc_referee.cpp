@@ -322,25 +322,27 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
  *
  */
 
-void Class_Referee::UART_Tx_Referee_UI()
+void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
 {
-		static uint8_t String_Index;
-        uint8_t string_num=7;
-		String_Index++;
-        if(String_Index==string_num+1)String_Index=0;
-        Referee_UI_Draw_String(0,Get_ID(), Referee_UI_One, 0 , 0x00, 0, 20, 2, 780, 180, "LEFT", (sizeof("LEFT")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(1,Get_ID(), Referee_UI_One, 0 , 0x01, 0, 20, 2, 950, 180, "MID", (sizeof("MID")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(2,Get_ID(), Referee_UI_One , 0, 0x02, 0, 20, 2, 1081, 180, "RIGHT  ", (sizeof("RIGHT")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(3,Get_ID(), Referee_UI_One, 0 , 0x03, 0, 20, 2, 70, 550, "RElAY", (sizeof("RElAY")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(4,Get_ID(), Referee_UI_One, 0 , 0x04, 0, 20, 2, 70, 600, "GIMBAL", (sizeof("GIMBAL")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(5,Get_ID(), Referee_UI_One , 0, 0x05, 0, 20, 2, 70, 650, "GIMBAL_MODE  ", (sizeof("GIMBAL_MODE")-1),Referee_UI_ADD);
-        Referee_UI_Draw_String(6,Get_ID(), Referee_UI_One, 0 , 0x06, 0, 20, 2, 70, 700, "NOW_STATUS", (sizeof("NOW_STATUS")-1),Referee_UI_ADD);        
-        Referee_UI_Draw_String(7,Get_ID(), Referee_UI_One, 0 , 0x07, 0, 20, 2, 1600, 700, "AUTO", (sizeof("AUTO")-1),Referee_UI_ADD);      
-        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
-        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
-        Referee_UI_Draw_Line(Get_ID(),Referee_UI_One,1,0x04,2,3,950,450,950,550,Referee_UI_ADD);
-        if(String_Index<string_num)Referee_UI_Packed_Data(&Interaction_Graphic_String[String_Index]); //打包字符数据
-        else Referee_UI_Packed_Data(&Interaction_Graphic_7); //打包图形数据
+//		static uint8_t String_Index;
+//        uint8_t string_num=7;
+//		String_Index++;
+//        if(String_Index==string_num+1)String_Index=0;
+//        Referee_UI_Draw_String(0,Get_ID(), Referee_UI_One, 0 , 0x00, 0, 20, 2, 780, 180, "LEFT", (sizeof("LEFT")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(1,Get_ID(), Referee_UI_One, 0 , 0x01, 0, 20, 2, 950, 180, "MID", (sizeof("MID")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(2,Get_ID(), Referee_UI_One , 0, 0x02, 0, 20, 2, 1081, 180, "RIGHT  ", (sizeof("RIGHT")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(3,Get_ID(), Referee_UI_One, 0 , 0x03, 0, 20, 2, 70, 550, "RElAY", (sizeof("RElAY")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(4,Get_ID(), Referee_UI_One, 0 , 0x04, 0, 20, 2, 70, 600, "GIMBAL", (sizeof("GIMBAL")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(5,Get_ID(), Referee_UI_One , 0, 0x05, 0, 20, 2, 70, 650, "GIMBAL_MODE  ", (sizeof("GIMBAL_MODE")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(6,Get_ID(), Referee_UI_One, 0 , 0x06, 0, 20, 2, 70, 700, "NOW_STATUS", (sizeof("NOW_STATUS")-1),Referee_UI_ADD);        
+//        Referee_UI_Draw_String(7,Get_ID(), Referee_UI_One, 0 , 0x07, 0, 20, 2, 1600, 700, "AUTO", (sizeof("AUTO")-1),Referee_UI_ADD);      
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_One,1,0x04,2,3,950,450,950,550,Referee_UI_ADD);
+		if (__String_Index < 9)
+        Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据
+    else if(__String_Index >=9)
+        Referee_UI_Packed_Data(&Interaction_Graphic_7); // 打包图形数据
 		UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
 }
 

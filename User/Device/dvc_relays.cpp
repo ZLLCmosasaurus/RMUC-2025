@@ -14,7 +14,7 @@ void Class_Relays::Set_Relay_State(Enum_Relays_Id Relays_Id,Enum_Relays_Control_
 {
 	uint8_t id=Relays_Id;
 	
-	Relays_Control_State [id-1]=__Relays_Control_State;
+	Relays_Control_State [id]=__Relays_Control_State;
 	
 
 }
