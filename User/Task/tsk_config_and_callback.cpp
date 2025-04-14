@@ -429,6 +429,8 @@ extern "C" void Task_Init()
     /********************************** 驱动层初始化 **********************************/
 	#ifdef CHASSIS
 
+        hdma_usart6_rx.Init.Mode = DMA_CIRCULAR;
+
         //集中总线can1/can2
         CAN_Init(&hcan1, Chassis_Device_CAN1_Callback);
         CAN_Init(&hcan2, Chassis_Device_CAN2_Callback);
@@ -455,6 +457,8 @@ extern "C" void Task_Init()
     #endif
 
     #ifdef GIMBAL
+
+        hdma_usart6_rx.Init.Mode = DMA_NORMAL;
 
         //集中总线can1/can2
         CAN_Init(&hcan1, Gimbal_Device_CAN1_Callback);
