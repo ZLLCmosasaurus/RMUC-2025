@@ -390,10 +390,6 @@ void Class_Chariot::Control_Chassis()
         //     Chassis.Supercap.Get_Supercap_Control_Status(Supercap_Control_Status_DISABLE);
         // }
     }
-    else
-    {
-        Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-    }
 
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
@@ -485,7 +481,7 @@ void Class_Chariot::Control_Gimbal()
         tmp_gimbal_yaw += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * 2.0f;
         // pitch赋值逻辑
         tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
-        tmp_gimbal_pitch -= True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
+        tmp_gimbal_pitch += True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
         // 长按右键  开启自瞄
         if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED)
         {
@@ -501,21 +497,7 @@ void Class_Chariot::Control_Gimbal()
         if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             tmp_gimbal_yaw += 180;
-
-            // if(Chassis_Logics_Direction == Chassis_Logic_Direction_Positive)
-            //     Chassis_Logics_Direction = Chassis_Logic_Direction_Negative;
-            // else
-            //     Chassis_Logics_Direction = Chassis_Logic_Direction_Positive;
         }
-        
-        // E键按下切换Pitch锁定模式和free模式
-        // if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
-        // {
-        //     if (Pitch_Control_Status == Pitch_Status_Control_Free)
-        //         Pitch_Control_Status = Pitch_Status_Control_Lock;
-        //     else
-        //         Pitch_Control_Status = Pitch_Status_Control_Free;
-        // }
         // 设定角度
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
         Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw); // IMU角度值
@@ -539,26 +521,69 @@ void Class_Chariot::Control_Gimbal()
  * @brief 图传控制逻辑
  *
  */
+float Omega = -3.5f;
 void Class_Chariot::Control_Image()
 {
-    //设置pitch yaw角度
-    float tmp_image_pitch = 0.0f, tmp_image_roll = 0.0f;
+    static float K = 1.0f;
+    // 设置pitch yaw角度
+    float tmp_image_pitch = 0.0f,tmp_image_roll = 0.0f;
     if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
         if(DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
-            tmp_image_pitch = 0.0f;
-            tmp_image_roll = 0.0f;
+            Image.Set_Target_Image_Pitch_Angle(40.0f);
+            Image.Set_Target_Image_Roll_Angle(-170.0f);
+        }
+        else if(DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            Image.Set_Target_Image_Pitch_Angle(5.0f);
+            Image.Set_Target_Image_Roll_Angle(-10.0f);
+        }
+
+        if(DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            Image.Set_Target_Image_Roll_Angle(-170.0f);
+        }
+
+        if(DR16.Get_Keyboard_Key_V() == DR16_Key_Status_PRESSED)
+        {
+            K = 0.008f;
+        }
+        else if(DR16.Get_Keyboard_Key_B() == DR16_Key_Status_PRESSED)
+        {
+            K= -0.008f;
         }
         else
         {
-            tmp_image_pitch = 0.0f;
-            tmp_image_roll = 0.0f;
+            K = 0.0f;
         }
-    }
+        
 
-    Image.Set_Target_Image_Pitch_Angle(tmp_image_pitch + Image.get_Image_Pitch_Calibrate_Offset());
-    Image.Set_Target_Image_Roll_Angle(tmp_image_roll + Image.get_Image_Roll_Calibrate_Offset());
+        tmp_image_pitch = Image.Get_Target_Image_Pitch_Angle();
+        tmp_image_pitch -= DR16.Get_Mouse_Z() * DR16_Mouse_Pitch_Angle_Resolution * 4.0f;
+
+        tmp_image_roll = Image.Get_Target_Image_Roll_Angle();
+        tmp_image_roll += K*DR16_Mouse_Pitch_Angle_Resolution;
+
+        Math_Constrain(&tmp_image_pitch, 0.0f, 45.0f);
+        Math_Constrain(&tmp_image_roll, -180.0f, 0.0f);
+        Image.Set_Target_Image_Pitch_Angle(tmp_image_pitch);
+        Image.Set_Target_Image_Roll_Angle(tmp_image_roll);
+    }
+    
+    float tx_pitch_angle = Image.Get_Target_Image_Pitch_Angle();
+    float tx_roll_angle = Image.Get_Target_Image_Roll_Angle();
+    memcpy(CAN1_0x02E_TX_Data, &tx_pitch_angle, sizeof(float));
+    memcpy(CAN1_0x02E_TX_Data + 4, &tx_roll_angle, sizeof(float));
+
+    
+
+    // if(DR16.Get_DR16_Status() == DR16_Status_ENABLE)
+    // {
+    //     Image.Motor_Image_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+    //     Image.Motor_Image_Pitch.Set_Target_Omega_Radian(Omega);
+    // }
+
     
 }
 #endif
@@ -906,7 +931,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     // 各个模块的分别解算
     Gimbal.TIM_Calculate_PeriodElapsedCallback();
     Booster.TIM_Calculate_PeriodElapsedCallback();
-    Image.TIM_Calculate_PeriodElapsedCallback();
+    //Image.TIM_Calculate_PeriodElapsedCallback();
     // 传输数据给上位机
     MiniPC.TIM_Write_PeriodElapsedCallback();
     // 给下板发送数据
@@ -998,11 +1023,13 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             }
 #elif defined(GIMBAL)
 
-        if (mod50_mod3 % 3 == 0)
+        if (mod50_mod3 % 5 == 0)
         {
             // 判断底盘通讯在线状态
             TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
             DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
+            // Image.Motor_Image_Pitch.TIM_Alive_PeriodElapsedCallback();
+            // Image.Motor_Image_Roll.TIM_Alive_PeriodElapsedCallback();
             mod50_mod3 = 0;
         }
 
@@ -1010,8 +1037,6 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         Gimbal.Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
         Gimbal.Boardc_BMI.TIM1msMod50_Alive_PeriodElapsedCallback();
         Booster.Motor_Driver.TIM_Alive_PeriodElapsedCallback();
-        Image.Motor_Image_Pitch.TIM_Alive_PeriodElapsedCallback();
-        Image.Motor_Image_Roll.TIM_Alive_PeriodElapsedCallback();
         for (auto i = 0; i < 4; i++)
         {
             Booster.Fric[i].TIM_Alive_PeriodElapsedCallback();

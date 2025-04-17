@@ -112,6 +112,7 @@ extern uint8_t CAN1_0x1b_Tx_Streeing_Wheel_B_data[8];
 extern uint8_t CAN1_0x1c_Tx_Streeing_Wheel_C_data[8];
 extern uint8_t CAN1_0x1d_Tx_Streeing_Wheel_D_data[8];
 extern uint8_t CAN1_0x01E_Tx_Data[8];
+extern uint8_t CAN1_0x02E_TX_Data[8];
 /*********LK电机 控制缓冲区***********/
 extern uint8_t CAN1_0x141_Tx_Data[8];
 extern uint8_t CAN1_0x142_Tx_Data[8];

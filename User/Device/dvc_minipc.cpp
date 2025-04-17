@@ -65,7 +65,7 @@ void Class_MiniPC::Data_Process()
       Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
     }
     //pitch角度限幅
-    Math_Constrain(&Rx_Angle_Pitch,-40.0f,5.0f);
+    Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
 }
@@ -103,7 +103,22 @@ void Class_MiniPC::Data_Process_UART(uint8_t *Rx_Data)
 {
   if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
   {
-    memcpy(&Pack_Rx,UART_Manage_Object->Rx_Buffer,sizeof(Pack_rx_t));
+    if(UART_Manage_Object->Rx_Buffer[0] == 0xA5)
+    {
+      uint8_t *data_temp = new uint8_t[MiniPC_Rx_Data_Length];
+      for(auto i = 0; i < MiniPC_Rx_Data_Length; i++)
+      {
+        data_temp[i] = UART_Manage_Object->Rx_Buffer[i];
+      }
+      if (Verify_CRC16_Check_Sum(data_temp, MiniPC_Rx_Data_Length) == 1) //校验整个帧
+      {
+        memcpy(&Pack_Rx, UART_Manage_Object->Rx_Buffer, sizeof(Pack_rx_t));
+        Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+        //pitch角度限幅
+        Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
+      }
+      delete[] data_temp;
+    }
   }
 }
 void Class_MiniPC::Output_UART()

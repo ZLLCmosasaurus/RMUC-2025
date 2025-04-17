@@ -70,6 +70,8 @@ CAN_Massage_Unit Massage_queue[4] =
 static uint8_t CAN1_Tx_Index = 0;
 //底盘给舵小板发送功率数据
 uint8_t CAN1_0x01E_Tx_Data[8];
+//云台c板发给Image板的CAN数据
+uint8_t CAN1_0x02E_TX_Data[8];
 /*********LK电机 控制缓冲区***********/
 uint8_t CAN1_0x141_Tx_Data[8];
 uint8_t CAN1_0x142_Tx_Data[8];
@@ -302,18 +304,24 @@ void TIM_CAN_PeriodElapsedCallback()
     }
 
 #elif defined(GIMBAL)
-    static uint8_t mod = 0;
-    mod++;
+    static uint8_t mod3 = 0;
+    mod3++;
     // CAN1 摩擦轮*4 图传roll 图传pitch
-    if (mod == 3)
+    if (mod3 == 3)
     {
         can_tx_status[0] = CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); // 摩擦轮*4
-        mod = 0;
+        mod3 = 0;
     }
-    else
+    
+    static uint8_t mod30 = 0;
+    mod30++;
+    if(mod30 == 30)
     {
-        can_tx_status[1] = CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); // 图传roll pitch
+        mod30 = 0;
+        // CAN1图传
+        can_tx_status[1] = CAN_Send_Data(&hcan1, 0x02E, CAN1_0x02E_TX_Data, 8);
     }
+
     // CAN2 yaw-0x205  pitch-0x206   拨弹盘0x207
     //if (mod % 2 == 1)
     can_tx_status[2] = CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8);

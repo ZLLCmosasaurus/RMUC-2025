@@ -265,7 +265,8 @@ void Class_Gimbal::Init()
  * @brief 输出到电机
  *
  */
-float Tmp_Yaw_Angle = 0.0f,Tmp_Pitch_Angle = 0.0f;
+//#define Launch_Enable
+float Tmp_Target_Yaw_Angle = 0.0f,Tmp_Ture_Yaw_Angle = 0.0f;
 void Class_Gimbal::Output()
 {
 
