@@ -315,7 +315,13 @@
                 "path": "../User/Middleware/Algorithm/alg_new_power_limit.cpp"
               },
               {
-                "path": "../User/Middleware/Algorithm/alg_new_power_limit.h"
+                "path": "../User/Middleware/Algorithm/alg_flying_slope.cpp"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_flying_slope.h"
+              },
+              {
+                "path": "../User/Middleware/Algorithm/alg_power_limit.cpp"
               }
             ],
             "folders": []
@@ -436,7 +442,9 @@
   },
   "targets": {
     "infantry": {
-      "excludeList": [],
+      "excludeList": [
+        "<virtual_root>/Middleware/Algorithm/alg_new_power_limit.cpp"
+      ],
       "toolchain": "AC6",
       "compileConfig": {
         "cpuType": "Cortex-M4",

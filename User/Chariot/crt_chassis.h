@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "alg_slope.h"
+#include "alg_flying_slope.h"
+#include "dvc_imu.h"
 #include "dvc_sampler.h"
 #include "dvc_referee.h"
 #include "dvc_djimotor.h"
@@ -71,6 +73,14 @@ public:
     Class_Slope Slope_Omega;
 
     Class_Supercap Supercap;
+
+    #ifdef FLYING_SLOPE
+
+    Class_IMU Boardc_BMI;
+    Class_Flying_Slope Flying_Slope;
+
+    #endif
+
     #ifdef POWER_LIMIT
     
     //功率限制
@@ -126,7 +136,7 @@ protected:
     //舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     //底盘小陀螺模式角速度
-    float Spin_Omega = 1.5f;
+    float Spin_Omega = 2.513272f;             //n = 0.4
     //常量
 
     //电机理论上最大输出
@@ -194,13 +204,13 @@ const float FRONT_TO_FRONT_CENTER_DISTANCE = 0.176f;
 const float WHEEL_AZIMUTH[3] = {0.0f, atan2f(-FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE), atan2f(FRONT_TO_FRONT_CENTER_DISTANCE, -FRONT_CENTER_TO_CORE_DISTANCE)};
 
 //轮子直径 单位m
-const float WHELL_DIAMETER = 0.154f;	
+const float WHELL_DIAMETER = 0.141f;	
 
 //底盘半宽 单位m
-const float HALF_WIDTH = 0.18466f;		
+const float HALF_WIDTH = 0.19000f;		
 
 //底盘半长 单位m
-const float HALF_LENGTH = 0.18466f;	
+const float HALF_LENGTH = 0.19550f;	
 
 //转速转角速度	1 rpm = 2pi/60 rad/s 
 const float RPM2RAD = 0.104720f;				

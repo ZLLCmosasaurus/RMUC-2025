@@ -98,6 +98,7 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
  * @brief 卡弹策略有限自动机
  *
  */
+uint8_t status_2 = 0;
 void Class_FSM_Antijamming::Reload_TIM_Status_PeriodElapsedCallback()
 {
     Status[Now_Status_Serial].Time++;
@@ -122,7 +123,7 @@ void Class_FSM_Antijamming::Reload_TIM_Status_PeriodElapsedCallback()
             //卡弹嫌疑状态
             Booster->Output();
 
-            if (Status[Now_Status_Serial].Time >= 70)
+            if (Status[Now_Status_Serial].Time >= 60)
             {
                 //长时间大扭矩->卡弹反应状态
                 Set_Status(2);
@@ -137,6 +138,7 @@ void Class_FSM_Antijamming::Reload_TIM_Status_PeriodElapsedCallback()
         case (2):
         {
             //卡弹反应状态->准备卡弹处理
+            status_2 ++;
             Booster->Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
             Booster->Drvier_Angle = Booster->Motor_Driver.Get_Now_Radian() - PI / 12.0f;
             Booster->Motor_Driver.Set_Target_Radian(Booster->Drvier_Angle);
@@ -174,7 +176,7 @@ void Class_Booster::Init()
     //拨弹盘电机
     Motor_Driver.PID_Angle.Init(40.0f, 0.1f, 0.3f, 0.0f, 20.0f * PI, 20.0f * PI);
     Motor_Driver.PID_Omega.Init(6000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
-    Motor_Driver.Init(&hcan2, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_OMEGA,36);
+    Motor_Driver.Init(&hcan2, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_OMEGA,90);           //36*2.5 == 90
 
     //摩擦轮电机左
     Motor_Friction_Left.PID_Omega.Init(420.0f, 11.0f, 0.8f, 0.0f, 2000.0f, Motor_Friction_Left.Get_Output_Max());
@@ -239,7 +241,7 @@ void Class_Booster::Output()
             Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
 
-            Drvier_Angle -= 2.0f * PI / 8.0f;
+            Drvier_Angle += 2.0f * PI / 9.0f;
             Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
 
@@ -255,7 +257,7 @@ void Class_Booster::Output()
             Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
 
-            Drvier_Angle -= 2.0f * PI / 8.0f * 5.0f; //五连发  一圈的角度/一圈弹丸数*发出去的弹丸数
+            Drvier_Angle += 2.0f * PI / 9.0f * 5.0f; //五连发  一圈的角度/一圈弹丸数*发出去的弹丸数
             Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
 
@@ -309,11 +311,11 @@ void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
 {     
     
     //无需裁判系统的热量控制计算
-    FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
+    // FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
     //卡弹处理
     FSM_Antijamming.Reload_TIM_Status_PeriodElapsedCallback();
 
-    Output();
+    //Output();
 
     Motor_Driver.TIM_PID_PeriodElapsedCallback();
     Motor_Friction_Left.TIM_PID_PeriodElapsedCallback();

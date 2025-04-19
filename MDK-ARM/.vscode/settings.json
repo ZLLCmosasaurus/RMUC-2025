@@ -1,5 +1,8 @@
 {
     "editor.fontSize": 14,
     "EIDE.ARM.Option.AxfToElf": true,
-    "EIDE.ARM.Option.AutoGenerateRTE_Components": false
+    "EIDE.ARM.Option.AutoGenerateRTE_Components": false,
+    "C_Cpp.errorSquiggles": "disabled",
+
+    "copilot" : false,
 }

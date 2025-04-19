@@ -344,7 +344,11 @@ void Task100us_TIM4_Callback()
         // //暂无云台tim4任务
         // if(Referee_Sand_Cnt%10)
         //     Task_Loop();
+        #ifdef FLYING_SLOPE
+        
+        chariot.Chassis.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 
+        #endif
     #elif defined(GIMBAL)
         // 单给IMU消息开的定时器 ims
         chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();     
@@ -357,8 +361,8 @@ void Task100us_TIM4_Callback()
  * @brief TIM5任务回调函数
  *
  */
-float Target_Radian = 0.0f;
-
+float Target_Omega_Radian = 0.0f;
+int pp = 2;
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -377,6 +381,16 @@ void Task1ms_TIM5_Callback()
         #endif
 
         chariot.TIM_Calculate_PeriodElapsedCallback();
+        // chariot.Chassis.Motor_Wheel[pp].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        // chariot.Chassis.Motor_Wheel[pp].Set_Target_Omega_Radian(Target_Omega_Radian);
+        // chariot.Chassis.Motor_Wheel[pp].TIM_PID_PeriodElapsedCallback();
+        // for(int i =0;i<4;i++){
+        //     if(i != pp){
+        //         chariot.Chassis.Motor_Wheel[i].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);
+        //         chariot.Chassis.Motor_Wheel[i].Set_Out(0.0f);
+        //         chariot.Chassis.Motor_Wheel[i].TIM_PID_PeriodElapsedCallback();
+        //     }
+        // }
 
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
@@ -415,12 +429,23 @@ extern "C" void Task_Init()
     /********************************** 驱动层初始化 **********************************/
 	#ifdef CHASSIS
 
+        hdma_usart6_rx.Init.Mode = DMA_CIRCULAR;
+
         //集中总线can1/can2
         CAN_Init(&hcan1, Chassis_Device_CAN1_Callback);
         CAN_Init(&hcan2, Chassis_Device_CAN2_Callback);
 
         //裁判系统
         UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+
+        #ifdef FLYING_SLOPE
+
+            //c板陀螺仪spi外设
+            SPI_Init(&hspi1,Device_SPI1_Callback);
+            //磁力计iic外设
+            IIC_Init(&hi2c3, Ist8310_IIC3_Callback);
+
+        #endif
         
 
         #ifdef POWER_LIMIT
@@ -432,6 +457,8 @@ extern "C" void Task_Init()
     #endif
 
     #ifdef GIMBAL
+
+        hdma_usart6_rx.Init.Mode = DMA_NORMAL;
 
         //集中总线can1/can2
         CAN_Init(&hcan1, Gimbal_Device_CAN1_Callback);
