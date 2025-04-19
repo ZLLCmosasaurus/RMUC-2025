@@ -250,11 +250,11 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 #ifdef GIMBAL
 void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
-    chariot.DR16.Image_UART_RxCpltCallback(Buffer);
-
+    chariot.DR16.Image_UART_RxCpltCallback(Buffer); 
+    
     //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
-	
+    chariot.TIM_Control_Callback(); 
+
 }
 #endif
 
@@ -269,9 +269,11 @@ void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
+	
+	if(chariot.DR16.Get_Image_Status()==Image_Status_DISABLE){
     //底盘 云台 发射机构 的控制策略
     chariot.TIM_Control_Callback();
-	
+	}
 }
 #endif
 
@@ -323,6 +325,20 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
     chariot.MiniPC.USB_RxCpltCallback(Buffer);
 }
 #endif
+
+/**
+ * @brief USB MiniPC回调函数
+ *
+ * @param Buffer UART收到的消息
+ *
+ * @param Length 长度
+ */
+#ifdef GIMBAL
+void MiniPC_UART_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    chariot.MiniPC.UART_RxCpltCallback(Buffer);
+}
+#endif
 /**
  * @brief TIM4任务回调函数
  *
@@ -337,7 +353,7 @@ void Task1ms_TIM4_Callback()
 
     #elif defined(GIMBAL)
         // 单给IMU消息开的定时器 ims
-        chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();     
+        chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();    
     #endif
 }
 
@@ -426,8 +442,13 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-		UART_Init(&huart1, Image_UART6_Callback, 40);
-
+		UART_Init(&huart6, Image_UART6_Callback, 40);
+        //minipc
+        UART_Init(&huart1, MiniPC_UART_Callback, MiniPC_Rx_Data_Length);   
+        //图传
+        //  __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+	    //  HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 80);
+        //  UART6_Manage_Object.Rx_Buffer_Length = 80;
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
         
@@ -454,7 +475,9 @@ extern "C" void Task_Init()
 }
 extern "C" void Task_Loop()
 {
+    #ifdef CHASSIS
     chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,64);
+    #endif
 }
 
 /**

@@ -166,7 +166,7 @@ protected:
     //读写变量
 
     //底盘控制方法
-    Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+    Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_FLLOW;
     //目标速度X
     float Target_Velocity_X = 0.0f;
     //目标速度Y

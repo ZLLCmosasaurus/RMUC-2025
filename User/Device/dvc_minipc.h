@@ -20,6 +20,7 @@
 #include "dvc_imu.h"
 #include "dvc_referee.h"
 #include "math.h"
+#include "drv_uart.h"
 /* Exported macros -----------------------------------------------------------*/
 #ifdef __cplusplus
 /* Exported types ------------------------------------------------------------*/
@@ -84,7 +85,15 @@ enum Enum_MiniPC_Status :uint8_t
     MiniPC_Status_DISABLE = 0,
     MiniPC_Status_ENABLE,
 };
-
+/**
+ * @brief 迷你主机USB状态
+ *
+ */
+enum Enum_Minipc_USB_Status : uint8_t
+{
+    MiniPC_USB_Status_DISABLE = 0,
+    MiniPC_USB_Status_ENABLE,
+};
 /**
  * @brief 裁判系统UI刷新状态
  *
@@ -235,7 +244,8 @@ struct Pack_rx_t
 	uint16_t crc16;
 }__attribute__((packed));
 
-
+#define MiniPC_Rx_Data_Length sizeof(Pack_rx_t)
+#define MiniPC_Tx_Data_Length sizeof(Pack_tx_t)
 /**
  * @brief Specialized, 迷你主机类
  *
@@ -244,7 +254,7 @@ class Class_MiniPC
 {
 public:
     void Init(Struct_USB_Manage_Object* __MiniPC_USB_Manage_Object, uint8_t __frame_header = 0x5A, uint8_t __frame_rear = 0x01);
-
+    void Init_UART(Struct_UART_Manage_Object* __UART_Manage_Object, uint8_t __frame_header = 0x5A);
     inline Enum_MiniPC_Status Get_MiniPC_Status();
     inline float Get_Chassis_Target_Velocity_X();
     inline float Get_Chassis_Target_Velocity_Y();
@@ -294,6 +304,7 @@ public:
     float meanFilter(float input);
 
     void USB_RxCpltCallback(uint8_t *Rx_Data);
+    void UART_RxCpltCallback(uint8_t *Rx_Data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
     void Remote_Controlled_Shot();
@@ -307,6 +318,8 @@ protected:
 
     //绑定的USB
     Struct_USB_Manage_Object *USB_Manage_Object;
+    //绑定的UART
+    Struct_UART_Manage_Object *UART_Manage_Object;
     //数据包头标
     uint8_t Frame_Header;
     //数据包尾标
@@ -318,13 +331,15 @@ protected:
 
     //当前时刻的迷你主机接收flag
     uint32_t Flag = 0;
+    uint32_t UART_Flag = 0;
     //前一时刻的迷你主机接收flag
     uint32_t Pre_Flag = 0;
-
+    uint32_t Pre_UART_Flag = 0;
     //读变量
 
     //迷你主机状态
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
+    Enum_Minipc_USB_Status Minipc_USB_Status = MiniPC_USB_Status_DISABLE;
     //迷你主机对外接口信息
     Struct_MiniPC_Rx_Data Data_NUC_To_MCU;
 
@@ -356,6 +371,9 @@ protected:
 
     void Data_Process();
     void Output();
+
+    void Data_Process_UART(uint8_t *Rx_Data);
+    void Output_UART();
 };
 /* Exported variables --------------------------------------------------------*/
 

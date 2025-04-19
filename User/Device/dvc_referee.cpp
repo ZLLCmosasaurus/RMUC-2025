@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_referee.h"
-#include "dvc_dwt.h"
 #include "drv_math.h"
 /* Private macros ------------------------------------------------------------*/
 
@@ -66,7 +65,6 @@ void Class_Referee::Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header)
  * 如遇到大规模丢包或错乱现象, 可重新启用校验过程
  *
  */    
-float FPS;
 uint16_t buffer_index = 0;
 uint16_t cmd_id,data_length;
 uint16_t buffer_index_max;
@@ -111,7 +109,6 @@ void Class_Referee::Data_Process()
                             reinterpret_cast<uint8_t *>(&Game_Status)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
                         }
                         buffer_index += sizeof(Struct_Referee_Rx_Data_Game_Status) + 7;
-                        FPS = FPS_Counter_Update();
                     }
                     break;
                     case (Referee_Command_ID_GAME_RESULT):

@@ -57,7 +57,7 @@ protected:
     //图传roll轴校准速度rad/s
     float Image_Roll_Calibrate_Speed = 3.5f;
     //图传pitch轴校准速度rad/s 
-    float Image_Pitch_Calibrate_Speed = 3.5f;
+    float Image_Pitch_Calibrate_Speed = -5.0f;
     //图传roll轴校准完后相对位置
     float Image_Roll_Calibrate_Offset = 0.0f;
     //图传pitch轴校准完后相对位置
@@ -65,7 +65,7 @@ protected:
     //图传roll轴校准临界力矩
     float Image_Roll_Calibrate_Stiffness = 510.0f;
     //图传pitch轴校准临界力矩
-    float Image_Pitch_Calibrate_Stiffness = 510.0f;
+    float Image_Pitch_Calibrate_Stiffness = 4500.0f;
     //内部函数
     void Output();
 };

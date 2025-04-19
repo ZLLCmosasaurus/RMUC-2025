@@ -17,7 +17,6 @@
 #include <limits.h>
 #include <string.h>
 #include "drv_uart.h"
-
 /* Exported macros -----------------------------------------------------------*/
 #ifdef	__cplusplus 
 //拨动开关位置
@@ -187,6 +186,9 @@ public:
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
     inline Enum_Image_Status Get_Image_Status() {return (Image_Status);};
     inline Enum_DT7_Status Get_DT7_Status() {return (DT7_Status);};
+    inline uint16_t Get_Circle_Index(uint16_t index){
+        return (index % UART_Manage_Object_2->Rx_Buffer_Length);
+    };
     inline float Get_Right_X();
     inline float Get_Right_Y();
     inline float Get_Left_X();

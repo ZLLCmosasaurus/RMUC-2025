@@ -13,6 +13,9 @@
 
 #include "dvc_dr16.h"
 #include "tsk_config_and_callback.h"
+#include "drv_math.h"
+#include "dvc_referee.h"
+#include "dvc_dwt.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -80,6 +83,7 @@ void Class_DR16::Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2)
     else if (huart_2->Instance == USART6)
     {
         UART_Manage_Object_2 = &UART6_Manage_Object;
+        hdma_usart6_rx.Init.Mode = DMA_NORMAL;
     }
 }
 
@@ -329,6 +333,7 @@ void Class_DR16::DR16_UART_RxCpltCallback(uint8_t *Rx_Data)
 
 void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
 {
+    
     if(Rx_Data[0]==0xA5)
     {
         uint16_t cmd_id,data_length;
@@ -346,6 +351,63 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
             memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[7], sizeof(Struct_Image_UART_Data));            
         }
     }
+
+    // uint16_t buffer_index = 0;
+    // uint16_t cmd_id,data_length;
+    // uint16_t buffer_index_max;
+    // buffer_index_max = UART_Manage_Object_2->Rx_Buffer_Length;
+    // // 遍历整个接收缓冲区寻找帧头
+    // while (buffer_index < buffer_index_max)
+    // {
+    //     // 通过校验和帧头
+    //     if (UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index)] == 0xA5)
+    //     {
+    //         // 数据处理过程
+    //         cmd_id = (UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + 6)]) & 0xff;
+    //         cmd_id = (cmd_id << 8) | UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + 5)];
+    //         data_length = UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + 2)] & 0xff;
+    //         data_length = (data_length << 8) | UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + 1)];
+    //         Math_Constrain(&data_length,(uint16_t)0,(uint16_t)(40));  //限制数据段最大长度
+    //         // Enum_Referee_Command_ID CMD_ID = (Enum_Referee_Command_ID)cmd_id;
+
+    //         uint8_t *data_temp = new uint8_t[5];
+    //         uint8_t *sum_data = new uint8_t[data_length + 9];
+    //         for (int i = 0; i < 5; i++)
+    //         {
+    //             data_temp[i] = UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + i)];
+    //         }
+    //         if (Verify_CRC8_Check_Sum(data_temp, 5) == 1) //校验帧头
+    //         {
+    //             for (int i = 0; i < data_length + 9; i++)
+    //             {
+    //                 sum_data[i] = UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + i)];
+    //             }
+    //             if (Verify_CRC16_Check_Sum(sum_data, data_length + 9) == 1) //校验整个帧
+    //             {
+    //                 switch (cmd_id)
+    //                 {
+    //                 case 0x0304:
+    //                 {
+    //                     FPS = FPS_Counter_Update();
+    //                     for (int i = 0; i < data_length; i++)
+    //                     {
+    //                         reinterpret_cast<uint8_t *>(&Now_UART_Image_Rx_Data)[i] = UART_Manage_Object_2->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+    //                     }
+    //                     Image_Flag += 1;
+    //                     Image_Data_Process(reinterpret_cast<uint8_t *>(&Now_UART_Image_Rx_Data));
+    //                     memcpy(&Pre_UART_Image_Rx_Data, &Now_UART_Image_Rx_Data, sizeof(Struct_Image_UART_Data));
+    //                     buffer_index += sizeof(Struct_Image_UART_Data) + 7;
+    //                 }
+    //                 break;
+    //                 }
+    //             }
+    //         }
+    //         delete[] sum_data;
+    //         delete[] data_temp;
+    //     }
+    //     buffer_index++;
+    // }
+    
 }
 
 /**
