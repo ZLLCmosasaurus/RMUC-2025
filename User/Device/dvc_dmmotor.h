@@ -114,7 +114,7 @@ class Class_DM_Motor_J4310
 {
 public:
 
-    void Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_ID, Enum_DM_Motor_Control_Method __Control_Method = DM_Motor_Control_Method_MIT_POSITION, int32_t __Position_Offset = 0, float __Omega_Max = 20.94359f, float __Torque_Max = 10.0f);
+    void Init(CAN_HandleTypeDef *hcan, Enum_DM_Motor_ID __CAN_ID, Enum_DM_Motor_Control_Method __Control_Method = DM_Motor_Control_Method_MIT_TORQUE, int32_t __Position_Offset = 0, float __Omega_Max = 30.f, float __Torque_Max = 10.0f);
 
     inline Enum_DM_Motor_Control_Status Get_DM_Motor_Control_Status();
     inline Enum_DM_Motor_Status Get_DM_Motor_Status();
@@ -129,6 +129,8 @@ public:
     inline float Get_Target_Angle();
     inline float Get_Target_Omega();
     inline float Get_Target_Torque();
+    inline float Get_Omega_Max();
+    inline float Get_Torque_Max();
     
     inline void Set_DM_Control_Status(Enum_DM_Motor_Control_Status __DM_Motor_Control_Status);
     inline void Set_DM_Motor_Control_Method(Enum_DM_Motor_Control_Method __DM_Motor_Control_Method);
@@ -182,9 +184,9 @@ protected:
     //读写变量
 
     //电机控制状态
-    Enum_DM_Motor_Control_Status DM_Motor_Control_Status = DM_Motor_Control_Status_DISABLE;
+    Enum_DM_Motor_Control_Status DM_Motor_Control_Status = DM_Motor_Control_Status_ENABLE;
     //电机控制方式
-    Enum_DM_Motor_Control_Method DM_Motor_Control_Method = DM_Motor_Control_Method_MIT_POSITION;
+    Enum_DM_Motor_Control_Method DM_Motor_Control_Method = DM_Motor_Control_Method_MIT_TORQUE;
     //MIT的Kp值, 0~500, 空载6, 位置控制需要
     float MIT_K_P = 0.0f;
     //MIT的Kd值, 0~5, 空载0.2, 位置和速度控制需要
@@ -233,6 +235,22 @@ float Class_DM_Motor_J4310::Get_Now_Angle()
 float Class_DM_Motor_J4310::Get_Now_Omega()
 {
     return (Data.Now_Omega);
+}
+
+float Class_DM_Motor_J4310::Get_Omega_Max()
+{
+    return (Omega_Max);
+}
+
+/**
+ * @brief 获取最大扭矩, 直接采用反馈值
+ *
+ * @return float 最大扭矩, 直接采用反馈值
+ */
+
+float Class_DM_Motor_J4310::Get_Torque_Max()
+{
+    return (Torque_Max);
 }
 
 /**

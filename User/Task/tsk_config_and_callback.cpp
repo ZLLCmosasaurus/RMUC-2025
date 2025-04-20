@@ -170,14 +170,14 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
          chariot.Gimbal.Motor_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x206):
+    case (0xa1):
     {
-         chariot.Gimbal.Motor_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        chariot.Gimbal.Motor_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x141):
     {
-         chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
+//         chariot.Gimbal.Motor_Pitch_LK6010.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
 	}
@@ -384,7 +384,7 @@ void Task1ms_TIM5_Callback()
     
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
     chariot.Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
-    chariot.Buzzer.Set_NowTask(test_tone);
+//    chariot.Buzzer.Set_NowTask(test_tone);
     /****************************** 交互层回调函数 1ms *****************************************/
     if(start_flag==1)
     {
@@ -399,13 +399,13 @@ void Task1ms_TIM5_Callback()
         
         // TIM_UART_PeriodElapsedCallback();
         
-         static int mod5 = 0;
-         mod5++;
-         if (mod5 == 20)
+         static int mod20 = 0;
+         mod20++;
+         if (mod20 == 20)
          {
              TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
 					 chariot.LED.WaterFall(18,Color_RED);
-         mod5 = 0;
+         mod20 = 0;
          }	        
     }
 }
@@ -488,34 +488,8 @@ extern "C" void Task_Init()
  */
  extern "C" void Task_Loop()
 {
-    #ifdef GIMBAL
-        float now_angle_yaw = chariot.Gimbal.Motor_Yaw.Get_True_Angle_Yaw();
-        float target_angle_yaw = chariot.Gimbal.MiniPC->Get_Rx_Yaw_Angle();
-        //如果是自瞄开启并且距离装甲板的瞄准弧度小于0.1m
-        if( chariot.Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_MINIPC &&
-        (chariot.Gimbal.MiniPC->Get_Distance()*abs(now_angle_yaw-target_angle_yaw)/180.0f*PI) < 0.1)
-        { 
-            chariot.MiniPC_Aim_Status = MinPC_Aim_Status_ENABLE;
-        }
-        else
-        {
-            chariot.MiniPC_Aim_Status = MinPC_Aim_Status_DISABLE;
-        }
-    #endif
-    #ifdef CHASSIS
-        JudgeReceiveData.robot_id = chariot.Referee.Get_ID();
-        JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;  //pitch角度
-        JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;      //弹舱
-        JudgeReceiveData.Fric_Status = chariot.Fric_Status;             //摩擦轮
-        JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;         //自瞄是否离线
-        JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;  //自瞄是否瞄准
-        JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();  //超级电容储能  
-        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage();  //超级电容电压
-        JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); //底盘控制模式
-        if(chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
-            Init_Cnt=10;
-        GraphicSendtask();
-    #endif
+  
+   
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

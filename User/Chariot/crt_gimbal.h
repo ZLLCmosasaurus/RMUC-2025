@@ -15,6 +15,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_djimotor.h"
+#include "dvc_dmmotor.h"
 #include "dvc_witahrs.h"
 #include "dvc_minipc.h"
 #include "dvc_imu.h"
@@ -91,12 +92,15 @@ float Class_Gimbal_Yaw_Motor_GM6020::Get_True_Angle_Yaw()
  * @brief Specialized, pitch轴电机类
  *
  */
-class Class_Gimbal_Pitch_Motor_GM6020 : public Class_DJI_Motor_GM6020
+class Class_Gimbal_Pitch_Motor_J4310 : public Class_DM_Motor_J4310
 {
 public:
     //陀螺仪获取云台角速度
     Class_IMU* IMU;
 
+    Class_PID PID_Angle;
+    // PID角速度环控制
+    Class_PID PID_Omega;
 
     inline float Get_True_Rad_Pitch();
     inline float Get_True_Gyro_Pitch();
@@ -127,17 +131,17 @@ protected:
     //内部函数
 };
 
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Rad_Pitch()
+float Class_Gimbal_Pitch_Motor_J4310::Get_True_Rad_Pitch()
 {
     return (True_Rad_Pitch);
 }
 
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Angle_Pitch()
+float Class_Gimbal_Pitch_Motor_J4310::Get_True_Angle_Pitch()
 {
     return (True_Angle_Pitch);
 }
 
-float Class_Gimbal_Pitch_Motor_GM6020::Get_True_Gyro_Pitch()
+float Class_Gimbal_Pitch_Motor_J4310::Get_True_Gyro_Pitch()
 {
     return (True_Gyro_Pitch);
 }
@@ -216,11 +220,13 @@ public:
     // yaw轴电机
     Class_Gimbal_Yaw_Motor_GM6020 Motor_Yaw;
 
+
+    
     // pitch轴电机
-    Class_Gimbal_Pitch_Motor_GM6020 Motor_Pitch;
+    Class_Gimbal_Pitch_Motor_J4310 Motor_Pitch;
 
     // pithc轴电机
-    Class_Gimbal_Pitch_Motor_LK6010 Motor_Pitch_LK6010;
+//    Class_Gimbal_Pitch_Motor_LK6010 Motor_Pitch_LK6010;
 
     void Init();
 
@@ -248,9 +254,9 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -7.f;
+    float Min_Pitch_Angle = -35.f;
     // pitch轴最大值
-    float Max_Pitch_Angle = 35.0f ; //多10°
+    float Max_Pitch_Angle = 7.0f ; //多10°
 
     //内部变量 
 

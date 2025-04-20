@@ -213,7 +213,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     chassis_velocity_x = Chassis.Get_Target_Velocity_X();
     chassis_velocity_y = Chassis.Get_Target_Velocity_Y();
     chassis_omega = Chassis.Get_Target_Omega();
-    gimbal_pitch = Gimbal.Motor_Pitch_LK6010.Get_True_Angle_Pitch();
+//    gimbal_pitch = Gimbal.Motor_Pitch_LK6010.Get_True_Angle_Pitch();
     chassis_control_type = Chassis.Get_Chassis_Control_Type();
     control_type =  (uint8_t)(Referee_UI_Refresh_Status << 7|MiniPC_Status << 6|MiniPC_Aim_Status << 5|Fric_Status << 4|Bulletcap_Status << 3|Sprint_Status << 2|chassis_control_type);
 
@@ -599,7 +599,14 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
-        Gimbal.TIM_Calculate_PeriodElapsedCallback();
+				static uint8_t mod5	=	0;
+				mod5++;
+         if (mod5 == 1)
+         {
+         Gimbal.TIM_Calculate_PeriodElapsedCallback();
+         mod5 = 0;
+         }	  
+        
         Booster.TIM_Calculate_PeriodElapsedCallback();
         //传输数据给上位机
         MiniPC.TIM_Write_PeriodElapsedCallback();
@@ -682,14 +689,14 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             if(mod50_mod3%3==0)
             {
                 //判断底盘通讯在线状态
-                TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();    
+                // TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();    
                 DR16.TIM1msMod50_Alive_PeriodElapsedCallback();	   
                 mod50_mod3 = 0;         
             }
                 
-            Gimbal.Motor_Pitch.TIM_Alive_PeriodElapsedCallback();
+//            Gimbal.Motor_Pitch.TIM_Alive_PeriodElapsedCallback();
             Gimbal.Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
-            Gimbal.Motor_Pitch_LK6010.TIM_Alive_PeriodElapsedCallback();
+            Gimbal.Motor_Pitch.TIM_Alive_PeriodElapsedCallback();
             Gimbal.Boardc_BMI.TIM1msMod50_Alive_PeriodElapsedCallback();
 
             Booster.Motor_Driver.TIM_Alive_PeriodElapsedCallback();
