@@ -340,6 +340,79 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
 
   return pitch;
 }
+
+/**
+ * @brief 计算球体弹丸的空气阻力
+ * @param velocity 球体相对于空气的速度（单位：m/s）
+ * @param diameter 球体直径（单位：m）
+ * @param air_density 空气密度（单位：kg/m³，默认值：1.225）
+ * @param drag_coefficient 阻力系数（默认值：0.47，对应光滑球体亚音速）
+ * @return 空气阻力（单位：N）
+ */
+float calculate_sphere_drag_force(float velocity,float diameter)
+{
+  const float air_density = 1.225f;
+  const float drag_coefficient = 0.47f;
+  // 输入参数校验
+  if (diameter <= 0 || velocity < 0)
+    return 0.0f;
+
+  // 计算横截面积 A = π*(d/2)^2
+  const float radius = diameter / 2.0f;
+  const float area = PI * radius * radius;
+
+  // 应用公式 Fd = 0.5 * Cd * ρ * v² * A
+  const float force = 0.5f * drag_coefficient * air_density * velocity * velocity * area;
+  return force;
+}
+
+//迭代重力-空气阻力补偿
+float Class_MiniPC::calc_pitch_compensated(float x, float y, float z) 
+{
+    const float diameter = 0.05f;
+    float k = calculate_sphere_drag_force(bullet_v,diameter);    // 空气阻力系数
+    float epsilon = 0.01f;          // 收敛阈值
+
+    // 初始俯仰角计算（基于几何投影）
+    float pitch = atan2f(z, sqrtf(x * x + y * y));
+
+    // 迭代补偿重力和空气阻力影响
+    for (int i = 0; i < 20; ++i) {
+        float target_rho = sqrtf(x * x + y * y); // 水平投影距离
+        float cos_pitch = cosf(pitch);
+        
+        // 处理无效的cos值
+        if (fabsf(cos_pitch) < 1e-6f) break;
+
+        // 计算弹丸飞行时间（考虑水平方向阻力）
+        float t_numerator = target_rho * k;
+        float t_denominator = bullet_v * cos_pitch;
+        if (t_numerator >= t_denominator) break; // 弹道不可达
+        
+        float fly_time = (-logf(1 - t_numerator / t_denominator)) / k;
+
+        // 计算z轴实际位移（含阻力模型）
+        float sin_pitch = sinf(pitch);
+        float exp_term = expf(-k * fly_time);
+        float real_z = 
+            (bullet_v * sin_pitch + g / k) * (1 - exp_term) / k - 
+            (g * fly_time) / k;
+
+        // 计算高度误差并调整俯仰角
+        float dz = z - real_z;
+        if (fabsf(dz) < epsilon) break;
+
+        // 安全计算角度修正量（限制在asin有效范围）
+        float distance = sqrtf(x*x + y*y + z*z);
+        float clamped_dz = fmaxf(fminf(dz, distance), -distance);
+        float delta_pitch = asinf(clamped_dz / distance);
+        
+        pitch += delta_pitch;
+    }
+
+    // 转换为角度制并符合坐标系定义
+    return -(pitch * 180.0f / PI);
+}
 /**
  * 计算计算yaw，pitch
  * 

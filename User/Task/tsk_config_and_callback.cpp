@@ -381,7 +381,7 @@ void Task1ms_TIM5_Callback()
         #ifdef GIMBAL
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
         #endif
-        chariot.TIM_Calculate_PeriodElapsedCallback();
+        chariot.TIM_Calculate_PeriodElapsedCallback();  
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送

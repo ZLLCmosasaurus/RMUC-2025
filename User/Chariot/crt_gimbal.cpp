@@ -100,9 +100,9 @@ void Class_Gimbal_Yaw_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
         Target_Omega_Angle = PID_Yaw_Encoder_Angle.Get_Out();
 
         PID_Yaw_Encoder_Omega.Set_Target(Target_Omega_Angle);
-        PID_Yaw_Encoder_Omega.Set_Now(Data.Now_Omega_Angle);
+        PID_Yaw_Encoder_Omega.Set_Now(-Data.Now_Omega_Angle);
         PID_Yaw_Encoder_Omega.TIM_Adjust_PeriodElapsedCallback();
-        Set_Out(PID_Yaw_Encoder_Omega.Get_Out());
+        Set_Out(-PID_Yaw_Encoder_Omega.Get_Out());
     }
     break;
     default:
@@ -126,21 +126,22 @@ void Class_Gimbal_Yaw_Motor_GM6020::Transform_Angle()
 }
 void Class_Gimbal_Yaw_Motor_GM6020::Transform_EmcoderAngle_To_TrueAngle()
 {
-    //yaw轴total_angle
-    float total_angle = ((float)Get_Now_Total_Encoder()) / 8191 * 2 * PI / 2;
-    float Yaw_Now_Rad = fabsf(fmodf(total_angle, 2.0f * PI));
-    float Yaw_Now_Angle = fabsf(Yaw_Now_Rad / PI * 180);
-    if (Get_Now_Total_Round() < 0)
-    {
-        Yaw_Now_Rad = 2.0f * PI - Yaw_Now_Rad;
-        Yaw_Now_Angle = fabsf(Yaw_Now_Rad / PI * 180);
-    }
-    if (Yaw_Now_Rad > PI)
-    {
-        Yaw_Now_Rad -= 2 * PI;
-        Yaw_Now_Angle = Yaw_Now_Rad / PI * 180;
-    }
-    EmcoderAngle_To_TrueAngle = Yaw_Now_Angle;
+    const float Reference_Angle = 1.07800508f;
+    float GM6020_Angle_Rad = ((float)Get_Now_Total_Encoder()) / 8191 * 2 * PI / 2;
+    float Yaw_Angle_Rad = fabsf(fmodf(GM6020_Angle_Rad, 2.0f * PI));
+    if(Get_Now_Total_Round() < 0)
+        Yaw_Angle_Rad = 2.0f * PI - Yaw_Angle_Rad;
+    if(Yaw_Angle_Rad > PI)
+        Yaw_Angle_Rad -= 2 * PI;//得到角度范围为[-PI,PI]
+    
+    Yaw_Angle_Rad -=  Reference_Angle;
+
+    while(Yaw_Angle_Rad > PI)
+        Yaw_Angle_Rad -= PI * 2.0f;
+    while(Yaw_Angle_Rad < -PI)
+        Yaw_Angle_Rad += PI * 2.0f;
+    
+    EmcoderAngle_To_TrueAngle = -Yaw_Angle_Rad / PI * 180.0f;
 }
 /**
  * @brief TIM定时器中断计算回调函数
@@ -265,7 +266,7 @@ void Class_Gimbal::Init()
  * @brief 输出到电机
  *
  */
-//#define Launch_Enable
+
 float Tmp_Target_Yaw_Angle = 0.0f,Tmp_Ture_Yaw_Angle = 0.0f;
 void Class_Gimbal::Output()
 {
@@ -297,12 +298,11 @@ void Class_Gimbal::Output()
         }
         //pitch yaw轴控制方式
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
-        #ifdef Launch_Enable
+        //Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
+        
         switch (Get_Launch_Mode())//吊射模式 拨杆左上 不影响自瞄
         {
         case Launch_Disable:
-        case Launch_Enable:
         {
             Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
             Tmp_Target_Yaw_Angle = Target_Yaw_Angle;
@@ -317,21 +317,20 @@ void Class_Gimbal::Output()
         }
         break;
         }
-        #endif
 
         //限制角度范围 处理yaw轴180度问题
-        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())>Max_Yaw_Angle)
+        while((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)>Max_Yaw_Angle)
         {
-            Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
+            Tmp_Target_Yaw_Angle -= (2 * Max_Yaw_Angle);
         }
-        while((Target_Yaw_Angle-Motor_Yaw.Get_True_Angle_Yaw())<-Max_Yaw_Angle)
+        while((Tmp_Target_Yaw_Angle-Tmp_Ture_Yaw_Angle)<-Max_Yaw_Angle)
         {
-            Target_Yaw_Angle += (2 * Max_Yaw_Angle);
+            Tmp_Target_Yaw_Angle += (2 * Max_Yaw_Angle);
         }
         //pitch限位
         Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
         //设置yaw轴与pitch轴目标角度
-        Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
+        Motor_Yaw.Set_Target_Angle(Tmp_Target_Yaw_Angle);
         Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);   
     }
 }
@@ -345,7 +344,7 @@ void Class_Gimbal::TIM_Calculate_PeriodElapsedCallback()
     
     //根据不同c板的放置方式来修改这几个函数
     Motor_Yaw.Transform_Angle();
-    //Motor_Yaw.Transform_EmcoderAngle_To_TrueAngle();
+    Motor_Yaw.Transform_EmcoderAngle_To_TrueAngle();
     Motor_Pitch.Transform_Angle();
 
 //    Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OPENLOOP);

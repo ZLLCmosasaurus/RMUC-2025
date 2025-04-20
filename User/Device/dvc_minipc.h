@@ -299,6 +299,7 @@ public:
     float calc_yaw(float x, float y, float z);
     float calc_distance(float x, float y, float z) ;
     float calc_pitch(float x, float y, float z) ;
+    float calc_pitch_compensated(float x, float y, float z);
     void Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance);
     float Get_Shoot_Speed();
     float meanFilter(float input);

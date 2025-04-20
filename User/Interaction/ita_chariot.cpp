@@ -381,6 +381,26 @@ void Class_Chariot::Control_Chassis()
                 Supercap_Control_Status = Supercap_Control_Status_DISABLE;
                 
         }
+
+        static uint8_t Switch_Mode_Flag = 0;
+        switch (Gimbal.Get_Launch_Mode())
+        {
+        case Launch_Enable:
+        {
+            Switch_Mode_Flag = 0;
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+        }
+        break;
+        case Launch_Disable:
+        {
+            if(!Switch_Mode_Flag)
+            {
+                Switch_Mode_Flag = 1;
+                Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
+            }
+        }
+        }
+        
         // if(DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_PRESSED)
         // {
         //     Chassis.Supercap.Get_Supercap_Control_Status(Supercap_Control_Status_ENABLE);
@@ -417,12 +437,12 @@ void Class_Chariot::Transform_Mouse_Axis()
 void Class_Chariot::Control_Gimbal()
 {
     // 角度目标值
-    float tmp_gimbal_yaw, tmp_gimbal_pitch;
+    float tmp_gimbal_yaw_encoder,tmp_gimbal_yaw_imu,tmp_gimbal_pitch;
     // 遥控器摇杆值
     float dr16_y, dr16_r_y;
     //static uint8_t Switch_Mode_Flag = 0;
     //static float tmp_yaw_offest = 0.0f;
-    static float Remote_K = 3.0f;//1.25
+    static float Remote_K = 2.0f;//1.25
     /************************************遥控器控制逻辑*********************************************/
     if (Get_DR16_Control_Type() == DR16_Control_Type_REMOTE)
     {
@@ -433,29 +453,8 @@ void Class_Chariot::Control_Gimbal()
         tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
         tmp_gimbal_pitch += dr16_r_y * DR16_Pitch_Angle_Resolution * 0.5f;
         // yaw赋值逻辑
-        tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-        tmp_gimbal_yaw -= dr16_y * DR16_Yaw_Angle_Resolution * Remote_K;
-
-        // switch (Gimbal.Get_Launch_Mode()) // 吊射模式
-        // {
-        // case Launch_Disable:
-        // {
-        //     Switch_Mode_Flag = 0;
-        //     Remote_K = 0.75f;
-        // }
-        // break;
-        // case Launch_Enable:
-        // {
-        //     if (!Switch_Mode_Flag)
-        //     {
-        //         Switch_Mode_Flag = 1;
-        //         // tmp_yaw_offest = Gimbal.Motor_Yaw.Get_True_Angle_Yaw_From_Encoder()-Gimbal.Motor_Yaw.Get_True_Angle_Yaw();
-        //         Remote_K = 0.25f;
-        //     }
-        //     // Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw+tmp_yaw_offest);//编码器角度值
-        // }
-        // break;
-        // }
+        tmp_gimbal_yaw_imu = Gimbal.Get_Target_Yaw_Angle();
+        tmp_gimbal_yaw_imu -= dr16_y * DR16_Yaw_Angle_Resolution * 3.0f;
         // 自瞄模式逻辑
         if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下自瞄
         {
@@ -469,16 +468,47 @@ void Class_Chariot::Control_Gimbal()
         }
         //设定角度
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
-        Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw); // IMU角度值
+        Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu); // IMU角度值
     }
     /************************************键鼠控制逻辑*********************************************/
     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
         //修正坐标系正方向
         Transform_Mouse_Axis();
-        // yaw赋值逻辑
-        tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
-        tmp_gimbal_yaw += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * 2.0f;
+
+        static uint8_t Switch_Mode_Flag = 0;
+        static float tmp_yaw_offest = 0.0f;
+        //
+        tmp_gimbal_yaw_imu = Gimbal.Get_Target_Yaw_Angle(); 
+        tmp_gimbal_yaw_imu += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * Remote_K;
+        Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
+        // 设定云台控制类型
+        switch (Gimbal.Get_Launch_Mode()) // 吊射模式
+        {
+        case Launch_Disable:
+        {
+            Switch_Mode_Flag = 0;
+            Remote_K = 2.0f;
+            // yaw赋值逻辑
+            // tmp_gimbal_yaw_imu = Gimbal.Get_Target_Yaw_Angle(); 
+            // tmp_gimbal_yaw_imu += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * 2.0f;
+            //Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
+        }
+        break;
+        case Launch_Enable:
+        {
+            if (!Switch_Mode_Flag)
+            {
+                Switch_Mode_Flag = 1;
+                tmp_yaw_offest = Gimbal.Motor_Yaw.Get_True_Angle_Yaw_From_Encoder()-Gimbal.Motor_Yaw.Get_True_Angle_Yaw();
+            }
+            Remote_K = 1.0f;
+            //更新编码器模式下Yaw_encoder目标角度
+            tmp_gimbal_yaw_encoder = Gimbal.Get_Target_Yaw_Angle() + tmp_yaw_offest; 
+            Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw_encoder);
+        }
+        break;
+        }
         // pitch赋值逻辑
         tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
         tmp_gimbal_pitch += True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
@@ -496,20 +526,27 @@ void Class_Chariot::Control_Gimbal()
         //C键按下 一键调头
         if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
-            tmp_gimbal_yaw += 180;
+            tmp_gimbal_yaw_imu += 180;
+            Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
+        }
+        //X键切换模式
+        if (DR16.Get_Keyboard_Key_X() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            if(Gimbal.Get_Launch_Mode() == Launch_Disable){
+                Gimbal.Set_Launch_Mode(Launch_Enable);
+            }
+            else{
+                Gimbal.Set_Launch_Mode(Launch_Disable);
+            }
         }
         // 设定角度
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
-        Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw); // IMU角度值
+        //Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu); // IMU角度值
     }
 
     // 如果小陀螺/随动 yaw给不同参数
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
-        // Gimbal.Motor_Yaw.PID_Angle.Set_K_P(40.0f);
-        // Gimbal.Motor_Yaw.PID_Angle.Set_K_D(0.25f);
-        // Gimbal.Motor_Yaw.PID_Omega.Set_K_P(75.0f);
-        // Gimbal.Motor_Yaw.PID_Omega.Set_K_D(0.15f);
     }
 }
 
@@ -524,7 +561,7 @@ void Class_Chariot::Control_Gimbal()
 float Omega = -3.5f;
 void Class_Chariot::Control_Image()
 {
-    static float K = 1.0f;
+    static float K;
     // 设置pitch yaw角度
     float tmp_image_pitch = 0.0f,tmp_image_roll = 0.0f;
     if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
@@ -560,10 +597,10 @@ void Class_Chariot::Control_Image()
         
 
         tmp_image_pitch = Image.Get_Target_Image_Pitch_Angle();
-        tmp_image_pitch -= DR16.Get_Mouse_Z() * DR16_Mouse_Pitch_Angle_Resolution * 4.0f;
+        tmp_image_pitch += DR16.Get_Mouse_Z() * DR16_Mouse_Pitch_Angle_Resolution * 4.0f;
 
         tmp_image_roll = Image.Get_Target_Image_Roll_Angle();
-        tmp_image_roll += K*DR16_Mouse_Pitch_Angle_Resolution;
+        tmp_image_roll += -K*DR16_Mouse_Pitch_Angle_Resolution;
 
         Math_Constrain(&tmp_image_pitch, 0.0f, 45.0f);
         Math_Constrain(&tmp_image_roll, -180.0f, 0.0f);
