@@ -78,23 +78,29 @@ enum Enum_Robotarm_Task_Status
 		Robotarm_Task_Status_Wait_Order=2,
 		Robotarm_Task_Status_Error=3,
 		Robotarm_Task_Status_Exchange=4,
+		Robotarm_Task_Status_Exchange_Pull=5,
 	
-    	Robotarm_Task_Status_Pick_Sliver_1=11,
-		Robotarm_Task_Status_Pick_Sliver_2=12,//中期考核使用状态，后期去除
+    Robotarm_Task_Status_Pick_Sliver_1=11,
+		Robotarm_Task_Status_Pick_Sliver_2=12,
 		Robotarm_Task_Status_Pick_Sliver_3=13,
+		Robotarm_Task_Status_Pick_Sliver_3_1=33,
+		Robotarm_Task_Status_Pick_Sliver_4=14,
+		Robotarm_Task_Status_Pick_Sliver_5=15,
+		Robotarm_Task_Status_Pick_Sliver_6=16,
+		Robotarm_Task_Status_Pick_Sliver_6_1=36,
+		Robotarm_Task_Status_Pick_Sliver_7=17,
+		Robotarm_Task_Status_Pick_Sliver_8=18,
+		Robotarm_Task_Status_Pick_Sliver_9=19,
+	
 		Robotarm_Task_Status_Pick_Gold_1=21,
 		Robotarm_Task_Status_Pick_Gold_2=22,
 		Robotarm_Task_Status_Pick_Gold_3=23,
 		Robotarm_Task_Status_Pick_Gold_4=24,
 		Robotarm_Task_Status_Pick_Gold_5=25,
-		Robotarm_Task_Status_Pick_Gold_6=24,
-		Robotarm_Task_Status_Pick_Gold_7=25,
-	
-	
+		Robotarm_Task_Status_Pick_Gold_6=26,
+		Robotarm_Task_Status_Pick_Gold_7=27,
 		
 	
-	
-
 
 };
 
@@ -235,8 +241,8 @@ public:
 	float Target_Yaw=0.f;
 	float Actual_Yaw;
 	float Max_Chassis_Vx = 3.0f;
-	float Max_Chassis_Vy = 3.0f;
-	float Max_Chassis_Omega = 3.0f;
+	float Max_Chassis_Vy = 2.0f;
+	float Max_Chassis_Omega = 2.0f;
   void TIM_PID_PeriodElapsedCallback();
  
 };
@@ -273,6 +279,9 @@ public:
 class Class_Robotarm
 {
 public:
+	uint8_t DM4310_error_Flag;
+	uint8_t left_relay_flag=1;
+	uint8_t right_relay_flag=1;
 	float servo_angle_picth=100;
 	float servo_angle_yaw=90;
 	//1-5轴关节初始化角度+抬升机构长度
@@ -300,6 +309,8 @@ public:
 	Class_MiniPC MiniPc;
 	//校准完成标志位
 	bool init_finished = false;
+	//校准次数
+	uint8_t init_times;
     // 1轴电机
 	Class_AK_Motor_80_6 Motor_Joint1;
 	// 2轴电机
@@ -386,13 +397,13 @@ protected:
         float DR16_Mouse_Chassis_Shift = 2.0f;
 		//车在特定位置，各种情况机械臂的角度
 		//取出银矿相关角度
-		//const float Angle_Pick_Fisrt[6]={90,145,145,0,0,5};
-		const float Angle_Pick_Fisrt[6]={70,110,180,0,0,5};
-		const float Angle_Place_Second[6]={45,3,10,0,0,13};
-		//const float Angle_Pick_Second[6]={45,145,178,0,0,5};
-		const float Angle_Pick_Second[6]={70,110,0,0,0,5};
-		const float Angle_Place_Fisrt[6]={150,178,135,0,0,13};
-    	const float Angle_Pick_Third[6]={3,140,170,0,0,0};
+		const float Angle_Pick_Fisrt[6]={90,120,150,0,0,5};
+		const float Angle_Place_Fisrt[6]={100,135,141,0,0,17};
+		const float Angle_Pick_Second[6]={110,0,70,0,0,5};
+		const float Angle_Place_Second[6]={110,0,70,0,10,17};
+    const float Angle_Pick_Third[6]={90,90,90,0,0,5};
+		
+		
 		//取出金矿相关角度		
 		const float Angle_Pick_Gold[6]={120,45,115,0,90,5.0f};
 		const float Angle_Pick_Gold_UP[6]={120,45,115,0,115,5.0f};

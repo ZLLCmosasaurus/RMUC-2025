@@ -2,20 +2,21 @@
 
 void Class_Chariot::Init()
 {
-    chassis.Init(1.0f,3.0f,2.0f);
+    chassis.Init(2.0f,3.0f,2.0f);
     Auxiliary_Arm_Uplift_X_Lift.Init(&hcan1, DJI_Motor_ID_0x207, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_X_Lift.PID_Angle.Init(100.0f, 0.05f, 0.0f, 0.0f, 180.0f, 250.0f);
+    Auxiliary_Arm_Uplift_X_Lift.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 200.0f);
     Auxiliary_Arm_Uplift_X_Lift.PID_Omega.Init(40.0f, 0.1f, 0.0f, 0.0f, 2000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_X_Right.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_X_Right.PID_Angle.Init(100.0f, 0.05f, 0.0f, 0.0f, 180.0f, 250.0f);
+    Auxiliary_Arm_Uplift_X_Right.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 200.0f);
     Auxiliary_Arm_Uplift_X_Right.PID_Omega.Init(40.0f, 0.1f, 0.0f, 0.0f, 2000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_Y_Lift.Init(&hcan1, DJI_Motor_ID_0x208, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_Y_Lift.PID_Angle.Init(1900.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
-    Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(30.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
+    Auxiliary_Arm_Uplift_Y_Lift.PID_Angle.Init(2000.0f, 1.f, 0.0f, 0.0f, 180.0f, 1000.0f);
+    Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(30.0f, 0.1f, 0.0f, 0.0f, 3000.0f, 8000.0f);
     Auxiliary_Arm_Uplift_Y_Right.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(1900.0f, 0.f, 0.0f, 0.0f, 180.0f, 200.0f);
-    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(25.0f, 0.f, 0.0f, 0.0f, 3000.0f, 7000.0f);
-	
+    Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(2000.0f, 1.f, 0.0f, 0.0f, 180.0f, 1000.0f);
+    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(25.0f, 0.1f, 0.0f, 0.0f, 3000.0f, 8000.0f);
+		Auxiliary_Arm_Uplift_Y_Right.Slope.Init(0.013f, 0.013f);
+		Auxiliary_Arm_Uplift_Y_Lift.Slope.Init(0.013f, 0.013f);
 		chassis.Power_Limit.Set_Power_Limit(100);
 	
 	
@@ -243,7 +244,11 @@ void Class_Chariot::TIM_Chariot_PeriodElapsedCallback()
 		Auxiliary_Arm_Uplift_Y_Lift.Calculate_Actual_Up_Length(Arm_Uplift_Offset_Angle[2]);
 		Auxiliary_Arm_Uplift_X_Right.Calculate_Actual_Up_Length(Arm_Uplift_Offset_Angle[1]);
 		Auxiliary_Arm_Uplift_Y_Right.Calculate_Actual_Up_Length(Arm_Uplift_Offset_Angle[3]);
-	
+		
+	  Auxiliary_Arm_Uplift_Y_Right.Slope.Set_Target(Auxiliary_Arm_Uplift_Y_Right.Target_Up_Length);
+    Auxiliary_Arm_Uplift_Y_Right.Slope.TIM_Calculate_PeriodElapsedCallback();
+		Auxiliary_Arm_Uplift_Y_Lift.Slope.Set_Target(Auxiliary_Arm_Uplift_Y_Lift.Target_Up_Length);
+    Auxiliary_Arm_Uplift_Y_Lift.Slope.TIM_Calculate_PeriodElapsedCallback();
     Auxiliary_Arm_Uplift_X_Lift.TIM_PID_PeriodElapsedCallback();
     Auxiliary_Arm_Uplift_Y_Lift.TIM_PID_PeriodElapsedCallback();
     Auxiliary_Arm_Uplift_X_Right.TIM_PID_PeriodElapsedCallback();
@@ -272,7 +277,7 @@ void Class_Auxiliary_Arm_Uplift_Y::TIM_PID_PeriodElapsedCallback()
     case (DJI_Motor_Control_Method_ANGLE):
     {
 			
-        PID_Angle.Set_Target(Target_Up_Length);
+        PID_Angle.Set_Target(Slope.Get_Out());
         PID_Angle.Set_Now(Actual_Up_Length);
         PID_Angle.TIM_Adjust_PeriodElapsedCallback();
 

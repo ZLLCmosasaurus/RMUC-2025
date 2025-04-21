@@ -55,6 +55,7 @@ class Class_Auxiliary_Arm_Uplift_Y : public Class_DJI_Motor_C620
 {
 public:
 	//变量
+	Class_Slope Slope;
 	float Target_Up_Length;
 	float Actual_Up_Length;
 	float K_Target = 5.0f;
