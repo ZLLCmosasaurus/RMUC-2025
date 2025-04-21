@@ -273,7 +273,7 @@ void Class_DR16::DR16_Data_Process()
             Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Rx_Data.Keyboard_Key) >> i) & 0x1);
         }        
     }
-	}
+	
     //左前轮信息
     Data.Yaw = (tmp_buffer->Channel_Yaw - Rocker_Offset) / Rocker_Num;
 
