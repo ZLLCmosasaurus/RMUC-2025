@@ -6,22 +6,19 @@
 #define BUZZER_CALIBRATED_PRIORITY_NUM 10
 #define BUZZER_DJI_STARTUP_PRIORITY_NUM 3
 #define BUZZER_FREE_PRIORITY_NUM 10
-#define BUZZER_DEVICE_OFFLINE_PRIORITY_NUM 20
+#define BUZZER_DEVICE_OFFLINE_PRIORITY_NUM 2
 #define QUARTER_NOTE_DURATION_MS 500 // 120 BPM
 
-Class_Buzzer  Buzzer;
+Class_Buzzer Buzzer;
 // 定义强制停止优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
 int BUZZER_FORCE_STOP_PRIORITY_TONELIST[2][BUZZER_FORCE_STOP_PRIORITY_NUM] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                                                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 // 定义设备离线优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
 int BUZZER_DEVICE_OFFLINE_PRIORITY_TONELIST[2][BUZZER_DEVICE_OFFLINE_PRIORITY_NUM] = {
-  // 音调
-  {TONE_G4, TONE_E4, TONE_D4, TONE_C4, TONE_D4, TONE_E4, TONE_G4, TONE_G4, TONE_A4, TONE_G4,
-   TONE_E4, TONE_D4, TONE_C4, TONE_D4, TONE_E4, TONE_G4, TONE_G4, TONE_A4, TONE_G4, TONE_E4},
-  // 终止时间（每个音符持续 500ms）
-  {500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000,
-   5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000}
-};
+    // 音调
+    {TONE_G4, TONE_E4},
+    // 终止时间（每个音符持续 500ms）
+    {500, 1000}};
 // 定义校准中优先级下的蜂鸣器音调列表，两个数组分别表示音调和持续时间
 int BUZZER_CALIBRATING_PRIORITY_TONELIST[2][BUZZER_CALIBRATING_PRIORITY_NUM] = {{TONE_A3, TONE_A4, TONE_A3, TONE_D4, TONE_C5},
                                                                                 {1000, 2000, 3000, 4000, 8000}};
@@ -71,9 +68,9 @@ void Class_Buzzer_Tone::SetTone(BUZZER_BSP_TONE_TO_POW_LUT_H __Tone)
 float *test_p;
 void Class_Buzzer_Tone::SetDuration(float __Duration)
 {
-  test_p=&Duration;
-      // 设置音符的持续时间
-      Duration = __Duration;
+  test_p = &Duration;
+  // 设置音符的持续时间
+  Duration = __Duration;
 }
 
 BUZZER_BSP_TONE_TO_POW_LUT_H Class_Buzzer_Tone::GetTone(void)
@@ -98,7 +95,6 @@ void Class_Buzzer::Buzzer_SheetListInit(void)
   {
     d_p[i] = &SheetMusic[BUZZER_FREE_PRIORITY].ToneList[i].Duration;
   }
-   
 
   memset(SheetMusic, 0, sizeof(SheetMusic));
   // 设置不同优先级的乐谱
@@ -180,14 +176,18 @@ void Class_Buzzer::Play_Tone(BUZZER_BSP_TONE_TO_POW_LUT_H __Tone)
   Set_TargetFrequency(TONE_A4_FREQUENCY * pow(SEMITONE_COEFFICIENT, __Tone));
   Set_Arr((uint16_t)(ClkFreq / Psc / TargetFrequency));
 }
-
+float start_time = 0;
+uint16_t delta_time_inter;
 void Class_Buzzer::Reload_Buzzer_Status_PeriodElapsedCallback(void)
 {
   // 定时器周期结束时重新加载蜂鸣器状态
   if (Get_NowTask() != Get_LastTask() && Get_NowTask() != BUZZER_FREE_PRIORITY)
   {
+    float start_time_inter = DWT_GetTimeline_us();
     Set_State(BUZZER_SWITCH_ON);
-    Set_StartTime(HAL_GetTick());
+    delta_time_inter = DWT_GetTimeline_us() - start_time_inter;
+    start_time = DWT_GetTimeline_ms();
+    Set_StartTime(start_time);
   }
 }
 
@@ -219,6 +219,7 @@ BUZZER_BEEP_TASK_PRIORITY_E Class_Buzzer::Get_LastTask(void)
 void Class_Buzzer::Set_WaitTime(void)
 {
   // 设置等待时间
+  if((BuzzerNowTime - BuzzerStartTime)>0)
   BuzzerWaitTime = BuzzerNowTime - BuzzerStartTime;
 }
 float Class_Buzzer::Get_WaitTime(void)
@@ -231,7 +232,7 @@ uint8_t i = 0;
 void Class_Buzzer::PlayToneList(BUZZER_BEEP_TASK_PRIORITY_E __NowTask)
 {
   // 播放当前任务的音符列表
-  Set_NowTime(HAL_GetTick());
+  Set_NowTime(DWT_GetTimeline_ms());
   Set_WaitTime();
   if ((Get_WaitTime() < SheetMusic[__NowTask].ToneList[i].GetDuration() + BUZZER_TASK_TICK_DIFFERENCE_TOLERANCE) && i < SheetMusic[__NowTask].GetNum())
   {

@@ -2,7 +2,7 @@
 #include "math.h"
 #include "cstring"
 
-
+#include "dvc_dwt.h"
 
 // 定义蜂鸣器的最大优先级数，用于控制不同音调的播放优先级
 #define BUZZER_MAX_PRIORITY_NUM 16

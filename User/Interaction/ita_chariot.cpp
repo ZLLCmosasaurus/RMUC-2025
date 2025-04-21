@@ -361,7 +361,7 @@ void Class_Chariot::Control_Chassis()
 void Class_Chariot::Transform_Mouse_Axis()
 {
     True_Mouse_X = -DR16.Get_Mouse_X();
-    True_Mouse_Y = DR16.Get_Mouse_Y();
+    True_Mouse_Y = -DR16.Get_Mouse_Y();
     True_Mouse_Z = DR16.Get_Mouse_Z();
 }
 #endif
@@ -442,7 +442,7 @@ void Class_Chariot::Control_Gimbal()
          
         }
         tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
-        tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
+        tmp_gimbal_pitch += DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         // R键按下 一键开关弹舱
         if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
