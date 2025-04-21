@@ -413,62 +413,14 @@ void Class_Chariot::Control_Gimbal()
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
             // Transform_Mouse_Axis();
             tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
-            tmp_gimbal_pitch -= DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
+            tmp_gimbal_pitch += DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         }
-        //R键按下 一键开关弹舱
-        if(DR16.Get_Keyboard_Key_R()==DR16_Key_Status_TRIG_FREE_PRESSED) 
-        {
-            if(Compare == 1700)
-            {
-                Bulletcap_Status = Bulletcap_Status_CLOSE;
-                Compare = 400;
-            }
-            else
-            {
-                Bulletcap_Status = Bulletcap_Status_OPEN;
-                Compare = 1700; 
-            }
-        } 
-        //F键按下 一键调头
-        if(DR16.Get_Keyboard_Key_F()==DR16_Key_Status_TRIG_FREE_PRESSED) 
-        {
-            tmp_gimbal_yaw += 180;
-        } 
-        //V键按下 自瞄模式中切换四点和五点模式
-        if( Gimbal.Get_Gimbal_Control_Type()==Gimbal_Control_Type_MINIPC &&
-            DR16.Get_Keyboard_Key_V()==DR16_Key_Status_PRESSED) 
-        {
-            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill);
-            //Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-        }
-        //E键按下切换Pitch锁定模式和free模式
-        if(DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED)
-        {
-            if(Pitch_Control_Status == Pitch_Status_Control_Free)
-                Pitch_Control_Status = Pitch_Status_Control_Lock;
-            else
-                Pitch_Control_Status = Pitch_Status_Control_Free;
-        }
+      
+        
+       
+    
+    
     }
-
-    //如果pitch为锁定状态
-    if(Pitch_Control_Status == Pitch_Status_Control_Lock)
-        tmp_gimbal_pitch = 0;
-
-    //如果小陀螺/随动 yaw给不同参数
-    // if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_FLLOW)
-    // {
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_K_P(0.35);
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_K_D(0.0);
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_Out_Max(6);
-    // }
-    // else if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN)
-    // {
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_K_P(0.65);
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_K_D(0.01);
-    //     Gimbal.Motor_Yaw.PID_Angle.Set_Out_Max(15);  
-    // }
-
     // 设定角度
     Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw);
     Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
@@ -516,20 +468,9 @@ void Class_Chariot::Control_Booster()
     /************************************键鼠控制逻辑*********************************************/
     else if(Get_DR16_Control_Type()==DR16_Control_Type_KEYBOARD)
     {   
-        //自瞄模式+五点模式 左键变成单发
-        if( Gimbal.Get_Gimbal_Control_Type()==Gimbal_Control_Type_MINIPC &&
-            Gimbal.MiniPC->Get_MiniPC_Type()==MiniPC_Type_Windmill)
-        {
-            // 按下左键并且摩擦轮开启 单发
-            if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED) &&
-                (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()))
-            {
-                //单发
-                Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
-            }
-        }
+       
         //正常模式 左键猎兽模式  长按左键并且摩擦轮开启 无限火力
-        else if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_PRESSED) &&
+        if ((DR16.Get_Mouse_Left_Key() == DR16_Key_Status_PRESSED) &&
                 (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()) &&
                 (Booster.Motor_Driver.Get_Now_Radian()-Booster.Motor_Driver.Get_Target_Radian()<0.1f))
         {
@@ -540,7 +481,7 @@ void Class_Chariot::Control_Booster()
             Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
         }
         //C键控制摩擦轮
-        if(DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if(DR16.Get_Keyboard_Key_Ctrl() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if(Booster.Get_Friction_Control_Type()==Friction_Control_Type_ENABLE)
             {
@@ -599,13 +540,13 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
-				static uint8_t mod5	=	0;
-				mod5++;
-         if (mod5 == 1)
-         {
+		// 		static uint8_t mod5	=	0;
+		// 		mod5++;
+        //  if (mod5 == 20)
+        //  {
          Gimbal.TIM_Calculate_PeriodElapsedCallback();
-         mod5 = 0;
-         }	  
+        //  mod5 = 0;
+        //  }	  
         
         Booster.TIM_Calculate_PeriodElapsedCallback();
         //传输数据给上位机
@@ -626,7 +567,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 void Class_Chariot::Judge_DR16_Control_Type()
 {
     if (DR16.Get_Left_X() != 0 ||
-        // DR16.Get_Left_Y() != 0 ||
+         DR16.Get_Left_Y() != 0 ||
         DR16.Get_Right_X() != 0 ||
         DR16.Get_Right_Y() != 0)
     {
@@ -654,7 +595,7 @@ void Class_Chariot::TIM_Control_Callback()
     //判断DR16控制数据来源
     Judge_DR16_Control_Type();
     //底盘，云台，发射机构控制逻辑
-    Control_Chassis();
+//    Control_Chassis();
     Control_Gimbal();
     Control_Booster();
 }

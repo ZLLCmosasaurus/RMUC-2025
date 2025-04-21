@@ -318,12 +318,12 @@ void Ist8310_IIC3_Callback(uint8_t* Tx_Buffer, uint8_t* Rx_Buffer, uint16_t Tx_L
  * @param Buffer UART收到的消息
  * @param Length 长度
  */
-#ifdef CHASSIS
-void Referee_UART6_Callback(uint8_t *Buffer, uint16_t Length)
+
+void Referee_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.Referee.UART_RxCpltCallback(Buffer,Length);
 }
-#endif
+
 /**
  * @brief UART1超电回调函数
  *
@@ -427,7 +427,7 @@ extern "C" void Task_Init()
         CAN_Init(&hcan2, Chassis_Device_CAN2_Callback);
 
         //裁判系统
-        UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
+        UART_Init(&huart6, Referee_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
 
         #ifdef POWER_LIMIT
         //旧版超电
@@ -450,7 +450,8 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-		UART_Init(&huart6, Image_UART6_Callback, 40);
+		UART_Init(&huart1, Image_UART6_Callback, 40);
+        UART_Init(&huart6, Referee_Callback, 128);
 
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);

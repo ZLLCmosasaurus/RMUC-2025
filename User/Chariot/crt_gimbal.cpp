@@ -313,16 +313,16 @@ void Class_Gimbal::Init()
     Boardc_BMI.Init(); 
 
     //yaw轴电机
-	Motor_Yaw.PID_Angle.Init(22.f, 0.5f, 0.0f, 4.0f, 36, 36,0.0f,0.0f,0,0.001f,0.0f);
+	Motor_Yaw.PID_Angle.Init(20.f, 0.2f, 0.5f, 0.0f, 4, 175,0.0f,0.0f,0,0.001f,0.0f);
     //250 300
-    Motor_Yaw.PID_Omega.Init(55.0f, 4.0f, 0.0f, 300.0f, 25000.0f, 25000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
+    Motor_Yaw.PID_Omega.Init(100.0f, 0.0f, 0.1f, 0.0f, 1000.0f, 18000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;
     Motor_Yaw.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     //pitch轴电机
-    Motor_Pitch.PID_Angle.Init(0.05f, 0.01f, 0.0f, 0.0f, 0.5f, 2.0f);
-    Motor_Pitch.PID_Omega.Init(0.75f, 0.0f, 0.0f, 0, 0, 1.5f,0.0f,0.0f,0.0f,0.001f,0.0f);
+    Motor_Pitch.PID_Angle.Init(0.8f, 0.13f, 0.001f, 0.0f, 1.0f, 4.0f);
+    Motor_Pitch.PID_Omega.Init(1.1f, 0.1f, 0.0f, 0, 0.5f, 3.f,0.0f,0.0f,0.0f,0.001f,0.0f);
     // Motor_Pitch.PID_Torque.Init(0.0, 0.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
      Motor_Pitch.IMU = &Boardc_BMI;
      Motor_Pitch.Init(&hcan1, DM_Motor_ID_0xA1, DM_Motor_Control_Method_MIT_TORQUE, 0);
