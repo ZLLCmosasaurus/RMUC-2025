@@ -26,17 +26,18 @@
 
 #define POWER_LIMIT
 #ifdef POWER_LIMIT
-#define POWER_LIMI//T_BUFFER_LOOP
+#define POWER_LIMIT_BUFFER_LOOP
+
 #define BIG_P_ALLOCATE
 //        #define POWER_LIMIT_NEW_CONTROL
-//        //#define POWER_LIMIT_OLD_CONTROL
+ //       #define POWER_LIMIT_OLD_CONTROL
 #endif
 
 #define SPEED_SLOPE
 
 #endif
 
-#define DISABLE_SUPEACAP
+//#define DISABLE_SUPEACAP
 
 /* Exported types ------------------------------------------------------------*/
 
