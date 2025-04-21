@@ -82,7 +82,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 #ifdef CHASSIS
 // 控制类型字节
 uint8_t control_type;
-float offset_k = -0.0f;
+float offset_k =-0.041f;
 // 底盘和云台夹角（弧度制）
 float derta_angle;
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
@@ -124,7 +124,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Chassis_Angle = Motor_Yaw.Get_Now_Radian();
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
     {
-        Offset_Angle = offset_k * Motor_Yaw.Get_Now_Radian();
+        Offset_Angle = offset_k * Motor_Yaw.Get_Now_Omega_Radian();
     }
     else
     {
@@ -680,7 +680,9 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 void Class_Chariot::Judge_DR16_Control_Type()
 {
     if (DR16.Get_Left_X() != 0 ||
+
         DR16.Get_Left_Y() != 0 ||
+
         DR16.Get_Right_X() != 0 ||
         DR16.Get_Right_Y() != 0)
     {

@@ -86,7 +86,7 @@ public:
     // 下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 
-    void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
+    void Init(float __Velocity_X_Max = 7.0f, float __Velocity_Y_Max = 7.0f, float __Omega_Max = 24.0f, float __Steer_Power_Ratio = 0.5);
 
     inline Enum_Chassis_Control_Type Get_Chassis_Control_Type();
     inline float Get_Velocity_X_Max();
@@ -128,7 +128,7 @@ protected:
     // 舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     // 底盘小陀螺模式角速度
-    float Spin_Omega = 2 * PI * 2.0f;
+    float Spin_Omega = 6 * PI * 2.0f;
     // 常量
 
     // 电机理论上最大输出

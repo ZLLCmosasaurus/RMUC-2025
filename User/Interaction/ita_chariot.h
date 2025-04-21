@@ -92,6 +92,7 @@ enum Enum_DR16_Control_Type
     DR16_Control_Type_REMOTE = 0,
     DR16_Control_Type_KEYBOARD,
     DR16_Control_Type_NONE,
+
 };
 
 /**
@@ -206,6 +207,7 @@ protected:
     // 绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
 
+
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
         float Reference_Angle = 0.549932122f;
@@ -287,6 +289,7 @@ protected:
 
         void Transform_Mouse_Axis();
     #endif
+
 };
 
 /* Exported variables --------------------------------------------------------*/
