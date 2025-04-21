@@ -150,8 +150,11 @@ public:
 
     void CAN_Chassis_Rx_Gimbal_Callback();
     void CAN_Chassis_Tx_Gimbal_Callback();
+    void CAN_Chassis_Rx_Gimbal_Callback_1();
+    void CAN_Chassis_Tx_Gimbal_Callback_1();
     void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
-
+    uint16_t Booster_fric_omega_left = 0;
+    uint16_t Booster_fric_omega_right =0;
 #elif defined(GIMBAL)
 
     inline void DR16_Offline_Cnt_Plus();
@@ -172,6 +175,8 @@ public:
 
     void CAN_Gimbal_Rx_Chassis_Callback();
     void CAN_Gimbal_Tx_Chassis_Callback();
+    void CAN_Gimbal_Rx_Chassis_Callback_1();
+    void CAN_Gimbal_Tx_Chassis_Callback_1();
 
     void TIM_Control_Callback();
 

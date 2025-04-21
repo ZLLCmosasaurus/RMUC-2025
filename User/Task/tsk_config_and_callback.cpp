@@ -145,7 +145,11 @@ void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.CAN_Chassis_Rx_Gimbal_Callback();
     }
     break;
-
+    case (0x78):
+    {
+        chariot.CAN_Chassis_Rx_Gimbal_Callback_1();
+    }
+    break;
     case (0x201):
     {
         test_yaw++;
@@ -204,6 +208,11 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     case (0x88): // 留给下板通讯
     {
         chariot.CAN_Gimbal_Rx_Chassis_Callback();
+    }
+    break;
+    case (0x89):
+    {
+        chariot.CAN_Gimbal_Rx_Chassis_Callback_1();
     }
     break;
     case (0x206): // 保留can2对6020编码器的接口
@@ -406,9 +415,11 @@ void Task1ms_TIM5_Callback()
 #ifdef GIMBAL
             // 给下板发送数据
             chariot.CAN_Gimbal_Tx_Chassis_Callback();
+            chariot.CAN_Gimbal_Tx_Chassis_Callback_1();
 #elif defined(CHASSIS)
             // 底盘给云台发消息
             chariot.CAN_Chassis_Tx_Gimbal_Callback();
+            chariot.CAN_Chassis_Tx_Gimbal_Callback_1();
 #endif
             mod5 = 0;
         }
@@ -515,6 +526,8 @@ extern "C" void Task_Loop()
         JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage()/100.0f;     // 超级电容容量
         JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); // 底盘控制模式
         JudgeReceiveData.Supercap_State = chariot.Sprint_Status;
+        JudgeReceiveData.booster_fric_omega_left= chariot.Booster_fric_omega_left; // 左摩擦轮速度; // 左摩擦轮速度
+        JudgeReceiveData.booster_fric_omega_right= chariot.Booster_fric_omega_right;
         if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
             Init_Cnt = 10;
         GraphicSendtask();

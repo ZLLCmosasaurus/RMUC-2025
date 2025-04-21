@@ -177,6 +177,11 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
 }
+void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback_1()
+{
+    memcpy(&Booster_fric_omega_left, &CAN_Manage_Object->Rx_Buffer.Data[2], sizeof(uint16_t));
+    memcpy(&Booster_fric_omega_right, &CAN_Manage_Object->Rx_Buffer.Data[4], sizeof(uint16_t));
+}
 #endif
 
 /**
@@ -205,6 +210,12 @@ void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback()
     Referee.Set_Booster_17mm_1_Heat_Max(Shooter_Barrel_Heat_Limit);
     Referee.Set_Game_Stage(game_stage);
     Referee.Set_Booster_Speed(Shooter_Speed);
+}
+void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback_1()
+{
+   uint16_t tmp_heat;
+    memcpy(&tmp_heat, &CAN_Manage_Object->Rx_Buffer.Data[2], sizeof(uint16_t));
+    Booster.set_heat(tmp_heat);
 }
 #endif
 
@@ -249,6 +260,15 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 5, &tmp_gimbal_pitch, sizeof(uint16_t));
 
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 7, &control_type, sizeof(uint8_t));
+}
+void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback_1()
+{
+    uint16_t tmp_fric_omega_left = 0;
+    uint16_t tmp_fric_omega_right = 0;
+    tmp_fric_omega_left = (uint16_t)abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian());
+    tmp_fric_omega_right = (uint16_t)abs(Booster.Motor_Friction_Right.Get_Now_Omega_Radian());
+    memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 2, &tmp_fric_omega_left, sizeof(uint16_t));
+    memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 4, &tmp_fric_omega_right, sizeof(uint16_t));
 }
 #endif
 
@@ -608,6 +628,12 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     memcpy(CAN2_Chassis_Tx_Gimbal_Data + 2, &Shooter_Barrel_Heat_Limit, sizeof(uint16_t));
     memcpy(CAN2_Chassis_Tx_Gimbal_Data + 4, &Shooter_Barrel_Cooling_Value, sizeof(uint16_t));
     memcpy(CAN2_Chassis_Tx_Gimbal_Data+6,&Shooter_Speed,sizeof(uint16_t));
+}
+void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback_1()
+{
+    uint16_t current_heat;
+    current_heat = Referee.Get_Booster_17mm_1_Heat();
+    memcpy(&CAN2_Chassis_Tx_Gimbal_Data_1[2], &current_heat, sizeof(uint16_t));
 }
 #endif
 /**

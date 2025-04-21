@@ -189,8 +189,11 @@ typedef struct
 	uint8_t Fric_Status;
 	uint8_t Supercap_Energy;
 	uint8_t Supercap_State;
+	uint16_t booster_fric_omega_left;
+	uint16_t booster_fric_omega_right;
 	float Supercap_Voltage;
 	float Pitch_Angle;
+
 } JudgeReceive_t;
 
 void JudgementDataSend(void);
