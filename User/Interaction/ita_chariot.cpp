@@ -215,7 +215,7 @@ void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback_1()
 {
    uint16_t tmp_heat;
     memcpy(&tmp_heat, &CAN_Manage_Object->Rx_Buffer.Data[2], sizeof(uint16_t));
-   // Booster.set_heat(tmp_heat);
+    Booster.set_heat(tmp_heat);
 }
 #endif
 
