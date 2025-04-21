@@ -20,16 +20,16 @@
 
 /* Exported macros -----------------------------------------------------------*/
 
-//拨动开关位置
+// 拨动开关位置
 #define SWITCH_UP (1)
 #define SWITCH_DOWN (2)
 #define SWITCH_MIDDLE (3)
 
-//按键开关位置
+// 按键开关位置
 #define KEY_FREE (0)
 #define KEY_PRESSED (1)
 
-//键位宏定义
+// 键位宏定义
 #define KEY_W 0
 #define KEY_S 1
 #define KEY_A 2
@@ -57,12 +57,6 @@ enum Enum_DR16_Status
 {
     DR16_Status_DISABLE = 0,
     DR16_Status_ENABLE,
-};
-
-enum Enum_Image_Status
-{
-    Image_Status_DISABLE = 0,
-    Image_Status_ENABLE,
 };
 
 /**
@@ -99,13 +93,13 @@ enum Enum_Image_Status
  */
 enum Enum_DR16_Switch_Status
 {
-    DR16_Switch_Status_UP = 0,           //上状态
-    DR16_Switch_Status_TRIG_UP_MIDDLE,   //上到中的突变状态
-    DR16_Switch_Status_TRIG_MIDDLE_UP,   //中到上的突变状态
-    DR16_Switch_Status_MIDDLE,           //中状态
-    DR16_Switch_Status_TRIG_MIDDLE_DOWN, //中到下的突变状态
-    DR16_Switch_Status_TRIG_DOWN_MIDDLE, //下到中的突变状态
-    DR16_Switch_Status_DOWN,             //下状态
+    DR16_Switch_Status_UP = 0,           // 上状态
+    DR16_Switch_Status_TRIG_UP_MIDDLE,   // 上到中的突变状态
+    DR16_Switch_Status_TRIG_MIDDLE_UP,   // 中到上的突变状态
+    DR16_Switch_Status_MIDDLE,           // 中状态
+    DR16_Switch_Status_TRIG_MIDDLE_DOWN, // 中到下的突变状态
+    DR16_Switch_Status_TRIG_DOWN_MIDDLE, // 下到中的突变状态
+    DR16_Switch_Status_DOWN,             // 下状态
 };
 
 /**
@@ -114,10 +108,10 @@ enum Enum_DR16_Switch_Status
  */
 enum Enum_DR16_Key_Status
 {
-    DR16_Key_Status_FREE = 0,           //松开状态
-    DR16_Key_Status_TRIG_FREE_PRESSED,  //松开到按下的突变状态
-    DR16_Key_Status_TRIG_PRESSED_FREE,  //按下到松开的突变状态
-    DR16_Key_Status_PRESSED,            //按下状态
+    DR16_Key_Status_FREE = 0,          // 松开状态
+    DR16_Key_Status_TRIG_FREE_PRESSED, // 松开到按下的突变状态
+    DR16_Key_Status_TRIG_PRESSED_FREE, // 按下到松开的突变状态
+    DR16_Key_Status_PRESSED,           // 按下状态
 };
 
 /**
@@ -125,15 +119,15 @@ enum Enum_DR16_Key_Status
  *
  */
 struct Struct_Image_UART_Data
-{ 
+{
     int16_t Mouse_X;
     int16_t Mouse_Y;
     int16_t Mouse_Z;
     int8_t Mouse_Left_Key;
     int8_t Mouse_Right_Key;
-    uint16_t Keyboard_Key; 
+    uint16_t Keyboard_Key;
     uint16_t reserved;
-} __attribute__((packed)); 
+} __attribute__((packed));
 
 /**
  * @brief DR16源数据
@@ -152,10 +146,9 @@ struct Struct_DR16_UART_Data
     int16_t Mouse_Z;
     uint64_t Mouse_Left_Key : 8;
     uint64_t Mouse_Right_Key : 8;
-    uint64_t Keyboard_Key : 16; 
+    uint64_t Keyboard_Key : 16;
     uint64_t Channel_Yaw : 11;
 } __attribute__((packed));
-
 
 /**
  * @brief DR16经过处理的的数据, 摇杆信息经过归一化到-1~1, 鼠标信息有待进一步标定
@@ -185,13 +178,12 @@ struct Struct_DR16_Data
 class Class_DR16
 {
 public:
-    void Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2);
+    void Init(UART_HandleTypeDef *huart_1, UART_HandleTypeDef *huart_2);
 
     inline Enum_DR16_Status Get_DR16_Status();
-		inline Enum_Image_Status Get_Image_Status();
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
-    inline Enum_Image_Status Get_Image_Status() {return (Image_Status);};
-    inline Enum_DT7_Status Get_DT7_Status() {return (DT7_Status);};
+    inline Enum_Image_Status Get_Image_Status() { return (Image_Status); };
+    inline Enum_DT7_Status Get_DT7_Status() { return (DT7_Status); };
     inline float Get_Right_X();
     inline float Get_Right_Y();
     inline float Get_Left_X();
@@ -219,78 +211,75 @@ public:
     inline Enum_DR16_Key_Status Get_Keyboard_Key_C();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_V();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_B();
-    
+
     inline float Get_Yaw();
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
     void Image_UART_RxCpltCallback(uint8_t *Rx_Data);
-    
+
     void TIM1msMod50_Alive_PeriodElapsedCallback();
 
-    
 protected:
-    //初始化相关常量
+    // 初始化相关常量
 
-    //绑定的UART
+    // 绑定的UART
     Struct_UART_Manage_Object *UART_Manage_Object_1;
     Struct_UART_Manage_Object *UART_Manage_Object_2;
 
-    //常量
+    // 常量
 
-    //摇杆偏移量
+    // 摇杆偏移量
     float Rocker_Offset = 1024.0f;
-    //摇杆总刻度
+    // 摇杆总刻度
     float Rocker_Num = 660.0f;
 
-    //内部变量
-    //前一时刻的遥控器状态信息
+    // 内部变量
+    // 前一时刻的遥控器状态信息
     Struct_DR16_UART_Data Now_UART_Rx_Data;
-    //前一时刻的遥控器状态信息
+    // 前一时刻的遥控器状态信息
     Struct_DR16_UART_Data Pre_UART_Rx_Data;
 
     Struct_Image_UART_Data Now_UART_Image_Rx_Data;
     Struct_Image_UART_Data Pre_UART_Image_Rx_Data;
 
-    //当前时刻的遥控器接收flag
+    // 当前时刻的遥控器接收flag
     uint32_t DR16_Flag = 0;
-    //前一时刻的遥控器接收flag
+    // 前一时刻的遥控器接收flag
     uint32_t Pre_DR16_Flag = 0;
 
-    //当前时刻的遥控器接收flag
+    // 当前时刻的遥控器接收flag
     uint32_t Image_Flag = 0;
-    //前一时刻的遥控器接收flag
+    // 前一时刻的遥控器接收flag
     uint32_t Pre_Image_Flag = 0;
 
-    //遥控器50ms离线次数
-    uint16_t DR16_Unline_Cnt = 0;
-		uint16_t Image_Unline_Cnt = 0;
-    //遥控器50ms串口错误次数
+    // 遥控器50ms离线次数
+    uint16_t Unline_Cnt = 0;
+    // 遥控器50ms串口错误次数
     uint16_t Error_Cnt = 0;
-    //读变量
+    // 读变量
 
-    //遥控器状态
+    // 遥控器状态
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
-		Enum_Image_Status Image_Status	=	Image_Status_DISABLE;
-    //遥控器数据更新状态
+    // 遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
-    //图传存活状态
+    // 图传存活状态
     Enum_Image_Status Image_Status = Image_Status_DISABLE;
-    //dt7存活状态
+    // dt7存活状态
     Enum_DT7_Status DT7_Status = DT7_Status_DISABLE;
     // DR16对外接口信息
     Struct_DR16_Data Data;
 
-    //写变量
+    // 写变量
 
-    //读写变量
+    // 读写变量
 
-    //内部函数
+    // 内部函数
 
     void Judge_Switch(Enum_DR16_Switch_Status *Switch, uint8_t Status, uint8_t Pre_Status);
     void Judge_Key(Enum_DR16_Key_Status *Key, uint8_t Status, uint8_t Pre_Status);
-    void Judge_Updata(Struct_DR16_UART_Data Pre_UART_Rx_Data,Struct_DR16_UART_Data Now_UART_Rx_Data);
+    void Judge_Updata(Struct_DR16_UART_Data Pre_UART_Rx_Data, Struct_DR16_UART_Data Now_UART_Rx_Data);
     void DR16_Data_Process();
-    void Image_Data_Process(uint8_t* __rx_buffer);
+    void Image_Data_Process(uint8_t *__rx_buffer);
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -306,10 +295,7 @@ Enum_DR16_Status Class_DR16::Get_DR16_Status()
 {
     return (DR16_Status);
 }
-Enum_Image_Status Class_DR16::Get_Image_Status()
-{
-    return (Image_Status);
-}
+
 /**
  * @brief 获取遥控器数据更新状态
  *
