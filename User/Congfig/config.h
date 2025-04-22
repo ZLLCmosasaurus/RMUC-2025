@@ -18,8 +18,11 @@
 #define MINIPC_COMM_CAN
 // #define MINIPC_COMM_USB
 
-#define CHASSIS
-// #define GIMBAL
+#define IMAGE_VT12
+#define IMAGE_VT13
+
+// #define CHASSIS
+#define GIMBAL
 
 #ifdef GIMBAL
 

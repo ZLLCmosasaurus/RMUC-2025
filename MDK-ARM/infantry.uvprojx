@@ -699,6 +699,11 @@
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_buzzer.cpp</FilePath>
             </File>
+            <File>
+              <FileName>dvc_VT13.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_VT13.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

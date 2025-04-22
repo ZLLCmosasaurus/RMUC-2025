@@ -295,6 +295,14 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 
     chariot.TIM_Control_Callback();
 }
+
+void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
+
+    // 底盘 云台 发射机构 的控制策略
+    chariot.TIM_Control_Callback();
+}
 #endif
 
 /**
@@ -372,9 +380,9 @@ void Task100us_TIM2_Callback()
     chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 #endif
     static float start_time = 0;
-//       		start_time=	DWT_GetTimeline_ms();
-//        	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
-//        	   delta_time = DWT_GetTimeline_ms() - start_time;
+    //       		start_time=	DWT_GetTimeline_ms();
+    //        	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+    //        	   delta_time = DWT_GetTimeline_ms() - start_time;
 }
 
 /**
@@ -469,7 +477,13 @@ extern "C" void Task_Init()
 
     // 遥控器接收
     UART_Init(&huart3, DR16_UART3_Callback, 18);
+
+#ifdef IMAGE_VT12
     UART_Init(&huart6, Image_UART6_Callback, 40);
+#endif // VT12
+#ifdef IMAGE_VT13
+    UART_Init(&huart6, VT13_UART_Callback, 30);
+#endif // VT12
 
     // 上位机USB
     USB_Init(&MiniPC_USB_Manage_Object, MiniPC_USB_Callback);

@@ -784,6 +784,39 @@ void Class_Chariot::Judge_DR16_Control_Type()
         DR16_Control_Type = DR16_Control_Type_KEYBOARD;
     }
 }
+
+void Class_Chariot::Judge_VT13_Control_Type()
+{
+    if (VT13.Get_Left_X() != 0 ||
+        VT13.Get_Left_Y() != 0 ||
+        VT13.Get_Right_X() != 0 ||
+        VT13.Get_Right_Y() != 0)
+    {
+        VT13_Control_Type = VT13_Control_Type_REMOTE;
+    }
+    else if (VT13.Get_Mouse_X() != 0 ||
+             VT13.Get_Mouse_Y() != 0 ||
+             VT13.Get_Mouse_Z() != 0 ||
+             VT13.Get_Keyboard_Key_A() != 0 ||
+             VT13.Get_Keyboard_Key_D() != 0 ||
+             VT13.Get_Keyboard_Key_W() != 0 ||
+             VT13.Get_Keyboard_Key_S() != 0 ||
+             VT13.Get_Keyboard_Key_Shift() != 0 ||
+             VT13.Get_Keyboard_Key_Ctrl() != 0 ||
+             VT13.Get_Keyboard_Key_Q() != 0 ||
+             VT13.Get_Keyboard_Key_E() != 0 ||
+             VT13.Get_Keyboard_Key_R() != 0 ||
+             VT13.Get_Keyboard_Key_F() != 0 ||
+             VT13.Get_Keyboard_Key_G() != 0 ||
+             VT13.Get_Keyboard_Key_Z() != 0 ||
+             VT13.Get_Keyboard_Key_C() != 0 ||
+             VT13.Get_Keyboard_Key_V() != 0 ||
+             VT13.Get_Keyboard_Key_B() != 0)
+    {
+        VT13_Control_Type = VT13_Control_Type_KEYBOARD;
+    }
+}
+
 #endif
 /**
  * @brief 控制回调函数
@@ -794,6 +827,7 @@ void Class_Chariot::TIM_Control_Callback()
 {
     // 判断DR16控制数据来源
     Judge_DR16_Control_Type();
+    Judge_VT13_Control_Type();
     // 底盘，云台，发射机构控制逻辑
     Control_Chassis();
     Control_Gimbal();
