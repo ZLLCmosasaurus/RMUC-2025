@@ -198,8 +198,8 @@ public:
     Enum_Chassis_Logics_Direction Chassis_Logics_Direction = Chassis_Logic_Direction_Positive;
     //冲刺
     Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
-    //弹仓开关
-    Enum_Bulletcap_Status Bulletcap_Status = Bulletcap_Status_CLOSE;
+    //yaw编码开关
+    Enum_Yaw_Encoder_Control_Status Yaw_Encoder_Control_Status = Yaw_Encoder_Control_Status_Disable;
     //摩擦轮开关
     Enum_Fric_Status Fric_Status = Fric_Status_CLOSE;
     //超级电容超级放电状态

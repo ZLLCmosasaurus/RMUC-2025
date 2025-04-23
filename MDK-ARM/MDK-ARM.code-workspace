@@ -6,8 +6,8 @@
     ],
     "settings": {
         "files.associations": {
-            "config.h": "c",
-            "limits": "cpp"
+            "tsk_config_and_callback.h": "c",
+            "config.h": "c"
         }
     },
     "extensions": {}

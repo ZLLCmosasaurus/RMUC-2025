@@ -107,7 +107,7 @@ uint8_t UART_Send_Data(UART_HandleTypeDef *huart, uint8_t *Data, uint16_t Length
 void TIM_UART_PeriodElapsedCallback()
 {
     // UART1超电通讯
-    UART_Send_Data(&huart1, UART1_Manage_Object.Tx_Buffer, 10);
+    UART_Send_Data(&huart1, UART1_Manage_Object.Tx_Buffer,19);
 }
 
 /**

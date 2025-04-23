@@ -368,7 +368,16 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-
+  #ifdef GIMBAL
+  if(RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
+  {
+    __HAL_UART_CLEAR_IDLEFLAG(&huart1);              
+		HAL_UART_DMAStop(&huart1);
+    Task_Loop();
+    HAL_UART_Receive_DMA(&huart1, (uint8_t*)UART1_Manage_Object.Rx_Buffer,UART1_Manage_Object.Rx_Buffer_Length);
+    // memset(UART6_Manage_Object.Rx_Buffer, 0, 128);
+  }
+  #endif
   /* USER CODE END USART1_IRQn 1 */
 }
 

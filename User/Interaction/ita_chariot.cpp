@@ -42,7 +42,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     Chassis.Init(Chassis_Velocity_Max,Chassis_Velocity_Max);
 
     // 底盘随动PID环初始化
-    PID_Chassis_Fllow.Init(3.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.001f);
+    PID_Chassis_Fllow.Init(6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.001f);//Kp=3
 
     // yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
     Motor_Yaw.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE, 2);
@@ -77,7 +77,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.Init(&MiniPC_USB_Manage_Object);
     MiniPC.IMU = &Gimbal.Boardc_BMI;
     MiniPC.Referee = &Referee;
-    MiniPC.Init_UART(&UART6_Manage_Object);
+    MiniPC.Init_UART(&UART1_Manage_Object);
 #endif
 }
 
@@ -144,7 +144,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Set_Gimbal_Pitch_Angle(Gimbal_Tx_Pitch_Angle);
     chassis_control_type = (Enum_Chassis_Control_Type)(control_type & 0x03);
     Chassis_Logics_Direction = (Enum_Chassis_Logics_Direction)(control_type >> 2 & 0x01);
-    Bulletcap_Status = (Enum_Bulletcap_Status)(control_type >> 3 & 0x01);
+    Yaw_Encoder_Control_Status = (Enum_Yaw_Encoder_Control_Status)(control_type >> 3 & 0x01);
     Fric_Status = (Enum_Fric_Status)(control_type >> 4 & 0x01);
     Supercap_Control_Status = (Enum_Supercap_Control_Status)(control_type >> 5 & 0x01);
     MiniPC_Status = (Enum_MiniPC_Status)(control_type >> 6 & 0x01);
@@ -247,7 +247,8 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     gimbal_pitch = Gimbal.Motor_Pitch.Get_True_Angle_Pitch();
     //Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
     chassis_control_type = Chassis.Get_Chassis_Control_Type();
-    control_type = (uint8_t)(Referee_UI_Refresh_Status << 7 |  MiniPC_Status<< 6 | Supercap_Control_Status << 5 | Fric_Status << 4 | Bulletcap_Status << 3 | Chassis_Logics_Direction << 2 | chassis_control_type);
+    Yaw_Encoder_Control_Status = (Enum_Yaw_Encoder_Control_Status)Gimbal.Get_Launch_Mode();
+    control_type = (uint8_t)(Referee_UI_Refresh_Status << 7 |  MiniPC_Status<< 6 | Supercap_Control_Status << 5 | Fric_Status << 4 | Yaw_Encoder_Control_Status << 3 | Chassis_Logics_Direction << 2 | chassis_control_type);
 
     // 设定速度
     tmp_chassis_velocity_x = Math_Float_To_Int(chassis_velocity_x, -1 * Chassis.Get_Velocity_X_Max(), Chassis.Get_Velocity_X_Max(), 0, 0x7FFF);
@@ -460,7 +461,6 @@ void Class_Chariot::Control_Gimbal()
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal);
-
         }
         else // 非自瞄模式
         {
@@ -687,6 +687,44 @@ void Class_Chariot::Control_Booster()
                 Booster.Set_Friction_Control_Type(Friction_Control_Type_ENABLE);
             }				
         }
+        #ifdef Shoot_Speed_Adjust
+        // 超速调整
+        static float Pre_Shoot_Speed;
+        static uint8_t Shoot_Speed_Updata_Flag = 0;
+        if (Referee.Get_Shoot_Speed() != Pre_Shoot_Speed)
+        {
+            Shoot_Speed_Updata_Flag = 1;
+        }
+        else
+        {
+            Shoot_Speed_Updata_Flag = 0;
+        }
+        Pre_Shoot_Speed = Referee.Get_Shoot_Speed();
+
+        switch (Shoot_Speed_Updata_Flag)
+        {
+        case 1:
+        {
+            
+            if (Referee.Get_Shoot_Speed() >= 16.0f)
+            {
+                Booster.Set_Fric_Speed_Rpm_High(Booster.Get_Fric_Speed_Rpm_High() - 50);
+                Booster.Set_Fric_Speed_Rpm_Low(Booster.Get_Fric_Speed_Rpm_Low() - 50);
+            }
+            else if(Referee.Get_Shoot_Speed() <= 15.5f)
+            {
+                Booster.Set_Fric_Speed_Rpm_High(Booster.Get_Fric_Speed_Rpm_High() + 50);
+                Booster.Set_Fric_Speed_Rpm_Low(Booster.Get_Fric_Speed_Rpm_Low() + 50);
+            }
+        }
+        break;
+        default:
+        {
+            //不做处理
+        }
+        break;
+        }
+        #endif
     }
     //UI显示检测摩擦轮是否开启
     if(abs(Booster.Fric[0].Get_Now_Omega_Rpm()) > Booster.Get_Friction_Omega_Threshold() &&
@@ -854,7 +892,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
             Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_CHANGE);
         }
         // 云台状态
-        if (Gimbal_Status == Gimbal_Status_ENABLE)
+        if (Yaw_Encoder_Control_Status == Yaw_Encoder_Control_Status_Enable)
         {
             //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Alive", (sizeof("Gimbal_Alive") - 1), Referee_UI_CHANGE);
             Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_PINK,10,430,820-150,480,770-150,Referee_UI_CHANGE);
@@ -912,7 +950,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     break;
     }
     Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, Graphic_Color_GREEN, 20, 5, 500/2, 400+410, "Fric :", (sizeof("Fric :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02,Graphic_Color_GREEN , 20, 5, 500/2, 660, "Gimbal:", (sizeof("Gimbal:") - 1), Referee_UI_ADD);
+    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02,Graphic_Color_GREEN , 20, 5, 500/2, 660, "Encoder:", (sizeof("Encoder:") - 1), Referee_UI_ADD);
     // 画线
     Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x03, 3, 3, 960-400+120, 200, 900, 200, Referee_UI_ADD);
     Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x04, 3, 3, 1020, 200, 960+400-120, 200, Referee_UI_ADD);
@@ -970,6 +1008,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     Booster.TIM_Calculate_PeriodElapsedCallback();
     //Image.TIM_Calculate_PeriodElapsedCallback();
     // 传输数据给上位机
+    MiniPC.Set_Tx_Angle_Encoder_Yaw(Gimbal.Motor_Yaw.Get_True_Angle_Yaw_From_Encoder());
     MiniPC.TIM_Write_PeriodElapsedCallback();
     // 给下板发送数据
     CAN_Gimbal_Tx_Chassis_Callback();

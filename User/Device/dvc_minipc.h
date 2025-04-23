@@ -272,6 +272,8 @@ public:
     inline float Get_Distance();
     inline Enum_MiniPC_Type Get_MiniPC_Type();
     inline Enum_MiniPC_Move_Control_Mode Get_Move_Control_Mode();
+    inline uint8_t Get_Radar_Enable_Control();
+    inline uint8_t Get_Radar_Enable_Status();
 
     inline void Set_Game_Stage(Enum_MiniPC_Game_Stage __Game_Stage);
     inline void Set_Chassis_Now_Velocity_X(float __Chassis_Now_Velocity_X);
@@ -288,6 +290,7 @@ public:
     inline void Set_Outpost_Protect_Status(Enum_MiniPC_Data_Status __Outpost_Protect_Status);
     inline void Set_MiniPC_Type(Enum_MiniPC_Type __MiniPC_Type);
     inline void Set_bullet_v(float __bullet_v);
+    inline void Set_Tx_Angle_Encoder_Yaw(float Tx_Angle_Encoder_Yaw);
 
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
@@ -350,6 +353,7 @@ protected:
 	float Tx_Angle_Roll;
 	float Tx_Angle_Pitch;
 	float Tx_Angle_Yaw;
+    float Tx_Angle_Encoder_Yaw;
 
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
@@ -530,6 +534,14 @@ Enum_MiniPC_Move_Control_Mode Class_MiniPC::Get_Move_Control_Mode()
     return (Data_NUC_To_MCU.Move_Control_Mode);
 }
 
+uint8_t Class_MiniPC::Get_Radar_Enable_Control()
+{
+    return (Pack_Tx.radar_enable_control);
+}
+uint8_t Class_MiniPC::Get_Radar_Enable_Status()
+{
+    return (Pack_Rx.radar_enable_status);
+}
 float Class_MiniPC::Get_Rx_Pitch_Angle()
 {
     return(Rx_Angle_Pitch);
@@ -655,6 +667,12 @@ void Class_MiniPC::Set_bullet_v(float __bullet_v)
 {
     bullet_v = __bullet_v;
 }
+
+void Class_MiniPC::Set_Tx_Angle_Encoder_Yaw(float __Tx_Angle_Encoder_Yaw)
+{
+    Tx_Angle_Encoder_Yaw = __Tx_Angle_Encoder_Yaw;
+}
+
 /**
  * @brief 设定迷你主机类型
  *

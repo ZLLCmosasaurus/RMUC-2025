@@ -58,7 +58,10 @@ void Class_MiniPC::Data_Process()
     //利用坐标系转换计算目标的yaw和pitch和距离
     if(Pack_Rx.radar_enable_status == 1 && Pack_Tx.radar_enable_control == 1)//当上位机反馈的雷达已处于运行状态&下位机使能开启雷达
     {
-      Self_aim(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+      //Self_aim(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+      Distance = calc_distance(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z);
+      Rx_Angle_Yaw = Tx_Angle_Encoder_Yaw + calc_yaw(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z);
+      Rx_Angle_Pitch = calc_pitch_compensated(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z);
     }
     else
     {
@@ -66,6 +69,7 @@ void Class_MiniPC::Data_Process()
     }
     //pitch角度限幅
     Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
+    Math_Constrain(&Rx_Angle_Yaw,-180.0f,180.0f);
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
 }
@@ -87,7 +91,8 @@ void Class_MiniPC::Output()
 	Pack_Tx.target_id    = 0x08;
 	Pack_Tx.roll         = Tx_Angle_Roll;
 	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
-	Pack_Tx.yaw          = Tx_Angle_Yaw;
+	// Pack_Tx.yaw          = Tx_Angle_Yaw;
+  Pack_Tx.yaw          = Tx_Angle_Encoder_Yaw;
   Pack_Tx.radar_enable_control = 1; //雷达使能标志位 0 关闭雷达 1 打开雷达
 	Pack_Tx.crc16        = 0xffff;
   Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
@@ -99,12 +104,14 @@ void Class_MiniPC::Output()
  * @brief 迷你主机发送数据输出到串口发送缓冲区
  *
  */
+float FPS;
 void Class_MiniPC::Data_Process_UART(uint8_t *Rx_Data)
 {
   if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
   {
     if(UART_Manage_Object->Rx_Buffer[0] == 0xA5)
     {
+      FPS = FPS_Counter_Update();
       uint8_t *data_temp = new uint8_t[MiniPC_Rx_Data_Length];
       for(auto i = 0; i < MiniPC_Rx_Data_Length; i++)
       {
@@ -123,8 +130,8 @@ void Class_MiniPC::Data_Process_UART(uint8_t *Rx_Data)
 }
 void Class_MiniPC::Output_UART()
 {
-  if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
-  {
+  // if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
+  // {
     Pack_Tx.header = Frame_Header;
 
     // 根据referee判断红蓝方
@@ -142,8 +149,9 @@ void Class_MiniPC::Output_UART()
     Pack_Tx.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
     memcpy(UART_Manage_Object->Tx_Buffer, &Pack_Tx, sizeof(Pack_Tx));
     Append_CRC16_Check_Sum(UART_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
-    UART_Send_Data(UART_Manage_Object->UART_Handler, USB_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
-  }
+    UART_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
+    // UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
+  // }
 }
 /**
  * @brief tim定时器中断增加数据到发送缓冲区
@@ -369,7 +377,7 @@ float calculate_sphere_drag_force(float velocity,float diameter)
 //迭代重力-空气阻力补偿
 float Class_MiniPC::calc_pitch_compensated(float x, float y, float z) 
 {
-    const float diameter = 0.05f;
+    const float diameter = 0.042f;
     float k = calculate_sphere_drag_force(bullet_v,diameter);    // 空气阻力系数
     float epsilon = 0.01f;          // 收敛阈值
 

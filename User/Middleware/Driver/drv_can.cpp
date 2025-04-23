@@ -139,7 +139,7 @@ void can_filter_mask_config(CAN_HandleTypeDef *hcan, uint8_t Object_Para, uint32
         //标准帧验证码 高16bit不启用
         can_filter_init_structure.FilterIdHigh = 0x0000 ; 
         //验证码 低16bit
-			  can_filter_init_structure.FilterIdLow =ID << 5 | (Object_Para & 0x02) << 4;  
+		can_filter_init_structure.FilterIdLow =ID << 5 | (Object_Para & 0x02) << 4;  
         //标准帧屏蔽码 高16bit不启用
         can_filter_init_structure.FilterMaskIdHigh =  0x0000 ;
         //屏蔽码 低16bit

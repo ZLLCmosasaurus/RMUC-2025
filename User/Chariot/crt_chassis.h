@@ -41,7 +41,11 @@ enum Enum_Sprint_Status : uint8_t
     Sprint_Status_DISABLE = 0, 
     Sprint_Status_ENABLE,
 };
-
+enum Enum_Yaw_Encoder_Control_Status : uint8_t
+{
+    Yaw_Encoder_Control_Status_Disable = 0,
+    Yaw_Encoder_Control_Status_Enable,
+};
 /**
  * @brief 底盘逻辑方向枚举
  * 

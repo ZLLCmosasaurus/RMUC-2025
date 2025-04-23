@@ -246,7 +246,7 @@ void Class_Gimbal::Init()
     // Motor_Yaw.PID_Angle.Init(80.0f, 0.016f, 0.04f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
     // Motor_Yaw.PID_Omega.Init(150.0f, 0.15f, 0.0075f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //较好的随动参数
-    Motor_Yaw.PID_Angle.Init(55.0f, 0.016f, 0.3f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    Motor_Yaw.PID_Angle.Init(70.0f, 0.016f, 1.5f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Yaw.PID_Omega.Init(80.0f, 0.15f, 0.01f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //编码器PID初始化
     Motor_Yaw.PID_Yaw_Encoder_Angle.Init(80.0f, 0.1f, 0.3f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f,0.005f);
@@ -291,10 +291,17 @@ void Class_Gimbal::Output()
             Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
             Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
         }
-        else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_MiniPC_Status()!=MiniPC_Status_DISABLE))
+        else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_Radar_Enable_Status()) == 1)
         {   
             Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
-            Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
+            if(MiniPC->Get_Radar_Enable_Control() == 1)
+            {
+                Target_Yaw_Encoder_Angle = MiniPC->Get_Rx_Yaw_Angle();
+            }
+            else
+            {
+                Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
+            }
         }
         //pitch yaw轴控制方式
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
