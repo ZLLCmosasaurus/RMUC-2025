@@ -23,52 +23,11 @@
 
 /* Function prototypes -------------------------------------------------------*/
 
-
-void Class_Booster::can_shoot(int shoot_count)
-{
-    shoot_count += 1;//预留一发余地
-    // current_heat=Referee->Get_Booster_17mm_1_Heat();//当前热量
-    max_heat_capacity =Referee->Get_Booster_17mm_1_Heat_Max();//最大热量
-    remain_heat = max_heat_capacity - current_heat;//剩余热量
-
-    if (remain_heat<=heat_per_bullet*shoot_count)//剩余热量小于单发子弹热量*发射数量
-    {
-        shoot_permission=0;//不允许发射
-    }
-    else 
-    {
-        shoot_permission=1;
-    }
-}
-void Class_Booster::if_shoot_complete()
-{
-    static uint8_t flag__;
-    flag__++;
-    if(Shoot_Count>=tmp_shoot_count_target)//发射数量大于目标数量
-    {
-        Shoot_Count=0;//发射数量清零
-        tmp_shoot_count_target=0;//目标发射数量清零
-        booster_shoot_flag=0;//发射状态置为空闲
-        flag__==0;
-    }
-    else if(Shoot_Count<tmp_shoot_count_target)//发射数量小于目标数量
-    {
-        booster_shoot_flag=1;//发射状态置为发射
-        flag__++;
-        if(flag__>=1000)
-        {
-            Shoot_Count=0;//发射数量清零
-            tmp_shoot_count_target=0;//目标发射数量清零
-            flag__=0;
-        }
-    }
-}
 /**
  * @brief 定时器处理函数
  * 这是一个模板, 使用时请根据不同处理情况在不同文件内重新定义
  *
  */
-
 void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
 {
     Status[Now_Status_Serial].Time++;
@@ -95,12 +54,8 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
     case (1):
     {
         // 发射嫌疑状态
-        if (abs(Booster->Motor_Friction_Right.Get_Now_Torque()) <= Booster->Friction_Torque_Threshold)
-        {
-            // 大扭矩->检测状态
-            Set_Status(0);
-        }
-        if (Status[Now_Status_Serial].Time >= 10)
+
+        if (Status[Now_Status_Serial].Time >= 15)
         {
             // 长时间大扭矩->确认是发射了
             Set_Status(2);
@@ -113,7 +68,6 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
 
         Heat += 10.0f;
         Set_Status(0);
-        Booster->Shoot_Count++;//发射数量加一
     }
     break;
     case (3):
@@ -241,7 +195,7 @@ void Class_Booster::Init()
  */
 void Class_Booster::Output()
 {
-can_shoot(1);
+	
 	#ifdef BULLET_SPEED_PID
         if (Referee->Get_Referee_Status() == Referee_Status_ENABLE&&Referee->Get_Shoot_Speed()>15&&(Booster_Control_Type==Booster_Control_Type_SINGLE||Booster_Control_Type==Booster_Control_Type_MULTI))
         {
@@ -286,7 +240,6 @@ can_shoot(1);
         {
             Motor_Driver.Set_Target_Omega_Radian(0.0f);
         }
-    
     }
     break;
     case (Booster_Control_Type_SINGLE):
@@ -295,14 +248,9 @@ can_shoot(1);
         Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
         Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        
 
-            if (shoot_permission == 1 && booster_shoot_flag==0)
-            {
-                Drvier_Angle += 2.0f * PI / 9.0f;
-                Motor_Driver.Set_Target_Radian(Drvier_Angle);
-                tmp_shoot_count_target = 1;
-            }
+        Drvier_Angle += 2.0f * PI / 9.0f;
+        Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
         // 点一发立刻停火
         Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
@@ -310,49 +258,39 @@ can_shoot(1);
     break;
     case (Booster_Control_Type_MULTI):
     {
-        // 五连发模式
-        Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
-        Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-        if(booster_shoot_flag==0)
-        {
-        for(int i=1;i<6;i++)
-        {
-            can_shoot(i);
-            if (shoot_permission==0)
-            {
-                break;
-            }
-            else {
-            Drvier_Angle += 2.0f * PI / 9.0f;
-            tmp_shoot_count_target ++;
-            }
-        }
-
-        Motor_Driver.Set_Target_Radian(Drvier_Angle);
-        }
-        // 点五发立刻停火
-        Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
-    }
-    break;
-    case  (Booster_Control_Type_REPEATED): 
-    {
         // 连发模式
         Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
         Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
-if(shoot_permission==1)
-        {
-            Drvier_Angle += 2.0f * PI / 9.0f;
-        }
+        Drvier_Angle += 2.0f * PI / 9.0f * 5.0f; // 五连发  一圈的角度/一圈弹丸数*发出去的弹丸数
+        Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
-        
-        //Motor_Driver.Set_Target_Radian(Drvier_Angle);
-       Motor_Driver.Set_Target_Radian(Drvier_Angle);
-        // 点五发立刻停火
+        // 点一发立刻停火
         Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+    }
+    break;
+    case (Booster_Control_Type_REPEATED):
+    {
+        // 连发模式
+        Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+        Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
+        // 根据冷却计算拨弹盘默认速度, 此速度下与冷却均衡
+        // Default_Driver_Omega = Referee->Get_Booster_17mm_1_Heat_CD() / 10.0f / 8.0f * 2.0f * PI;
+
+        // 热量控制
+        if (abs(Driver_Omega) <= abs(Default_Driver_Omega))
+        {
+            Motor_Driver.Set_Target_Omega_Radian(Driver_Omega);
+        }
+        else
+        {
+            float tmp_omega;
+            // tmp_omega = (Default_Driver_Omega - Driver_Omega) / Referee->Get_Booster_17mm_1_Heat_Max() * (FSM_Heat_Detect.Heat + 30.0f) + Driver_Omega;
+            Motor_Driver.Set_Target_Omega_Radian(tmp_omega);
+        }
     }
     break;
     }
@@ -378,18 +316,13 @@ if(shoot_permission==1)
 void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
 {
 
-    // 无需裁判系统的热量控制计算(实际没有使用热量部分，现在只用这个函数来判断发射)
-     FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
-    if_shoot_complete();
-    // 需要裁判系统的热量控制计算已经内置于发射函数里
-    // 若无主控则无法限制发射（不过主控都没了也没热量限制的要求吧）
-
-
+    // 无需裁判系统的热量控制计算
+    FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
     // 卡弹处理
     FSM_Antijamming.Reload_TIM_Status_PeriodElapsedCallback();
-    
+
     Output();
-   
+
     Motor_Driver.TIM_PID_PeriodElapsedCallback();
     Motor_Friction_Left.TIM_PID_PeriodElapsedCallback();
     Motor_Friction_Right.TIM_PID_PeriodElapsedCallback();
