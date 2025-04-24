@@ -17,7 +17,7 @@
 #include "drv_uart.h"
 #include "limits.h"
 #include "string.h"
-#include "config.h""
+#include "config.h"
 /* Exported macros -----------------------------------------------------------*/
 
 class Class_Chariot;
@@ -1206,7 +1206,8 @@ public:
 		
     #ifdef GIMBAL
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
-    inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
+    inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);
+    inline void Set_Booster_17mm_1_Heat(uint16_t __Booster_17mm_1_Heat);
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
     inline void Set_Booster_Speed(float __booster_speed);
@@ -2226,15 +2227,11 @@ void Class_Referee::Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage)
 #endif
 
 
-/**
- * @brief 设置17mm枪管冷却cd
- *
- * @param __Booster_17mm_1_Heat_CD 枪管冷却cd
- */
+
 #ifdef GIMBAL
-void Class_Referee::Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD)
+void Class_Referee::Set_Booster_17mm_1_Heat(uint16_t __Booster_17mm_1_Heat)
 {
-    this->Robot_Status.Shooter_Barrel_Cooling_Value = __Booster_17mm_1_Heat_CD;
+    this->Robot_Power_Heat.Booster_17mm_1_Heat = __Booster_17mm_1_Heat;
 }
 #endif
 

@@ -172,7 +172,7 @@ void Class_Booster::Init()
     FSM_Antijamming.Init(4, 0);
 
     // 拨弹盘电机
-    Motor_Driver.PID_Angle.Init(40.0f, 0.1f, 0.0f, 0.0f, 20.0f * PI, 20.0f * PI);
+    Motor_Driver.PID_Angle.Init(40.0f, 0.1f, 0.0f, 0.0f, Default_Driver_Omega, Default_Driver_Omega);
     Motor_Driver.PID_Omega.Init(6000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
     Motor_Driver.Init(&hcan2, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 90);
 
@@ -184,9 +184,9 @@ void Class_Booster::Init()
     Motor_Friction_Right.PID_Omega.Init(150.0f, 4.0f, 0.2f, 0.0f, 2000.0f, Motor_Friction_Right.Get_Output_Max());
     Motor_Friction_Right.Init(&hcan1, DJI_Motor_ID_0x201, DJI_Motor_Control_Method_OMEGA, 1.0f);
 
-    #ifdef BULLET_SPEED_PID
-    Bullet_Speed.Init(3.0,0,0,0,10,200,0,0,0,0.001,0.3);
-    #endif
+#ifdef BULLET_SPEED_PID
+    Bullet_Speed.Init(3.0, 0, 0, 0, 10, 200, 0, 0, 0, 0.001, 0.3);
+#endif
 }
 
 /**
@@ -195,17 +195,17 @@ void Class_Booster::Init()
  */
 void Class_Booster::Output()
 {
-	
-	#ifdef BULLET_SPEED_PID
-        if (Referee->Get_Referee_Status() == Referee_Status_ENABLE&&Referee->Get_Shoot_Speed()>15&&(Booster_Control_Type==Booster_Control_Type_SINGLE||Booster_Control_Type==Booster_Control_Type_MULTI))
-        {
-            Bullet_Speed.Set_Now(Referee->Get_Shoot_Speed());
-            Bullet_Speed.Set_Target(Target_Bullet_Speed);
-            Bullet_Speed.TIM_Adjust_PeriodElapsedCallback();
-            Friction_Omega += Bullet_Speed.Get_Out();
-        }
+
+#ifdef BULLET_SPEED_PID
+    if (Referee->Get_Referee_Status() == Referee_Status_ENABLE && Referee->Get_Shoot_Speed() > 15 && (Booster_Control_Type == Booster_Control_Type_SINGLE || Booster_Control_Type == Booster_Control_Type_MULTI))
+    {
+        Bullet_Speed.Set_Now(Referee->Get_Shoot_Speed());
+        Bullet_Speed.Set_Target(Target_Bullet_Speed);
+        Bullet_Speed.TIM_Adjust_PeriodElapsedCallback();
+        Friction_Omega += Bullet_Speed.Get_Out();
+    }
 #endif
-	
+
     // 控制拨弹轮
     switch (Booster_Control_Type)
     {
@@ -249,8 +249,12 @@ void Class_Booster::Output()
         Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
-        Drvier_Angle += 2.0f * PI / 9.0f;
-        Motor_Driver.Set_Target_Radian(Drvier_Angle);
+        if (Referee->Get_Booster_17mm_1_Heat() + 30 < Referee->Get_Booster_17mm_1_Heat_Max())
+        {
+
+            Drvier_Angle += 2.0f * PI / 9.0f;
+            Motor_Driver.Set_Target_Radian(Drvier_Angle);
+        }
 
         // 点一发立刻停火
         Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
@@ -277,21 +281,15 @@ void Class_Booster::Output()
         Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
-        // 根据冷却计算拨弹盘默认速度, 此速度下与冷却均衡
-        // Default_Driver_Omega = Referee->Get_Booster_17mm_1_Heat_CD() / 10.0f / 8.0f * 2.0f * PI;
-
-        // 热量控制
-        if (abs(Driver_Omega) <= abs(Default_Driver_Omega))
+        if (Referee->Get_Booster_17mm_1_Heat() + 30 < Referee->Get_Booster_17mm_1_Heat_Max())
         {
-            Motor_Driver.Set_Target_Omega_Radian(Driver_Omega);
+            Motor_Driver.Set_Target_Omega_Radian(Default_Driver_Omega);
         }
         else
         {
-            float tmp_omega;
-            // tmp_omega = (Default_Driver_Omega - Driver_Omega) / Referee->Get_Booster_17mm_1_Heat_Max() * (FSM_Heat_Detect.Heat + 30.0f) + Driver_Omega;
-            Motor_Driver.Set_Target_Omega_Radian(tmp_omega);
+            Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
         }
-    }
+        }
     break;
     }
 

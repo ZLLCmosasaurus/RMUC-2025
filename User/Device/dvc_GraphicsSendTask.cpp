@@ -373,27 +373,25 @@ void CarPosture_Change(short Yaw_100, uint8_t Init_Cnt)
 
 	Send_UIPack(Drawing_Graphic2_ID, JudgeReceiveData.robot_id, JudgeReceiveData.robot_id + 0x100, data_pack, DRAWING_PACK * 2); // ��7��ͼ��
 }
-void FrictSpeed_Draw(uint16_t omega_left, uint16_t omega_right,uint8_t Init_Cnt) {
-    static uint8_t FricSpeedValueName_left[] = "fsl"; // 数值的独立名称
+void FrictSpeed_Draw(uint16_t omega_left, uint16_t omega_right, uint8_t Init_Cnt)
+{
+	static uint8_t FricSpeedValueName_left[] = "fsl";  // 数值的独立名称
 	static uint8_t FricSpeedValueName_right[] = "fsr"; // 数值的独立名称
-    uint8_t optype = (Init_Cnt == 0) ? Op_Change : Op_Add;
+	uint8_t optype = (Init_Cnt == 0) ? Op_Change : Op_Add;
 
-    // 将整数转换为字符串
-    uint8_t speed_str_left[8];
-    snprintf((char *)speed_str_left, sizeof(speed_str_left), "%d", omega_left);
+	// 将整数转换为字符串
+	uint8_t speed_str_left[8];
+	snprintf((char *)speed_str_left, sizeof(speed_str_left), "%d", omega_left);
 	uint8_t speed_str_right[8];
-    snprintf((char *)speed_str_right, sizeof(speed_str_right), "%d", omega_right);
+	snprintf((char *)speed_str_right, sizeof(speed_str_right), "%d", omega_right);
 
+	// 动态更新数值
+	Char_Draw(0, optype,
+			  0.9 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, // 数值位置 (X, Y)
+			  20, strlen((char *)speed_str_left), 2,
+			  Green, FricSpeedValueName_left, speed_str_left);
 
-
-    // 动态更新数值
-    Char_Draw(0, optype, 
-		0.9 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, // 数值位置 (X, Y)
-              20, strlen((char *)speed_str_left), 2, 
-              Green, FricSpeedValueName_left, speed_str_left);
-	
- Char_Draw(0, optype, 0.933 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, 20, strlen((char *)speed_str_right), 2, Green, FricSpeedValueName_right, speed_str_right);
-		
+	Char_Draw(0, optype, 0.933 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, 20, strlen((char *)speed_str_right), 2, Green, FricSpeedValueName_right, speed_str_right);
 }
 /*�������ݵ�������*/
 void CapDraw(float CapVolt, uint8_t Init_Flag)
@@ -416,7 +414,7 @@ void CapDraw(float CapVolt, uint8_t Init_Flag)
 	else
 	{
 
-		Length = CapVolt  * (0.3 * SCREEN_LENGTH);
+		Length = CapVolt * (0.3 * SCREEN_LENGTH);
 		P_graphic_data = Line_Draw(0, Op_Change, 0.35 * SCREEN_LENGTH, 0.125 * SCREEN_WIDTH, 0.35 * SCREEN_LENGTH + Length, 0.125 * SCREEN_WIDTH, 27, Green, CapName2);
 		memcpy(data_pack, (uint8_t *)P_graphic_data, DRAWING_PACK);
 		Send_UIPack(Drawing_Graphic1_ID, JudgeReceiveData.robot_id, JudgeReceiveData.robot_id + 0x100, data_pack, DRAWING_PACK);
@@ -466,7 +464,7 @@ void CharChange(uint8_t Init_Flag)
 	// }
 
 	/*冲刺状态*/
-	
+
 	/*摩擦轮状态改变*/
 	static uint8_t FrictionChangeName[] = "mcl";
 	if (Init_Flag)
@@ -568,10 +566,10 @@ void Char_Init(void)
 
 	/*              CAP�ַ�*/
 	uint8_t cap_char[] = "CAP :  V";
-	Char_Draw(0, Op_Add, 0.40 * SCREEN_LENGTH, 0.1 * SCREEN_WIDTH, 30, sizeof(cap_char), 2, Yellow, CapStaticName, cap_char);\
+	Char_Draw(0, Op_Add, 0.40 * SCREEN_LENGTH, 0.1 * SCREEN_WIDTH, 30, sizeof(cap_char), 2, Yellow, CapStaticName, cap_char);
 
 	uint8_t fric_speed_label[] = "OMEGA :";
-    Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, 20, sizeof(fric_speed_label), 2, Yellow, FricSpeedName, fric_speed_label);
+	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, 20, sizeof(fric_speed_label), 2, Yellow, FricSpeedName, fric_speed_label);
 }
 
 void MiniPC_Aim_Change(uint8_t Init_Cnt)
@@ -652,7 +650,7 @@ void GraphicSendtask(void)
 	CapDraw(JudgeReceiveData.Supercap_Voltage, Init_Cnt);
 
 	MiniPC_Aim_Change(Init_Cnt);
-	FrictSpeed_Draw(JudgeReceiveData.booster_fric_omega_left,JudgeReceiveData.booster_fric_omega_right, Init_Cnt);	
+	FrictSpeed_Draw(JudgeReceiveData.booster_fric_omega_left, JudgeReceiveData.booster_fric_omega_right, Init_Cnt);
 	CapUI_Change(JudgeReceiveData.Supercap_Voltage, Init_Cnt);
 
 	if (Init_Cnt > 0)

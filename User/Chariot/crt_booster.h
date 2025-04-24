@@ -101,7 +101,7 @@ public:
 
     // 裁判系统
     Class_Referee *Referee;
-	
+
     // 拨弹盘电机
     Class_DJI_Motor_C610 Motor_Driver;
 
@@ -146,8 +146,8 @@ protected:
 
     // 读变量
 
-    // 拨弹盘默认速度, 一圈八发子弹, 此速度下与冷却均衡
-    float Default_Driver_Omega = 2.0f * PI;
+    // 拨弹盘默认速度
+    float Default_Driver_Omega = 2.0f * PI / 9.0f * 20;
 
     // 写变量
 
@@ -156,8 +156,8 @@ protected:
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     // 摩擦轮角速度
     float Friction_Omega = 700.0f;
-    float Target_Bullet_Speed=23.5f;
-    // 拨弹盘实际的目标速度, 一圈八发子弹
+    float Target_Bullet_Speed = 23.5f;
+    // 拨弹盘实际的目标速度
     float Driver_Omega = 2.0f * PI;
     // 拨弹轮目标绝对角度 加圈数
     float Drvier_Angle = 0.0f;
