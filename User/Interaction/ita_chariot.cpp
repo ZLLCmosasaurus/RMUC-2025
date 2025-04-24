@@ -137,9 +137,10 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
     
     //底盘控制方案
-    if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
+    if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
+        Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
     {
-        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * Chassis.Get_Omega_Max(),Chassis.Get_Omega_Max());
+        chassis_omega = Math_Int_To_Float(tmp_omega,-0xFF,0xFF,-1 * Chassis.Get_Omega_Max(),Chassis.Get_Omega_Max());
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
@@ -846,7 +847,7 @@ void Class_Chariot::Control_Booster()
         }
 
         // 正常模式
-        else if ((VT13.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED) &&
+        else if ((VT13.Get_Mouse_Left_Key() == VT13_Key_Status_TRIG_FREE_PRESSED) &&
                  (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold()) /*&&
                  (Booster.Motor_Driver.Get_Now_Radian() - Booster.Motor_Driver.Get_Target_Radian() < 0.1f)*/
         )
