@@ -95,7 +95,7 @@ void Send_toReferee(uint16_t cmd_id, uint16_t data_len)
 		Transmit_Pack[0] = 0xA5;
 		memcpy(&Transmit_Pack[1], (uint8_t *)&data_len, sizeof(data_len)); // ���ݶ���data�ĳ���
 		Transmit_Pack[3] = seq++;
-		Append_CRC8_Check_Sum(Transmit_Pack, HEADER_LEN); // ֡ͷУ��CRC8
+//		Append_CRC8_Check_Sum(Transmit_Pack, HEADER_LEN); // ֡ͷУ��CRC8
 	}
 
 	// ����ID

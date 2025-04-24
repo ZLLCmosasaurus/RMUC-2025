@@ -892,19 +892,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Config</GroupName>
-          <Files>
-            <File>
-              <FileName>config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\User\Congfig\config.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
           <GroupName>Middlewares/Library/DSP Library/DSP Library</GroupName>
           <GroupOption>
             <CommonProperty>
@@ -1008,14 +995,7 @@
 
   <RTE>
     <apis/>
-    <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="6.1.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.7.36" url="https://www.keil.com/pack/" vendor="ARM" version="6.1.0"/>
-        <targetInfos>
-          <targetInfo name="infantry"/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files/>
   </RTE>
 

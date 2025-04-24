@@ -34,7 +34,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     #ifdef CHASSIS
     
         //裁判系统
-        Referee.Init(&huart6);
+        
 
         //底盘
         Chassis.Referee = &Referee;
@@ -48,7 +48,9 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
     #elif defined(GIMBAL)
         
-        Chassis.Set_Velocity_X_Max(4.0f);
+				Referee.Init(&huart6);
+
+				Chassis.Set_Velocity_X_Max(4.0f);
         Chassis.Set_Velocity_Y_Max(4.0f);
 
         //遥控器离线控制 状态机
