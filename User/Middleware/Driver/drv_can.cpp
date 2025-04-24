@@ -243,8 +243,12 @@ void TIM_CAN_PeriodElapsedCallback()
     if(mod%5==0)
     {
         CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); // 给底盘发送控制命令 按照0x77 ID 发送
+        CAN_Send_Data(&hcan2, 0x78, CAN2_Gimbal_Tx_Chassis_Data_1, 8);
     }
-
+    if(mod==10)
+    {
+        mod=0;
+    }
 
 #endif
 }
