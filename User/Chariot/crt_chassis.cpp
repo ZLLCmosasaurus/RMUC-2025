@@ -89,7 +89,8 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             }            
         }
         break;
-		case (Chassis_Control_Type_SPIN) :
+		case (Chassis_Control_Type_SPIN_Positive) :
+        case (Chassis_Control_Type_SPIN_NePositive) :
         case (Chassis_Control_Type_FLLOW):
         {
             //底盘四电机模式配置

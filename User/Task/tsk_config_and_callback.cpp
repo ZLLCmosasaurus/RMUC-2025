@@ -290,8 +290,15 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 
     //底盘 云台 发射机构 的控制策略
     chariot.TIM_Control_Callback();
-		
-	
+}
+
+
+void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
+
+    //底盘 云台 发射机构 的控制策略
+    chariot.TIM_Control_Callback();
 }
 #endif
 
@@ -382,7 +389,15 @@ void Task1ms_TIM5_Callback()
     if(start_flag==1)
     {
         #ifdef GIMBAL
+        #ifdef USE_DR16
+
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+
+        #elif defined(USE_VT13)
+
+        chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
+
+        #endif
         #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
@@ -441,8 +456,12 @@ extern "C" void Task_Init()
         IIC_Init(&hi2c3, Ist8310_IIC3_Callback);    
         
         //遥控器接收
+        #ifdef USE_DR16
         UART_Init(&huart3, DR16_UART3_Callback, 18);
 		UART_Init(&huart6, Image_UART6_Callback, 40);
+        #elif defined(USE_VT13)
+        UART_Init(&huart6, VT13_UART_Callback, 30);
+        #endif
 
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);

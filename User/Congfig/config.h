@@ -16,8 +16,8 @@
 
 /* Exported macros -----------------------------------------------------------*/
 
-#define CHASSIS
-//#define GIMBAL
+//#define CHASSIS
+#define GIMBAL
 
 
 #ifdef CHASSIS 	
@@ -30,6 +30,14 @@
     #endif
 
     //#define SPEED_SLOPE
+
+#endif
+
+#ifdef GIMBAL
+
+    #define USE_VT13
+
+    //#define USE_DR16
 
 #endif
 

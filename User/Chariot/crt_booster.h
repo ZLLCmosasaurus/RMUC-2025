@@ -42,6 +42,13 @@ enum Enum_Booster_Control_Type
     Booster_Control_Type_MULTI,  //连发
 };
 
+enum Enum_Booster_User_Control_Type
+{
+    Booster_User_Control_Type_DISABLE = 0,
+    Booster_User_Control_Type_SINGLE,
+    Booster_User_Control_Type_MULTI, // 连发
+};
+
 /**
  * @brief 摩擦轮控制类型
  *
@@ -121,6 +128,8 @@ public:
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
+
+    Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
 		
 protected:
     //初始化相关常量

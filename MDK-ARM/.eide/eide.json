@@ -258,6 +258,9 @@
           },
           {
             "path": "../User/Device/GraphicsSendTask.cpp"
+          },
+          {
+            "path": "../User/Device/dvc_VT13.cpp"
           }
         ],
         "folders": []
