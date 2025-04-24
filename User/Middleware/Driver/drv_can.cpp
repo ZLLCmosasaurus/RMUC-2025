@@ -86,6 +86,7 @@ uint8_t CAN2_0xx08_Tx_Data[8];
 uint8_t CAN_Supercap_Tx_Data[8];
 
 uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
+uint8_t CAN2_Gimbal_Tx_Chassis_Data_Extern[8];  //云台给底盘发送缓冲区
 uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
@@ -258,6 +259,7 @@ void TIM_CAN_PeriodElapsedCallback()
 		if(cnt>=2000)
 			cnt = 0;
 		//if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 0)
+		//	if(cnt%10 == 0)
 		can_tx_status[0]=CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8, CAN_ID_STD);	
 		can_tx_status[1]=CAN_Send_Data(&hcan2, 0x200,  CAN2_0x200_Tx_Data, 8,CAN_ID_STD);
 	//	can_tx_status[3]=CAN_Send_Data(&hcan2, 0x1ff,  CAN2_0x1ff_Tx_Data, 8,CAN_ID_STD);
@@ -266,8 +268,21 @@ void TIM_CAN_PeriodElapsedCallback()
 			can_tx_status[2]=CAN_Send_Data(&hcan2, 0x088, CAN2_Gimbal_Tx_Chassis_Data, 8, CAN_ID_STD);
 #endif
 #ifdef CHASSIS_TASK
-		  can_tx_status[0]=CAN_Send_Data(&hcan1,0x200,CAN1_0x200_Tx_Data,8,CAN_ID_STD);
-			can_tx_status[1]=CAN_Send_Data(&hcan1,0x1ff,CAN1_0x1ff_Tx_Data,8,CAN_ID_STD);
+			static uint16_t cnt = 0;
+			cnt++;
+		if(cnt>=2000)
+			cnt = 0;
+		if(cnt%10==0)
+		{
+
+		can_tx_status[1]=CAN_Send_Data(&hcan1,0x1ff,CAN1_0x1ff_Tx_Data,8,CAN_ID_STD);
+		}
+		if(cnt%8==0)
+		{
+					can_tx_status[0]=CAN_Send_Data(&hcan1,0x200,CAN1_0x200_Tx_Data,8,CAN_ID_STD);
+			
+		}
+      // can_tx_status[2]=CAN_Send_Data(&hcan2,0x1ff,CAN2_0x1ff_Tx_Data,8,CAN_ID_STD);
 #endif
 }
 

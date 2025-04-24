@@ -1219,7 +1219,7 @@ public:
     template <typename T>
     void Referee_UI_Packed_Data(T* __data);
 
-    void UART_Tx_Referee_UI();
+    void UART_Tx_Referee_UI(uint8_t __String_Index);
 
     void UART_RxCpltCallback(uint8_t *Rx_Data, uint16_t Size);
     void TIM1msMod50_Alive_PeriodElapsedCallback();

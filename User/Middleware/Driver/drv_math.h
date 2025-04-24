@@ -55,7 +55,7 @@ float Math_Sinc(float x);
 
 int32_t Math_Float_To_Int(float x, float Float_Min, float Float_Max, int32_t Int_Min, int32_t Int_Max);
 float Math_Int_To_Float(int32_t x, int32_t Int_Min, int32_t Int_Max, float Float_Min, float Float_Max);
-float Math_Limit_func(float*input,float min,float max);
+
 /**
  * @brief 限幅函数
  *
@@ -65,15 +65,15 @@ float Math_Limit_func(float*input,float min,float max);
  * @param Max 最大值
  */
 template <typename Type>
-void Math_Constrain(Type& x, Type Min, Type Max)
+void Math_Constrain(Type *x, Type Min, Type Max)
 {
-    if (x < Min)
+    if (*x < Min)
     {
-        x = Min;
+        *x = Min;
     }
-    else if (x > Max)
+    else if (*x > Max)
     {
-        x = Max;
+        *x = Max;
     }
 }
 

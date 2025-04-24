@@ -43,22 +43,26 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
  * @brief 数据处理过程
  *
  */
+uint8_t flag;
 void Class_MiniPC::Data_Process()
 {
+		
     if(!Verify_CRC16_Check_Sum(USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length)) return;
 
     memcpy(&Pack_Rx,(Pack_rx_t*)USB_Manage_Object->Rx_Buffer,USB_Manage_Object->Rx_Buffer_Length);
 
     Set_MiniPc_Status(Pack_Rx.status);
     
-    Math_Constrain(Pack_Rx.Joint_Uplift_Angle,0.0f,0.0f);
-    Math_Constrain(Pack_Rx.Jonit_1_Angle,0.0f,180.0f);
-    Math_Constrain(Pack_Rx.Jonit_2_Angle,0.0f,180.0f);
-    Math_Constrain(Pack_Rx.Jonit_3_Angle,0.0f,180.0f);
-    Math_Constrain(Pack_Rx.Jonit_4_Angle,0.0f,180.0f);
-    Math_Constrain(Pack_Rx.Jonit_5_Angle,0.0f,180.0f);
-
+//			Math_Constrain(&Pack_Rx.Joint_Uplift_Angle,0.0f,35.0f);
+//    Math_Constrain(Pack_Rx.Jonit_1_Angle,0.0f,180.0f);
+//    Math_Constrain(Pack_Rx.Jonit_2_Angle,0.0f,180.0f);
+//    Math_Constrain(Pack_Rx.Jonit_3_Angle,0.0f,180.0f);
+//    Math_Constrain(Pack_Rx.Jonit_4_Angle,0.0f,180.0f);
+//    Math_Constrain(Pack_Rx.Jonit_5_Angle,0.0f,180.0f);
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
+	
+	
+	
 }
 
 /**
@@ -85,7 +89,26 @@ void Class_MiniPC::Output()
 	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx));
   USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
 }
+/**
+ * @brief 迷你主机发送数据输出到usb发送缓冲区
+ *
+ */
+void Class_MiniPC::Output_en(float *angle,float uplift_high,Enum_Exchange_Status exchange_status)
+{
+	Pack_Tx_en.header= 0X5A;
+	Pack_Tx_en.status=exchange_status;
+	Pack_Tx_en.Joint_Uplift_Angle   = uplift_high;
+	Pack_Tx_en.Jonit_1_Angle        = angle[1];
+	Pack_Tx_en.Jonit_2_Angle        = angle[2];
+	Pack_Tx_en.Jonit_3_Angle        = angle[3];
+	Pack_Tx_en.Jonit_4_Angle        = angle[3];
+	Pack_Tx_en.Jonit_5_Angle        = angle[3]; 
+	Pack_Tx_en.crc16        = 0xffff;
+	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx_en,sizeof(Pack_Tx_en));
+	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx_en));
+  USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx_en);
 
+}
 /**
  * @brief tim定时器中断增加数据到发送缓冲区
  *

@@ -118,7 +118,29 @@ struct Struct_Image_UART_Data
     uint16_t Keyboard_Key; 
     uint16_t reserved;
 } __attribute__((packed)); 
-
+struct Struct_Image_UART_Data_VT03
+{
+    uint8_t sof_1;
+    uint8_t sof_2;
+    uint64_t Channel_0:11;
+    uint64_t Channel_1:11;
+    uint64_t Channel_2:11;
+    uint64_t Channel_3:11;
+    uint64_t mode_sw:2;
+    uint64_t pause:1;
+    uint64_t fn_1:1;
+    uint64_t fn_2:1;
+    uint64_t wheel:11;
+    uint64_t trigger:1;
+    int16_t Mouse_X;
+    int16_t Mouse_Y;
+    int16_t Mouse_Z;
+    uint8_t Mouse_Left_Key:2;
+    uint8_t Mouse_Right_Key:2;
+    uint8_t mouse_middle:2;
+    uint16_t Keyboard_Key;
+    uint16_t crc16;
+} __attribute__((packed)); 
 /**
  * @brief 图传自定义控制器源数据
  *
@@ -210,6 +232,8 @@ public:
     void Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2);
 
     inline Enum_DR16_Status Get_DR16_Status();
+    inline Enum_Image_Status Get_Image_Status();
+    inline Enum_Image_Status Get_Image_Key_Status();
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
     inline float Get_Right_X();
     inline float Get_Right_Y();
@@ -240,7 +264,7 @@ public:
     inline Enum_DR16_Key_Status Get_Keyboard_Key_C();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_V();
     inline Enum_DR16_Key_Status Get_Keyboard_Key_B();
-    inline Enum_Image_Status Get_Image_Status();
+
     inline float Get_Yaw();
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -250,6 +274,7 @@ public:
 Struct_Customize_Controller_Data Customize_Controller_Data;
 
     uint16_t  i;
+		uint8_t Control_Key;
 protected:
     //初始化相关常量
 
@@ -270,9 +295,10 @@ protected:
     //前一时刻的遥控器状态信息
     Struct_DR16_UART_Data Pre_UART_Rx_Data;
 
-    Struct_Image_UART_Data Now_UART_Image_Rx_Data;
-    Struct_Image_UART_Data Pre_UART_Image_Rx_Data;
-
+//    Struct_Image_UART_Data Now_UART_Image_Rx_Data;
+//    Struct_Image_UART_Data Pre_UART_Image_Rx_Data;
+		Struct_Image_UART_Data_VT03 Now_UART_Image_Rx_Data;
+		Struct_Image_UART_Data_VT03 Pre_UART_Image_Rx_Data;
     Struct_Image_UART_Data_Customer_controller Now_UART_Image_Rx_Data_Customer_controller;
     Struct_Image_UART_Data_Customer_controller Pre_UART_Image_Rx_Data_Customer_controller;
 		
@@ -283,11 +309,18 @@ protected:
     //前一时刻的遥控器接收flag
     uint32_t Pre_DR16_Flag = 0;
 
-    //当前时刻的遥控器接收flag
+    //当前时刻的自定义控制器接收flag
     uint32_t Image_Flag = 0;
 		
     //前一时刻的遥控器接收flag
     uint32_t Pre_Image_Flag = 0;
+		
+		//当前时刻的图传链路键鼠接收flag
+    uint32_t Image_Key_Flag = 0;
+		
+    //前一时刻的遥控器接收flag
+    uint32_t Pre_Image_Key_Flag = 0;
+		
 
     //当前时刻的遥控器接收flag
     uint32_t Image_Flag_Customer_controller = 0;
@@ -304,6 +337,8 @@ protected:
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
 		//图传链路自定义控制器状态
 		Enum_Image_Status Image_Status=Image_Status_ENABLE;
+			//图传链路自定义控制器状态
+		Enum_Image_Status Image_Key_Status=Image_Status_ENABLE;
     //遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
     // DR16对外接口信息
@@ -313,6 +348,7 @@ protected:
 
     //读写变量
     float Angle_Image[5];
+	
     int16_t total_round[5];
     //内部函数
 
@@ -340,6 +376,15 @@ Enum_DR16_Status Class_DR16::Get_DR16_Status()
 }
 /**
  * @brief 获取自定义控制器在线状态
+ *
+ * @return Enum_DR16_Status 自定义控制器在线状态
+ */
+Enum_Image_Status Class_DR16::Get_Image_Key_Status()
+{
+return (Image_Key_Status);
+}
+/**
+ * @brief 获图传链路键鼠在线状态
  *
  * @return Enum_DR16_Status 自定义控制器在线状态
  */
