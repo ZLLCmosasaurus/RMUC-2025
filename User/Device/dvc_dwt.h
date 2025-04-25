@@ -15,5 +15,6 @@ void DWT_SysTimeUpdate(void);
 float FPS_Counter_Update();
 extern DWT_Time_t SysTime;
 extern uint32_t CPU_FREQ_Hz, CPU_FREQ_Hz_ms, CPU_FREQ_Hz_us;
-extern uint32_t CYCCNT_RountCount,CYCCNT_LAST,CYCCNT64;
+extern uint32_t CYCCNT_RountCount,CYCCNT_LAST;
+extern uint64_t CYCCNT64;
 #endif

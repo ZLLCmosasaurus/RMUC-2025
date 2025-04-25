@@ -110,9 +110,9 @@ enum Enum_DR16_Switch_Status
 enum Enum_DR16_Key_Status
 {
     DR16_Key_Status_FREE = 0,           //松开状态
+    DR16_Key_Status_PRESSED,            //按下状态
     DR16_Key_Status_TRIG_FREE_PRESSED,  //松开到按下的突变状态
     DR16_Key_Status_TRIG_PRESSED_FREE,  //按下到松开的突变状态
-    DR16_Key_Status_PRESSED,            //按下状态
 };
 
 /**
@@ -121,13 +121,34 @@ enum Enum_DR16_Key_Status
  */
 struct Struct_Image_UART_Data
 { 
-    int16_t Mouse_X;
-    int16_t Mouse_Y;
-    int16_t Mouse_Z;
-    int8_t Mouse_Left_Key;
-    int8_t Mouse_Right_Key;
-    uint16_t Keyboard_Key; 
-    uint16_t reserved;
+    // int16_t Mouse_X;
+    // int16_t Mouse_Y;
+    // int16_t Mouse_Z;
+    // int8_t Mouse_Left_Key;
+    // int8_t Mouse_Right_Key;
+    // uint16_t Keyboard_Key; 
+    // uint16_t reserved;
+    uint8_t sof_1;                    //帧头1
+    uint8_t sof_2;                    //帧头2
+    uint64_t ch_0:11;                 //右X
+    uint64_t ch_1:11;                 //右Y
+    uint64_t ch_2:11;                 //左Y
+    uint64_t ch_3:11;                 //左X
+    uint64_t mode_sw:2;
+    uint64_t pause:1;
+    uint64_t fn_1:1;
+    uint64_t fn_2:1;
+    uint64_t wheel:11;
+    uint64_t trigger:1;
+
+    int16_t mouse_x;
+    int16_t mouse_y;
+    int16_t mouse_z;
+    uint8_t mouse_left:2;
+    uint8_t mouse_right:2;
+    uint8_t mouse_middle:2;
+    uint16_t key;
+    uint16_t crc16;
 } __attribute__((packed)); 
 
 /**

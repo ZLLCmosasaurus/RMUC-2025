@@ -81,6 +81,7 @@ void UART_Init(UART_HandleTypeDef *huart, UART_Call_Back Callback_Function, uint
         UART6_Manage_Object.UART_Handler = huart;
         UART6_Manage_Object.Callback_Function = Callback_Function;
         UART6_Manage_Object.Rx_Buffer_Length = Rx_Buffer_Length;
+        
         HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
         // __HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
         // memset(UART6_Manage_Object.Rx_Buffer, 0, sizeof(UART6_Manage_Object.Rx_Buffer));
@@ -116,6 +117,7 @@ void TIM_UART_PeriodElapsedCallback()
  * @param huart UART编号
  * @param Size 长度
  */
+HAL_StatusTypeDef return_status;
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {    
     //停止DMA接收 保护处理过程
@@ -158,8 +160,18 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
          UART6_Manage_Object.Rx_Length = Size;
         UART6_Manage_Object.Callback_Function(UART6_Manage_Object.Rx_Buffer, Size);
 		// memset(&UART6_Manage_Object.Rx_Buffer,0,UART6_Manage_Object.Rx_Buffer_Length);
-        HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
-		//__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
+        return_status = HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
+		if(return_status != HAL_OK)
+        {
+            if(return_status == HAL_BUSY || huart->ErrorCode == HAL_UART_ERROR_ORE)
+            {
+                __HAL_UART_CLEAR_OREFLAG(huart); // 清除ORE错误标志
+                huart->RxState = HAL_UART_STATE_READY; // 重置接收状态
+                huart->Lock = HAL_UNLOCKED; // 解锁
+                HAL_UARTEx_ReceiveToIdle_DMA(huart, UART6_Manage_Object.Rx_Buffer, UART6_Manage_Object.Rx_Buffer_Length);
+            }
+        }
+        //__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
     }
 }
 

@@ -187,11 +187,16 @@ public:
     inline float Get_Target_Pitch_Angle();
     inline Enum_Gimbal_Control_Type Get_Gimbal_Control_Type();
     inline Enum_Gimbal_Launch_Mode Get_Launch_Mode();
+    inline float Get_Transfrom_Yaw_Encoder_Angle();
+    inline float Get_Transfrom_Pitch_IMU_Angle();
+
     inline void Set_Launch_Mode(Enum_Gimbal_Launch_Mode __Launch_Mode);
     inline void Set_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
     inline void Set_Target_Yaw_Angle(float __Target_Yaw_Angle);
     inline void Set_Target_Yaw_Encoder_Angle(float __Target_Yaw_Encoder_Angle);
     inline void Set_Target_Pitch_Angle(float __Target_Pitch_Angle);
+    inline void Set_Transfrom_Yaw_Encoder_Angle(float __Transfrom_Yaw_Encoder_Angle);
+    inline void Set_Transfrom_Pitch_IMU_Angle(float __Transfrom_Pitch_IMU_Angle);
 
     void TIM_Calculate_PeriodElapsedCallback();
 
@@ -227,8 +232,10 @@ protected:
     // yaw轴角度
     float Target_Yaw_Angle = 0.0f;//IMU获取的欧拉角
     float Target_Yaw_Encoder_Angle = 0.0f;//编码器获取的相对角度值
+    float Transfrom_Yaw_Encoder_Angle = 0.0f;//上位机模式下调整的偏移角度
     // pitch轴角度
     float Target_Pitch_Angle = 0.0f;
+    float Transfrom_Pitch_IMU_Angle = 0.0f;
     //图传roll轴角度
     float Target_Image_Roll_Angle = 0.0f;
     //图传pitch轴角度
@@ -315,6 +322,24 @@ void Class_Gimbal::Set_Target_Pitch_Angle(float __Target_Pitch_Angle)
     Target_Pitch_Angle = __Target_Pitch_Angle;
 }
 
+void Class_Gimbal::Set_Transfrom_Yaw_Encoder_Angle(float __Transfrom_Yaw_Encoder_Angle)
+{
+    Transfrom_Yaw_Encoder_Angle = __Transfrom_Yaw_Encoder_Angle;
+}
+
+void Class_Gimbal::Set_Transfrom_Pitch_IMU_Angle(float __Transfrom_Pitch_IMU_Angle)
+{
+    Transfrom_Pitch_IMU_Angle = __Transfrom_Pitch_IMU_Angle;
+}
+
+float Class_Gimbal::Get_Transfrom_Yaw_Encoder_Angle()
+{
+    return Transfrom_Yaw_Encoder_Angle;
+}
+float Class_Gimbal::Get_Transfrom_Pitch_IMU_Angle()
+{
+    return Transfrom_Pitch_IMU_Angle;
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

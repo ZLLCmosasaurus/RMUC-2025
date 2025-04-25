@@ -323,7 +323,7 @@ void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
     else
         Referee_UI_Packed_Data(&Interaction_Graphic_5);
     
-    UART_Send_Data(&huart6, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
+    UART_Send_Data(&huart1, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
 }
 
 /**

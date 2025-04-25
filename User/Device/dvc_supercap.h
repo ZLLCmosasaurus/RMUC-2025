@@ -42,10 +42,10 @@ enum Enum_Supercap_Control_Status : uint8_t
 struct Struct_Supercap_CAN_Data
 {
     int16_t Chassis_Actual_Power;
-    uint16_t Supercap_Buffer_Power;
-    uint16_t Supercap_Charge_Percentage;
+    int16_t Supercap_Buffer_Power;
+    uint8_t Supercap_Charge_Percentage;
     uint8_t Supercup_Control_Level_Status;
-    uint8_t Supercap_Current_Energy_Consumption;
+    uint16_t Supercap_Current_Energy_Consumption;
 } __attribute__((packed));
 /**
  * @brief 超级电容源处理后的数据

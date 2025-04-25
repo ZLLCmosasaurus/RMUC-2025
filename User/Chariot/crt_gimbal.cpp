@@ -293,14 +293,10 @@ void Class_Gimbal::Output()
         }
         else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_Radar_Enable_Status()) == 1)
         {   
-            Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
             if(MiniPC->Get_Radar_Enable_Control() == 1)
             {
-                Target_Yaw_Encoder_Angle = MiniPC->Get_Rx_Yaw_Angle();
-            }
-            else
-            {
-                Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
+                Target_Yaw_Encoder_Angle = MiniPC->Get_Rx_Yaw_Angle() + Transfrom_Yaw_Encoder_Angle;
+                Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle() + Transfrom_Pitch_IMU_Angle;
             }
         }
         //pitch yaw轴控制方式

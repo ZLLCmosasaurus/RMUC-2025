@@ -275,6 +275,7 @@ public:
     inline uint8_t Get_Radar_Enable_Control();
     inline uint8_t Get_Radar_Enable_Status();
 
+    inline void Set_Tx_Flag_Control_Radar(uint8_t __Tx_Flag_Control_Radar);
     inline void Set_Game_Stage(Enum_MiniPC_Game_Stage __Game_Stage);
     inline void Set_Chassis_Now_Velocity_X(float __Chassis_Now_Velocity_X);
     inline void Set_Chassis_Now_Velocity_Y(float __Chassis_Now_Velocity_Y);
@@ -302,7 +303,7 @@ public:
     float calc_yaw(float x, float y, float z);
     float calc_distance(float x, float y, float z) ;
     float calc_pitch(float x, float y, float z) ;
-    float calc_pitch_compensated(float x, float y, float z);
+    float calc_pitch_compensated(float x, float y, float z,float init_x,float init_y,float init_z); 
     void Self_aim(float x,float y,float z,float *yaw,float *pitch,float *distance);
     float Get_Shoot_Speed();
     float meanFilter(float input);
@@ -311,7 +312,7 @@ public:
     void UART_RxCpltCallback(uint8_t *Rx_Data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
-    void Remote_Controlled_Shot();
+    void calc_Pos_X_Y_Z(float x, float y, float z, float *calc_x, float *calc_y, float *calc_z);
     
     Class_IMU *IMU;
     Class_Referee *Referee;
@@ -354,14 +355,15 @@ protected:
 	float Tx_Angle_Pitch;
 	float Tx_Angle_Yaw;
     float Tx_Angle_Encoder_Yaw;
+    float Tx_Flag_Control_Radar;
 
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
 
-    float g = 9.8f; // 重力加速度
-    float bullet_v = 15.0;//28.0; // 子弹速度  
-
+    float g = 9.7204f; // 重力加速度
+    float bullet_v = 15.8;//28.0; // 子弹速度  
+    float pitch_imu_offset = 4.13314819;
     // 距离
     float Distance;
 
@@ -551,7 +553,10 @@ float Class_MiniPC::Get_Rx_Yaw_Angle()
 {
     return(Rx_Angle_Yaw);
 }
-
+void Class_MiniPC::Set_Tx_Flag_Control_Radar(uint8_t __Tx_Flag_Control_Radar)
+{
+    Tx_Flag_Control_Radar = __Tx_Flag_Control_Radar;
+}
 
 /**
  * @brief

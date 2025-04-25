@@ -95,9 +95,9 @@ void Class_Supercap::Data_Process()
 
     Data.Chassis_Actual_Power = (float)Supercap_Data.Chassis_Actual_Power / 10.0f;
     Data.Supercap_Buffer_Power = (float)Supercap_Data.Supercap_Buffer_Power / 100.0f;
-    Data.Supercap_Charge_Percentage = (float)Supercap_Data.Supercap_Charge_Percentage / 100.0f;
+    Data.Supercap_Charge_Percentage = (float)Supercap_Data.Supercap_Charge_Percentage;
     Data.Supercup_Control_Level_Status = Supercap_Data.Supercup_Control_Level_Status;
-    Data.Supercap_Current_Energy_Consumption = Supercap_Data.Supercap_Current_Energy_Consumption;
+    Data.Supercap_Current_Energy_Consumption = (float)Supercap_Data.Supercap_Current_Energy_Consumption / 100.0f;
 }
 
 /**

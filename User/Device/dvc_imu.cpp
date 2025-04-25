@@ -23,9 +23,9 @@ void Class_IMU::Init()
     IMU_BMI088.init(&hspi1,&BMI088_Raw_Data);
     HAL_Delay(100);
 
-    // 初始化IST8310传感器
-    IMU_IST8310.init(&hi2c3);
-    HAL_Delay(100);
+    //初始化IST8310传感器
+    // IMU_IST8310.init(&hi2c3);
+    // HAL_Delay(100);
 
     // 初始化MahonyAHRS算法，并传入初始四元数
     IMU_MahonyAHRS.init(INS_Quat);

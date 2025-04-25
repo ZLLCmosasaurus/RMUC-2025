@@ -6,7 +6,6 @@
     ],
     "settings": {
         "files.associations": {
-            "tsk_config_and_callback.h": "c",
             "config.h": "c"
         }
     },
