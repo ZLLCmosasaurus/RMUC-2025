@@ -251,15 +251,6 @@
             "path": "../User/Device/dvc_dwt.cpp"
           },
           {
-            "path": "../User/Device/CharSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/dvc_GraphicsSendTask.cpp"
-          },
-          {
-            "path": "../User/Device/GraphicsSendTask.cpp"
-          },
-          {
             "path": "../User/Device/dvc_buzzer.cpp"
           },
           {
@@ -408,20 +399,6 @@
             ]
           }
         ]
-      },
-      {
-        "name": "Config",
-        "files": [
-          {
-            "path": "../User/Congfig/config.h"
-          }
-        ],
-        "folders": []
-      },
-      {
-        "name": "::CMSIS",
-        "files": [],
-        "folders": []
       }
     ]
   },

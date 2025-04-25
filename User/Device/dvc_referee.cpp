@@ -306,15 +306,15 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
  */
 void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
 {
-    // static uint8_t String_Index;
-    // String_Index++;
-    // if (String_Index == 4)
-    //     String_Index = 0;
-    // Referee_UI_Draw_String(0, Get_ID(), Referee_UI_One, 0, 0x02, 0, 20, 2, 500, 300, "Chassis", (sizeof("Chassis") - 1), Referee_UI_ADD);
-    // Referee_UI_Draw_String(1, Get_ID(), Referee_UI_One, 0, 0x01, 0, 20, 2, 500, 350, "Gimbal", (sizeof("Gimbal") - 1), Referee_UI_ADD);
-    // Referee_UI_Draw_String(2, Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500, 400, "Fric  ", (sizeof("Fric  ") - 1), Referee_UI_ADD);
-    // Referee_UI_Draw_Line(Get_ID(), Referee_UI_Zero, 1, 0x03, 2, 3, 900, 500, 1000, 500, Referee_UI_ADD);
-    // Referee_UI_Draw_Line(Get_ID(), Referee_UI_One, 1, 0x04, 2, 3, 950, 450, 950, 550, Referee_UI_ADD);
+//     static uint8_t String_Index;
+//     String_Index++;
+//     if (String_Index == 4)
+//         String_Index = 0;
+//     Referee_UI_Draw_String(0, Get_ID(), Referee_UI_One, 0, 0x02, 0, 20, 2, 500, 300, "Chassis", (sizeof("Chassis") - 1), Referee_UI_ADD);
+//     Referee_UI_Draw_String(1, Get_ID(), Referee_UI_One, 0, 0x01, 0, 20, 2, 500, 350, "Gimbal", (sizeof("Gimbal") - 1), Referee_UI_ADD);
+//     Referee_UI_Draw_String(2, Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500, 400, "Fric  ", (sizeof("Fric  ") - 1), Referee_UI_ADD);
+//     Referee_UI_Draw_Line(Get_ID(), Referee_UI_Zero, 1, 0x03, 2, 3, 900, 500, 1000, 500, Referee_UI_ADD);
+//     Referee_UI_Draw_Line(Get_ID(), Referee_UI_One, 1, 0x04, 2, 3, 950, 450, 950, 550, Referee_UI_ADD);
     
     if (__String_Index < 5)
         Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据

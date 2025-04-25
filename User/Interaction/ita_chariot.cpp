@@ -13,7 +13,7 @@
 
 #include "ita_chariot.h"
 #include "drv_math.h"
-#include "dvc_GraphicsSendTask.h"
+
 
 /* Private macros ------------------------------------------------------------*/
 
@@ -520,6 +520,80 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
  * @brief 计算回调函数
  *
  */
+void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status)
+{
+    
+    static uint8_t String_Index = 0;
+    String_Index++;
+    if (String_Index > 6)
+    {
+        String_Index = 0;
+    }
+
+    switch (__Referee_UI_Refresh_Status)
+    {
+    case (Referee_UI_Refresh_Status_DISABLE):
+    {
+        // 摩擦轮状态
+        if (Fric_Status == Fric_Status_OPEN)
+        {
+            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_OPEN", (sizeof("Fric_OPEN") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_PINK,10,430,820,480,770,Referee_UI_CHANGE);
+        }
+        else
+        {
+            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_CHANGE);
+        }
+
+        if(MiniPC_Status == MiniPC_Status_ENABLE)
+        {
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+        }
+        else
+        {
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+        }
+        // Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,Pitch_IMU_Angle,Referee_UI_CHANGE);
+
+    }
+    break;
+    case (Referee_UI_Refresh_Status_ENABLE):
+    {
+        //摩擦轮状态
+        //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_ADD);
+        //底盘状态
+        Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_WHITE, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_ADD);
+        // 云台状态
+        //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Dead", (sizeof("Gimbal_Dead") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_WHITE,10,430,820-150,480,770-150,Referee_UI_ADD);
+        //超电
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*0), 45, Referee_UI_ADD);
+        //自瞄
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
+        //超电
+        Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_ADD);
+        //pitch
+        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,0.0f,Referee_UI_ADD);
+    }
+    break;
+    }
+    Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, Graphic_Color_GREEN, 20, 5, 500/2, 400+410, "Fric :", (sizeof("Fric :") - 1), Referee_UI_ADD);
+    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02,Graphic_Color_GREEN , 20, 5, 500/2, 660, "Gimbal:", (sizeof("Gimbal:") - 1), Referee_UI_ADD);
+    // 画线
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x03, 3, 3, 960-400+120, 200, 900, 200, Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x04, 3, 3, 1020, 200, 960+400-120, 200, Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x05, 3, 3, 960-400, 100, 960-400+120, 200, Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x06, 3, 3, 960+400-120, 200, 960+400, 100, Referee_UI_ADD);
+    
+    // 超电容量
+    Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x07, 8, 3,960-400+120, 50,960+400-120, 40, Referee_UI_ADD);
+
+    // 善后处理
+    Referee.UART_Tx_Referee_UI(String_Index);
+}
 
 void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
@@ -542,21 +616,17 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
-		// 		static uint8_t mod5	=	0;
-		// 		mod5++;
-        //  if (mod5 == 20)
-        //  {
-         Gimbal.TIM_Calculate_PeriodElapsedCallback();
-        //  mod5 = 0;
-        //  }	  
-        
+        Gimbal.TIM_Calculate_PeriodElapsedCallback();
         Booster.TIM_Calculate_PeriodElapsedCallback();
         //传输数据给上位机
         MiniPC.TIM_Write_PeriodElapsedCallback();
-        //给下板发送数据
-        // CAN_Gimbal_Tx_Chassis_Callback();
-        //弹舱舵机控制
-        // __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, Compare);
+        static uint8_t mod50	=	0;
+        mod50++;
+        if(mod50%50==0)
+        {
+            Chariot_Referee_UI_Tx_Callback(Referee_UI_Refresh_Status);
+            mod50 = 0;
+        }
 
     #endif   
 }
@@ -576,12 +646,23 @@ void Class_Chariot::Judge_DR16_Control_Type()
         DR16_Control_Type = DR16_Control_Type_REMOTE;
     }
     else if (DR16.Get_Mouse_X() != 0 ||
-             DR16.Get_Mouse_Y() != 0 ||
-             DR16.Get_Mouse_Z() != 0 ||
-             DR16.Get_Keyboard_Key_A() != 0 ||
-             DR16.Get_Keyboard_Key_D() != 0 ||
-             DR16.Get_Keyboard_Key_W() != 0 ||
-             DR16.Get_Keyboard_Key_S() != 0)
+    DR16.Get_Mouse_Y() != 0 ||
+    DR16.Get_Mouse_Z() != 0 ||
+    DR16.Get_Keyboard_Key_A() != 0 ||
+    DR16.Get_Keyboard_Key_D() != 0 ||
+    DR16.Get_Keyboard_Key_W() != 0 ||
+    DR16.Get_Keyboard_Key_S() != 0 ||
+    DR16.Get_Keyboard_Key_Shift() != 0 ||
+    DR16.Get_Keyboard_Key_Ctrl() != 0 ||
+    DR16.Get_Keyboard_Key_Q() != 0 ||
+    DR16.Get_Keyboard_Key_E() != 0 ||
+    DR16.Get_Keyboard_Key_R() != 0 ||
+    DR16.Get_Keyboard_Key_F() != 0 ||
+    DR16.Get_Keyboard_Key_G() != 0 ||
+    DR16.Get_Keyboard_Key_Z() != 0 ||
+    DR16.Get_Keyboard_Key_C() != 0 ||
+    DR16.Get_Keyboard_Key_V() != 0 ||
+    DR16.Get_Keyboard_Key_B() != 0)
     {
         DR16_Control_Type = DR16_Control_Type_KEYBOARD;
     }
@@ -616,7 +697,7 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         mod50_mod3++;
         #ifdef CHASSIS
 
-            Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
+           
             Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
             Chassis.Supercap.TIM_Alive_PeriodElapsedCallback();
             for (auto& wheel : Chassis.Motor_Wheel) {
@@ -637,7 +718,7 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
                 mod50_mod3 = 0;         
             }
                 
-//            Gimbal.Motor_Pitch.TIM_Alive_PeriodElapsedCallback();
+            Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
             Gimbal.Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
             Gimbal.Motor_Pitch.TIM_Alive_PeriodElapsedCallback();
             Gimbal.Boardc_BMI.TIM1msMod50_Alive_PeriodElapsedCallback();

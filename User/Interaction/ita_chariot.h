@@ -24,6 +24,7 @@
 #include "config.h"
 #include "dvc_buzzer.h"
 #include "dvc_ws2812.h"
+#include "dvc_referee.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -168,7 +169,7 @@ public:
         inline void Set_Pre_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
         inline void Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
         inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
-
+        inline void Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status);
         inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
 
