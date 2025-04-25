@@ -118,7 +118,6 @@ public:
     inline float Get_Friction_Omega();
     inline float Get_Friction_Omega_Threshold();
     inline float Get_Drvier_Angle();
-
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
     inline Enum_Friction_Control_Type Get_Friction_Control_Type();
     inline void Set_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
@@ -126,8 +125,10 @@ public:
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
     inline void Set_Drive_Count(uint16_t __Drvie_Count);
-    inline void Set_Friction_Motor_Live_Type();
-
+    inline void Set_Fric_Speed_Rpm_High(int16_t __Fric_High_Rpm);
+    inline void Set_Fric_Speed_Rpm_Low(int16_t __Fric_Low_Rpm);
+    inline int16_t Get_Fric_Speed_Rpm_High();
+    inline int16_t Get_Fric_Speed_Rpm_Low();
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
 		
@@ -156,8 +157,8 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
-    int16_t Fric_High_Rpm = 5025;//5075;
-    int16_t Fric_Low_Rpm = 4875;//4925;
+    int16_t Fric_High_Rpm = 4975;//5025;//5075;
+    int16_t Fric_Low_Rpm = 4825;//4875;//4925;
     //沈阳：5025 5175
 	//速度
     float Friction_Omega = 0.0f;//暂时用不到
@@ -276,7 +277,22 @@ float Class_Booster::Get_Drvier_Angle()
 {
     return (Drvier_Angle);
 }
-
+void Class_Booster::Set_Fric_Speed_Rpm_High(int16_t __Fric_High_Rpm)
+{
+    Fric_High_Rpm = __Fric_High_Rpm;
+}
+void Class_Booster::Set_Fric_Speed_Rpm_Low(int16_t __Fric_Low_Rpm)
+{
+    Fric_Low_Rpm = __Fric_Low_Rpm;
+}
+int16_t Class_Booster::Get_Fric_Speed_Rpm_High()
+{
+    return (Fric_High_Rpm);
+}
+int16_t Class_Booster::Get_Fric_Speed_Rpm_Low()
+{
+    return (Fric_Low_Rpm);
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

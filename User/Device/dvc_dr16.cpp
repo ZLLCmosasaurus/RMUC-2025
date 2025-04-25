@@ -16,6 +16,7 @@
 #include "drv_math.h"
 #include "dvc_referee.h"
 #include "dvc_dwt.h"
+#include "dvc_VT13.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -283,6 +284,7 @@ void Class_DR16::DR16_Data_Process()
  * @brief 数据处理过程
  *
  */
+uint8_t Now,Pre;
 void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
 {
     //获取当前原始值数据
@@ -293,19 +295,21 @@ void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
     /*源数据转为对外数据*/
 
     //鼠标信息
-    Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
-    Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
-    Data.Mouse_Z = tmp_buffer->Mouse_Z / 32768.0f;
+    Data.Mouse_X = tmp_buffer->mouse_x / 32768.0f;
+    Data.Mouse_Y = tmp_buffer->mouse_y / 32768.0f;
+    Data.Mouse_Z = tmp_buffer->mouse_z / 32768.0f;
 
 
     //判断鼠标触发
-    Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->Mouse_Left_Key, Pre_UART_Image_Rx_Data.Mouse_Left_Key);
-    Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->Mouse_Right_Key, Pre_UART_Image_Rx_Data.Mouse_Right_Key);
+    Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->mouse_left, Pre_UART_Image_Rx_Data.mouse_left);
+    Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->mouse_right, Pre_UART_Image_Rx_Data.mouse_right);
 
+    Now = (Now_UART_Image_Rx_Data.key >> 5) & 0x1;
+    Pre = (Pre_UART_Image_Rx_Data.key >> 5) & 0x1;
     //判断键盘触发
     for (int i = 0; i < 16; i++)
     {
-        Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Image_Rx_Data.Keyboard_Key) >> i) & 0x1);
+        Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->key) >> i) & 0x1, ((Pre_UART_Image_Rx_Data.key) >> i) & 0x1);
     }
 }
 
@@ -330,11 +334,26 @@ void Class_DR16::DR16_UART_RxCpltCallback(uint8_t *Rx_Data)
  *
  * @param Rx_Data 接收的数据
  */
+/**
+ * @brief crc16 verify function
+ *
+ * @param p_msg Data to verify
+ * @param len Stream length=data+checksum
+ * @return bool Crc16 check result
+ */
+/**
+ * @brief Get the crc16 checksum
+ *
+ * @param p_msg Data to check
+ * @param lenData length
+ * @param crc16 Crc16 initialized checksum
+ * @return crc16 Crc16 checksum
+ */
 
 void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
 {
     
-    if(Rx_Data[0]==0xA5)
+     if(Rx_Data[0]==0xA5)
     {
         uint16_t cmd_id,data_length;
         //数据处理过程
@@ -342,15 +361,24 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
         cmd_id=(cmd_id<<8)|Rx_Data[5];  
         data_length=Rx_Data[2]&0xff;
         data_length=(data_length<<8)|Rx_Data[1];
-        if(cmd_id == 0x0304 && data_length == 12)
+        if(cmd_id == 0x0302 && data_length == 30)
         {
-            //滑动窗口, 判断遥控器是否在线
-            Image_Flag += 1;
-            Image_Data_Process(&Rx_Data[7]);
-            //保留上一次数据
-            memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[7], sizeof(Struct_Image_UART_Data));            
+          //处理图传链路数据
         }
     }
+    
+     if(Rx_Data[0] == 0xA9 && Rx_Data[1] == 0x53)
+    {
+      if(verify_crc16_check_sum(Rx_Data, 21) == 1)
+      {
+        Image_Flag ++;
+
+        Image_Data_Process(Rx_Data);
+         //保留上一次数据
+        memcpy(&Pre_UART_Image_Rx_Data, Rx_Data, sizeof(Struct_Image_UART_Data));
+      }
+    }
+    
 
     // uint16_t buffer_index = 0;
     // uint16_t cmd_id,data_length;

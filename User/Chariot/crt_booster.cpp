@@ -340,10 +340,6 @@ void Class_Booster::Output()
     // 控制摩擦轮
     if (Friction_Control_Type != Friction_Control_Type_DISABLE)
     {
-        // Fric[0].Set_Target_Omega_Rpm(Fric_Low_Rpm);
-        // Fric[1].Set_Target_Omega_Rpm(Fric_High_Rpm);
-        // Fric[2].Set_Target_Omega_Rpm(-Fric_High_Rpm);
-        // Fric[3].Set_Target_Omega_Rpm(-Fric_Low_Rpm);
          Fric[0].Set_Target_Omega_Rpm(Fric_High_Rpm);
         Fric[1].Set_Target_Omega_Rpm(-Fric_High_Rpm);
         Fric[2].Set_Target_Omega_Rpm(-Fric_Low_Rpm);
@@ -364,6 +360,7 @@ void Class_Booster::Output()
  */
 int16_t Test_Torque = 0;float Test_Target_Driver_Angle = 0.0f;float Test_Actual_Driver_Angle = 0.0f;
 int16_t Test_Fric1_output,Test_Fric2_output,Test_Fric3_output,Test_Fric4_output;
+int16_t Test_Fric1_Speed,Test_Fric2_Speed,Test_Fric3_Speed,Test_Fric4_Speed;
 void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
 {
 
@@ -381,9 +378,14 @@ void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
     Test_Target_Driver_Angle = Get_Drvier_Angle() * 180.0f / PI;
     Test_Actual_Driver_Angle = Motor_Driver.Get_Now_Angle();
     Test_Fric1_output = -Fric[0].Get_Out();
-    Test_Fric2_output = -Fric[1].Get_Out();
-    Test_Fric3_output = Fric[2].Get_Out();
+    Test_Fric2_output = Fric[1].Get_Out();
+    Test_Fric3_output = -Fric[2].Get_Out();
     Test_Fric4_output = Fric[3].Get_Out();
+
+    Test_Fric1_Speed = -Fric[0].Get_Now_Omega_Rpm();
+    Test_Fric2_Speed = Fric[1].Get_Now_Omega_Rpm();
+    Test_Fric3_Speed = -Fric[2].Get_Now_Omega_Rpm();
+    Test_Fric4_Speed = Fric[3].Get_Now_Omega_Rpm();
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

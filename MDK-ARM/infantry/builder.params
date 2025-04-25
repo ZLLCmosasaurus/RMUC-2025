@@ -86,6 +86,7 @@
         "../User/Chariot/crt_gimbal.cpp",
         "../User/Chariot/crt_image.cpp",
         "../User/Device/dvc_GraphicsSendTask.c",
+        "../User/Device/dvc_VT13.cpp",
         "../User/Device/dvc_boardc_bmi088.cpp",
         "../User/Device/dvc_boardc_ist8310.cpp",
         "../User/Device/dvc_buzzer.cpp",

@@ -24,6 +24,7 @@
 #include "crt_chassis.h"
 #include "config.h"
 #include "crt_image.h"
+#include "dvc_VT13.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 extern Class_Chariot chariot;
@@ -99,6 +100,17 @@ enum Enum_DR16_Control_Type
 };
 
 /**
+ * @brief VT13控制数据来源
+ *
+ */
+enum Enum_VT13_Control_Type
+{
+    VT13_Control_Type_REMOTE = 0,
+    VT13_Control_Type_KEYBOARD,
+
+    VT13_Control_Type_NONE,
+};
+/**
  * @brief 机器人是否离线 控制模式有限自动机
  *
  */
@@ -110,6 +122,14 @@ public:
     void Reload_TIM_Status_PeriodElapsedCallback();
 };
 
+class Class_FSM_Alive_Control_VT13 : public Class_FSM
+{
+    public:
+    uint8_t Start_Flag = 0;     //记录第一次上电开机，以初始化状态
+    Class_Chariot *Chariot;
+
+    void Reload_TIM_Status_PeriodElapsedCallback();
+};
 /**
  * @brief 控制对象
  *
@@ -134,6 +154,8 @@ public:
     #ifdef GIMBAL
         //遥控器
         Class_DR16 DR16;
+
+        Class_VT13 VT13;
         //上位机
         Class_MiniPC MiniPC;
         //云台
@@ -145,6 +167,9 @@ public:
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
+
+        Class_FSM_Alive_Control_VT13 FSM_Alive_Control_VT13;
+        friend class Class_FSM_Alive_Control_VT13;
     #endif
 
     void Init(float __DR16_Dead_Zone = 0);
@@ -180,6 +205,7 @@ public:
 
         inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
+        inline Enum_VT13_Control_Type Get_VT13_Control_Type();
 
         void CAN_Gimbal_Rx_Chassis_Callback(uint8_t *Rx_Data);
         void CAN_Gimbal_Tx_Chassis_Callback();
@@ -198,8 +224,8 @@ public:
     Enum_Chassis_Logics_Direction Chassis_Logics_Direction = Chassis_Logic_Direction_Positive;
     //冲刺
     Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
-    //弹仓开关
-    Enum_Bulletcap_Status Bulletcap_Status = Bulletcap_Status_CLOSE;
+    //yaw编码开关
+    Enum_Yaw_Encoder_Control_Status Yaw_Encoder_Control_Status = Yaw_Encoder_Control_Status_Disable;
     //摩擦轮开关
     Enum_Fric_Status Fric_Status = Fric_Status_CLOSE;
     //超级电容超级放电状态
@@ -241,31 +267,38 @@ protected:
     #ifdef GIMBAL
         //遥控器拨动的死区, 0~1
         float DR16_Dead_Zone;
+        float VT13_Dead_Zone;
         //常量
         //键鼠模式按住shift 最大速度缩放系数
         float DR16_Mouse_Chassis_Shift = 2.0f;
+        float VT13_Mouse_Chassis_Shift = 2.0f;
         //舵机占空比 默认关闭弹舱
         uint16_t Compare =400;
         //DR16底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
         float DR16_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
+        float VT13_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
         //DR16底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
         float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
-
+        float VT13_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
+        float VT13_Yaw_Angle_Resolution = 0.005f * PI * 57.29577951308232;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
         float DR16_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
+        float VT13_Pitch_Angle_Resolution = 0.003f * PI * 57.29577951308232;
 
         //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
         float DR16_Yaw_Resolution = 0.003f * PI;
+        float VT13_Yaw_Resolution = 0.003f * PI;
         //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
         float DR16_Pitch_Resolution = 0.003f * PI;
-
+        float VT13_Pitch_Resolution = 0.003f * PI;
         //DR16鼠标云台yaw灵敏度系数, 不同鼠标不同参数
         float DR16_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
+        float VT13_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
         //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
         float DR16_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
-        
+        float VT13_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
         //迷你主机云台pitch自瞄控制系数
@@ -295,6 +328,7 @@ protected:
         uint8_t Shoot_Flag = 0;
         //DR16控制数据来源
         Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
+         Enum_VT13_Control_Type VT13_Control_Type = VT13_Control_Type_NONE;
         //内部函数
 
         void Judge_DR16_Control_Type();
@@ -335,6 +369,15 @@ protected:
         return (DR16_Control_Type);
     }
 
+    /**
+     * @brief 获取VT13控制数据来源
+     * 
+     * @return Enum_VT13_Control_Type VT13控制数据来源
+     */
+    Enum_VT13_Control_Type Class_Chariot::Get_VT13_Control_Type()
+    {
+        return (VT13_Control_Type);
+    }
     /**
      * @brief 获取前一帧底盘控制类型
      * 

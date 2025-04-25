@@ -190,9 +190,6 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Referee.Set_Game_Stage(game_stage);
         chariot.Referee.Set_Shoot_Speed(shoot_speed);
         Math_Constrain(&shoot_speed,5.0f,17.0f);
-        //chariot.MiniPC.Set_bullet_v(shoot_speed);
-        
-        //Shoot = chariot.MiniPC.Get_Shoot_Speed();
 
     }
     break;
@@ -251,10 +248,21 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
     chariot.DR16.Image_UART_RxCpltCallback(Buffer); 
-    
-    //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback(); 
 
+    //底盘 云台 发射机构 的控制策略
+    if(Buffer[0] == 0xA9 && Buffer[1] == 0x53)
+    {
+        chariot.TIM_Control_Callback(); 
+    }
+
+}
+
+void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
+
+    //底盘 云台 发射机构 的控制策略
+    chariot.TIM_Control_Callback();
 }
 #endif
 
@@ -379,15 +387,21 @@ void Task1ms_TIM5_Callback()
     if(start_flag==1)
     {
         #ifdef GIMBAL
+        #ifdef USE_DR16
+
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+
+        #elif defined(USE_VT13)
+
+        chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
+
         #endif
-        chariot.TIM_Calculate_PeriodElapsedCallback();
+        #endif
+        chariot.TIM_Calculate_PeriodElapsedCallback();  
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
-        //统一打包发送
+
         TIM_CAN_PeriodElapsedCallback();
-        //超电通信
-        //TIM_UART_PeriodElapsedCallback();
         #ifdef GIMBAL
         static int mod5 = 0;
         mod5++;
@@ -417,9 +431,9 @@ extern "C" void Task_Init()
 
         //裁判系统
         // UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
-         __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
-	     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 256);
-         UART6_Manage_Object.Rx_Buffer_Length = 256;
+         __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+	     HAL_UART_Receive_DMA(&huart1, (uint8_t*)UART1_Manage_Object.Rx_Buffer, 256);
+         UART1_Manage_Object.Rx_Buffer_Length = 256;
 
         #ifdef POWER_LIMIT
         //旧版超电
@@ -440,15 +454,19 @@ extern "C" void Task_Init()
         //磁力计iic外设
         IIC_Init(&hi2c3, Ist8310_IIC3_Callback);    
         
-        //遥控器接收
+        #ifdef USE_DR16
         UART_Init(&huart3, DR16_UART3_Callback, 18);
 		UART_Init(&huart6, Image_UART6_Callback, 40);
+        #elif defined(USE_VT13)
+        UART_Init(&huart6, VT13_UART_Callback, 40);
+        #endif
         //minipc
-        UART_Init(&huart1, MiniPC_UART_Callback, MiniPC_Rx_Data_Length);   
-        //图传
-        //  __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
-	    //  HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 80);
-        //  UART6_Manage_Object.Rx_Buffer_Length = 80;
+        //UART_Init(&huart1, MiniPC_UART_Callback, MiniPC_Rx_Data_Length);   
+        // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+        // HAL_UART_Receive_DMA(&huart1,(uint8_t*)UART1_Manage_Object.Rx_Buffer,MiniPC_Rx_Data_Length);
+        // UART1_Manage_Object.UART_Handler = &huart1;
+        // UART1_Manage_Object.Rx_Buffer_Length = MiniPC_Rx_Data_Length;
+
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
         
@@ -476,7 +494,10 @@ extern "C" void Task_Init()
 extern "C" void Task_Loop()
 {
     #ifdef CHASSIS
-    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,64);
+    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,64);
+    #endif
+    #ifdef GIMBAL
+    //chariot.MiniPC.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer);
     #endif
 }
 

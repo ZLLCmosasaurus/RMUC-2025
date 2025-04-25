@@ -58,14 +58,21 @@ void Class_MiniPC::Data_Process()
     //利用坐标系转换计算目标的yaw和pitch和距离
     if(Pack_Rx.radar_enable_status == 1 && Pack_Tx.radar_enable_control == 1)//当上位机反馈的雷达已处于运行状态&下位机使能开启雷达
     {
-      Self_aim(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+      static float tmp_x,tmp_y,tmp_z;
+      calc_Pos_X_Y_Z(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &tmp_x, &tmp_y, &tmp_z);
+
+      Distance = calc_distance(tmp_x, tmp_y, tmp_z);
+      Rx_Angle_Yaw = calc_yaw(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, 0.0f);
+      //Rx_Angle_Pitch = atan2f(-Pack_Rx.radar_target_z, sqrtf(Pack_Rx.radar_target_x * Pack_Rx.radar_target_x + Pack_Rx.radar_target_y * Pack_Rx.radar_target_y)) / PI * 180.0f;//calc_pitch_compensated(tmp_x, tmp_y, tmp_z,Pack_Rx.radar_target_x, Pack_Rx.radar_target_y,Pack_Rx.radar_target_z);
+      Rx_Angle_Pitch = calc_pitch_compensated(Pack_Rx.radar_target_x,  Pack_Rx.radar_target_y, Pack_Rx.radar_target_z,Pack_Rx.radar_target_x, Pack_Rx.radar_target_y,Pack_Rx.radar_target_z) - pitch_imu_offset;
     }
-    else
-    {
-      Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
-    }
+    // else
+    // {
+    //   Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z, &Rx_Angle_Yaw, &Rx_Angle_Pitch, &Distance);
+    // }
     //pitch角度限幅
     Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
+    Math_Constrain(&Rx_Angle_Yaw,-180.0f,180.0f);
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
 
 }
@@ -86,9 +93,10 @@ void Class_MiniPC::Output()
 
 	Pack_Tx.target_id    = 0x08;
 	Pack_Tx.roll         = Tx_Angle_Roll;
-	Pack_Tx.pitch        = -Tx_Angle_Pitch;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
-	Pack_Tx.yaw          = Tx_Angle_Yaw;
-  Pack_Tx.radar_enable_control = 1; //雷达使能标志位 0 关闭雷达 1 打开雷达
+	Pack_Tx.pitch        = -Tx_Angle_Pitch + pitch_imu_offset;  // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
+	// Pack_Tx.yaw          = Tx_Angle_Yaw;
+  Pack_Tx.yaw          = Tx_Angle_Encoder_Yaw;
+  Pack_Tx.radar_enable_control = Tx_Flag_Control_Radar; //雷达使能标志位 0 关闭雷达 1 打开雷达
 	Pack_Tx.crc16        = 0xffff;
   Pack_Tx.game_stage   = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();  
 	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx,sizeof(Pack_Tx));
@@ -123,8 +131,8 @@ void Class_MiniPC::Data_Process_UART(uint8_t *Rx_Data)
 }
 void Class_MiniPC::Output_UART()
 {
-  if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
-  {
+  // if (Minipc_USB_Status == MiniPC_USB_Status_DISABLE)
+  // {
     Pack_Tx.header = Frame_Header;
 
     // 根据referee判断红蓝方
@@ -137,13 +145,14 @@ void Class_MiniPC::Output_UART()
     Pack_Tx.roll = Tx_Angle_Roll;
     Pack_Tx.pitch = -Tx_Angle_Pitch; // 2024.5.7 未知原因添加负号，使得下位机发送数据不满足右手螺旋定则，但是上位机意外可以跑通
     Pack_Tx.yaw = Tx_Angle_Yaw;
-    Pack_Tx.radar_enable_control = 1; // 雷达使能标志位 0 关闭雷达 1 打开雷达
+    Pack_Tx.radar_enable_control = Tx_Flag_Control_Radar; // 雷达使能标志位 0 关闭雷达 1 打开雷达
     Pack_Tx.crc16 = 0xffff;
     Pack_Tx.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
     memcpy(UART_Manage_Object->Tx_Buffer, &Pack_Tx, sizeof(Pack_Tx));
     Append_CRC16_Check_Sum(UART_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
-    UART_Send_Data(UART_Manage_Object->UART_Handler, USB_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
-  }
+    UART_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
+    // UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
+  // }
 }
 /**
  * @brief tim定时器中断增加数据到发送缓冲区
@@ -340,6 +349,79 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
 
   return pitch;
 }
+
+/**
+ * @brief 计算球体弹丸的空气阻力
+ * @param velocity 球体相对于空气的速度（单位：m/s）
+ * @param diameter 球体直径（单位：m）
+ * @param air_density 空气密度（单位：kg/m³，默认值：1.225）
+ * @param drag_coefficient 阻力系数（默认值：0.47，对应光滑球体亚音速）
+ * @return 空气阻力（单位：N）
+ */
+float calculate_sphere_drag_force(float velocity,float diameter)
+{
+  const float air_density = 1.225f;
+  const float drag_coefficient = 0.47f;
+  // 输入参数校验
+  if (diameter <= 0 || velocity < 0)
+    return 0.0f;
+
+  // 计算横截面积 A = π*(d/2)^2
+  const float radius = diameter / 2.0f;
+  const float area = PI * radius * radius;
+
+  // 应用公式 Fd = 0.5 * Cd * ρ * v² * A
+  const float force = 0.5f * drag_coefficient * air_density * velocity * velocity * area;
+  return force;
+}
+
+//迭代重力-空气阻力补偿
+float Class_MiniPC::calc_pitch_compensated(float x, float y, float z,float init_x,float init_y,float init_z) 
+{
+    const float diameter = 0.042f;
+    float k = calculate_sphere_drag_force(bullet_v,diameter);    // 空气阻力系数
+    float epsilon = 0.01f;          // 收敛阈值
+
+    // 初始俯仰角计算（基于几何投影）
+    float pitch = atan2f(z, sqrtf(x * x + y * y));
+
+    // 迭代补偿重力和空气阻力影响
+    for (int i = 0; i < 20; ++i) {
+        float target_rho = sqrtf(x * x + y * y); // 水平投影距离
+        float cos_pitch = cosf(pitch);
+        
+        // 处理无效的cos值
+        if (fabsf(cos_pitch) < 1e-6f) break;
+
+        // 计算弹丸飞行时间（考虑水平方向阻力）
+        float t_numerator = target_rho * k;
+        float t_denominator = bullet_v * cos_pitch;
+        if (t_numerator >= t_denominator) break; // 弹道不可达
+        
+        float fly_time = (-logf(1 - t_numerator / t_denominator)) / k;
+
+        // 计算z轴实际位移（含阻力模型）
+        float sin_pitch = sinf(pitch);
+        float exp_term = expf(-k * fly_time);
+        float real_z = 
+            (bullet_v * sin_pitch + g / k) * (1 - exp_term) / k - 
+            (g * fly_time) / k;
+
+        // 计算高度误差并调整俯仰角
+        float dz = z - real_z;
+        if (fabsf(dz) < epsilon) break;
+
+        // 安全计算角度修正量（限制在asin有效范围）
+        float distance = sqrtf(x*x + y*y + z*z);
+        float clamped_dz = fmaxf(fminf(dz, distance), -distance);
+        float delta_pitch = asinf(clamped_dz / distance);
+        
+        pitch += delta_pitch;
+    }
+
+    // 转换为角度制并符合坐标系定义
+    return -(pitch * 180.0f / PI);
+}
 /**
  * 计算计算yaw，pitch
  * 
@@ -412,15 +494,12 @@ float Class_MiniPC::meanFilter(float input)
     // Return the mean of the buffer's values
     return sum / 5.0;
 }
-void Class_MiniPC::Remote_Controlled_Shot()
+void Class_MiniPC::calc_Pos_X_Y_Z(float x, float y, float z, float *calc_x, float *calc_y, float *calc_z)
 {
-  //接收雷达的yaw角度与相对基地装甲板距离
-  static float Remote_yaw,Remote_length;
-  //思路：
-  //在雷达的辅助下瞄准优先瞄准yaw轴 其次计算枪口到装甲板水平实际距离 最后解算pitch角
-  const float Booster_Length = 0.1f;//发射转轴到枪口实际距离
-  const float Object_Length = 0.1f;//激光相较于发射转轴水平距离
-  float Actual_Length = Remote_length - Booster_Length * cos(Rx_Angle_Pitch) - Object_Length;
-  
-}
+    const float Length_a = 0.117f; //外级摩擦轮中心到yaw轴转轴中心的距离
+    //从yaw轴转轴中心位置转换到外级摩擦轮中心
+    *calc_x = x - Length_a * cosf(-Tx_Angle_Pitch) * cosf(Tx_Angle_Yaw);
+    *calc_y = y - Length_a * cosf(-Tx_Angle_Pitch) * sinf(Tx_Angle_Yaw);
+    *calc_z = z - Length_a * sinf(-Tx_Angle_Pitch);
+} 
 /************************ copyright(c) ustc-robowalker **************************/

@@ -219,8 +219,6 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     #endif
 }
 #endif
-//#define SPEED_SLOPE
-#define NO_SPEED_SLOPE
 void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
     Velocity_X_Max = __Velocity_X_Max;
@@ -229,11 +227,11 @@ void Class_Streeing_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     Steer_Power_Ratio = __Steer_Power_Ratio;
 
     //斜坡函数加减速速度X  控制周期1ms
-    Slope_Velocity_X.Init(0.04f,0.5f);
+    Slope_Velocity_X.Init(0.01f,0.025f);
     //斜坡函数加减速速度Y  控制周期1ms
-    Slope_Velocity_Y.Init(0.04f,0.5f);
+    Slope_Velocity_Y.Init(0.01f,0.025f);
     //斜坡函数加减速角速度
-    Slope_Omega.Init(0.04f,0.5f);
+    Slope_Omega.Init(0.05f,0.05f);
     
     // 超级电容初始化
     Supercap.Init(&hcan1, 0.0f);
