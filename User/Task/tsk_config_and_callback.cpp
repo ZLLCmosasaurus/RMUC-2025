@@ -269,10 +269,9 @@ uint8_t first_flag = 0;
 void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 {
 
-        chariot.DR16.Image_UART_RxCpltCallback(Buffer);
-        // 底盘 云台 发射机构 的控制策略
-        chariot.TIM_Control_Callback();
-
+    chariot.DR16.Image_UART_RxCpltCallback(Buffer);
+    // 底盘 云台 发射机构 的控制策略
+    chariot.TIM_Control_Callback();
 }
 #endif
 
@@ -288,7 +287,7 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
     // 底盘 云台 发射机构 的控制策略
-    
+
     chariot.TIM_Control_Callback();
 }
 #endif
@@ -365,10 +364,10 @@ void Task100us_TIM2_Callback()
     // 单给IMU消息开的定时器 ims
     chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 #endif
-static float start_time =0;
-//		start_time=	DWT_GetTimeline_ms();
-//	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
-//	   delta_time = DWT_GetTimeline_ms() - start_time;
+    static float start_time = 0;
+    //		start_time=	DWT_GetTimeline_ms();
+    //	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+    //	   delta_time = DWT_GetTimeline_ms() - start_time;
 }
 
 /**
@@ -381,7 +380,7 @@ void Task1ms_TIM5_Callback()
     init_finished++;
     if (init_finished > 2000 && start_flag == 0)
     {
-      // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
         start_flag = 1;
     }
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
@@ -390,7 +389,7 @@ void Task1ms_TIM5_Callback()
 
     /****************************** 交互层回调函数 1ms *****************************************/
     if (start_flag == 1)
-    {    	  
+    {
 #ifdef GIMBAL
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
@@ -405,9 +404,6 @@ void Task1ms_TIM5_Callback()
         // 给上位机发数据
         TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
 
-
-           
-    	     
         static int mod5 = 0;
         mod5++;
         if (mod5 == 10) // 上下板通信 100hz
@@ -517,17 +513,17 @@ extern "C" void Task_Loop()
     if (start_flag == 1)
     {
         JudgeReceiveData.robot_id = chariot.Referee.Get_ID();
-        JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;                       // pitch角度
-        JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;                          // 弹舱
-        JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                 // 摩擦轮
-        JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                              // 自瞄是否离线
-        JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                     // 自瞄是否瞄准
-                                                                                            // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
-        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage()/100.0f;     // 超级电容容量
-        JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type(); // 底盘控制模式
+        JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;                            // pitch角度
+        JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;                               // 弹舱
+        JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                      // 摩擦轮
+        JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                                   // 自瞄是否离线
+        JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                          // 自瞄是否瞄准
+                                                                                                 // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
+        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage() / 100.0f; // 超级电容容量
+        JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type();      // 底盘控制模式
         JudgeReceiveData.Supercap_State = chariot.Sprint_Status;
-        JudgeReceiveData.booster_fric_omega_left= chariot.Booster_fric_omega_left; // 左摩擦轮速度; // 左摩擦轮速度
-        JudgeReceiveData.booster_fric_omega_right= chariot.Booster_fric_omega_right;
+        JudgeReceiveData.booster_fric_omega_left = chariot.Booster_fric_omega_left; // 左摩擦轮速度; // 左摩擦轮速度
+        JudgeReceiveData.booster_fric_omega_right = chariot.Booster_fric_omega_right;
         if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
             Init_Cnt = 10;
         GraphicSendtask();

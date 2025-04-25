@@ -16,24 +16,32 @@
 
 /* Exported macros -----------------------------------------------------------*/
 
-#define CHASSIS
-//#define GIMBAL
+//#define CHASSIS
+#define GIMBAL
+
+#ifdef GIMBAL
 
 #define BULLET_SPEED_PID
+#define MINIPC_COMM_CAN
+#define MINIPC_COMM_USB
+
+#endif
+
+
 
 
 #ifdef CHASSIS
 
+#define SPEED_SLOPE
 #define POWER_LIMIT
-#ifdef POWER_LIMIT
-#define POWER_LIMIT_BUFFER_LOOP
 
+#ifdef POWER_LIMIT
+
+#define POWER_LIMIT_BUFFER_LOOP
 #define BIG_P_ALLOCATE
-//        #define POWER_LIMIT_NEW_CONTROL
- //       #define POWER_LIMIT_OLD_CONTROL
+
 #endif
 
-#define SPEED_SLOPE
 
 #endif
 
