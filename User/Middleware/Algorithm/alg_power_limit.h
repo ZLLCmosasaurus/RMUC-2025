@@ -65,7 +65,7 @@ class Class_Power_Limit
     //电机模型参数
 	float k1 = 1.3;		// k1 
 	float k2 = 0.015;		// k2 
-	float Alpha = 0.0f;
+	float Alpha = 0.81f;
     float Tansfer_Coefficient = 9.55f;  //转化系数 w*t/Tansfer_Coefficient
 
     //超电电量

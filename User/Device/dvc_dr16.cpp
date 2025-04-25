@@ -250,21 +250,24 @@ void Class_DR16::DR16_Data_Process()
     Judge_Switch(&Data.Left_Switch, tmp_buffer->Switch_1, Pre_UART_Rx_Data.Switch_1);
     Judge_Switch(&Data.Right_Switch, tmp_buffer->Switch_2, Pre_UART_Rx_Data.Switch_2);
 
-    // //鼠标信息
-    // Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
-    // Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
-    // Data.Mouse_Z = tmp_buffer->Mouse_Z / 32768.0f;
+    //图传串口离线时使用DR16数据
+    if (Image_Status == Image_Status_DISABLE)
+    {
+        // //鼠标信息
+        Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
+        Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
+        Data.Mouse_Z = tmp_buffer->Mouse_Z / 32768.0f;
 
-    // //判断鼠标触发
-    // Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->Mouse_Left_Key, Pre_UART_Rx_Data.Mouse_Left_Key);
-    // Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->Mouse_Right_Key, Pre_UART_Rx_Data.Mouse_Right_Key);
+        // 判断鼠标触发
+        Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->Mouse_Left_Key, Pre_UART_Rx_Data.Mouse_Left_Key);
+        Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->Mouse_Right_Key, Pre_UART_Rx_Data.Mouse_Right_Key);
 
-    // //判断键盘触发
-    // for (int i = 0; i < 16; i++)
-    // {
-    //     Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Rx_Data.Keyboard_Key) >> i) & 0x1);
-    // }
-
+        // 判断键盘触发
+        for (int i = 0; i < 16; i++)
+        {
+            Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Rx_Data.Keyboard_Key) >> i) & 0x1);
+        }
+    }
     //左前轮信息
     Data.Yaw = (tmp_buffer->Channel_Yaw - Rocker_Offset) / Rocker_Num;
 
@@ -362,6 +365,14 @@ void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
         //遥控器保持连接
         DR16_Status = DR16_Status_ENABLE;
     }
+
+    if(Image_Flag == Pre_Image_Flag){
+        Image_Status = Image_Status_DISABLE;
+    }
+    else{
+        Image_Status = Image_Status_ENABLE;
+    }
+
     Pre_DR16_Flag = DR16_Flag;
     Pre_Image_Flag = Image_Flag;
 }

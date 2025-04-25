@@ -10,6 +10,7 @@
  */
 
 #include "alg_new_power_limit.h"
+//#include "alg_power_limit.h"
 #include "math.h"
 
 /* Private macros ------------------------------------------------------------*/
@@ -27,7 +28,7 @@ static inline float my_fmax(float a, float b) { return (a > b) ? a : b; }
  * @param __ErrorLow 低于Error会进行等比分配
  * @param __ErrorUp 高于error，直接按error分配功率，防止功率乱吃，分配错误
  */
-void Class_Power_Limit::Init(uint8_t __ErrorLow, uint8_t __ErrorUp)
+void Class_Power_Limit::Init(float __ErrorLow, float __ErrorUp)
 {
 #ifdef AGV
     float initParams_dir[2] = {k1_dir, k2_dir};
@@ -152,8 +153,8 @@ void Class_Power_Limit::Calculate_Power_Coefficient(float actual_power, const St
         }
 
         params = rls.update(samples, actual_power - effectivePower - 4 * k3);
-        k1 = my_fmax(params[0][0], 1e-5f);
-        k2 = my_fmax(params[1][0], 1e-5f);
+        k1 = my_fmax(params[0][0], 1e-7f);
+        k2 = my_fmax(params[1][0], 1e-7f);
     }
 #endif
 }
@@ -264,7 +265,6 @@ float Class_Power_Limit::Calculate_Toque(float omega, float power, float torque,
  *
  * @param power_management 功率管理结构体
  */
-float Kp = 0.0f;
 void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
 {
 #ifdef AGV
@@ -389,10 +389,12 @@ void Class_Power_Limit::Power_Task(Struct_Power_Management &power_management)
     {
         
         if(power_management.Max_Power < power_management.Theoretical_Total_Power){
+            //Max_flag = 1;
             Calulate_Power_Allocate(power_management.Motor_Data[i], power_management.Total_error, 
                                 power_management.Max_Power, power_management.Scale_Conffient);
         }
         else{
+            //Max_flag = 0;
             power_management.Motor_Data[i].scaled_power = power_management.Motor_Data[i].theoretical_power;
         }
 

@@ -22,8 +22,9 @@
 
 #ifdef CHASSIS 	
 
-    #define FLYING_SLOPE
-    //#define POWER_LIMIT
+    //#define FLYING_SLOPE
+    //#define POWER_LIMIT_JH
+    #define POWER_LIMIT
     #ifdef POWER_LIMIT
 //         //#define POWER_LIMIT_BUFFER_LOOP 
          #define POWER_LIMIT_NEW_CONTROL
@@ -32,6 +33,14 @@
 
 
 //     //#define SPEED_SLOPE
+
+#endif
+
+#ifdef GIMBAL
+
+    #define USE_VT13
+
+    //#define USE_DR16
 
 #endif
 

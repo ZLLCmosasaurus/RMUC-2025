@@ -227,7 +227,7 @@ void TIM_CAN_PeriodElapsedCallback()
     // CAN1 
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
 
-    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); //LK-Pitch
+    CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-6020
     
     // CAN2 
     //CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //  按照0x1ff ID 发送 可控制多个电机

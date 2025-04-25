@@ -53,7 +53,8 @@ enum Enum_Chassis_Control_Type :uint8_t
 {
     Chassis_Control_Type_DISABLE = 0,
     Chassis_Control_Type_FLLOW,
-    Chassis_Control_Type_SPIN,
+    Chassis_Control_Type_SPIN_Positive,
+    Chassis_Control_Type_SPIN_NePositive,
 };
 
 /**
@@ -85,6 +86,16 @@ public:
     
     //功率限制
     Class_Power_Limit Power_Limit;
+    
+    
+    #endif
+
+    #ifdef POWER_LIMIT_JH
+    
+    //功率限制
+    Class_Power_Limit Power_Limit;
+    Struct_Power_Management Power_Management;
+
     
     
     #endif
