@@ -815,7 +815,7 @@ struct Struct_Referee_Rx_Data_Event_Dart_Remaining_Time
  */
 struct Struct_Referee_Rx_Data_Robot_Status
 {
-    Enum_Referee_Data_Robots_ID Robot_ID;
+    Enum_Referee_Data_Robots_ID Robot_ID=Referee_Data_Robots_ID_RED_HERO_1;
     uint8_t Level;
     uint16_t HP;
     uint16_t HP_Max;
@@ -989,6 +989,7 @@ struct Struct_Referee_Tx_Data_Interaction_Layer_Delete
 {
     uint16_t Header = 0x0100;
     Enum_Referee_Data_Robots_ID Sender;  
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Enum_Referee_Data_Interaction_Layer_Delete_Operation Operation;
     uint8_t Delete_Serial;
@@ -1002,6 +1003,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_1
 {
     uint16_t Header = 0x0101;
     Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Union_Graphic Graphic_1;
 } __attribute__((packed));
@@ -1014,6 +1016,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_2
 {
     uint16_t Header = 0x0102;
     Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Union_Graphic Graphic_1;
     Union_Graphic Graphic_2;
@@ -1027,6 +1030,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_5
 {
     uint16_t Header = 0x0103;
     Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Union_Graphic Graphic[5];
 } __attribute__((packed));
@@ -1039,6 +1043,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_7
 {
     uint16_t Header = 0x0104;
     Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Union_Graphic Graphic[7];
 } __attribute__((packed));
@@ -1051,6 +1056,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_String
 {
     uint16_t Header = 0x0110;
     Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
     Union_Graphic Graphic_String;
     uint8_t String[30];
