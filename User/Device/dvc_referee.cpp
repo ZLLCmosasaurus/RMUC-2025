@@ -321,25 +321,29 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
  * @brief 裁判系统发送UI绘图数据
  *
  */
-void Class_Referee::UART_Tx_Referee_UI()
+
+void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
 {
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 500, "Chassis", (sizeof("chassis")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
-
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 800, "Gimbal", (sizeof("Gimbal")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
-
-    Referee_UI_Draw_String(Get_ID(), Referee_UI_Zero , 0 , 0x00, 0, 20, 2, 500, 1200, "Fric", (sizeof("Fric")-1),Referee_UI_ADD);    //配置字符信息
-    //Referee_UI_Packed_String(); 
-    Referee_UI_Packed_Data(&Interaction_Graphic_String); //打包字符数据
-    //UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Buffer_Length); //DMA发送
-    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10); //阻塞发送
+//		static uint8_t String_Index;
+//        uint8_t string_num=7;
+//		String_Index++;
+//        if(String_Index==string_num+1)String_Index=0;
+//        Referee_UI_Draw_String(0,Get_ID(), Referee_UI_One, 0 , 0x00, 0, 20, 2, 780, 180, "LEFT", (sizeof("LEFT")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(1,Get_ID(), Referee_UI_One, 0 , 0x01, 0, 20, 2, 950, 180, "MID", (sizeof("MID")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(2,Get_ID(), Referee_UI_One , 0, 0x02, 0, 20, 2, 1081, 180, "RIGHT  ", (sizeof("RIGHT")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(3,Get_ID(), Referee_UI_One, 0 , 0x03, 0, 20, 2, 70, 550, "RElAY", (sizeof("RElAY")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(4,Get_ID(), Referee_UI_One, 0 , 0x04, 0, 20, 2, 70, 600, "GIMBAL", (sizeof("GIMBAL")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(5,Get_ID(), Referee_UI_One , 0, 0x05, 0, 20, 2, 70, 650, "GIMBAL_MODE  ", (sizeof("GIMBAL_MODE")-1),Referee_UI_ADD);
+//        Referee_UI_Draw_String(6,Get_ID(), Referee_UI_One, 0 , 0x06, 0, 20, 2, 70, 700, "NOW_STATUS", (sizeof("NOW_STATUS")-1),Referee_UI_ADD);        
+//        Referee_UI_Draw_String(7,Get_ID(), Referee_UI_One, 0 , 0x07, 0, 20, 2, 1600, 700, "AUTO", (sizeof("AUTO")-1),Referee_UI_ADD);      
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_Zero,1,0x03,2,3,900,500,1000,500,Referee_UI_ADD);
+//        Referee_UI_Draw_Line(Get_ID(),Referee_UI_One,1,0x04,2,3,950,450,950,550,Referee_UI_ADD);
+		if (__String_Index < 9)
+        Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据
+    else if(__String_Index >=9)
+        Referee_UI_Packed_Data(&Interaction_Graphic_7); // 打包图形数据
+		UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
 }
 
 
@@ -382,22 +386,22 @@ void Class_Referee::Referee_UI_Packed_String()
  * @brief 绘制字符串
  *
  */
-void Class_Referee::Referee_UI_Draw_String(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type)
+void Class_Referee::Referee_UI_Draw_String(uint8_t String_index,uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type)
 {
-    Interaction_Graphic_String.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
-    Interaction_Graphic_String.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
+    Interaction_Graphic_String[String_index].Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_String[String_index].Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
 
-    memcpy(Interaction_Graphic_String.String, __String, __String_Length * sizeof(uint8_t));
-    Interaction_Graphic_String.Graphic_String.String.Serial = __Serial;
-    Interaction_Graphic_String.Graphic_String.String.Index[0] = __Index;
-    Interaction_Graphic_String.Graphic_String.String.Operation_Enum = __Operate_Type;
-    Interaction_Graphic_String.Graphic_String.String.Type_Enum = 7;
-    Interaction_Graphic_String.Graphic_String.String.Color_Enum = __Color;
-    Interaction_Graphic_String.Graphic_String.String.Font_Size = __Font_Size;
-    Interaction_Graphic_String.Graphic_String.String.Line_Width = __Line_Width;
-    Interaction_Graphic_String.Graphic_String.String.Start_X = __Start_X;
-    Interaction_Graphic_String.Graphic_String.String.Start_Y = __Start_Y;
-    Interaction_Graphic_String.Graphic_String.String.Length = __String_Length;
+    memcpy(Interaction_Graphic_String[String_index].String, __String, __String_Length * sizeof(uint8_t));
+    Interaction_Graphic_String[String_index].Graphic_String.String.Serial = __Serial;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Index[0] = __Index;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Type_Enum = 7;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Color_Enum = __Color;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Font_Size = __Font_Size;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Line_Width = __Line_Width;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Start_X = __Start_X;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Start_Y = __Start_Y;
+    Interaction_Graphic_String[String_index].Graphic_String.String.Length = __String_Length;
 }
 
 /**

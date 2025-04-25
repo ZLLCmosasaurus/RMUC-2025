@@ -240,32 +240,33 @@ void Class_DR16::DR16_Data_Process()
     Struct_DR16_UART_Data *tmp_buffer = (Struct_DR16_UART_Data *)UART_Manage_Object_1->Rx_Buffer;
 
     /*源数据转为对外数据*/
-
+	 //判断拨码触发
+    Judge_Switch(&Data.Left_Switch, tmp_buffer->Switch_1, Pre_UART_Rx_Data.Switch_1);
+    Judge_Switch(&Data.Right_Switch, tmp_buffer->Switch_2, Pre_UART_Rx_Data.Switch_2);
+	
+	if(Get_Image_Key_Status()==Image_Status_DISABLE){
+   
     //摇杆信息
     Data.Right_X = (tmp_buffer->Channel_0 - Rocker_Offset) / Rocker_Num;
     Data.Right_Y = (tmp_buffer->Channel_1 - Rocker_Offset) / Rocker_Num;
     Data.Left_X = (tmp_buffer->Channel_2 - Rocker_Offset) / Rocker_Num;
     Data.Left_Y = (tmp_buffer->Channel_3 - Rocker_Offset) / Rocker_Num;
 
-    //判断拨码触发
-    Judge_Switch(&Data.Left_Switch, tmp_buffer->Switch_1, Pre_UART_Rx_Data.Switch_1);
-    Judge_Switch(&Data.Right_Switch, tmp_buffer->Switch_2, Pre_UART_Rx_Data.Switch_2);
+   
+			 Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
+			 Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
+			 Data.Mouse_Z = tmp_buffer->Mouse_Z / 32768.0f;
 
-    // //鼠标信息
-    // Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
-    // Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
-    // Data.Mouse_Z = tmp_buffer->Mouse_Z / 32768.0f;
+			// //判断鼠标触发
+			 Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->Mouse_Left_Key, Pre_UART_Rx_Data.Mouse_Left_Key);
+			 Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->Mouse_Right_Key, Pre_UART_Rx_Data.Mouse_Right_Key);
 
-    // //判断鼠标触发
-    // Judge_Key(&Data.Mouse_Left_Key, tmp_buffer->Mouse_Left_Key, Pre_UART_Rx_Data.Mouse_Left_Key);
-    // Judge_Key(&Data.Mouse_Right_Key, tmp_buffer->Mouse_Right_Key, Pre_UART_Rx_Data.Mouse_Right_Key);
-
-    // //判断键盘触发
-    // for (int i = 0; i < 16; i++)
-    // {
-    //     Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Rx_Data.Keyboard_Key) >> i) & 0x1);
-    // }
-
+				//判断键盘触发
+			 for (int i = 0; i < 16; i++)
+			 {
+					 Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->Keyboard_Key) >> i) & 0x1, ((Pre_UART_Rx_Data.Keyboard_Key) >> i) & 0x1);
+			 }			
+		}
     //左前轮信息
     Data.Yaw = (tmp_buffer->Channel_Yaw - Rocker_Offset) / Rocker_Num;
 
@@ -279,12 +280,15 @@ void Class_DR16::DR16_Data_Process()
 void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
 {
     //获取当前原始值数据
-    memcpy(&Now_UART_Image_Rx_Data, __rx_buffer,sizeof(Struct_Image_UART_Data));
+    memcpy(&Now_UART_Image_Rx_Data, __rx_buffer,sizeof(Struct_Image_UART_Data_VT03));
     //数据处理过程
-    Struct_Image_UART_Data *tmp_buffer = (Struct_Image_UART_Data *)__rx_buffer;
+    Struct_Image_UART_Data_VT03 *tmp_buffer = (Struct_Image_UART_Data_VT03 *)__rx_buffer;
 
     /*源数据转为对外数据*/
-
+		Data.Right_X = (tmp_buffer->Channel_0 - Rocker_Offset) / Rocker_Num;
+    Data.Right_Y = (tmp_buffer->Channel_1 - Rocker_Offset) / Rocker_Num;
+    Data.Left_X = (tmp_buffer->Channel_3 - Rocker_Offset) / Rocker_Num;
+    Data.Left_Y = (tmp_buffer->Channel_2 - Rocker_Offset) / Rocker_Num;
     //鼠标信息
     Data.Mouse_X = tmp_buffer->Mouse_X / 32768.0f;
     Data.Mouse_Y = tmp_buffer->Mouse_Y / 32768.0f;
@@ -314,38 +318,13 @@ void Class_DR16::Image_Data_Process_Customer_controller(uint8_t* __rx_buffer)
     Struct_Image_UART_Data_Customer_controller *tmp_buffer = (Struct_Image_UART_Data_Customer_controller *)__rx_buffer;
 
     /*源数据转为对外数据*/
-//    for (int i = 0; i < 5; i++)
-//    {
-//    memcpy(&Angle_Image[i],&tmp_buffer[3*i],2);
-//    memcpy(&total_round[i],&tmp_buffer[3*i+2],1);
-//    Angle_Image[i]=Angle_Image[i]/100.f;
-//    }
-//	        for(uint8_t i=0; i<5; i++)
-//        {
-//            int16_t temp = (tmp_buffer->Data[3*i+1]<<8) | tmp_buffer->Data[3*i];
-//            Angle_Image[i] = temp/100.f;
-//        }
-//	    
-	
-	
-//	int16_t IntAngle;
-//    int8_t total_round;
-//	for(uint8_t i=0;i<5;i++)
-//  {
 
-//		memcpy(&IntAngle,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i],2);
-//    memcpy(&total_round,&Now_UART_Image_Rx_Data_Customer_controller.Data[3*i+2],1);
-//		Angle_Image[i]=(float)(IntAngle/100.f);
-
-//  }
-	for(uint8_t i=0; i<5; i++)
+				for(uint8_t i=0; i<5; i++)
         {
             int16_t temp = (Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+2]<<8) | Now_UART_Image_Rx_Data_Customer_controller.Data[2*i+1];
             Angle_Image[i] = temp/100.f;
         }
-	
-    //memcpy(&Customer_controller,&tmp_buffer,15);
-   
+				Control_Key=Now_UART_Image_Rx_Data_Customer_controller.Data[10];
 }
 /**
  * @brief UART通信接收回调函数
@@ -379,28 +358,39 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
         cmd_id=(cmd_id<<8)|Rx_Data[5];  
         data_length=Rx_Data[2]&0xff;
         data_length=(data_length<<8)|Rx_Data[1];
-        if(cmd_id == 0x0304 && data_length == 12)
-        {
-            //滑动窗口, 判断遥控器是否在线
-            Image_Flag += 1;
-            Image_Data_Process(&Rx_Data[7]);
-            //保留上一次数据
-            memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[7], sizeof(Struct_Image_UART_Data));            
-        }
-        else if ((cmd_id == 0x0302)&& (data_length == 30))// && data_length == 30
+//        if(cmd_id == 0x0304 && data_length == 12)
+//        {
+//            //滑动窗口, 判断遥控器是否在线
+//            Image_Key_Flag += 1;
+//            Image_Data_Process(&Rx_Data[7]);
+//            //保留上一次数据
+//            memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[7], sizeof(Struct_Image_UART_Data));            
+//        }
+//			 else
+        if ((cmd_id == 0x0302)&& (data_length == 30))// && data_length == 30
         {
 				 for(uint8_t i=0; i<5; i++)
         {
+						Image_Flag++;
             int16_t temp = (Rx_Data[2*i+8]<<8) | (Rx_Data[2*i+7]);
             Customize_Controller_Data.Angle[i] = float(temp/100.f);
         }
-//            Image_Flag_Customer_controller += 1;
-//            Image_Data_Process_Customer_controller(&Rx_Data[7]);
-//            //保留上一次数据
-//            memcpy(&Pre_UART_Image_Rx_Data_Customer_controller, &Rx_Data[7], sizeof(Struct_Image_UART_Data_Customer_controller));     
+						Control_Key=Rx_Data[17];
+            Image_Flag_Customer_controller += 1;
+            //Image_Data_Process_Customer_controller(&Rx_Data[7]);
+            //保留上一次数据
+            memcpy(&Pre_UART_Image_Rx_Data_Customer_controller, &Rx_Data[7], sizeof(Struct_Image_UART_Data_Customer_controller));     
         }
         
     }
+		else if((Rx_Data[0]==0xA9)&&(Rx_Data[1]==0x53))
+		{
+					//滑动窗口, 判断遥控器是否在线
+            Image_Key_Flag += 1;
+            Image_Data_Process(&Rx_Data[0]);
+            //保留上一次数据
+            memcpy(&Pre_UART_Image_Rx_Data, &Rx_Data[0], sizeof(Struct_Image_UART_Data_VT03));     
+		}
 }
 
 /**
@@ -409,8 +399,10 @@ void Class_DR16::Image_UART_RxCpltCallback(uint8_t *Rx_Data)
  */
 void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
 {
+	static uint8_t mod10;
+	mod10++;
     //判断该时间段内是否接收过遥控器数据
-    if (DR16_Flag == Pre_DR16_Flag && Image_Flag == Pre_Image_Flag)
+    if (DR16_Flag == Pre_DR16_Flag )
     {
         //遥控器断开连接
         DR16_Status = DR16_Status_DISABLE;
@@ -421,8 +413,32 @@ void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
         //遥控器保持连接
         DR16_Status = DR16_Status_ENABLE;
     }
+		if(mod10>=10){
+    //判断该时间段内是否接收过自定义控制器数据
+		if(Image_Flag == Pre_Image_Flag)
+		{
+			Image_Status = Image_Status_DISABLE;
+		}
+	   else
+		 {
+		 Image_Status = Image_Status_ENABLE;
+		 }
+		    //判断该时间段内是否接收过图传链路键鼠数据
+		 	if(Image_Key_Flag == Pre_Image_Key_Flag)
+			{
+			Image_Key_Status = Image_Status_DISABLE;
+			}
+	   else
+		 {
+		 Image_Key_Status = Image_Status_ENABLE;
+		 }
+		 	Pre_Image_Key_Flag=Image_Key_Flag;
+		  Pre_Image_Flag = Image_Flag;
+		  mod10=0;
+	 }
+	
     Pre_DR16_Flag = DR16_Flag;
-    Pre_Image_Flag = Image_Flag;
+   
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

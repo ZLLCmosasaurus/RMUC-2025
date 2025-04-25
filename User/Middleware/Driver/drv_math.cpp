@@ -182,11 +182,5 @@ float Math_Int_To_Float(int32_t x, int32_t Int_Min, int32_t Int_Max, float Float
     float out = tmp * (Float_Max - Float_Min) + Float_Min;
     return (out);
 }
-float Math_Limit_func(float*input,float min,float max)
-{
-  if(*input > max)
-      *input = max;
-  else if(*input < min)
-      *input = min;
-}
+
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

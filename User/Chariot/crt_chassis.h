@@ -79,7 +79,7 @@ public:
     #endif
     //裁判系统
     Class_Referee *Referee;
-
+		Class_Power_Limit Power_Limit;
     //下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 
