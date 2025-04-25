@@ -89,7 +89,7 @@ class Class_Power_Limit
     //四电机当前输出轴角速度 rad/s
     float Omega[4];	 
     //底盘总功率限制
-    float Total_Power_Limit = 80.f;//哨兵初始化
+    float Total_Power_Limit = 100.f;//哨兵初始化
     //底盘总预测功率
     float Total_Predict_Power = 0;  
     //预测功率

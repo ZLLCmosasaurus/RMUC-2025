@@ -476,7 +476,7 @@ void Class_LK_Motor::Set_IMU_K_D(float __IMU_K_D)
 /**
  * @brief ?څ??????, rad
  *
- * @param __Target_Angle ??????, rad
+ * @param __Target_Angle , rad
  */
 void Class_LK_Motor::Set_Target_Angle(float __Target_Angle)
 {

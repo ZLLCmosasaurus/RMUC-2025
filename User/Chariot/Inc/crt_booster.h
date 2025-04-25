@@ -22,6 +22,7 @@
 #include "alg_fsm.h"
 #include "dvc_referee.h"
 #include "dvc_djimotor.h"
+#include "dvc_minipc.h"
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -52,15 +53,7 @@ enum Enum_Friction_Control_Type
     Friction_Control_Type_ENABLE,
 };
 
-/**
- * @brief 
- *
- */
-enum Enum_Booster_Type
-{
-    Booster_Type_A = 0,
-    Booster_Type_B,
-};  
+
 
 /**
  * @brief Specialized, 热量检测有限自动机
@@ -105,6 +98,8 @@ public:
 
     //裁判系统
     Class_Referee *Referee;
+    //上位机
+    Class_MiniPC *MiniPC;
 
     //拨弹盘电机
     Class_DJI_Motor_C610 Motor_Driver;
@@ -132,6 +127,7 @@ public:
     inline void Set_Driver_Omega(float __Driver_Omega);
     inline void Set_Booster_Type(Enum_Booster_Type __Booster_Type);
     inline void Set_Heat(uint16_t __Heat);
+    inline void Set_Cooling_Value(uint16_t __Cooling_Value);
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
@@ -141,7 +137,8 @@ protected:
 
     //常量
     uint16_t Heat_Max = 400;
-
+    uint16_t Cooling_Value = 80;
+    float Heat_Consumption = 10.f;
     //拨弹盘堵转扭矩阈值, 超出被认为卡弹
     uint16_t Driver_Torque_Threshold = 8500;
     //摩擦轮单次判定发弹阈值, 超出被认为发射子弹
@@ -151,7 +148,10 @@ protected:
 
     //内部变量
     uint16_t Heat;
-
+    float shoot_time = 0.f;
+    float ShootTime = 0.f;
+    float shoot_speed = 0.f;
+    float Now_Angle = 0.f;
     //读变量
 
     //拨弹盘默认速度, 一圈八发子弹, 此速度下与冷却均衡
@@ -285,6 +285,10 @@ void Class_Booster::Set_Friction_Omega(float __Friction_Omega)
 void Class_Booster::Set_Driver_Omega(float __Driver_Omega)
 {
     Driver_Omega = __Driver_Omega;
+}
+void Class_Booster::Set_Cooling_Value(uint16_t __Cooling_Value)
+{
+    Cooling_Value = __Cooling_Value;
 }
 
 #endif

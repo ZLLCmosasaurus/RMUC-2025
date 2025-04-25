@@ -274,11 +274,11 @@ public:
     void Yaw_Angle_Limit(Enum_Motor_Yaw_Type Motor_Yaw_Type);
     void MiniPC_Update();
     void PID_Update();
+    void Limit_Update();
+    float Adjust_Target(float Target,float Now);
 
     IMU_Data IMU_Data_A;
     IMU_Data IMU_Data_B;
-
-    
 
 protected:
     //初始化相关常量
@@ -324,7 +324,7 @@ protected:
     Enum_Motor_Yaw_Type Motor_Yaw_Type = Yaw_A;
 
     //读写变量
-
+    volatile float pre_angle_main = 0.f;
     // yaw轴角度
     float Target_Yaw_Angle = 0.0f;
     float Target_Yaw_Angle_A = 0.0f;

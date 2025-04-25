@@ -22,7 +22,7 @@
 #define FILTER_FOURIER_ORDER (50)
 //采样频率
 #define SAMPLING_FREQUENCY (1000.0f)
-
+#define MAX_BUFFER_SIZE 1000
 /* Exported types ------------------------------------------------------------*/
 
 #define WINDOW_SIZE 5  // 建议奇数窗口（3/5/7）
@@ -37,6 +37,7 @@ void free_filter(SpikeFilter* filter);
 void init_filter(SpikeFilter* filter, int window_size);
 int compare(const void* a, const void* b);
 float process_sample(SpikeFilter* filter, float input);
+float addSampleAndFilter(float input, int windowSize);
 /**
  * @brief 滤波器类型
  *

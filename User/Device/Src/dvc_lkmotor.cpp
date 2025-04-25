@@ -317,7 +317,7 @@ void Class_LK_Motor::TIM_Alive_PeriodElapsedCallback()
 
     Pre_Flag = Flag;
 }
-float test_omaga = 1,test_angle = 0;
+float test_omaga = 1,test_angle_a = 0;
 /**
  * @brief TIM定时器中断发送出去的回调函数
  *
@@ -344,6 +344,7 @@ void Class_LK_Motor::TIM_Process_PeriodElapsedCallback()
         break;
         case (LK_Motor_Control_Method_ANGLE):
         {
+            test_angle_a = Target_Angle;
             PID_Angle.Set_Target(Target_Angle);
             //PID_Angle.Set_Target(test_angle);
             PID_Angle.Set_Now(Transform_Angle);
