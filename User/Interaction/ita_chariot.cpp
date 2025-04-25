@@ -622,7 +622,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         MiniPC.TIM_Write_PeriodElapsedCallback();
         static uint8_t mod50	=	0;
         mod50++;
-        if(mod50%50==0)
+        if(mod50%100==0)
         {
             Chariot_Referee_UI_Tx_Callback(Referee_UI_Refresh_Status);
             mod50 = 0;
