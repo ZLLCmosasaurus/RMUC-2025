@@ -41,7 +41,7 @@ typedef void (*USB_Call_Back)(uint8_t *Buffer, uint32_t Length);
 
 
 /**
- * @brief USBͨ�Ŵ����ṹ��
+ * @brief USBͨ
  *
  */
 struct Struct_USB_Manage_Object

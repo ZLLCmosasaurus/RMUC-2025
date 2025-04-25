@@ -279,13 +279,18 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
             // {
             //     Math_Constrain(&Omega_Max, -Omega_Max, Omega_Max);
             // }
-            //Set_Target_Velocity_Y(-Target_Velocity_Y);
 
             // 速度换算，正运动学分解
             float motor1_temp_linear_vel = Get_Target_Velocity_Y() - Get_Target_Velocity_X() + Get_Target_Omega() * (HALF_WIDTH + HALF_LENGTH);
             float motor2_temp_linear_vel = Get_Target_Velocity_Y() + Get_Target_Velocity_X() - Get_Target_Omega() * (HALF_WIDTH + HALF_LENGTH);
             float motor3_temp_linear_vel = Get_Target_Velocity_Y() + Get_Target_Velocity_X() + Get_Target_Omega() * (HALF_WIDTH + HALF_LENGTH);
             float motor4_temp_linear_vel = Get_Target_Velocity_Y() - Get_Target_Velocity_X() - Get_Target_Omega() * (HALF_WIDTH + HALF_LENGTH);
+
+            // 斜坡函数
+            // float motor1_temp_linear_vel = Slope_Velocity_Y.Get_Out() - Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * (HALF_WIDTH + HALF_LENGTH);
+            // float motor2_temp_linear_vel = Slope_Velocity_Y.Get_Out() + Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * (HALF_WIDTH + HALF_LENGTH);
+            // float motor3_temp_linear_vel = Slope_Velocity_Y.Get_Out() + Slope_Velocity_X.Get_Out() + Slope_Omega.Get_Out() * (HALF_WIDTH + HALF_LENGTH);
+            // float motor4_temp_linear_vel = Slope_Velocity_Y.Get_Out() - Slope_Velocity_X.Get_Out() - Slope_Omega.Get_Out() * (HALF_WIDTH + HALF_LENGTH);
 
             // 线速度 cm/s  转角速度  RAD
             float motor1_temp_rad = motor1_temp_linear_vel * VEL2RPM * RPM2RAD;
@@ -358,7 +363,6 @@ void Class_Tricycle_Chassis::Speed_Resolution(){
  * @brief TIM定时器中断计算回调函数
  *
  */
-float Power_Limit_K = 1.0f;
 void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Status __Sprint_Status)
 {
     
@@ -372,18 +376,17 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
 
     Slope_Omega.Set_Target(Target_Omega);
     Slope_Omega.TIM_Calculate_PeriodElapsedCallback();
-
     
     //速度解算
-    Speed_Resolution();
-    
-    /***************************超级电容*********************************/     
+    Speed_Resolution();    
+    /***************************超级电容*********************************/
+    Supercap.Set_Supercap_Mode(Get_Supercap_Mode());
     Supercap.TIM_Supercap_PeriodElapsedCallback();
 
     #if POWER_CONTROL == 1
     /*************************功率限制策略*******************************/
     //Power_Limit_Update();
-    Power_Limit.Set_Motor(Motor_Wheel);   //添加四个电机的控制电流和当前转速
+    Power_Limit.Set_Motor(Motor_Wheel);//添加四个电机的控制电流和当前转速
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);
     #endif

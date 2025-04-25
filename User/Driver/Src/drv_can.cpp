@@ -67,6 +67,12 @@ uint8_t CAN_Supercap_Tx_Data[8];
 uint8_t CAN3_Chassis_Tx_Data_A[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_B[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_C[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_D[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_E[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_MiniPC_Tx_Data_A[8];   //下位机发送缓冲区
+uint8_t CAN3_MiniPC_Tx_Data_B[8];   //下位机发送缓冲区
+uint8_t CAN3_MiniPC_Tx_Data_C[8];   //下位机发送缓冲区
+uint8_t CAN3_MiniPC_Tx_Data_D[8];   //下位机发送缓冲区
 uint8_t CAN3_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
@@ -335,6 +341,8 @@ void TIM_CAN_PeriodElapsedCallback()
         CAN_Send_Data(&hfdcan3, 0x88, CAN3_Chassis_Tx_Data_A, 8);
         CAN_Send_Data(&hfdcan3, 0x99, CAN3_Chassis_Tx_Data_B, 8);
         CAN_Send_Data(&hfdcan3, 0x78, CAN3_Chassis_Tx_Data_C, 8);
+        CAN_Send_Data(&hfdcan3, 0x98, CAN3_Chassis_Tx_Data_D, 8);
+        CAN_Send_Data(&hfdcan3, 0x97, CAN3_Chassis_Tx_Data_E, 8);
         //超电
         CAN_Send_Data(&hfdcan3, 0x66, CAN_Supercap_Tx_Data, 8);
         mod10 = 0;
@@ -366,6 +374,11 @@ void TIM_CAN_PeriodElapsedCallback()
         //  CAN3  下板 大yaw        
         CAN_Send_Data(&hfdcan3, 0x200, CAN3_0x200_Tx_Data, 8); //拨弹盘  按照0x200 ID 发送 可控制多个电机
         CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+        // CAN3   MiniPC 
+        CAN_Send_Data(&hfdcan3, 0x100, CAN3_MiniPC_Tx_Data_A, 8); //给上位机发送 按照0x100 ID 发送
+        CAN_Send_Data(&hfdcan3, 0x101, CAN3_MiniPC_Tx_Data_B, 8); //给上位机发送 按照0x101 ID 发送
+        CAN_Send_Data(&hfdcan3, 0x102, CAN3_MiniPC_Tx_Data_C, 8); //给上位机发送 按照0x102 ID 发送
+        CAN_Send_Data(&hfdcan3, 0x103, CAN3_MiniPC_Tx_Data_D, 8); //给上位机发送 按照0x103 ID 发送
     }
     if(mod2 == 2)
     {

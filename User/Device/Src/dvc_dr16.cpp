@@ -310,9 +310,7 @@ void Class_DR16::DR16_UART_RxCpltCallback(uint8_t *Rx_Data)
 {
     //滑动窗口, 判断遥控器是否在线
     DR16_Flag += 1;
-
     DR16_Data_Process();
-
     //保留上一次数据
     memcpy(&Pre_UART_Rx_Data, UART_Manage_Object_1->Rx_Buffer, sizeof(Struct_DR16_UART_Data));
 }

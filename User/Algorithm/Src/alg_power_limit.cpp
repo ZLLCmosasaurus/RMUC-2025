@@ -112,9 +112,8 @@ void Class_Power_Limit::TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&
         //跑功率限制
 		float power_limit_sum = fabs(Total_Power_Limit + Buffer_power);
         Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4);
-        // 设置输出
-		Output(Motor);	
-
+        //设置输出
+		Output(Motor);
 	#elif defined (POWER_LIMIT_OLD_CONTROL)
 	float Power_Limit;
 	//max_power=50;//裁判系统读取不到数据时自己赋值,比赛使用时要注释掉

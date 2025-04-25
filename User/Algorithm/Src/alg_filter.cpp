@@ -177,4 +177,33 @@ float process_sample(SpikeFilter* filter, float input) {
 void free_filter(SpikeFilter* filter) {
     free(filter->buffer);
 }
+
+float addSampleAndFilter(float input, int windowSize) {
+    static float buffer[MAX_BUFFER_SIZE];  // 内部缓冲区，保存历史数据
+    static int count = 0;                  // 当前样本个数
+
+    // 存储新输入的数据
+    if (count < MAX_BUFFER_SIZE) {
+        buffer[count++] = input;
+    } else {
+        // 如果缓冲区已满，则将数据左移，丢弃最旧数据
+        for (int i = 1; i < MAX_BUFFER_SIZE; i++) {
+            buffer[i-1] = buffer[i];
+        }
+        buffer[MAX_BUFFER_SIZE-1] = input;
+        // 保持 count 不变
+    }
+
+    // 确定实际参与平均计算的元素个数
+    int effectiveCount = (count < windowSize) ? count : windowSize;
+    float sum = 0.0f;
+
+    // 计算最近 effectiveCount 个数的和
+    for (int i = count - effectiveCount; i < count; i++) {
+        sum += buffer[i];
+    }
+
+    // 返回平均值
+    return sum / effectiveCount;
+}
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

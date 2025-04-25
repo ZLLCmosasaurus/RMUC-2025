@@ -267,11 +267,6 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
     switch (CAN_RxMessage->Header.Identifier)
     {
-        case (0x88):   //留给下板通讯
-        {
-            chariot.CAN_Gimbal_Rx_Chassis_Callback();
-        }
-        break;
         case (0x141):
         {
             chariot.Gimbal.Motor_Main_Yaw.CAN_RxCpltCallback(CAN_RxMessage->Data);
@@ -287,6 +282,11 @@ void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
             chariot.Booster_B.Motor_Driver.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
+        case (0x88):   //留给下板通讯
+        {
+            chariot.CAN_Gimbal_Rx_Chassis_Callback();
+        }
+        break;
         case (0x78):
         {
             chariot.CAN_Gimbal_Rx_Chassis_Callback();
@@ -296,6 +296,32 @@ void Gimbal_Device_CAN3_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage){
         {
             chariot.CAN_Gimbal_Rx_Chassis_Callback();
         }
+        break;
+        case (0x98):
+        {
+            chariot.CAN_Gimbal_Rx_Chassis_Callback();
+        }
+        break;
+        case (0x104):
+        {
+            chariot.MiniPC.CAN_RxCpltCallback();
+        }
+        break;
+        case (0x105):
+        {
+            chariot.MiniPC.CAN_RxCpltCallback();
+        }
+        break;
+        case (0x106):
+        {
+            chariot.MiniPC.CAN_RxCpltCallback();
+        }
+        break;
+        case (0x107):
+        {
+            chariot.MiniPC.CAN_RxCpltCallback();
+        }
+        break;
 	}
 }
 #endif
@@ -468,6 +494,19 @@ void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
 }
 #endif
 /**
+ * @brief UART MiniPC回调函数
+ *
+ * @param Buffer UART收到的消息
+ *
+ * @param Length 长度
+ */
+#ifdef GIMBAL
+void MiniPC_UART_Callback(uint8_t *Buffer, uint16_t Length)
+{
+    chariot.MiniPC.UART_RxCpltCallback(Buffer);
+}
+#endif
+/**
  * @brief TIM4任务回调函数
  *
  */
@@ -484,7 +523,6 @@ void Task100us_TIM4_Callback()
         chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();     
         IMUA_UART7_Callback(UART7_Manage_Object.Rx_Buffer, UART7_Manage_Object.Rx_Length);
         IMUB_USART1_Callback(UART1_Manage_Object.Rx_Buffer, UART1_Manage_Object.Rx_Length);
-
     #endif
 }
 
@@ -494,7 +532,7 @@ void Task100us_TIM4_Callback()
  * @brief TIM5任务回调函数
  *
  */
-float test_omega_angle=0;
+extern Referee_Rx_A_t CAN3_Chassis_Rx_Data_A;
 void Task1ms_TIM5_Callback()
 {
     init_finished++;
@@ -509,27 +547,31 @@ void Task1ms_TIM5_Callback()
     if(start_flag==1)
     {
         #ifdef GIMBAL
-        chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+            #ifdef DEBUG
+            chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+            #else
+            if(CAN3_Chassis_Rx_Data_A.game_process != 4)
+            {
+                chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+            }
+            #endif
         #endif
 
         chariot.TIM_Calculate_PeriodElapsedCallback();
         
     /****************************** 驱动层回调函数 1ms *****************************************/ 
         //统一打包发送
-			
-
         TIM_CAN_PeriodElapsedCallback();
-        
-        
-        //TIM_UART_PeriodElapsedCallback();
-        
+        //上位机
         static int mod5 = 0;
         mod5++;
         if (mod5 == 5)
         {
             TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-        mod5 = 0;
+            TIM_UART_PeriodElapsedCallback();
+            mod5 = 0;
         }	        
+
     }
 }
 
@@ -552,12 +594,10 @@ extern "C" void Task_Init()
 
         //裁判系统
         UART_Init(&huart10, Referee_UART10_Callback, 128);//并未使用环形队列 尽量给长范围增加检索时间 减少丢包
-        //超电
-        //UART_Init(&huart10, SuperCAP_UART1_Callback, 8);//8暂用 后面需要改
 
         #ifdef POWER_LIMIT
-        //旧版超电
-        //UART_Init(&huart1, SuperCAP_UART1_Callback, 128);
+
+
         #endif
 
     #endif
@@ -571,20 +611,17 @@ extern "C" void Task_Init()
 
         //c板陀螺仪spi外设
         SPI_Init(&hspi2,Device_SPI2_Callback);
-
         //磁力计iic外设
         //IIC_Init(&hi2c3, Ist8310_IIC3_Callback);    //达妙无磁力计
-        
         //遥控器接收
         UART_Init(&huart5, DR16_UART5_Callback, 18);
         //陀螺仪
 		UART_Init(&huart7, IMUA_UART7_Callback, 56);
         UART_Init(&huart1, IMUB_USART1_Callback, 56);
-
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
-
-        //HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+        //上位机串口
+        UART_Init(&huart8, MiniPC_UART_Callback, 56);
 
     #endif
 

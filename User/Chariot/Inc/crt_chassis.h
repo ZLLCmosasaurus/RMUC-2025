@@ -26,6 +26,7 @@
 #include "alg_power_limit.h"
 #include "dvc_supercap.h"
 #include "config.h"
+#include "dvc_minipc.h"
 /* Exported macros -----------------------------------------------------------*/
 #define wheel_diameter 12.000000f   // 
 #define half_width 10.0f           // 25.000000f		x方向为宽
@@ -126,6 +127,7 @@ public:
     inline float Get_Target_Omega();
     inline float Get_Spin_Omega();
     inline float Get_Relative_Angle();
+    inline Enum_Supercap_Mode Get_Supercap_Mode();
 
     inline void Set_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
     inline void Set_Target_Velocity_X(float __Target_Velocity_X);
@@ -135,6 +137,7 @@ public:
     inline void Set_Now_Velocity_Y(float __Now_Velocity_Y);
     inline void Set_Now_Omega(float __Now_Omega);
     inline void Set_Relative_Angle(float __Relative_Angle);
+    inline void Set_Supercap_Mode(Enum_Supercap_Mode __Supercap_Mode);
 
     inline void Set_Velocity_Y_Max(float __Velocity_Y_Max);
     inline void Set_Velocity_X_Max(float __Velocity_X_Max);
@@ -192,6 +195,7 @@ protected:
 
     //底盘控制方法
     Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+    Enum_Supercap_Mode Supercap_Mode = Supercap_DISABLE;
     //目标速度X
     float Target_Velocity_X = 0.0f;
     //目标速度Y
@@ -380,6 +384,10 @@ float Class_Tricycle_Chassis::Get_Relative_Angle()
 {
     return (Relative_Angle);
 }
+Enum_Supercap_Mode Class_Tricycle_Chassis::Get_Supercap_Mode()
+{
+    return (Supercap_Mode);
+}
 /**
  * @brief 设定底盘控制方法
  *
@@ -474,7 +482,10 @@ void Class_Tricycle_Chassis::Set_Relative_Angle(float __Relative_Angle)
 {
     Relative_Angle = __Relative_Angle;
 }
-
+void Class_Tricycle_Chassis::Set_Supercap_Mode(Enum_Supercap_Mode __Supercap_Mode)
+{
+    Supercap_Mode = __Supercap_Mode;
+}
 #endif
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

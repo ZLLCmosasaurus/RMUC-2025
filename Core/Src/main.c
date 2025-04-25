@@ -107,6 +107,8 @@ int main(void)
   MX_UART5_Init();
   MX_TIM5_Init();
   MX_TIM4_Init();
+  MX_UART8_Init();
+  MX_UART9_Init();
   /* USER CODE BEGIN 2 */
   Task_Init();
 	for(int i =0;i<8;i++){

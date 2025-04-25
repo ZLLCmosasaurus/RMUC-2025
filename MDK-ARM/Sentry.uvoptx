@@ -163,17 +163,12 @@
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>CAN3_Chassis_Rx_Data_A,0x0A</ItemText>
+          <ItemText>MiniPC_USB_Manage_Object</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>CAN3_Chassis_Rx_Data_C,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>CAN3_Chassis_Tx_Data_C</ItemText>
+          <ItemText>CAN3_Chassis_Rx_Data_D,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -181,11 +176,6 @@
           <count>0</count>
           <WinNumber>2</WinNumber>
           <ItemText>CAN_RxMessage</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>CAN3_Chassis_Rx_Data_A,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
@@ -1326,7 +1316,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
