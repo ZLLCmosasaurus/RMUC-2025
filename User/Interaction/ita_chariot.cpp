@@ -30,7 +30,7 @@
 void Class_Chariot::Init(float __Dead_Zone)
 {
     #ifdef CHASSIS
-    
+
         //裁判系统
         Referee.Init(&huart6);
 
@@ -45,7 +45,7 @@ void Class_Chariot::Init(float __Dead_Zone)
         #endif
 
         //底盘随动PID环初始化
-        PID_Chassis_Fllow.Init(8.5f, 0.0f, 0.0f, 0.0f, 10.0f, 16.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
+        PID_Chassis_Fllow.Init(10.0f, 0.0f, 0.0f, 0.0f, 10.0f, 20.0f,0.0f,0.0f,0.0f,0.001f,0.01f);
 
         //yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
         Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205);
@@ -140,7 +140,6 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
    //云台坐标系的目标速度转为底盘坐标系的目标速度
    chassis_velocity_x = -1.0f * ((float)(gimbal_velocity_x * cos(derta_angle) - gimbal_velocity_y * sin(derta_angle)));
    chassis_velocity_y =  1.0f * ((float)(gimbal_velocity_x * sin(derta_angle) + gimbal_velocity_y * cos(derta_angle)));
-
     //设定底盘控制类型
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
     
@@ -148,7 +147,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
         Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
     {
-        chassis_omega = Math_Int_To_Float(tmp_omega,-0xFF,0xFF,-1 * 8.0f,8.0f);
+        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 8.0f,8.0f);
         Chassis.Set_Spin_Omega(chassis_omega);
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
@@ -179,7 +178,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     //设定底盘目标速度
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
-    //Chassis.Set_Target_Omega(chassis_omega);
+    Chassis.Set_Target_Omega(chassis_omega);
 }
 #endif
 
@@ -291,7 +290,7 @@ void Class_Chariot::Control_Chassis()
         if (DR16.Get_Left_Switch()==DR16_Switch_Status_UP)  //左上 小陀螺模式
         {
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN_Positive);
-            chassis_omega = Chassis.Get_Spin_Omega();
+            chassis_omega = -Chassis.Get_Spin_Omega();
             if(DR16.Get_Right_Switch()== DR16_Switch_Status_DOWN)  //右下 小陀螺反向
             {
                 Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_SPIN_NePositive);
@@ -613,7 +612,7 @@ void Class_Chariot::Control_Gimbal()
         //更新目标角度
         if(Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_NORMAL){
             tmp_gimbal_yaw -= vt13_y * Yaw_Angle_Resolution;
-            tmp_gimbal_pitch += vt13_r_y * Pitch_Angle_Resolution;
+            tmp_gimbal_pitch -= vt13_r_y * Pitch_Angle_Resolution;
         }
 
     }
@@ -949,6 +948,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         PID_Chassis_Fllow.Set_Target(temp_reference);
         PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
+        //Chassis.Set_Target_Omega(0.0f);   
         Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());            
     }
     // 底盘解算任务
@@ -960,7 +960,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         Gimbal.TIM_Calculate_PeriodElapsedCallback();
         Booster.TIM_Calculate_PeriodElapsedCallback();        
         //传输数据给上位机
-        //MiniPC.TIM_Write_PeriodElapsedCallback();
+        MiniPC.TIM_Write_PeriodElapsedCallback();
 
     #endif
 }
@@ -1374,11 +1374,18 @@ void Class_FSM_Alive_Control_VT13::Reload_TIM_Status_PeriodElapsedCallback(){
 #ifdef CHASSIS
 void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status)
 {
+    static uint8_t circle_flag = 0;
+    static uint32_t start_flag = 0;
     static uint8_t String_Index = 0;
     String_Index++;
-    if (String_Index > 6)
+    if (String_Index > 8)
     {
         String_Index = 0;
+    }
+
+    if(start_flag < 20){
+        start_flag ++;
+        __Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_ENABLE;
     }
     
     switch (__Referee_UI_Refresh_Status)
@@ -1388,99 +1395,91 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         // 摩擦轮状态
         if (Fric_Status == Fric_Status_OPEN)
         {
-            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_OPEN", (sizeof("Fric_OPEN") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_PINK,10,430,820,480,770,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 880, "ON", (sizeof("ON") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 880, "OFF", (sizeof("OFF") - 1), Referee_UI_CHANGE);
         }
+
         // 底盘状态
         if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
         {
-            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_PINK, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "FLLOW", (sizeof("FLLOW") - 1), Referee_UI_CHANGE);
         }
         else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
                     Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
         {
-            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_WHITE, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_PINK, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "SPIN", (sizeof("SPIN") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_WHITE, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_CHANGE);
         }
-        // 云台状态
-        if (Gimbal_Status == Gimbal_Status_ENABLE)
-        {
-            //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Alive", (sizeof("Gimbal_Alive") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_PINK,10,430,820-150,480,770-150,Referee_UI_CHANGE);
-        }
-        else
-        {
-            //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Dead", (sizeof("Gimbal_Dead") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_WHITE,10,430,820-150,480,770-150,Referee_UI_CHANGE);
-        }
-
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*Chassis.Supercap.Get_Stored_Energy()/100.0f), 45, Referee_UI_CHANGE);
         
-        if(MiniPC_Status == MiniPC_Status_ENABLE)
+        //超电电量
+        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, 2, 45,665 , 35,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 35, Referee_UI_CHANGE);
+
+        if(MiniPC_Aim_Status == MinPC_Aim_Status_ENABLE)
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "ON", (sizeof("ON") - 1), Referee_UI_ADD);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 2, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 0, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
         }
-
-        // if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
-        // {
-        //     Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_PINK, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_CHANGE);
-        // }
-        // else
-        // {
-        //     Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_CHANGE);
-        // }
-
-        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,Gimbal_Tx_Pitch_Angle,Referee_UI_CHANGE);
-
     }
     break;
     case (Referee_UI_Refresh_Status_ENABLE):
     {
+        //自瞄变色框
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 0, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_ADD);
         //摩擦轮状态
-        //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 800, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
         //底盘状态
-        Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_WHITE, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_ADD);
-        // 云台状态
-        //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Dead", (sizeof("Gimbal_Dead") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_WHITE,10,430,820-150,480,770-150,Referee_UI_ADD);
-        //超电
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*0), 45, Referee_UI_ADD);
-        //自瞄
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
-        //超电
-        Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_ADD);
-        //pitch
-        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,0.0f,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 770, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_ADD);
+        //自瞄 Referee_UI_Six没用到
+        Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
+        //射速
+        //Referee.Referee_UI_Draw_Float()
+        //超电容量
+        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, 2, 45,665 , 35,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 35, Referee_UI_ADD);
     }
     break;
     }
-    Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, Graphic_Color_GREEN, 20, 5, 500/2, 400+410, "Fric :", (sizeof("Fric :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02,Graphic_Color_GREEN , 20, 5, 500/2, 660, "Gimbal:", (sizeof("Gimbal:") - 1), Referee_UI_ADD);
-    // 画线
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x03, 3, 3, 960-400+120, 200, 900, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x04, 3, 3, 1020, 200, 960+400-120, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x05, 3, 3, 960-400, 100, 960-400+120, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x06, 3, 3, 960+400-120, 200, 960+400, 100, Referee_UI_ADD);
+
+    // 画瞄准辅助线
+    if(!circle_flag){
+        circle_flag = 1;
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x01, 3, 1, 620, 0, 770, 450, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x02, 3, 1, 1300, 0, 1150, 450, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x03, 3, 1, 960, 420, 960, 500, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x04, 2, 1, 910, 465, 1010, 465, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Four, 1, 0x05, 2, 1, 930, 445, 990, 445, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x06, 2, 1, 940, 420, 980, 420, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x07, 2, 1, 950, 395, 970, 395, Referee_UI_ADD);
+    }
+    else{
+        circle_flag = 0;
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x11, 3, 1, 952, 540, 935, 540, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x22, 3, 1, 968, 540, 985, 540, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x33, 3, 1, 960, 548, 960, 565, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x44, 3, 1, 960, 532, 960, 515, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x55, 4, 1, 960, 540, 961, 541, Referee_UI_ADD);
+    }
     
-    // 超电容量
-    Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x07, 8, 3,960-400+120, 50,960+400-120, 40, Referee_UI_ADD);
+    
+    // 超电容量 边框
+    Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_Zero, 0, 0x08, 8, 1,665, 35, 665 + 590, 35 + 45, Referee_UI_ADD);
+
+    //摩擦轮等状态字符
+    Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 1, 0x09, Graphic_Color_YELLOW, 20, 2, 1548, 880, "FRICTION :", (sizeof("FRICTION :") - 1), Referee_UI_ADD);
+    Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_One, 1, 0x0A, Graphic_Color_YELLOW, 20, 2, 1548, 840, "AUTOAIM  :", (sizeof("AUTOAIM  :") - 1), Referee_UI_ADD);
+    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Two, 1, 0x0B, Graphic_Color_YELLOW, 20, 2, 1548, 800, "CHASSIS  :", (sizeof("CHASSIS  :") - 1), Referee_UI_ADD);
+    Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Three, 1, 0x0C, Graphic_Color_YELLOW, 20, 2, 1548, 760, "SHOOT    :", (sizeof("SHOOT    :") - 1), Referee_UI_ADD);
+
 
     // 善后处理
     Referee.UART_Tx_Referee_UI(String_Index);

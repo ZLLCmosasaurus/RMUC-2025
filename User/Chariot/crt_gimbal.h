@@ -62,6 +62,7 @@ protected:
     //常量
 
     //内部变量
+    float True_Acc_Z = 0.0f;
     float True_Rad_Yaw = 0.0f;
     float True_Angle_Yaw = 0.0f;
     float True_Gyro_Yaw = 0.0f;

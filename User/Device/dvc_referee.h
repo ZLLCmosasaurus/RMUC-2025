@@ -1018,8 +1018,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_2
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic_1;
-    Union_Graphic Graphic_2;
+    Union_Graphic Graphic[2];
 } __attribute__((packed));
 
 /**
@@ -1225,6 +1224,8 @@ public:
     inline void Set_Booster_42mm_1_Heat_Max(uint16_t __Booster_42mm_1_Heat_Max);
     #endif
 
+    void Referee_UI_Draw_Rectangle_Graphic_2(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Line_Graphic_2(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, uint32_t __End_X, uint32_t __End_Y, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Line(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Rectangle(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Oval(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __X_Length, uint32_t __Y_Length, Enum_Referee_UI_Operate_Type __Operate_Type);

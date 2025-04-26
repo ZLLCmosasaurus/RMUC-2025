@@ -105,8 +105,9 @@ void Chassis_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 
         }
         break;
-        case (0x206):
+        case (0x67):
         {
+            chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
         }
         break;
         case (0x207):
@@ -141,7 +142,7 @@ void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
     break;
     case (0x67):  //留给超级电容
     {
-        chariot.Chassis.Supercap.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        
     }
     break;
     case (0x201):
@@ -284,7 +285,9 @@ void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
     chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
+    if(Buffer[0] == 0xA9 && Buffer[1] == 0x53){
+        chariot.TIM_Control_Callback();
+    }
 }
 
 #endif
@@ -420,7 +423,7 @@ void Task1ms_TIM5_Callback()
 	    }
         
         #endif
-        //chariot.TIM_Calculate_PeriodElapsedCallback();
+        chariot.TIM_Calculate_PeriodElapsedCallback();
         //测底盘电机
         // chariot.Chassis.Motor_Wheel[pp].Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
         // chariot.Chassis.Motor_Wheel[pp].Set_Target_Omega_Radian(Target_Omega_Radian);

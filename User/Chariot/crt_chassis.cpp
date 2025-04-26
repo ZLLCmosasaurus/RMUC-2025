@@ -65,6 +65,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     #ifdef POWER_LIMIT
     //超级电容初始化
     Supercap.Init(&hcan1,45);
+    Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
     #endif
 
     //电机PID批量初始化
@@ -74,7 +75,7 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     // }
     Motor_Wheel[0].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
     Motor_Wheel[1].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
-    Motor_Wheel[2].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
+    Motor_Wheel[2].PID_Omega.Init(3500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
     Motor_Wheel[3].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
 
     //轮向电机ID初始化
@@ -199,11 +200,14 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     #ifdef POWER_LIMIT
 
     //Supercap.Set_Now_Power(Referee->Get_Chassis_Power());
-    if(Referee->Get_Referee_Status()==Referee_Status_DISABLE)
+    if(Referee->Get_Referee_Status()==Referee_Status_DISABLE){
         Supercap.Set_Limit_Power(45.0f);
+        Power_Limit.Set_Power_Limit(45.0f);
+    }
     else
     {
         Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+        Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
     }
     
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
@@ -214,6 +218,8 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
         Power_Limit.Set_Supercap_Enegry(Supercap.Get_Stored_Energy());
     
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
+
+    Supercap.TIM_Supercap_PeriodElapsedCallback();          //向超电发送信息
 
     #elif defined (POWER_LIMIT_JH)
     float Chassis_Buffer = Referee->Get_Chassis_Energy_Buffer();

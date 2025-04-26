@@ -72,10 +72,6 @@ float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float 
         {
             limit_k = (-func_b + sqrtf(delta)) / (2 * func_a); // 求根公式
         }
-        else
-        {
-            limit_k = 0;
-        }
     }
 		else{
 			limit_k = 1;
