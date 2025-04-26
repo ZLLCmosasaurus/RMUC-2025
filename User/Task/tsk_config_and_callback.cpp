@@ -168,6 +168,11 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
+    case (0xa1):
+    {
+        chariot.MiniPC.CAN_RxCpltCallback(CAN_RxMessage->Data);
+    }
+    break;
     case (0x203):
     {
     }

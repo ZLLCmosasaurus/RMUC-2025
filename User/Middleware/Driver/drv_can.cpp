@@ -243,6 +243,7 @@ void TIM_CAN_PeriodElapsedCallback()
     // CAN2
     if (mod % 2 == 0)
     {
+        CAN_Send_Data(&hcan1, 0xa0, CAN1_MiniPc_Tx_Data, 8);
         CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8); // yaw-GM6020  按照0x1ff ID 发送 可控制多个电机
         CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); // 拨弹轮
     }

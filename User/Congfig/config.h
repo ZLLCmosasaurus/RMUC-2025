@@ -23,7 +23,7 @@
 
 #define BULLET_SPEED_PID
 #define MINIPC_COMM_CAN
-#define MINIPC_COMM_USB
+//#define MINIPC_COMM_USB
 
 #endif
 

@@ -69,7 +69,7 @@ enum Enum_Windmill_Type : uint8_t
  */
 enum Enum_MiniPC_Type : uint8_t
 {
-    MiniPC_Type_Nomal = 4, // 装甲板
+    MiniPC_Type_Nomal = 0, // 装甲板
     MiniPC_Type_Windmill,  // 风车
 };
 
@@ -294,7 +294,7 @@ public:
     uint16_t Get_CRC16_Check_Sum(const uint8_t *pchMessage, uint32_t dwLength, uint16_t wCRC);
 
     inline void Transform_Angle_Tx();
-    inline void Transform_Angle_Rx();
+
 
     float calc_yaw(float x, float y, float z);
     float calc_distance(float x, float y, float z);
@@ -304,6 +304,7 @@ public:
     float meanFilter(float input);
 
     void USB_RxCpltCallback(uint8_t *Rx_Data);
+    void CAN_RxCpltCallback(uint8_t *rx_data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
 
@@ -684,15 +685,6 @@ void Class_MiniPC::Transform_Angle_Tx()
     Tx_Angle_Yaw = IMU->Get_Angle_Yaw();
 }
 
-/**
- * @brief 接收数据处理
- *
- */
-void Class_MiniPC::Transform_Angle_Rx()
-{
-    Rx_Angle_Pitch = -Pack_Rx.target_pitch;
-    Rx_Angle_Yaw = Pack_Rx.target_yaw;
-}
 
 #endif
 

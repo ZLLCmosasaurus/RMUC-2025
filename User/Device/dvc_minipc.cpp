@@ -65,6 +65,7 @@ float camera_distance = 0.036;
  */
 void Class_MiniPC::Data_Process()
 {
+#ifdef MINIPC_COMM_USB
   memcpy(&Pack_Rx, (Pack_rx_t *)USB_Manage_Object->Rx_Buffer, USB_Manage_Object->Rx_Buffer_Length);
   float tmp_yaw, tmp_pitch;
   Self_aim(Pack_Rx.target_x, Pack_Rx.target_y, Pack_Rx.target_z + camera_distance, &tmp_yaw, &tmp_pitch, &Distance);
@@ -72,14 +73,34 @@ void Class_MiniPC::Data_Process()
   Rx_Angle_Yaw = tmp_yaw;
   Math_Constrain(&Rx_Angle_Pitch, -20.0f, 34.0f);
   memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
+#endif
+
+#ifdef MINIPC_COMM_CAN
+  // CAN通信的数据处理
+  float tmp_yaw, tmp_pitch;
+  // 将CAN接收到的数据转换为实际值 (除以1000转换回浮点数)
+  float target_x = Pack_Rx.target_x / 1000.0f;
+  float target_y = Pack_Rx.target_y / 1000.0f;
+  float target_z = Pack_Rx.target_z / 1000.0f;
+  
+  Self_aim(target_x, target_y, target_z + camera_distance, &tmp_yaw, &tmp_pitch, &Distance);
+  Rx_Angle_Pitch = tmp_pitch;
+  Rx_Angle_Yaw = tmp_yaw;
+  Math_Constrain(&Rx_Angle_Pitch, -20.0f, 34.0f);
+#endif
 }
 
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区
  *
  */
+/**
+ * @brief 迷你主机发送数据输出
+ *
+ */
 void Class_MiniPC::Output()
 {
+#ifdef MINIPC_COMM_USB
   Pack_Tx.header = Frame_Header;
 
   // 根据referee判断红蓝方
@@ -97,6 +118,20 @@ void Class_MiniPC::Output()
   memcpy(USB_Manage_Object->Tx_Buffer, &Pack_Tx, sizeof(Pack_Tx));
   Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer, sizeof(Pack_Tx));
   USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
+#endif
+
+#ifdef MINIPC_COMM_CAN
+  // 设置发送数据
+  Pack_Tx.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
+  Pack_Tx.roll = (int16_t)(Tx_Angle_Roll * 1000.0f);
+  Pack_Tx.pitch = (int16_t)(Tx_Angle_Pitch * 1000.0f);
+  Pack_Tx.yaw = (int16_t)(Tx_Angle_Yaw * 1000.0f);
+  
+  // 直接将整个结构体复制到CAN发送缓冲区
+  memcpy(CAN_Tx_Data, &Pack_Tx, sizeof(Pack_Tx));
+  
+
+#endif
 }
 
 /**
@@ -325,3 +360,23 @@ float Class_MiniPC::meanFilter(float input)
 }
 
 /************************ copyright(c) ustc-robowalker **************************/
+
+/**
+ * @brief CAN通信接收回调函数
+ *
+ * @param rx_data 接收的数据
+ */
+void Class_MiniPC::CAN_RxCpltCallback(uint8_t *rx_data)
+{
+#ifdef MINIPC_COMM_CAN
+    // 滑动窗口, 判断迷你主机是否在线
+    Flag += 1;
+    
+    // 直接将接收到的数据复制到结构体
+    memcpy(&Pack_Rx, rx_data, sizeof(Pack_Rx));
+    
+    // 处理数据
+    Data_Process();
+  
+#endif
+}
