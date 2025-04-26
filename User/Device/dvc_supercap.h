@@ -30,10 +30,27 @@ enum Enum_Supercap_Status
     Supercap_Status_DISABLE = 0,
     Supercap_Status_ENABLE,
 };
+
 enum Enum_Supercap_Control_Status : uint8_t
 {
     Supercap_Control_Status_ENABLE = 0,
     Supercap_Control_Status_DISABLE,
+};
+enum Enum_Supercap_Operating_Status : uint8_t
+{
+    Supercap_Operating_Status_Charge = 0,
+    Supercap_Operating_Status_Discharge,
+    Supercap_Operating_Status_None,
+};  
+enum Enum_Supercap_Usage_Stratage : uint8_t
+{
+    Supercap_Usage_Stratage_Referee_BufferPower = 0,
+    Supercap_Usage_Stratage_Supercap_BufferPower,
+};
+enum Enum_PowerLimit_Type : uint8_t
+{
+    PowerLimit_Type_Referee_BufferPower = 0,
+    PowerLimit_Type_Supercap_BufferPower,
 };
 /**
  * @brief 超级电容源数据
@@ -88,7 +105,11 @@ public:
     inline float Get_Limit_Power();
     inline float Get_Supercap_Buffer_Power();
     inline float Get_Supercap_Charge_Percentage();
-
+    inline float Get_Chassis_Device_LimitPower();
+    inline void Set_Referee_BufferPower(float __Referee_BufferPower);
+    inline void Set_Referee_MaxPower(float __Referee_MaxPower);
+    inline void Set_PowerLimit_Type(Enum_PowerLimit_Type __PowerLimit_Type);
+    inline void Set_Supercap_Usage_Stratage(Enum_Supercap_Usage_Stratage __Supercap_Usage_Stratage);
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void UART_RxCpltCallback(uint8_t *Rx_Data);
 
@@ -121,9 +142,16 @@ protected:
     uint32_t Pre_Flag = 0;
 
     //读变量
-
+    float Referee_BufferPower;
+    float Referee_MaxPower;
     //超级电容状态
     Enum_Supercap_Status Supercap_Status = Supercap_Status_DISABLE;
+    //超级电容使用策略
+    Enum_Supercap_Usage_Stratage Supercap_Usage_Stratage = Supercap_Usage_Stratage_Referee_BufferPower;
+    //超级电容当前充放电状态
+    Enum_Supercap_Operating_Status Supercap_Operating_Status = Supercap_Operating_Status_None;
+    //底盘限制方式 
+    Enum_PowerLimit_Type PowerLimit_Type = PowerLimit_Type_Referee_BufferPower;
     //超级电容对外接口信息
     Struct_Supercap_CAN_Data Supercap_Data;
     Struct_Supercap_Data Data;
@@ -131,10 +159,14 @@ protected:
     Struct_Supercap_Tx_Data Supercap_Tx_Data;
 
     //写变量
-
-    //限制的功率
+    //referee缓冲环输出
+    float Referee_BufferPower_Output = 0.0f; 
+    //给超电发送的限制的功率
     float Limit_Power = 0.0f;
-
+    float Supercap_BufferPower_Output = 0.0f;
+    float Supercap_LimitBufferPower_Output = 0.0f;
+    //给底盘电机发送的限制功率
+    float Chassis_Device_LimitPower = 0.0f;
     //读写变量
 
     //内部函数
@@ -144,6 +176,8 @@ protected:
 
     void Data_Process_UART();
     void Output_UART();
+
+    void Use_SuperCap_Strategy();
 };
 
 /* Exported variables --------------------------------------------------------*/
@@ -236,6 +270,26 @@ float Class_Supercap::Get_Limit_Power()
 float Class_Supercap::Get_Supercap_Charge_Percentage()
 {
     return (Data.Supercap_Charge_Percentage);
+}
+float Class_Supercap::Get_Chassis_Device_LimitPower()
+{
+    return (Chassis_Device_LimitPower);
+}
+void Class_Supercap::Set_Referee_BufferPower(float __Referee_BufferPower)
+{
+    Referee_BufferPower = __Referee_BufferPower;
+}
+void Class_Supercap::Set_Referee_MaxPower(float __Referee_MaxPower)
+{
+    Referee_MaxPower = __Referee_MaxPower;
+}
+void Class_Supercap::Set_PowerLimit_Type(Enum_PowerLimit_Type __PowerLimit_Type)
+{
+    PowerLimit_Type = __PowerLimit_Type;
+}
+void Class_Supercap::Set_Supercap_Usage_Stratage(Enum_Supercap_Usage_Stratage __Supercap_Usage_Stratage)   
+{
+    Supercap_Usage_Stratage = __Supercap_Usage_Stratage;
 }
 #endif
 #endif

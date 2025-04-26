@@ -88,7 +88,7 @@ uint8_t Class_BoardC_BMI::BMI088_Init(IMU_Data_t *__BMI088)
         error |= BMI088_Gyro_Init();
     }
 
-    if (0)
+    if (caliOffset)
         Calibrate_MPU_Offset(__BMI088);
     else
     {

@@ -14201,3 +14201,258 @@ These source files will be recompiled
 [2025-04-25 23:22:00]	[done]
 	build successfully !
 
+[2025-04-26 10:39:08]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_boardc_bmi088.cpp': source file has been changed.
+
+[2025-04-26 10:39:15]	[done]
+	build successfully !
+
+[2025-04-26 10:41:51]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-26 10:41:52]	[done]
+	build successfully !
+
+[2025-04-26 13:00:47]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 13:00:47]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_supercap.o -MMD ./../User/Device/dvc_supercap.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_supercap.cpp:142:9: error: no matching function for call to 'Math_Constrain'
+  142 |         Math_Constrain(Referee_BufferPower_Output, -45.0f, 45.0f);
+      |         ^~~~~~~~~~~~~~
+../User/Middleware/Driver\drv_math.h:70:6: note: candidate template ignored: could not match 'Type *' against 'float'
+   70 | void Math_Constrain(Type *x, Type Min, Type Max)
+      |      ^
+./../User/Device/dvc_supercap.cpp:155:33: error: cannot initialize a parameter of type 'Enum_Supercap_Control_Status' with an rvalue of type 'int'
+  155 |     Set_Supercap_Control_Status(0);
+      |                                 ^
+./../User/Device/dvc_supercap.h:253:79: note: passing argument to parameter '__Supercap_Control_Status' here
+  253 | void Class_Supercap::Set_Supercap_Control_Status(Enum_Supercap_Control_Status __Supercap_Control_Status)
+      |                                                                               ^
+2 errors generated.
+
+[2025-04-26 13:01:01]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 13:01:01]	compilation failed at : "d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp", exit code: 1
+command: 
+  "D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe" --target=arm-arm-none-eabi -c -xc++ -std=c++11 -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../User/Chariot -I../User/Device -I../User/Interaction -I../Middlewares/ST/ARM/DSP/Inc -I../User/Middleware/Algorithm -I../User/Middleware/Driver -I../User/Task -IRTE/_infantry -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mcpu=cortex-m4 -mlittle-endian -O0 -ffunction-sections -funsigned-char -fshort-enums -fshort-wchar -fno-rtti -w -g -o ./infantry/.obj/__/User/Device/dvc_supercap.o -MMD ./../User/Device/dvc_supercap.cpp
+   at unify_builder.Program.Main(String[] args_)
+---
+./../User/Device/dvc_supercap.cpp:155:33: error: cannot initialize a parameter of type 'Enum_Supercap_Control_Status' with an rvalue of type 'int'
+  155 |     Set_Supercap_Control_Status(0);
+      |                                 ^
+./../User/Device/dvc_supercap.h:253:79: note: passing argument to parameter '__Supercap_Control_Status' here
+  253 | void Class_Supercap::Set_Supercap_Control_Status(Enum_Supercap_Control_Status __Supercap_Control_Status)
+      |                                                                               ^
+1 error generated.
+
+[2025-04-26 13:01:13]	[info] incremental build: 3 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': object (.o) file not exist
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 13:01:20]	[done]
+	build successfully !
+
+[2025-04-26 13:17:38]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 13:17:39]	[done]
+	build successfully !
+
+[2025-04-26 13:23:48]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': source file has been changed.
+
+[2025-04-26 13:23:49]	[done]
+	build successfully !
+
+[2025-04-26 14:24:46]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 14:24:48]	[done]
+	build successfully !
+
+[2025-04-26 14:30:44]	[done]
+	build successfully !
+
+[2025-04-26 15:31:12]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 15:31:13]	[done]
+	build successfully !
+
+[2025-04-26 15:31:55]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 15:31:56]	[done]
+	build successfully !
+
+[2025-04-26 15:33:55]	[done]
+	build successfully !
+
+[2025-04-26 16:41:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 16:41:59]	[done]
+	build successfully !
+
+[2025-04-26 16:42:32]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 16:42:33]	[done]
+	build successfully !
+
+[2025-04-26 16:58:13]	[done]
+	build successfully !
+
+[2025-04-26 16:58:19]	[done]
+	build successfully !
+
+[2025-04-26 17:16:20]	[info] incremental build: 15 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\Core\Src\stm32f4xx_it.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_booster.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_gimbal.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_image.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_GraphicsSendTask.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_djimotor.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_dr16.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_minipc.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_referee.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Algorithm\alg_power_limit.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Middleware\Driver\drv_can.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\config.c': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Task\config.h' has been changed.
+
+[2025-04-26 17:16:23]	[done]
+	build successfully !
+
+[2025-04-26 19:57:08]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 19:57:09]	[done]
+	build successfully !
+
+[2025-04-26 20:09:14]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:09:15]	[done]
+	build successfully !
+
+[2025-04-26 20:18:53]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:18:54]	[done]
+	build successfully !
+
+[2025-04-26 20:19:23]	[done]
+	build successfully !
+
+[2025-04-26 20:19:39]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:19:40]	[done]
+	build successfully !
+
+[2025-04-26 20:22:03]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:22:04]	[done]
+	build successfully !
+
+[2025-04-26 20:23:31]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:23:32]	[done]
+	build successfully !
+
+[2025-04-26 20:25:34]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:25:35]	[done]
+	build successfully !
+
+[2025-04-26 20:37:58]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:37:59]	[done]
+	build successfully !
+
+[2025-04-26 20:45:17]	[info] incremental build: 4 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Chariot\crt_chassis.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+'d:\Users_RM\hero\hero_new\User\Interaction\ita_chariot.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+'d:\Users_RM\hero\hero_new\User\Task\tsk_config_and_callback.cpp': dependence 'd:\Users_RM\hero\hero_new\MDK-ARM\..\User\Device\dvc_supercap.h' has been changed.
+
+[2025-04-26 20:45:20]	[done]
+	build successfully !
+
+[2025-04-26 20:59:25]	[info] incremental build: 1 source files changed
+These source files will be recompiled
+---
+'d:\Users_RM\hero\hero_new\User\Device\dvc_supercap.cpp': source file has been changed.
+
+[2025-04-26 20:59:26]	[done]
+	build successfully !
+

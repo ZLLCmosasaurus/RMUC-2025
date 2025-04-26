@@ -1262,12 +1262,7 @@ void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
     
     Chassis_Actual_Limit_Power = Power_Max + Buffer_Power;
 
-    // if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE && Supercap_Control_Status == Supercap_Control_Status_ENABLE)
-    //     Chassis_Actual_Limit_Power += ((Chassis.Supercap.Get_Supercap_Buffer_Power() > 0)? Chassis.Supercap.Get_Supercap_Buffer_Power() : 0);
-    // else
-    //     Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
-    
-    if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE)
+    if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE && Supercap_Control_Status == Supercap_Control_Status_ENABLE)
         Chassis_Actual_Limit_Power += ((Chassis.Supercap.Get_Supercap_Buffer_Power() > 0)? Chassis.Supercap.Get_Supercap_Buffer_Power() : 0);
     else
         Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
@@ -1420,17 +1415,22 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //底盘给分别给四个舵轮发消息
         CAN_Chassis_Tx_Streeing_Wheel_Callback();
         //底盘给舵小板发送最大功率
-        CAN_Chassis_Tx_Max_Power_Callback();
-        //云台，随动掉线保护
-        // if(Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_ENABLE && Gimbal_Status == Gimbal_Status_ENABLE)
-        // {
-        //     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
-        // }
-        // else
-        // {
-        //     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
-        // }
+        //CAN_Chassis_Tx_Max_Power_Callback();
+        //超电使用策略
+        Chassis.Supercap.Set_Referee_MaxPower(Referee.Get_Chassis_Power_Max());
+        Chassis.Supercap.Set_Referee_BufferPower(Referee.Get_Chassis_Energy_Buffer());
+        if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
+        {
+            Chassis.Supercap.Set_Supercap_Usage_Stratage(Supercap_Usage_Stratage_Supercap_BufferPower);
+        }
+        else
+        {
+            Chassis.Supercap.Set_Supercap_Usage_Stratage(Supercap_Usage_Stratage_Referee_BufferPower);
+        }
+        Chassis.Supercap.TIM_Supercap_PeriodElapsedCallback();
+        //底盘Omega控制
         Control_Chassis_Omega_TIM_PeriodElapsedCallback();
+        //底盘解算控制
         Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
         //画UI
         static uint8_t mod20 = 0;
@@ -1440,8 +1440,6 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
             Chariot_Referee_UI_Tx_Callback(Referee_UI_Refresh_Status);
             mod20 = 0;
         }
-        //超电通信
-        Chassis.Supercap.TIM_Supercap_PeriodElapsedCallback();
 #elif defined(GIMBAL)
     
     // 各个模块的分别解算
