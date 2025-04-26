@@ -262,24 +262,6 @@ void Device_SPI1_Callback(uint8_t *Tx_Buffer, uint8_t *Rx_Buffer, uint16_t Lengt
 }
 
 /**
- * @brief UART1图传回调函数
- *
- * @param Buffer UART1收到的消息
- * @param Length 长度
- */
-#ifdef GIMBAL
-void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
-{
-    chariot.DR16.Image_UART_RxCpltCallback(Buffer);
-
-    //底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
-	
-}
-#endif
-
-
-/**
  * @brief UART3遥控器回调函数
  *
  * @param Buffer UART1收到的消息
@@ -292,7 +274,24 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
+    if(chariot.VT13.Get_VT13_Status() == VT13_Status_DISABLE)
     chariot.TIM_Control_Callback();
+		
+	
+}
+
+void Image_Callback(uint8_t *Buffer, uint16_t Length)
+{
+
+    chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
+
+    //底盘 云台 发射机构 的控制策略
+    if(chariot.VT13.Now_RX_Data[0] == 0xA9 && chariot.VT13.Now_RX_Data[1] == 0x53)
+    {
+        chariot.TIM_Control_Callback();
+    }
+  
+   
 		
 	
 }
@@ -447,7 +446,7 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-		UART_Init(&huart1, Image_UART6_Callback, 40);
+	    UART_Init(&huart1, Image_Callback, 40);
         UART_Init(&huart6, Referee_Callback, 128);
 
         //上位机USB

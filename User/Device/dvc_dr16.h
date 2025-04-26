@@ -167,10 +167,10 @@ struct Struct_DR16_Data
 class Class_DR16
 {
 public:
-    void Init(UART_HandleTypeDef *huart_1,UART_HandleTypeDef *huart_2);
+    void Init(UART_HandleTypeDef *huart_1);
 
     inline Enum_DR16_Status Get_DR16_Status();
-    inline Enum_Image_Status Get_Image_Status();
+
     inline Enum_DR16_Updata_Status Get_DR16_Updata_Status();
     inline float Get_Right_X();
     inline float Get_Right_Y();
@@ -203,7 +203,7 @@ public:
     inline float Get_Yaw();
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
-    void Image_UART_RxCpltCallback(uint8_t *Rx_Data);
+
     
     void TIM1msMod50_Alive_PeriodElapsedCallback();
 
@@ -213,7 +213,7 @@ protected:
 
     //绑定的UART
     Struct_UART_Manage_Object *UART_Manage_Object_1;
-    Struct_UART_Manage_Object *UART_Manage_Object_2;
+
 
     //常量
 
@@ -228,29 +228,22 @@ protected:
     //前一时刻的遥控器状态信息
     Struct_DR16_UART_Data Pre_UART_Rx_Data;
 
-    Struct_Image_UART_Data Now_UART_Image_Rx_Data;
-    Struct_Image_UART_Data Pre_UART_Image_Rx_Data;
+
 
     //当前时刻的遥控器接收flag
     uint32_t DR16_Flag = 0;
     //前一时刻的遥控器接收flag
     uint32_t Pre_DR16_Flag = 0;
 
-    //当前时刻的遥控器接收flag
-    uint32_t Image_Flag = 0;
-    //前一时刻的遥控器接收flag
-    uint32_t Pre_Image_Flag = 0;
-
     //遥控器50ms离线次数
     uint16_t DR16_Unline_Cnt = 0;
-	uint16_t Image_Unline_Cnt = 0;
     //遥控器50ms串口错误次数
     uint16_t Error_Cnt = 0;
     //读变量
 
     //遥控器状态
     Enum_DR16_Status DR16_Status = DR16_Status_DISABLE;
-    Enum_Image_Status Image_Status	=	Image_Status_DISABLE;
+
     //遥控器数据更新状态
     Enum_DR16_Updata_Status DR16_Updata_Status = DR16_Status_DisUpdata;
     // DR16对外接口信息
@@ -282,10 +275,7 @@ Enum_DR16_Status Class_DR16::Get_DR16_Status()
 {
     return (DR16_Status);
 }
-Enum_Image_Status Class_DR16::Get_Image_Status()
-{
-    return (Image_Status);
-}
+
 
 /**
  * @brief 获取遥控器数据更新状态

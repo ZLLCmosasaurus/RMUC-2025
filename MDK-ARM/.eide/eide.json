@@ -255,6 +255,9 @@
           },
           {
             "path": "../User/Device/dvc_ws2812.cpp"
+          },
+          {
+            "path": "../User/Device/dvc_VT13.cpp"
           }
         ],
         "folders": []

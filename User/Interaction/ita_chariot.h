@@ -25,6 +25,7 @@
 #include "dvc_buzzer.h"
 #include "dvc_ws2812.h"
 #include "dvc_referee.h"
+#include "dvc_VT13.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -91,10 +92,12 @@ enum Enum_Gimbal_Status
  * @brief DR16控制数据来源
  *
  */
-enum Enum_DR16_Control_Type
+enum Enum_Control_Type
 {
     DR16_Control_Type_REMOTE = 0,
     DR16_Control_Type_KEYBOARD,
+    VT13_Control_Type_REMOTE ,
+    VT13_Control_Type_KEYBOARD,
 };
 
 /**
@@ -133,6 +136,7 @@ public:
     #ifdef GIMBAL
         //遥控器
         Class_DR16 DR16;
+        Class_VT13 VT13;
         //上位机
         Class_MiniPC MiniPC;
         //云台
@@ -171,7 +175,7 @@ public:
         inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
         inline void Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status);
         inline Enum_Chassis_Status Get_Chassis_Status();
-        inline Enum_DR16_Control_Type Get_DR16_Control_Type();
+        inline Enum_Control_Type Get_Control_Type();
 
         void CAN_Gimbal_Rx_Chassis_Callback();
         void CAN_Gimbal_Tx_Chassis_Callback();
@@ -227,7 +231,7 @@ protected:
 
     #ifdef GIMBAL
         //遥控器拨动的死区, 0~1
-        float DR16_Dead_Zone;
+        float Dead_Zone;
         //常量
         //键鼠模式按住shift 最大速度缩放系数
         float DR16_Mouse_Chassis_Shift = 2.0f;
@@ -281,10 +285,10 @@ protected:
         //单发连发标志位
         uint8_t Shoot_Flag = 0;
         //DR16控制数据来源
-        Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_REMOTE;
+        Enum_Control_Type Control_Type = DR16_Control_Type_REMOTE;
         //内部函数
 
-        void Judge_DR16_Control_Type();
+        void Judge_Control_Type();
 
         void Control_Chassis();
         void Control_Gimbal();
@@ -316,9 +320,9 @@ protected:
      * @return Enum_DR16_Control_Type DR16控制数据来源
      */
 
-    Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
+     Enum_Control_Type Class_Chariot::Get_Control_Type()
     {
-        return (DR16_Control_Type);
+        return (Control_Type);
     }
 
     /**
