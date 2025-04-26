@@ -677,18 +677,37 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         float temp_yaw, temp_reference;
         temp_yaw = Chassis_Angle;
         temp_reference = Reference_Angle;
-        if (Chassis_Angle > PI)
-            temp_yaw = Chassis_Angle - 2 * PI;
-        else if (Chassis_Angle < -PI)
-            temp_yaw = Chassis_Angle + 2 * PI;
-        if (Reference_Angle > PI)
-            temp_reference = Reference_Angle - 2 * PI;
-        // 随动环
-        PID_Chassis_Fllow.Set_Target(temp_reference);
+        
+        // 将角度规范化到 [-π, π] 范围内
+        if (temp_yaw > PI)
+            temp_yaw = temp_yaw - 2 * PI;
+        else if (temp_yaw < -PI)
+            temp_yaw = temp_yaw + 2 * PI;
+            
+        if (temp_reference > PI)
+            temp_reference = temp_reference - 2 * PI;
+        else if (temp_reference < -PI)
+            temp_reference = temp_reference + 2 * PI;
+            
+        // 计算角度差，选择最短路径（优弧）
+        float angle_diff = temp_reference - temp_yaw;
+        
+        // 优弧劣弧判断与优化
+        if (angle_diff > PI) {
+            angle_diff -= 2 * PI;
+        } else if (angle_diff < -PI) {
+            angle_diff += 2 * PI;
+        }
+        
+        // 使用优化后的角度差进行PID控制
+        PID_Chassis_Fllow.Set_Target(temp_yaw + angle_diff);
         PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
         Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());
-    }
+
+
+
+}
 
     static uint8_t mod2 = 0;
     // 各个模块的分别解算

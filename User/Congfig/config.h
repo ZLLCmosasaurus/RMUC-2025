@@ -15,20 +15,17 @@
 /* Includes ------------------------------------------------------------------*/
 
 /* Exported macros -----------------------------------------------------------*/
+// #define MINIPC_COMM_CAN
+#define MINIPC_COMM_USB
 
 //#define CHASSIS
-#define GIMBAL
+ #define GIMBAL
 
 #ifdef GIMBAL
 
 #define BULLET_SPEED_PID
-#define MINIPC_COMM_CAN
-//#define MINIPC_COMM_USB
 
 #endif
-
-
-
 
 #ifdef CHASSIS
 
@@ -42,10 +39,9 @@
 
 #endif
 
-
 #endif
 
-//#define DISABLE_SUPEACAP
+// #define DISABLE_SUPEACAP
 
 /* Exported types ------------------------------------------------------------*/
 

@@ -155,7 +155,7 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     // 摩擦轮角速度
-    float Friction_Omega = 700.0f;
+    float Friction_Omega = 650.0f;
     float Target_Bullet_Speed = 23.5f;
     // 拨弹盘实际的目标速度
     float Driver_Omega = 2.0f * PI;
