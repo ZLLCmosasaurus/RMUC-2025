@@ -144,7 +144,7 @@ protected:
     //写变量
 
     //发射机构状态
-    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
     float Friction_Omega = 800.0f;
