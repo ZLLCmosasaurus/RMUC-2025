@@ -79,8 +79,7 @@ public:
 };
 enum Enum_Booster_User_Control_Type
 {
-    Booster_User_Control_Type_DISABLE = 0,
-    Booster_User_Control_Type_SINGLE,
+    Booster_User_Control_Type_SINGLE=0,
     Booster_User_Control_Type_MULTI, // 连发
 };
 

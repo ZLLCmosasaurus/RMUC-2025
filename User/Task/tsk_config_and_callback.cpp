@@ -338,11 +338,12 @@ void SuperCAP_UART1_Callback(uint8_t *Buffer, uint16_t Length)
  *
  * @param Length 长度
  */
-float freq;
-uint32_t time_s;
+
 #ifdef GIMBAL
 void MiniPC_USB_Callback(uint8_t *Buffer, uint32_t Length)
 {
+    static float freq;
+    static uint32_t time_s;
     freq = 1 / DWT_GetDeltaT(&time_s);
     chariot.MiniPC.USB_RxCpltCallback(Buffer);
 }
@@ -355,6 +356,7 @@ float delta_time;
 void Task100us_TIM2_Callback()
 {
 #ifdef CHASSIS
+    GraphicSendtask();
     static uint16_t Referee_Sand_Cnt = 0;
     // //暂无云台tim4任务
     if (Referee_Sand_Cnt % 50 == 1)
@@ -370,9 +372,9 @@ void Task100us_TIM2_Callback()
     chariot.Gimbal.Boardc_BMI.TIM_Calculate_PeriodElapsedCallback();
 #endif
     static float start_time = 0;
-//    		start_time=	DWT_GetTimeline_ms();
-//    	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
-//    	   delta_time = DWT_GetTimeline_ms() - start_time;
+//       		start_time=	DWT_GetTimeline_ms();
+//        	 Buzzer.Buzzer_Calculate_PeriodElapsedCallback();
+//        	   delta_time = DWT_GetTimeline_ms() - start_time;
 }
 
 /**
@@ -498,6 +500,7 @@ extern "C" void Task_Init()
  * @brief 前台循环任务
  *
  */
+
 extern "C" void Task_Loop()
 {
 #ifdef GIMBAL
@@ -517,22 +520,25 @@ extern "C" void Task_Loop()
 #ifdef CHASSIS
     if (start_flag == 1)
     {
+        static float freq;
+        static uint32_t time_s;
+        freq = 1 / DWT_GetDeltaT(&time_s);
+
         JudgeReceiveData.robot_id = chariot.Referee.Get_ID();
-        JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle;                            // pitch角度
-        JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;                               // 弹舱
-        JudgeReceiveData.Fric_Status = chariot.Fric_Status;                                      // 摩擦轮
-        JudgeReceiveData.Minipc_Satus = chariot.MiniPC_Status;                                   // 自瞄是否离线
-        JudgeReceiveData.MiniPC_Aim_Status = chariot.MiniPC_Aim_Status;                          // 自瞄是否瞄准
-                                                                                                 // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
-        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage(); // 超级电容容量
+        JudgeReceiveData.Pitch_Angle = chariot.Gimbal_Tx_Pitch_Angle; // pitch角度
+        JudgeReceiveData.Bullet_Status = chariot.Bulletcap_Status;    // 弹舱
+        JudgeReceiveData.Fric_Status = chariot.Fric_Status;           // 摩擦轮
+        JudgeReceiveData.Minipc_Status = chariot.MiniPC_Status;       // 自瞄是否离线
+        JudgeReceiveData.Booster_User_Control_Type = chariot.Booster_User_Control_Type;
+        // JudgeReceiveData.Supercap_Energy = chariot.Chassis.Supercap.Get_Stored_Energy();    // 超级电容储能
+        JudgeReceiveData.Supercap_Voltage = chariot.Chassis.Supercap.Get_Now_Voltage() / 100.0f; // 超级电容容量
         JudgeReceiveData.Chassis_Control_Type = chariot.Chassis.Get_Chassis_Control_Type();      // 底盘控制模式
         JudgeReceiveData.Supercap_State = chariot.Sprint_Status;
         JudgeReceiveData.booster_fric_omega_left = chariot.Booster_fric_omega_left; // 左摩擦轮速度; // 左摩擦轮速度
         JudgeReceiveData.booster_fric_omega_right = chariot.Booster_fric_omega_right;
+
         if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
             Init_Cnt = 10;
-        GraphicSendtask();
-        //        DWT_Delay(0.1);
     }
 
 #endif

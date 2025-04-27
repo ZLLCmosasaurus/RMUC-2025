@@ -67,7 +67,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
     // 上位机
     MiniPC.Init(&MiniPC_USB_Manage_Object);
-     MiniPC.Init(&hcan1);
+    MiniPC.Init(&hcan1);
     MiniPC.IMU = &Gimbal.Boardc_BMI;
     MiniPC.Referee = &Referee;
 
@@ -97,6 +97,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     float chassis_omega;
     // 底盘控制类型
     Enum_Chassis_Control_Type chassis_control_type;
+    Enum_Gimbal_Control_Type gimbal_control_type;
     //    //底盘和云台夹角（弧度制）
     //    float derta_angle;
     // float映射到int16之后的速度
@@ -111,13 +112,15 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 
     gimbal_velocity_x = Math_Int_To_Float(tmp_velocity_x, 0, 0x7FFF, -1 * Chassis.Get_Velocity_X_Max(), Chassis.Get_Velocity_X_Max());
     gimbal_velocity_y = Math_Int_To_Float(tmp_velocity_y, 0, 0x7FFF, -1 * Chassis.Get_Velocity_Y_Max(), Chassis.Get_Velocity_Y_Max());
-    Gimbal_Tx_Pitch_Angle = Math_Int_To_Float(tmp_gimbal_pitch, 0, 0x7FFF, -10.0f, 30.0f);
+    Gimbal_Tx_Pitch_Angle = Math_Int_To_Float(tmp_gimbal_pitch, 0, 0x7FFF, -30.0f, 30.0f);
 
     chassis_control_type = (Enum_Chassis_Control_Type)(control_type & 0x03);
     Sprint_Status = (Enum_Sprint_Status)(control_type >> 2 & 0x01);
-    // Bulletcap_Status = (Enum_Bulletcap_Status)(control_type >> 3 & 0x01);
-    Fric_Status = (Enum_Fric_Status)(control_type >> 3 & 0x01);
-    MiniPC_Aim_Status = (Enum_MinPC_Aim_Status)(control_type >> 5 & 0x01);
+    // 将原来的Fric_Status解析改为云台控制类型解析
+    gimbal_control_type = (Enum_Gimbal_Control_Type)((control_type >> 3) & 0x03);
+    // 更新JudgeReceiveData中的云台控制类型
+    JudgeReceiveData.Gimbal_Control_Type = gimbal_control_type;
+    Booster_User_Control_Type = (Enum_Booster_User_Control_Type)(control_type >> 5 & 0x01);
     MiniPC_Status = (Enum_MiniPC_Status)(control_type >> 6 & 0x01);
     Referee_UI_Refresh_Status = (Enum_Referee_UI_Refresh_Status)(control_type >> 7 & 0x01);
 
@@ -150,22 +153,6 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     }
     else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
     {
-        // //随动yaw角度优化
-        // float temp_yaw,temp_reference;
-        // temp_yaw = Chassis_Angle;
-        // temp_reference = Reference_Angle;
-        // // if(Chassis_Angle > PI)
-        // //     temp_yaw = Chassis_Angle - 2 * PI;
-        // // else if(Chassis_Angle < -PI)
-        // //     temp_yaw = Chassis_Angle + 2 * PI;
-        // // if(Reference_Angle > PI)
-        // //     temp_reference = Reference_Angle - 2 * PI;
-        // //随动环
-        // PID_Chassis_Fllow.Set_Target(temp_reference);
-        // PID_Chassis_Fllow.Set_Now(temp_yaw);
-        // PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
-        // chassis_omega = PID_Chassis_Fllow.Get_Out();
-        // chassis_omega = 0;
     }
     else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
     {
@@ -233,7 +220,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     float chassis_velocity_x = 0, chassis_velocity_y = 0, gimbal_pitch;
     // 映射之后的目标速度 int16_t
     uint16_t tmp_chassis_velocity_x = 0, tmp_chassis_velocity_y = 0, tmp_chassis_omega = 0;
-    uint8_t tmp_gimbal_pitch = 0;
+    uint16_t tmp_gimbal_pitch = 0;
     float chassis_omega = 0;
     // 底盘控制类型
     Enum_Chassis_Control_Type chassis_control_type;
@@ -245,8 +232,10 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     chassis_omega = Chassis.Get_Target_Omega();
     gimbal_pitch = Gimbal.Motor_Pitch.Get_True_Angle_Pitch();
     chassis_control_type = Chassis.Get_Chassis_Control_Type();
-    control_type = (uint8_t)(Referee_UI_Refresh_Status << 7 | MiniPC_Status << 6 | MiniPC_Aim_Status << 5 | Fric_Status << 3 | Sprint_Status << 2 | chassis_control_type);
-
+    Enum_Gimbal_Control_Type gimbal_control_type = Gimbal.Get_Gimbal_Control_Type();
+    uint8_t booster_user_control = Booster.Booster_User_Control_Type;
+    // 修改control_type，将Fric_Status替换为gimbal_control_type
+    control_type = (uint8_t)(Referee_UI_Refresh_Status << 7 | MiniPC_Status << 6 | booster_user_control << 5 | gimbal_control_type << 3 | Sprint_Status << 2 | chassis_control_type);
     // 设定速度
     tmp_chassis_velocity_x = Math_Float_To_Int(chassis_velocity_x, -1 * Chassis.Get_Velocity_X_Max(), Chassis.Get_Velocity_X_Max(), 0, 0x7FFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data, &tmp_chassis_velocity_x, sizeof(uint16_t));
@@ -257,7 +246,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     tmp_chassis_omega = Math_Float_To_Int(chassis_omega, -1 * 8.0f, 8.0f, 0, 0xFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 4, &tmp_chassis_omega, sizeof(uint8_t));
 
-    tmp_gimbal_pitch = Math_Float_To_Int(gimbal_pitch, -10.0f, 30.0f, 0, 0x7FFF);
+    tmp_gimbal_pitch = Math_Float_To_Int(gimbal_pitch, -30.0f, 30.0f, 0, 0x7FFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 5, &tmp_gimbal_pitch, sizeof(uint16_t));
 
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 7, &control_type, sizeof(uint8_t));
@@ -442,6 +431,11 @@ void Class_Chariot::Control_Gimbal()
     /************************************键鼠控制逻辑*********************************************/
     else if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
+        if (DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            tmp_gimbal_pitch = 0;
+        }
+
         // 长按右键  开启自瞄
         if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
         {
@@ -567,7 +561,7 @@ void Class_Chariot::Control_Booster()
         {
             Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
         }
-        //连发
+        // 连发
         else if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_MULTI && DR16.Get_Mouse_Left_Key() == DR16_Key_Status_PRESSED && abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) > Booster.Get_Friction_Omega_Threshold())
         {
             Booster.Set_Booster_Control_Type(Booster_Control_Type_REPEATED);
@@ -626,10 +620,6 @@ void Class_Chariot::Control_Booster()
         //     Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
         // }
     }
-  
-
-
-   
 }
 
 #endif
@@ -665,6 +655,17 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback_1()
 void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
 #ifdef CHASSIS
+// 计算云台与底盘的夹角（角度制）
+    float chassis_gimbal_diff = (Reference_Angle - Chassis_Angle) * 180.0f / PI;
+    // 将角度限制在-180到180度范围内
+    if (chassis_gimbal_diff > 180.0f) {
+        chassis_gimbal_diff -= 360.0f;
+    } else if (chassis_gimbal_diff < -180.0f) {
+        chassis_gimbal_diff += 360.0f;
+    }
+    
+    // 将夹角信息存入JudgeReceiveData
+    JudgeReceiveData.Chassis_Gimbal_Diff = chassis_gimbal_diff;
 
     // 小陀螺 随动计算角速度
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
@@ -677,37 +678,37 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         float temp_yaw, temp_reference;
         temp_yaw = Chassis_Angle;
         temp_reference = Reference_Angle;
-        
+
         // 将角度规范化到 [-π, π] 范围内
         if (temp_yaw > PI)
             temp_yaw = temp_yaw - 2 * PI;
         else if (temp_yaw < -PI)
             temp_yaw = temp_yaw + 2 * PI;
-            
+
         if (temp_reference > PI)
             temp_reference = temp_reference - 2 * PI;
         else if (temp_reference < -PI)
             temp_reference = temp_reference + 2 * PI;
-            
+
         // 计算角度差，选择最短路径（优弧）
         float angle_diff = temp_reference - temp_yaw;
-        
+
         // 优弧劣弧判断与优化
-        if (angle_diff > PI) {
+        if (angle_diff > PI)
+        {
             angle_diff -= 2 * PI;
-        } else if (angle_diff < -PI) {
+        }
+        else if (angle_diff < -PI)
+        {
             angle_diff += 2 * PI;
         }
-        
+
         // 使用优化后的角度差进行PID控制
         PID_Chassis_Fllow.Set_Target(temp_yaw + angle_diff);
         PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
         Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());
-
-
-
-}
+    }
 
     static uint8_t mod2 = 0;
     // 各个模块的分别解算

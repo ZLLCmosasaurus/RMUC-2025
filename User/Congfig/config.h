@@ -19,7 +19,7 @@
 #define MINIPC_COMM_USB
 
 //#define CHASSIS
- #define GIMBAL
+#define GIMBAL
 
 #ifdef GIMBAL
 

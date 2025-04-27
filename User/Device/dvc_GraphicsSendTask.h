@@ -93,7 +93,7 @@ enum ARMOR_ID
 };
 
 // ͼ�����ݽṹ��
-typedef __PACKED_STRUCT 
+typedef __PACKED_STRUCT
 {
 	uint8_t graphic_name[3];
 	uint32_t operate_tpye : 3;
@@ -108,7 +108,8 @@ typedef __PACKED_STRUCT
 	uint32_t radius : 10;
 	uint32_t end_x : 11;
 	uint32_t end_y : 11;
-} graphic_data_struct_t;
+}
+graphic_data_struct_t;
 
 /* ͼ�λ������� */
 typedef enum
@@ -184,15 +185,19 @@ typedef struct
 	uint8_t robot_id;
 	uint8_t Chassis_Control_Type;
 	uint8_t Bullet_Status;
-	uint8_t Minipc_Satus;
+	uint8_t Minipc_Status;
 	uint8_t MiniPC_Aim_Status;
 	uint8_t Fric_Status;
 	uint8_t Supercap_Energy;
 	uint8_t Supercap_State;
+	uint8_t Radar_Double_Damage_Flag;
+	uint8_t Gimbal_Control_Type;  // 添加云台控制状态字段
+	uint8_t Booster_User_Control_Type;
 	uint16_t booster_fric_omega_left;
 	uint16_t booster_fric_omega_right;
 	float Supercap_Voltage;
 	float Pitch_Angle;
+	 float Chassis_Gimbal_Diff;
 
 } JudgeReceive_t;
 

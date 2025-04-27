@@ -200,6 +200,7 @@ public:
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
     // 裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
+    Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
     // 底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
 

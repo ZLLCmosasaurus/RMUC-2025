@@ -14,9 +14,12 @@
 #include "dvc_referee.h"
 #include "dvc_buzzer.h"
 #include "drv_math.h"
+#include "dvc_GraphicsSendTask.h" // 添加这一行，包含完整的JudgeReceive_t定义
 
 /* Private macros ------------------------------------------------------------*/
-
+// 删除前向声明，因为已经包含了完整定义
+// struct JudgeReceive_t;
+extern JudgeReceive_t JudgeReceiveData;
 /* Private types -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -257,6 +260,19 @@ void Class_Referee::Data_Process()
                             reinterpret_cast<uint8_t *>(&Robot_Dart_Command)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
                         }
                         buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Dart_Command) + 7;
+                    }
+                    break;
+                    case(Referee_Command_ID_INTERACTION):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Interaction_Students)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Data_Interaction_Students) + 7;
+                        if (Interaction_Students.Header == 0x0221)
+                        {
+                            JudgeReceiveData.Radar_Double_Damage_Flag=Interaction_Students.Data[0];
+                        }
                     }
                     break;
                     }
