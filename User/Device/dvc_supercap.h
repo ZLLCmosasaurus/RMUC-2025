@@ -17,6 +17,7 @@
 #include "drv_math.h"
 #include "drv_can.h"
 #include "drv_uart.h"
+#include "alg_fsm.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -120,7 +121,7 @@ public:
 
 protected:
     //初始化相关常量
-
+    Class_FSM fsm;
     //绑定的CAN
     Struct_CAN_Manage_Object *CAN_Manage_Object;
     //收数据绑定的CAN ID, 切记避开0x201~0x20b, 默认收包CAN1的0x210, 滤波器最后一个, 发包CAN1的0x220

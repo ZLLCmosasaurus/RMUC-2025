@@ -42,6 +42,8 @@ void Class_Supercap::Init(CAN_HandleTypeDef *hcan, float __Limit_Power_Max)
     }
     Supercap_Tx_Data.Limit_Power = __Limit_Power_Max;
     CAN_Tx_Data = CAN_Supercap_Tx_Data;
+
+    fsm.Init(2,0);
 }
 /**
  * @brief 初始化超级电容通信
@@ -168,9 +170,31 @@ void Class_Supercap::Use_SuperCap_Strategy()
         switch (Supercap_Usage_Stratage)
         {
         case Supercap_Usage_Stratage_Referee_BufferPower:
-        {
-            Referee_BufferPower_Output = 0.5f * (Referee_BufferPower - 30.0f);
-            Math_Constrain(&Referee_BufferPower_Output, -30.0f, 30.0f);
+        {   
+            fsm.Status[fsm.Get_Now_Status_Serial()].Time++;
+            switch (fsm.Get_Now_Status_Serial())
+            {
+            case 0://正常 ：Referee_BufferPower !< 25J
+            {
+                Referee_BufferPower_Output = 0.5f * (Referee_BufferPower - 30.0f);
+                Math_Constrain(&Referee_BufferPower_Output, -15.0f, 15.0f);
+                if(Referee_BufferPower < 25.0f)
+                {
+                    fsm.Set_Status(1);
+                }
+            }
+            break;
+            case 1:
+            {
+                Referee_BufferPower_Output = 0.0f;
+                if(Referee_BufferPower > 55.0f)
+                {
+                    fsm.Set_Status(0);
+                }
+            }
+            break;
+            }
+
             Set_PowerLimit_Type(PowerLimit_Type_Referee_BufferPower);
         }
         break;
@@ -178,7 +202,7 @@ void Class_Supercap::Use_SuperCap_Strategy()
         {
             Supercap_BufferPower_Output = Data.Supercap_Buffer_Power;
             Supercap_LimitBufferPower_Output = 0.5f * (Referee_BufferPower - 30.0f);
-            Math_Constrain(&Supercap_LimitBufferPower_Output,0.0f,30.0f);
+            Math_Constrain(&Supercap_LimitBufferPower_Output,0.0f,15.0f);
             Set_PowerLimit_Type(PowerLimit_Type_Supercap_BufferPower);
         }
         break;
@@ -186,8 +210,12 @@ void Class_Supercap::Use_SuperCap_Strategy()
     }
     else
     {
+        Referee_BufferPower_Output = 0.25f * (Referee_BufferPower - 30.0f);
+        //Math_Constrain(&Referee_BufferPower_Output, -15.0f, 15.0f);
         Set_PowerLimit_Type(PowerLimit_Type_Referee_BufferPower);
     }
+
+
 
 }
 

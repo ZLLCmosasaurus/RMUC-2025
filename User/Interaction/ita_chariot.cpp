@@ -1417,7 +1417,13 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //底盘给舵小板发送最大功率
         //CAN_Chassis_Tx_Max_Power_Callback();
         //超电使用策略
-        Chassis.Supercap.Set_Referee_MaxPower(Referee.Get_Chassis_Power_Max());
+        if(Referee.Get_Level() == 1){
+            Chassis.Supercap.Set_Referee_MaxPower(55.0f);
+        }
+        else{
+            Chassis.Supercap.Set_Referee_MaxPower(Referee.Get_Chassis_Power_Max());
+        }
+
         Chassis.Supercap.Set_Referee_BufferPower(Referee.Get_Chassis_Energy_Buffer());
         if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
         {
