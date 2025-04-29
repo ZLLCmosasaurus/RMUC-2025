@@ -167,6 +167,8 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 }
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback_1()
 {
+    MiniPC_Type = Enum_MiniPC_Type(CAN_Manage_Object->Rx_Buffer.Data[0]);
+
     memcpy(&Booster_fric_omega_left, &CAN_Manage_Object->Rx_Buffer.Data[2], sizeof(uint16_t));
     memcpy(&Booster_fric_omega_right, &CAN_Manage_Object->Rx_Buffer.Data[4], sizeof(uint16_t));
 }
@@ -257,6 +259,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback_1()
     uint16_t tmp_fric_omega_right = 0;
     tmp_fric_omega_left = (uint16_t)abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian());
     tmp_fric_omega_right = (uint16_t)abs(Booster.Motor_Friction_Right.Get_Now_Omega_Radian());
+    CAN2_Gimbal_Tx_Chassis_Data_1[0] = MiniPC.Get_MiniPC_Type();
     memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 2, &tmp_fric_omega_left, sizeof(uint16_t));
     memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 4, &tmp_fric_omega_right, sizeof(uint16_t));
 }
@@ -437,10 +440,9 @@ void Class_Chariot::Control_Gimbal()
         }
 
         // 长按右键  开启自瞄
-        if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
+        if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED)
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
-            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal); // 开启自瞄默认为四点
 
             tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
             tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
@@ -477,11 +479,16 @@ void Class_Chariot::Control_Gimbal()
             tmp_gimbal_yaw += 180;
         }
         // V键按下 自瞄模式中切换四点和五点模式
-        if (Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_MINIPC &&
-            DR16.Get_Keyboard_Key_V() == DR16_Key_Status_PRESSED)
+        if (DR16.Get_Keyboard_Key_V() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
-            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill);
-            // Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+            if (Gimbal.MiniPC->Get_MiniPC_Type() == MiniPC_Type_Windmill)
+            {
+                Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal);
+            }
+            else
+            {
+                Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill);
+            }
         }
         // G键按下切换Pitch锁定模式和free模式
         if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
@@ -571,7 +578,7 @@ void Class_Chariot::Control_Booster()
             Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
         }
 
-        // C键控制摩擦轮
+        // Ctrl键控制摩擦轮
         if (DR16.Get_Keyboard_Key_Ctrl() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Booster.Get_Friction_Control_Type() == Friction_Control_Type_ENABLE)
@@ -579,11 +586,9 @@ void Class_Chariot::Control_Booster()
 
                 Booster.Set_Friction_Control_Type(Friction_Control_Type_DISABLE);
                 Fric_Status = Fric_Status_CLOSE;
-                // Booster.Booster_User_Control_Type = Booster_User_Control_Type_DISABLE;
             }
             else
             {
-
                 Booster.Set_Friction_Control_Type(Friction_Control_Type_ENABLE);
                 Fric_Status = Fric_Status_OPEN;
             }
@@ -655,15 +660,13 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback_1()
 void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
 {
 #ifdef CHASSIS
-// 计算云台与底盘的夹角（角度制）
-    float chassis_gimbal_diff = (Reference_Angle - Chassis_Angle) * 180.0f / PI;
-    // 将角度限制在-180到180度范围内
-    if (chassis_gimbal_diff > 180.0f) {
-        chassis_gimbal_diff -= 360.0f;
-    } else if (chassis_gimbal_diff < -180.0f) {
-        chassis_gimbal_diff += 360.0f;
+    // 计算云台与底盘的夹角（弧度制）
+    float chassis_gimbal_diff = (Reference_Angle - Chassis_Angle);
+    if (chassis_gimbal_diff <= 0)
+    {
+        chassis_gimbal_diff += 2 * PI;
     }
-    
+
     // 将夹角信息存入JudgeReceiveData
     JudgeReceiveData.Chassis_Gimbal_Diff = chassis_gimbal_diff;
 

@@ -103,7 +103,7 @@ typedef __PACKED_STRUCT
 	uint32_t start_angle : 9;
 	uint32_t end_angle : 9;
 	uint32_t width : 10;
-	uint32_t start_x : 11;
+	uint32_t start_x : 11;//起点/圆心坐标
 	uint32_t start_y : 11;
 	uint32_t radius : 10;
 	uint32_t end_x : 11;
@@ -191,7 +191,8 @@ typedef struct
 	uint8_t Supercap_Energy;
 	uint8_t Supercap_State;
 	uint8_t Radar_Double_Damage_Flag;
-	uint8_t Gimbal_Control_Type;  // 添加云台控制状态字段
+	uint8_t Minipc_Mode;
+	uint8_t Gimbal_Control_Type; // 添加云台控制状态字段
 	uint8_t Booster_User_Control_Type;
 	uint16_t booster_fric_omega_left;
 	uint16_t booster_fric_omega_right;

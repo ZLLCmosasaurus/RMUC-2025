@@ -123,6 +123,7 @@ void Class_MiniPC::Output()
 #ifdef MINIPC_COMM_CAN
   // 设置发送数据
   Pack_Tx.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
+  
   Pack_Tx.roll = (int16_t)(Tx_Angle_Roll * 100.0f);
   Pack_Tx.pitch = (int16_t)(Tx_Angle_Pitch * 100.0f);
   Pack_Tx.yaw = (int16_t)(Tx_Angle_Yaw * 100.0f);

@@ -271,7 +271,7 @@ void Class_Referee::Data_Process()
                         buffer_index += sizeof(Struct_Referee_Data_Interaction_Students) + 7;
                         if (Interaction_Students.Header == 0x0221)
                         {
-                            JudgeReceiveData.Radar_Double_Damage_Flag=Interaction_Students.Data[0];
+                            JudgeReceiveData.Radar_Double_Damage_Flag=Interaction_Students.Data;
                         }
                     }
                     break;

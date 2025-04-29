@@ -15,11 +15,11 @@
 /* Includes ------------------------------------------------------------------*/
 
 /* Exported macros -----------------------------------------------------------*/
-// #define MINIPC_COMM_CAN
-#define MINIPC_COMM_USB
+#define MINIPC_COMM_CAN
+// #define MINIPC_COMM_USB
 
-//#define CHASSIS
-#define GIMBAL
+#define CHASSIS
+// #define GIMBAL
 
 #ifdef GIMBAL
 

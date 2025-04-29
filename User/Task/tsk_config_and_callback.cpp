@@ -536,6 +536,7 @@ extern "C" void Task_Loop()
         JudgeReceiveData.Supercap_State = chariot.Sprint_Status;
         JudgeReceiveData.booster_fric_omega_left = chariot.Booster_fric_omega_left; // 左摩擦轮速度; // 左摩擦轮速度
         JudgeReceiveData.booster_fric_omega_right = chariot.Booster_fric_omega_right;
+        JudgeReceiveData.Minipc_Mode = chariot.MiniPC_Type;
 
         if (chariot.Referee_UI_Refresh_Status == Referee_UI_Refresh_Status_ENABLE)
             Init_Cnt = 10;
