@@ -34,9 +34,6 @@ void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t _
 	  USB_Manage_Object = __USB_Manage_Object;
     Frame_Header = __frame_header;
     Frame_Rear = __frame_rear;
-    //Pack_Tx.target_type = MiniPC_Type_Nomal;
-    //Pack_Tx.windmill_type = Windmill_Type_Small;
-    //Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
 }
 /**
  * @brief 迷你主机初始化
@@ -47,6 +44,20 @@ void Class_MiniPC::Init_UART(Struct_UART_Manage_Object* __UART_Manage_Object, ui
 {
     UART_Manage_Object = __UART_Manage_Object;
     Frame_Header = __frame_header;
+}
+
+void Class_MiniPC::Init_CAN(CAN_HandleTypeDef *hcan)
+{
+  if (hcan->Instance == CAN1)
+  {
+    CAN_Manage_Object = &CAN1_Manage_Object;
+  }
+  else if (hcan->Instance == CAN2)
+  {
+    CAN_Manage_Object = &CAN2_Manage_Object;
+  }
+
+  CAN_Tx_Data = CAN_MiniPC_Tx_Data;
 }
 /**
  * @brief 数据处理过程
@@ -77,6 +88,41 @@ void Class_MiniPC::Data_Process()
 
 }
 
+void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
+{
+  
+    int16_t tmp_pos_x, tmp_pos_y, tmp_pos_z;
+    memcpy(&tmp_pos_x,Rx_Data,2);
+    Pack_Rx.radar_target_x = (float)tmp_pos_x / 1000.0f;
+    memcpy(&tmp_pos_y,Rx_Data+2,2);
+    Pack_Rx.radar_target_y = (float)tmp_pos_y / 1000.0f;
+    memcpy(&tmp_pos_z,Rx_Data+4,2);
+    Pack_Rx.radar_target_z = (float)tmp_pos_z / 1000.0f;
+    memcpy(&Pack_Rx.radar_enable_status,Rx_Data+6,1);
+    //利用坐标系转换计算目标的yaw和pitch和距离
+    if(Pack_Rx.radar_enable_status == 1 && Pack_Tx.radar_enable_control == 1)//当上位机反馈的雷达已处于运行状态&下位机使能开启雷达
+    {
+      static float tmp_x,tmp_y,tmp_z;
+      calc_Pos_X_Y_Z(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, Pack_Rx.radar_target_z, &tmp_x, &tmp_y, &tmp_z);
+
+      Distance = calc_distance(tmp_x, tmp_y, tmp_z);
+      Rx_Angle_Yaw = calc_yaw(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, 0.0f);
+      Rx_Angle_Pitch = calc_pitch_compensated(Pack_Rx.radar_target_x,  Pack_Rx.radar_target_y, Pack_Rx.radar_target_z,Pack_Rx.radar_target_x, Pack_Rx.radar_target_y,Pack_Rx.radar_target_z) - pitch_imu_offset;
+    }
+    //pitch角度限幅
+    Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
+    Math_Constrain(&Rx_Angle_Yaw,-180.0f,180.0f);
+    memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
+}
+void Class_MiniPC::Output_CAN()
+{
+  uint8_t radar_control_Byte;
+  int16_t tmp_yaw;
+  tmp_yaw = (int16_t)(Tx_Angle_Encoder_Yaw * 100.0f);
+  radar_control_Byte = (uint8_t)(Radar_Target_Outpost << 2 | Radar_Target << 1 | Tx_Flag_Control_Radar);
+  memcpy(CAN_Tx_Data, &tmp_yaw, 2);
+  memcpy(CAN_Tx_Data + 2, &radar_control_Byte, 1);
+}
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区
  *
@@ -161,8 +207,9 @@ void Class_MiniPC::Output_UART()
 void Class_MiniPC::TIM_Write_PeriodElapsedCallback()
 {
   Transform_Angle_Tx();
-  Output();
-  Output_UART();
+  // Output();
+  // Output_UART();
+  Output_CAN();
 }
 
 /**
@@ -187,6 +234,12 @@ void Class_MiniPC::UART_RxCpltCallback(uint8_t *rx_data)
   UART_Flag += 1;
   Data_Process_UART(rx_data);
 }
+
+void Class_MiniPC::CAN_RxCpltCallback(uint8_t *Rx_Data)
+{
+  CAN_Flag ++;
+  Data_Process_CAN(Rx_Data);
+}
 /**
  * @brief tim定时器中断定期检测迷你主机是否存活
  *
@@ -197,13 +250,13 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
     if (Flag == Pre_Flag)
     {
         //迷你主机断开连接
-        MiniPC_Status =  MiniPC_Status_DISABLE;
+        //MiniPC_Status =  MiniPC_Status_DISABLE;
         Minipc_USB_Status =  MiniPC_USB_Status_DISABLE;
     }
     else
     {
         //迷你主机保持连接
-        MiniPC_Status =  MiniPC_Status_ENABLE;
+        //MiniPC_Status =  MiniPC_Status_ENABLE;
         Minipc_USB_Status =  MiniPC_USB_Status_ENABLE;
     }
 
@@ -218,8 +271,18 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
         Minipc_USB_Status =  MiniPC_USB_Status_ENABLE;
     }
 
+    if(CAN_Flag == Pre_CAN_Flag)
+    {
+      MiniPC_Status =  MiniPC_Status_ENABLE;
+    }
+    else
+    {
+      MiniPC_Status =  MiniPC_Status_DISABLE;
+    }
+
     Pre_Flag = Flag;
     Pre_UART_Flag = UART_Flag;
+    Pre_CAN_Flag = CAN_Flag;
 }
 
 /**

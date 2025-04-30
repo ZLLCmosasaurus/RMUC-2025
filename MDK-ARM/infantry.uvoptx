@@ -120,6 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>?</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -188,6 +189,16 @@
           <count>5</count>
           <WinNumber>1</WinNumber>
           <ItemText>pitch_offset</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>can_tx_status</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>CAN_MiniPC_Rx_Data,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

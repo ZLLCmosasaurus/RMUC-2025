@@ -153,14 +153,9 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Booster.Fric[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x205):
+    case (0xa1):
     {
-        chariot.Image.Motor_Image_Roll.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x206):
-    {
-        chariot.Image.Motor_Image_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        chariot.MiniPC.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     }
@@ -183,13 +178,23 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         Enum_Referee_Data_Robots_ID robo_id;
         Enum_Referee_Game_Status_Stage game_stage;
         float shoot_speed;
+        int16_t  projectile_allowance_42mm;
         memcpy(&robo_id,CAN_RxMessage->Data,sizeof(uint8_t));
         memcpy(&game_stage,CAN_RxMessage->Data+1,sizeof(uint8_t));
         memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(float));
+        memcpy(&projectile_allowance_42mm,CAN_RxMessage->Data+6,sizeof(int16_t));    
         chariot.Referee.Set_Robot_ID(robo_id);
         chariot.Referee.Set_Game_Stage(game_stage);
-        chariot.Referee.Set_Shoot_Speed(shoot_speed);
-        Math_Constrain(&shoot_speed,5.0f,17.0f);
+        chariot.Booster.Set_Referee_Bullet_Velocity(shoot_speed);
+        if(game_stage != Referee_Game_Status_Stage_BATTLE)
+        {
+            chariot.Booster.Set_Projectile_Allowance_42mm(666);
+        }
+        else
+        {
+            chariot.Booster.Set_Projectile_Allowance_42mm(projectile_allowance_42mm);
+        }
+        //Math_Constrain(&shoot_speed,5.0f,17.0f);
 
     }
     break;
@@ -403,13 +408,13 @@ void Task1ms_TIM5_Callback()
 
         TIM_CAN_PeriodElapsedCallback();
         #ifdef GIMBAL
-        static int mod5 = 0;
-        mod5++;
-        if (mod5 == 5)
-        {
-            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-            mod5 = 0;
-        }
+        // static int mod5 = 0;
+        // mod5++;
+        // if (mod5 == 5)
+        // {
+        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+        //     mod5 = 0;
+        // }
         #endif
     }
 }

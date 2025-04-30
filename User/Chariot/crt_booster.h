@@ -22,7 +22,6 @@
 #include "alg_fsm.h"
 #include "dvc_referee.h"
 #include "dvc_djimotor.h"
-
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -52,6 +51,11 @@ enum Enum_Friction_Control_Type
     Friction_Control_Type_ENABLE,
 };
 
+enum Enum_Referee_Bullet_Velocity_Updata_Status : uint8_t
+{
+    Referee_Bullet_Velocity_Updata_Status_DISABLE = 0,
+    Referee_Bullet_Velocity_Updata_Status_ENABLE,
+};
 /**
  * @brief Specialized, 热量检测有限自动机
  *
@@ -98,9 +102,10 @@ public:
     Class_FSM_Antijamming FSM_Antijamming;
     friend class Class_FSM_Antijamming;
 
+    Class_FSM FSM_Bullet_Velocity;
     //裁判系统
     Class_Referee *Referee;
-
+    
     //拨弹盘电机
     Class_DJI_Motor_C620 Motor_Driver;
 
@@ -127,8 +132,11 @@ public:
     inline void Set_Drive_Count(uint16_t __Drvie_Count);
     inline void Set_Fric_Speed_Rpm_High(int16_t __Fric_High_Rpm);
     inline void Set_Fric_Speed_Rpm_Low(int16_t __Fric_Low_Rpm);
+    inline void Set_Referee_Bullet_Velocity(float __Referee_Bullet_Velocity);
+    inline void Set_Projectile_Allowance_42mm(int16_t __Projectile_Allowance_42mm);
     inline int16_t Get_Fric_Speed_Rpm_High();
     inline int16_t Get_Fric_Speed_Rpm_Low();
+    void TIM_Adjust_Bullet_Velocity_PeriodElapsedCallback();
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
 		
@@ -159,6 +167,12 @@ protected:
     //摩擦轮角速度
     int16_t Fric_High_Rpm = 4975;//5025;//5075;
     int16_t Fric_Low_Rpm = 4825;//4875;//4925;
+    int16_t Fric_Transform_Rpm = -162;
+    //子弹实际速度
+    float Referee_Bullet_Velocity = 0.0f; 
+    float Pre_Referee_Bullet_Velocity = 0.0f;
+    Enum_Referee_Bullet_Velocity_Updata_Status Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_DISABLE;
+    int16_t Projectile_Allowance_42mm;
     //沈阳：5025 5175
 	//速度
     float Friction_Omega = 0.0f;//暂时用不到
@@ -284,6 +298,14 @@ void Class_Booster::Set_Fric_Speed_Rpm_High(int16_t __Fric_High_Rpm)
 void Class_Booster::Set_Fric_Speed_Rpm_Low(int16_t __Fric_Low_Rpm)
 {
     Fric_Low_Rpm = __Fric_Low_Rpm;
+}
+void Class_Booster::Set_Referee_Bullet_Velocity(float __Referee_Bullet_Velocity)
+{
+    Referee_Bullet_Velocity = __Referee_Bullet_Velocity;
+}
+void Class_Booster::Set_Projectile_Allowance_42mm(int16_t __Projectile_Allowance_42mm)
+{
+    Projectile_Allowance_42mm = __Projectile_Allowance_42mm;    
 }
 int16_t Class_Booster::Get_Fric_Speed_Rpm_High()
 {

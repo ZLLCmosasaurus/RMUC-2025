@@ -50,6 +50,7 @@ uint8_t CAN2_0xxf7_Tx_Data[8];
 uint8_t CAN2_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
+uint8_t CAN_MiniPC_Tx_Data[8];
 
 uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
 uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
@@ -278,11 +279,11 @@ void TIM_CAN_PeriodElapsedCallback()
         CAN_Send_Data(&hcan1, 0x66, CAN_Supercap_Tx_Data, 8);
     }
 
-    static uint16_t mod500 = 0;
-    mod500++;
-    if(mod500 == 500)
+    static uint16_t mod100 = 0;
+    mod100++;
+    if(mod100 == 100)
     {
-        mod500 = 0;
+        mod100 = 0;
         // CAN1 发送报文给上板
         CAN_Send_Data(&hcan1, 0x51, CAN2_Chassis_Tx_Gimbal_Data, 8);
     }
@@ -322,15 +323,22 @@ void TIM_CAN_PeriodElapsedCallback()
         can_tx_status[1] = CAN_Send_Data(&hcan1, 0x02E, CAN1_0x02E_TX_Data, 8);
     }
 
+   static uint8_t mod5 = 0;
+   mod5++;
+   if (mod5 == 5)
+   {
+       mod5 = 0;
+       can_tx_status[2] = CAN_Send_Data(&hcan1, 0xa0, CAN_MiniPC_Tx_Data, 8);
+   }
     // CAN2 yaw-0x205  pitch-0x206   拨弹盘0x207
     //if (mod % 2 == 1)
-    can_tx_status[2] = CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8);
+    can_tx_status[3] = CAN_Send_Data(&hcan2, 0x1ff, CAN2_0x1ff_Tx_Data, 8);
 
     static uint8_t mod10 = 0;
     mod10++;
     if (mod10 == 10)
     {
-        can_tx_status[3] = CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); // 给底盘发送控制命令 按照0x77 ID 发送
+        can_tx_status[4] = CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); // 给底盘发送控制命令 按照0x77 ID 发送
         mod10 = 0;
     }
 

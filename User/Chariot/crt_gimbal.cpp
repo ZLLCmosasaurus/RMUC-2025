@@ -286,19 +286,20 @@ void Class_Gimbal::Output()
     else // 非失能模式
     {   
         //设置目标角度，最后会做软件限幅处理
-        if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
-        {
-            Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
-            Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-        }
-        else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_Radar_Enable_Status()) == 1)
-        {   
-            if(MiniPC->Get_Radar_Enable_Control() == 1)
-            {
-                Target_Yaw_Encoder_Angle = MiniPC->Get_Rx_Yaw_Angle() + Transfrom_Yaw_Encoder_Angle;
-                Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle() + Transfrom_Pitch_IMU_Angle;
-            }
-        }
+        // if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
+        // {
+        //     Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
+        //     Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
+        // }
+        // else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_Radar_Enable_Status()) == 1)
+        // {   
+        //     if(MiniPC->Get_Radar_Enable_Control() == 1)
+        //     {
+        //         Target_Yaw_Encoder_Angle = MiniPC->Get_Rx_Yaw_Angle() + Transfrom_Yaw_Encoder_Angle;
+        //         Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle() + Transfrom_Pitch_IMU_Angle;
+
+        //     }
+        // }
         //pitch yaw轴控制方式
         Motor_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
         //Motor_Yaw.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_IMU_ANGLE);
