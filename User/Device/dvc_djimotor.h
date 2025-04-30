@@ -151,7 +151,7 @@ protected:
     //发送缓存区
     uint8_t *CAN_Tx_Data;
     //编码器偏移
-    uint32_t Encoder_Offset;
+    int32_t Encoder_Offset;
     //最大速度, 需根据不同负载测量后赋值, 也就开环输出用得到, 不过我感觉应该没有奇葩喜欢开环输出这玩意
     float Omega_Max;
 

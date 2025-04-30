@@ -285,7 +285,7 @@ protected:
         //单发连发标志位
         uint8_t Shoot_Flag = 0;
         //DR16控制数据来源
-        Enum_Control_Type Control_Type = DR16_Control_Type_REMOTE;
+        Enum_Control_Type Control_Type = VT13_Control_Type_KEYBOARD;
         //内部函数
 
         void Judge_Control_Type();

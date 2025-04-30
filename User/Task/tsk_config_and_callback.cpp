@@ -286,7 +286,7 @@ void Image_Callback(uint8_t *Buffer, uint16_t Length)
     chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
-    if(chariot.VT13.Now_RX_Data[0] == 0xA9 && chariot.VT13.Now_RX_Data[1] == 0x53)
+    if(Buffer[0] == 0xA9 && Buffer[1] == 0x53)
     {
         chariot.TIM_Control_Callback();
     }

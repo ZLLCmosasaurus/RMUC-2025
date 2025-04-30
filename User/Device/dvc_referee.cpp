@@ -530,6 +530,40 @@ void Class_Referee::Referee_UI_Draw_Circle(uint8_t __Robot_ID,Enum_Referee_UI_Gr
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_X = __Center_X;
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
 }
+
+/**
+ * @brief 绘制半圆
+ *
+ * @param __Robot_ID 机器人ID
+ * @param __data_type 数据类型
+ * @param __Serial 序列号
+ * @param __Index 索引
+ * @param __Color 颜色
+ * @param __Line_Width 线宽
+ * @param __Center_X 中心点X坐标
+ * @param __Center_Y 中心点Y坐标
+ * @param __Radius 半径
+ * @param __Operate_Type 操作类型
+ */
+void Class_Referee::Referee_UI_Draw_Arc(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Half_Length_X,uint32_t __Half_Length_Y, uint32_t __Start_Angle,uint32_t __End_Angle, Enum_Referee_UI_Operate_Type __Operate_Type)
+{
+    Interaction_Graphic_7.Sender = (Enum_Referee_Data_Robots_ID)__Robot_ID;
+    Interaction_Graphic_7.Receiver = (Enum_Referee_Data_Robots_Client_ID)(__Robot_ID + 0x0100);
+
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Serial = __Serial;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Index[0] = __Index;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Operation_Enum = __Operate_Type;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Type_Enum = 4;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Color_Enum = __Color;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Start_Angle = __Start_Angle;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.End_Angle = __End_Angle;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Line_Width = __Line_Width;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Center_X = __Center_X;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Center_Y= __Center_Y;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Half_Length_X = __Half_Length_X;
+    Interaction_Graphic_7.Graphic[__Group_Index].Arc.Half_Length_Y = __Half_Length_Y;      
+}
+
 /**
  * @brief 绘制圆形
  *  
@@ -556,7 +590,8 @@ void Class_Referee::Referee_UI_Draw_Circle_Graphic_5(uint8_t __Robot_ID, Enum_Re
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Color_Enum = __Color;
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Line_Width = __Line_Width;
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_X = __Center_X;
-    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;
+		Interaction_Graphic_5.Graphic[__Group_Index].Circle.Radius= __Radius;
 }
 /**
  * @brief 绘制浮点数

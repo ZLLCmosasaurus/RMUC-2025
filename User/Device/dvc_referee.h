@@ -1237,7 +1237,7 @@ public:
     void Referee_UI_Draw_Rectangle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Float_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Packed_String();
-
+    void Referee_UI_Draw_Arc(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Half_Length_X,uint32_t __Half_Length_Y, uint32_t __Start_Angle,uint32_t __End_Angle, Enum_Referee_UI_Operate_Type __Operate_Type);
     template <typename T>
     void Referee_UI_Packed_Data(T* __data);
 

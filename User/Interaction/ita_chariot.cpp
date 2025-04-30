@@ -291,6 +291,18 @@ void Class_Chariot::Control_Gimbal()
             tmp_gimbal_yaw -= VT13.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
             tmp_gimbal_pitch += VT13.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
         }
+				if(VT13.Get_Keyboard_Key_R()==VT13_Key_Status_PRESSED)
+				{
+					if(Referee_UI_Refresh_Status	==	Referee_UI_Refresh_Status_DISABLE)
+					{
+						Referee_UI_Refresh_Status=Referee_UI_Refresh_Status_ENABLE;
+					}
+					else
+					{
+						Referee_UI_Refresh_Status=Referee_UI_Refresh_Status_DISABLE;
+					}
+				
+				}
       
     }
     else if(Get_Control_Type()==DR16_Control_Type_REMOTE)
@@ -382,7 +394,7 @@ void Class_Chariot::Control_Booster()
             Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
 					
         }
-        //C键控制摩擦轮
+        //Ctrl键控制摩擦轮
         if(VT13.Get_Keyboard_Key_Ctrl() ==VT13_Key_Status_TRIG_FREE_PRESSED)
         {
             if(Booster.Get_Friction_Control_Type()==Friction_Control_Type_ENABLE)
@@ -496,62 +508,64 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     {
     case (Referee_UI_Refresh_Status_DISABLE):
     {
-        // 摩擦轮状态
-        if (Fric_Status == Fric_Status_OPEN)
+        // 左摩擦轮状态
+        if (Fric_Status == Fric_Status_OPEN&& Booster.Motor_Friction_Left.Get_DJI_Motor_Status()==DJI_Motor_Status_ENABLE)
         {
-            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_OPEN", (sizeof("Fric_OPEN") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_PINK,10,430,820,480,770,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,0,0x0A,Graphic_Color_GREEN,25,184,675,50,Referee_UI_CHANGE);
+        }
+        else if (Fric_Status == Fric_Status_CLOSE&& Booster.Motor_Friction_Left.Get_DJI_Motor_Status()==DJI_Motor_Status_ENABLE)
+        {
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,0,0x0A,Graphic_Color_ORANGE,25,184,675,50,Referee_UI_CHANGE);
         }
         else
         {
-            //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,0,0x0A,Graphic_Color_WHITE,25,184,675,50,Referee_UI_CHANGE);
         }
-
-        if(MiniPC_Status == MiniPC_Status_ENABLE)
+        // 右摩擦轮状态
+        if (Fric_Status == Fric_Status_OPEN&& Booster.Motor_Friction_Right.Get_DJI_Motor_Status()==DJI_Motor_Status_ENABLE)
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0B,Graphic_Color_GREEN,25,309,675,50,Referee_UI_CHANGE);
+        }
+        else if (Fric_Status == Fric_Status_CLOSE&& Booster.Motor_Friction_Right.Get_DJI_Motor_Status()==DJI_Motor_Status_ENABLE)
+        {
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0B,Graphic_Color_ORANGE,25,309,675,50,Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0B,Graphic_Color_WHITE,25,309,675,50,Referee_UI_CHANGE);
         }
-        // Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,Pitch_IMU_Angle,Referee_UI_CHANGE);
 
+        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0C,Graphic_Color_ORANGE,20,5,1342,748,Gimbal.Motor_Yaw.Get_Now_Angle(),Referee_UI_CHANGE);
+        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0D,Graphic_Color_ORANGE,20,5,1342,360,Gimbal.Motor_Pitch.Get_True_Angle_Pitch(),Referee_UI_CHANGE);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x08, Graphic_Color_MAIN, 5, 1405, 617, 1405+70*sinf(Gimbal.Motor_Yaw.Get_Now_Angle()*0.0174), 617+70*cosf(Gimbal.Motor_Yaw.Get_Now_Angle()*0.0174), Referee_UI_CHANGE);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x09, Graphic_Color_MAIN, 5, 1405, 442, 1405+70*cosf(Gimbal.Motor_Pitch.Get_True_Angle_Pitch()*0.0174), 442+70*sinf(Gimbal.Motor_Pitch.Get_True_Angle_Pitch()*0.0174), Referee_UI_CHANGE);
     }
     break;
     case (Referee_UI_Refresh_Status_ENABLE):
     {
-        //摩擦轮状态
-        //Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, 0, 20, 2, 500/2, 400+410, "Fric_CLOSE", (sizeof("Fric_CLOSE") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0A,Graphic_Color_WHITE,10,430,820,480,770,Referee_UI_ADD);
-        //底盘状态
-        Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Zero, 0, 0x01, Graphic_Color_WHITE, 20, 5, 500/2+800, 400+410, "Follow", (sizeof("Follow") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Zero, 0, 0x10, Graphic_Color_WHITE, 20, 5, 500/2+800, 660, "Spin", (sizeof("Spin") - 1), Referee_UI_ADD);
-        // 云台状态
-        //Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02, 0, 20, 2, 500/2, 300+410, "Gimbal_Dead", (sizeof("Gimbal_Dead") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0B,Graphic_Color_WHITE,10,430,820-150,480,770-150,Referee_UI_ADD);
-        //超电
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*0), 45, Referee_UI_ADD);
-        //自瞄
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
-        //超电
-        Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_ADD);
-        //pitch
-        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,0.0f,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,0,0x0A,Graphic_Color_ORANGE,25,184,675,50,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0B,Graphic_Color_ORANGE,25,309,675,50,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0C,Graphic_Color_ORANGE,20,5,1342,748,Gimbal.Motor_Yaw.Get_Now_Angle(),Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0D,Graphic_Color_ORANGE,20,5,1342,360,Gimbal.Motor_Pitch.Get_True_Angle_Pitch(),Referee_UI_ADD);
+			Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x08, Graphic_Color_MAIN, 5, 1405, 617, 1405, 687, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x09, Graphic_Color_MAIN, 5, 1405, 442, 1475, 442, Referee_UI_ADD);
     }
-    break;
+        
+        break;
     }
-    Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, Graphic_Color_GREEN, 20, 5, 500/2, 400+410, "Fric :", (sizeof("Fric :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Zero, 0, 0x02,Graphic_Color_GREEN , 20, 5, 500/2, 660, "Gimbal:", (sizeof("Gimbal:") - 1), Referee_UI_ADD);
+   
     // 画线
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x03, 3, 3, 960-400+120, 200, 900, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x04, 3, 3, 1020, 200, 960+400-120, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x05, 3, 3, 960-400, 100, 960-400+120, 200, Referee_UI_ADD);
-    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x06, 3, 3, 960+400-120, 200, 960+400, 100, Referee_UI_ADD);
+    //Line-Middle
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x03, Graphic_Color_YELLOW, 2, 959, 175, 959, 650, Referee_UI_ADD);
+    //Line_Left
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x04, Graphic_Color_YELLOW, 2, 959, 610, 859, 900, Referee_UI_ADD);
+    //Line_Right
+    Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x05, Graphic_Color_YELLOW, 2, 959, 610, 1059, 900, Referee_UI_ADD);
     
-    // 超电容量
-    Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x07, 8, 3,960-400+120, 50,960+400-120, 40, Referee_UI_ADD);
+    //画半圆
+    Referee.Referee_UI_Draw_Arc(Referee.Get_ID(), Referee_UI_Three, 0, 0x06, Graphic_Color_ORANGE, 10, 1405, 617, 50, 50, 270,90, Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Arc(Referee.Get_ID(), Referee_UI_Four, 0, 0x07, Graphic_Color_ORANGE, 10, 1405, 442, 50, 50, 90,180, Referee_UI_ADD);
+//   
 
     // 善后处理
     Referee.UART_Tx_Referee_UI(String_Index);
@@ -584,9 +598,10 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         MiniPC.TIM_Write_PeriodElapsedCallback();
         static uint8_t mod50	=	0;
         mod50++;
-        if(mod50 == 20)
+        if(mod50 == 40)
         {
             Chariot_Referee_UI_Tx_Callback(Referee_UI_Refresh_Status);
+//					LED.WriteAll(Color_RED,0.2);
             mod50 = 0;
         }
 
