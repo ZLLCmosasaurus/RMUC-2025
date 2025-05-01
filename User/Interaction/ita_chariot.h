@@ -128,6 +128,13 @@ public:
 
     void Reload_TIM_Status_PeriodElapsedCallback();
 };
+// 添加活动控制器枚举类型
+enum Enum_Active_Controller
+{
+    Controller_NONE = 0,
+    Controller_DR16,
+    Controller_VT13
+};
 
 /**
  * @brief 控制对象
@@ -166,8 +173,10 @@ public:
 
     // 遥控器离线保护控制状态机
     Class_FSM_Alive_Control FSM_Alive_Control;
+    Class_FSM_Alive_Control_VT13 FSM_Alive_Control_VT13;
+   
     friend class Class_FSM_Alive_Control;
-
+    friend class Class_FSM_Alive_Control_VT13;
 #endif
 
     void Init(float __DR16_Dead_Zone = 0);
@@ -197,7 +206,7 @@ public:
     inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
 
     inline Enum_Chassis_Status Get_Chassis_Status();
-    inline Enum_DR16_Control_Type Get_DR16_Control_Type();
+    // inline Enum_DR16_Control_Type Get_DR16_Control_Type();
 
     void CAN_Gimbal_Rx_Chassis_Callback();
     void CAN_Gimbal_Tx_Chassis_Callback();
@@ -313,6 +322,17 @@ protected:
     Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
     Enum_VT13_Control_Type VT13_Control_Type = VT13_Control_Type_NONE;
     // 内部函数
+    // 当前活动的控制器
+    Enum_Active_Controller Active_Controller = Controller_NONE;
+
+    // 判断当前活动的控制器
+    void Judge_Active_Controller();
+    // 获取当前活动的控制器类型
+    Enum_Active_Controller Get_Active_Controller();
+    // 获取DR16控制类型
+    // Enum_DR16_Control_Type Get_DR16_Control_Type();
+    // 获取VT13控制类型
+    Enum_VT13_Control_Type Get_VT13_Control_Type();
 
     void Judge_DR16_Control_Type();
     void Judge_VT13_Control_Type();
@@ -346,10 +366,10 @@ Enum_Chassis_Status Class_Chariot::Get_Chassis_Status()
  * @return Enum_DR16_Control_Type DR16控制数据来源
  */
 
-Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
-{
-    return (DR16_Control_Type);
-}
+// Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
+// {
+//     return (DR16_Control_Type);
+// }
 
 /**
  * @brief 获取前一帧底盘控制类型

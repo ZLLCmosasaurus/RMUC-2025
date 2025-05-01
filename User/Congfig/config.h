@@ -18,7 +18,7 @@
 #define MINIPC_COMM_CAN
 // #define MINIPC_COMM_USB
 
-#define IMAGE_VT12
+// #define IMAGE_VT12
 #define IMAGE_VT13
 
 // #define CHASSIS

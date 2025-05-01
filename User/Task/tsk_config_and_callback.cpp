@@ -301,7 +301,10 @@ void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
     chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
 
     // 底盘 云台 发射机构 的控制策略
-    chariot.TIM_Control_Callback();
+    if (*(Buffer + 0) == 0xA9 && *(Buffer + 1) == 0x53)
+    {
+        chariot.TIM_Control_Callback();
+    }
 }
 #endif
 
@@ -407,6 +410,7 @@ void Task1ms_TIM5_Callback()
     {
 #ifdef GIMBAL
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
+        chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
 #endif
         chariot.TIM_Calculate_PeriodElapsedCallback();
 
