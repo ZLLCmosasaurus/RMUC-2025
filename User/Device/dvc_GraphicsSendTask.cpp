@@ -1002,7 +1002,7 @@ void GraphicSendtask(void)
 			break;
 
 		case 1: // 更新超级电容电压
-			if (fabs(Last_JudgeReceiveData.Supercap_Voltage - JudgeReceiveData.Supercap_Voltage) > 0.01f)
+			if (fabs(Last_JudgeReceiveData.Supercap_Voltage - JudgeReceiveData.Supercap_Voltage) >= 0.01f)
 			{
 				CapDraw(JudgeReceiveData.Supercap_Voltage, 0);
 				// CapUI_Change(JudgeReceiveData.Supercap_Voltage, 0);
@@ -1015,7 +1015,7 @@ void GraphicSendtask(void)
 			break;
 
 		case 3: // 更新云台底盘夹角与自瞄状态
-			if (fabs(Last_JudgeReceiveData.Chassis_Gimbal_Diff - JudgeReceiveData.Chassis_Gimbal_Diff) > PI / 180.0)
+			if (fabs(Last_JudgeReceiveData.Chassis_Gimbal_Diff - JudgeReceiveData.Chassis_Gimbal_Diff) >= PI / 180.0)
 			{
 				CarPosture_Change(JudgeReceiveData.Chassis_Gimbal_Diff, 0); // 直接传入弧度值
 				Last_JudgeReceiveData.Chassis_Gimbal_Diff = JudgeReceiveData.Chassis_Gimbal_Diff;

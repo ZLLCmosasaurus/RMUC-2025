@@ -92,7 +92,7 @@ void Class_Supercap::Data_Process()
 {
     int16_t temp_chassis_power;
     uint16_t temp_buffer_power;
-uint8_t	temp_cap_percent;
+    uint8_t temp_cap_percent;
     uint16_t temp_used_energy;
     // 数据处理过程
     if (CAN_Manage_Object->Rx_Buffer.Header.StdId == 0x67)
@@ -102,13 +102,13 @@ uint8_t	temp_cap_percent;
         memcpy(&temp_cap_percent, CAN_Manage_Object->Rx_Buffer.Data + 4, 1);
 
         Supercap_Data.Chassis_Power = temp_chassis_power / 10.0f;
-        Supercap_Data.Buffer_Power = (float)temp_buffer_power/100.0f ;
+        Supercap_Data.Buffer_Power = (float)temp_buffer_power / 100.0f;
         Supercap_Data.Cap_Percent = temp_cap_percent;
         Supercap_Data.Supercap_Status = static_cast<Enum_Supercap_Status>(CAN_Manage_Object->Rx_Buffer.Data[5]);
         Supercap_Status = Supercap_Data.Supercap_Status;
-       // Supercap_Data.Used_Energy = CAN_Manage_Object->Rx_Buffer.Data[6];
-       memcpy(&temp_used_energy, CAN_Manage_Object->Rx_Buffer.Data + 6, 2);
-       Supercap_Data.Used_Energy = temp_used_energy;
+        // Supercap_Data.Used_Energy = CAN_Manage_Object->Rx_Buffer.Data[6];
+        memcpy(&temp_used_energy, CAN_Manage_Object->Rx_Buffer.Data + 6, 2);
+        Supercap_Data.Used_Energy = temp_used_energy;
     }
 
     if (CAN_Manage_Object->Rx_Buffer.Header.StdId == 0x55)

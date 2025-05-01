@@ -444,12 +444,15 @@ void Class_Chariot::Control_Gimbal()
         {
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
 
-            tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
-            tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
-            if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
+            if (MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
             {
-                tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle() + minipc_yaw_offset;
+                tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
                 tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
+                if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN)
+                {
+                    tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
+                    tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
+                }
             }
         }
         else
@@ -459,6 +462,7 @@ void Class_Chariot::Control_Gimbal()
         }
         tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
         tmp_gimbal_pitch += DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
+
         // R键按下 一键开关弹舱
         if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
