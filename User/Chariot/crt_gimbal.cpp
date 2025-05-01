@@ -286,11 +286,11 @@ void Class_Gimbal::Output()
     else // 非失能模式
     {   
         //设置目标角度，最后会做软件限幅处理
-        // if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
-        // {
-        //     Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
-        //     Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
-        // }
+//        if (Gimbal_Control_Type == Gimbal_Control_Type_NORMAL)
+//        {
+//            Motor_Yaw.Set_Target_Angle(Target_Yaw_Angle);
+//            Motor_Pitch.Set_Target_Angle(Target_Pitch_Angle);
+//        }
         // else if((Gimbal_Control_Type == Gimbal_Control_Type_MINIPC) && (MiniPC->Get_Radar_Enable_Status()) == 1)
         // {   
         //     if(MiniPC->Get_Radar_Enable_Control() == 1)

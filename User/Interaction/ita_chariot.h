@@ -167,9 +167,11 @@ public:
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
-
+        
         Class_FSM_Alive_Control_VT13 FSM_Alive_Control_VT13;
         friend class Class_FSM_Alive_Control_VT13;
+
+        Class_FSM FSM_VT13_Alive_Protect;
     #endif
 
     void Init(float __DR16_Dead_Zone = 0);

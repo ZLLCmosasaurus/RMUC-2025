@@ -113,15 +113,17 @@ void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
     Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
     Math_Constrain(&Rx_Angle_Yaw,-180.0f,180.0f);
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
-}
+} 
 void Class_MiniPC::Output_CAN()
 {
   uint8_t radar_control_Byte;
   int16_t tmp_yaw;
   tmp_yaw = (int16_t)(Tx_Angle_Encoder_Yaw * 100.0f);
-  radar_control_Byte = (uint8_t)(Radar_Target_Outpost << 2 | Radar_Target << 1 | Tx_Flag_Control_Radar);
+  radar_control_Byte = (uint8_t)(Radar_Target_Outpost << 3 | Radar_Target_Outpost << 2 | Radar_Target << 1 | Tx_Flag_Control_Radar);
   memcpy(CAN_Tx_Data, &tmp_yaw, 2);
   memcpy(CAN_Tx_Data + 2, &radar_control_Byte, 1);
+
+  Pack_Tx.radar_enable_control = Tx_Flag_Control_Radar;
 }
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区

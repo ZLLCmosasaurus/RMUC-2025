@@ -394,7 +394,7 @@ protected:
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
 
-    float g = 9.7204f; // 重力加速度
+    float g = 9.73365f; // 重力加速度
     float bullet_v = 15.8;//28.0; // 子弹速度  
     float pitch_imu_offset = 4.13314819;
     // 距离
