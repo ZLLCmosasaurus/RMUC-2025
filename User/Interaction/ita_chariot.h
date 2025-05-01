@@ -104,7 +104,6 @@ enum Enum_VT13_Control_Type
 {
     VT13_Control_Type_REMOTE = 0,
     VT13_Control_Type_KEYBOARD,
-
     VT13_Control_Type_NONE,
 };
 

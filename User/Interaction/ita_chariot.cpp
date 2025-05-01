@@ -542,6 +542,8 @@ void Class_Chariot::Control_Gimbal()
         vt13_y = (Math_Abs(VT13.Get_Right_X()) > DR16_Dead_Zone) ? VT13.Get_Right_X() : 0;
         vt13_r_y = (Math_Abs(VT13.Get_Right_Y()) > DR16_Dead_Zone) ? VT13.Get_Right_Y() : 0;
 
+        if (Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_DISABLE)
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
         if (VT13.Get_Button_Right() == VT13_Button_TRIG_FREE_PRESSED) //
         {
             if (Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_NORMAL)
@@ -555,12 +557,10 @@ void Class_Chariot::Control_Gimbal()
             else
                 Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal);
         }
-        
 
-            // 遥控器操作逻辑
-            tmp_gimbal_yaw -= vt13_y * DR16_Yaw_Angle_Resolution;
-            tmp_gimbal_pitch += vt13_r_y * DR16_Pitch_Angle_Resolution;
-        
+        // 遥控器操作逻辑
+        tmp_gimbal_yaw -= vt13_y * DR16_Yaw_Angle_Resolution;
+        tmp_gimbal_pitch += vt13_r_y * DR16_Pitch_Angle_Resolution;
     }
     /************************************键鼠控制逻辑*********************************************/
     else if ((Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_KEYBOARD) ||
@@ -804,6 +804,18 @@ void Class_Chariot::Control_Booster()
         // 分别处理DR16和VT13遥控器
         if (Active_Controller == Controller_DR16)
         {
+
+            if (DR16.Get_Keyboard_Key_B() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            {
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
+                {
+                    Booster.Booster_User_Control_Type = Booster_User_Control_Type_MULTI;
+                }
+                else
+                {
+                    Booster.Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
+                }
+            }
             // 按下ctrl键 开启摩擦轮
             if (DR16.Get_Keyboard_Key_Ctrl() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
@@ -820,11 +832,23 @@ void Class_Chariot::Control_Booster()
             }
 
             // 按下鼠标左键 单发
-            if (DR16.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            if (Booster.Get_Friction_Control_Type() == Friction_Control_Type_ENABLE)
             {
-                if (Fric_Status == Fric_Status_OPEN)
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
                 {
-                    Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                    if (DR16.Get_Mouse_Left_Key() == DR16_Key_Status_TRIG_FREE_PRESSED)
+                    {
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                    }
+                }
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_MULTI)
+                {
+                    if (DR16.Get_Mouse_Left_Key() == DR16_Key_Status_PRESSED)
+                    {
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_REPEATED);
+                    }
+                    else
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
                 }
             }
             else
@@ -834,6 +858,17 @@ void Class_Chariot::Control_Booster()
         }
         else if (Active_Controller == Controller_VT13)
         {
+            if (VT13.Get_Keyboard_Key_B() == VT13_Key_Status_TRIG_FREE_PRESSED)
+            {
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
+                {
+                    Booster.Booster_User_Control_Type = Booster_User_Control_Type_MULTI;
+                }
+                else
+                {
+                    Booster.Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
+                }
+            }
 
             if (VT13.Get_Keyboard_Key_Ctrl() == VT13_Key_Status_TRIG_FREE_PRESSED)
             {
@@ -849,12 +884,23 @@ void Class_Chariot::Control_Booster()
                 }
             }
 
-            // 按下鼠标左键 单发
-            if (VT13.Get_Mouse_Left_Key() == VT13_Key_Status_TRIG_FREE_PRESSED)
+            if (Booster.Get_Friction_Control_Type() == Friction_Control_Type_ENABLE)
             {
-                if (Fric_Status == Fric_Status_OPEN)
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_SINGLE)
                 {
-                    Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                    if (VT13.Get_Mouse_Left_Key() == VT13_Key_Status_TRIG_FREE_PRESSED)
+                    {
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_SINGLE);
+                    }
+                }
+                if (Booster.Booster_User_Control_Type == Booster_User_Control_Type_MULTI)
+                {
+                    if (VT13.Get_Mouse_Left_Key() == VT13_Key_Status_PRESSED)
+                    {
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_REPEATED);
+                    }
+                    else
+                        Booster.Set_Booster_Control_Type(Booster_Control_Type_CEASEFIRE);
                 }
             }
             else
@@ -1212,7 +1258,7 @@ void Class_Chariot::TIM_Unline_Protect_PeriodElapsedCallback()
 // 云台离线保护
 #ifdef GIMBAL
 
-    if (DR16.Get_DR16_Status() == DR16_Status_DISABLE&&VT13.Get_VT13_Status()==VT13_Status_DISABLE)
+    if (DR16.Get_DR16_Status() == DR16_Status_DISABLE && VT13.Get_VT13_Status() == VT13_Status_DISABLE)
     {
         // 记录离线前一状态
         Pre_Gimbal_Control_Type = Gimbal.Get_Gimbal_Control_Type();
