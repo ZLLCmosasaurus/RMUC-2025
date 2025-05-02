@@ -342,14 +342,14 @@ void Class_Gimbal::Init()
     // yaw轴电机
     Motor_Yaw.filtered_target_angle.Init(-30, 40, Filter_Fourier_Type_LOWPASS, 20, 0, 1000, 4);
     // 250 300
-    Motor_Yaw.PID_Angle.Init(10.0f, 1.0f, 1.0f, 10.0f, 100, 1000, 0.0f, 0.0f, 0, 0.001f, 0.0f, PID_D_First_ENABLE);
-    Motor_Yaw.PID_Omega.Init(150.0f, 1500.0f, 1.0f, 0.0f, 4000.0f, 20000.0f, 0.0f, 0.0f, 0.0f, 0.001f, 0.0f, PID_D_First_ENABLE);
+    Motor_Yaw.PID_Angle.Init(50.0f, 0.0f, 0.2f, 10.0f, 100, 1000, 0.0f, 0.0f, 0, 0.001f, 0.0f, PID_D_First_ENABLE);
+    Motor_Yaw.PID_Omega.Init(300.0f, 2000.0f, 0.0f, 0.0f, 10000.0f, 20000.0f, 0.0f, 0.0f, 0.0f, 0.001f, 0.0f, PID_D_First_ENABLE);
     Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_IMU_ANGLE, 2048);
 
     // pitch轴电机
-    Motor_Pitch.PID_Angle.Init(45.0f, 0.1f, 0.0f, 0.0f, 10000000, 10000000);
+    Motor_Pitch.PID_Angle.Init(50.0f, 0.0f, 0.3f, 0.0f, 10000000, 10000000,0.0f, 0.0f, 0, 0.001f, 0.0f, PID_D_First_ENABLE);
     Motor_Pitch.PID_Omega.Init(100.0f, 2000.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(), 0.0f, 0.0f, 0.0f, 0.001f, 0.8f);
     Motor_Pitch.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
     Motor_Pitch.IMU = &Boardc_BMI;
@@ -403,7 +403,6 @@ void Class_Gimbal::Output()
         {
             Target_Pitch_Angle = MiniPC->Get_Rx_Pitch_Angle();
             Target_Yaw_Angle = MiniPC->Get_Rx_Yaw_Angle();
-					
         }
 
         // 限制角度范围 处理yaw轴180度问题

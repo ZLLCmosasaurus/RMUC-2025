@@ -115,6 +115,8 @@ protected:
     // 当前值
     float Now = 0.0f;
 
+    float Error = 0.0f;
+
     // 读写变量
 
     // 积分值

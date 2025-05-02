@@ -4,8 +4,8 @@
 *                         www.segger.com                             *
 **********************************************************************
 
-File          : E:/files/2025-M54/RMUC-2025/detect.jdebug
-Created       : 16 Mar 2025 19:32
+File          : E:/files/RMUC-2025/detect.jdebug
+Created       : 2 May 2025 10:13
 Ozone Version : V3.38c
 */
 
@@ -22,10 +22,10 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("E:/files/2025-M54/RMUC-2025", "$(ProjectDir)");
-  Project.AddPathSubstitute ("e:/files/2025-m54/rmuc-2025", "$(ProjectDir)");
+  Project.AddPathSubstitute ("E:/files/RMUC-2025", "$(ProjectDir)");
+  Project.AddPathSubstitute ("e:/files/rmuc-2025", "$(ProjectDir)");
   Project.SetDevice ("Cortex-M4");
-  Project.SetHostIF ("USB", "69665247");
+  Project.SetHostIF ("USB", "123456");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
@@ -33,7 +33,8 @@ void OnProjectLoad (void) {
   //
   // User settings
   //
-  File.Open ("E:/files/RMUC-2025/MDK-ARM/infantry/infantry.axf");
+  File.Open ("$(ProjectDir)/MDK-ARM/infantry/infantry.axf");
+  Edit.SysVar (VAR_HSS_SPEED, FREQ_100_HZ);
 }
 
 /*********************************************************************

@@ -437,8 +437,8 @@
       }
     ]
   },
-  "outDir": "build",
-  "deviceName": null,
+  "outDir": "..\\MDK-ARM",
+  "deviceName": "STM32F407IGHx",
   "packDir": null,
   "miscInfo": {
     "uid": "f20743d35935815cd11837347f67a11a"

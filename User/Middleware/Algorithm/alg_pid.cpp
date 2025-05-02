@@ -75,11 +75,11 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
 
     error = Target - Now;
     abs_error = Math_Abs(error);
-
+    Error = error;
     // 判断死区
     if (abs_error < Dead_Zone)
     {
-        //Target = Now;
+        // Target = Now;
         error = 0.0f;
         abs_error = 0.0f;
     }
@@ -147,7 +147,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     else
     {
         // 微分先行使能
-        d_out = K_D * (Out - Pre_Out) / D_T;
+        d_out = K_D * (Pre_Now - Now) / D_T;
     }
 
     // 计算前馈

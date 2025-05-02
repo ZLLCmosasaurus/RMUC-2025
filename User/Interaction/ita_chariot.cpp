@@ -45,7 +45,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     // yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x206);
 
-    huart6.Instance->BRR = UART_BRR_SAMPLING16(HAL_RCC_GetPCLK2Freq(), 921600);
+    huart6.Instance->BRR = UART_BRR_SAMPLING16(HAL_RCC_GetPCLK2Freq(), 115200);
 
 #elif defined(GIMBAL)
 
