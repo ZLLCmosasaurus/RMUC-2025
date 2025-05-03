@@ -958,7 +958,7 @@ struct Struct_Referee_Data_Interaction_Students
     uint8_t Reserved_1;
     Enum_Referee_Data_Robots_ID Receiver;
     uint8_t Reserved_2;
-    uint8_t Data;
+    uint8_t Data[112];
     uint16_t CRC_16;
 }__attribute__((packed));
 

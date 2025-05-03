@@ -264,6 +264,9 @@
           },
           {
             "path": "../User/Device/buzzer.c"
+          },
+          {
+            "path": "../User/Device/buzzer_bsp.c"
           }
         ],
         "folders": []

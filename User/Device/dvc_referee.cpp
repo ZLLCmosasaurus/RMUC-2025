@@ -269,9 +269,9 @@ void Class_Referee::Data_Process()
                             reinterpret_cast<uint8_t *>(&Interaction_Students)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
                         }
                         buffer_index += sizeof(Struct_Referee_Data_Interaction_Students) + 7;
-                        if (Interaction_Students.Header == 0x0221)
+                        if (Interaction_Students.Header == 0x0205)
                         {
-                            JudgeReceiveData.Radar_Double_Damage_Flag=Interaction_Students.Data;
+                            JudgeReceiveData.Radar_Double_Damage_Flag=Interaction_Students.Data[0];
                         }
                     }
                     break;

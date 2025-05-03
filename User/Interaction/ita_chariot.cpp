@@ -1207,21 +1207,23 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
         mod50_mod3++;
 #ifdef CHASSIS
 
-        Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
-        Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
-        Chassis.Supercap.TIM_Alive_PeriodElapsedCallback();
+      
         for (auto &wheel : Chassis.Motor_Wheel)
         {
             wheel.TIM_Alive_PeriodElapsedCallback();
         }
         if (mod50_mod3 % 3 == 0)
         {
+            Referee.TIM1msMod50_Alive_PeriodElapsedCallback();
+            Motor_Yaw.TIM_Alive_PeriodElapsedCallback();
+            Chassis.Supercap.TIM_Alive_PeriodElapsedCallback();
             TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
             mod50_mod3 = 0;
         }
         // 云台，随动掉线保护
         if (Motor_Yaw.Get_DJI_Motor_Status() == DJI_Motor_Status_DISABLE || Gimbal_Status == Gimbal_Status_DISABLE)
         {
+            buzzer_setTask(&buzzer, BUZZER_DEVICE_OFFLINE_PRIORITY);
             Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
         }
 #elif defined(GIMBAL)

@@ -703,19 +703,24 @@ void RadarDoubleDamage_Draw(uint8_t Init_Cnt)
 {
 	static uint8_t RadarDamageChangeName[] = "rdd";
 	static uint8_t optype;
-	static uint8_t READY[] = "READY";
+	static uint8_t READY2[] = "READY2";
+	static uint8_t READY1[] = "READY1";
 	static uint8_t EMPTY[] = "     ";
 
 	optype = (Init_Cnt == 0) ? Op_Change : Op_Add;
 
-	if (JudgeReceiveData.Radar_Double_Damage_Flag)
+	switch (JudgeReceiveData.Radar_Double_Damage_Flag)
 	{
-		Char_Draw(0, optype, 0.5 * SCREEN_LENGTH, 0.7 * SCREEN_WIDTH, 30, sizeof(READY), 3, Green, RadarDamageChangeName, READY);
+	case 1:
+		Char_Draw(0, optype, 0.5 * SCREEN_LENGTH, 0.7 * SCREEN_WIDTH, 30, sizeof(READY1), 3, Green, RadarDamageChangeName, READY1);
+		break;
+	case 2:
+		Char_Draw(0, optype, 0.5 * SCREEN_LENGTH, 0.7 * SCREEN_WIDTH, 30, sizeof(READY2), 3, Green, RadarDamageChangeName, READY2);
+		break;
+	default:
+		break;
 	}
-	else
-	{
-		Char_Draw(0, optype, 0.5 * SCREEN_LENGTH, 0.7 * SCREEN_WIDTH, 30, sizeof(EMPTY), 3, Pink, RadarDamageChangeName, EMPTY);
-	}
+	
 }
 
 /**********************************************************************************************************
