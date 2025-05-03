@@ -314,6 +314,8 @@ public:
     inline void Set_Radar_Target(Enum_Radar_Target __Radar_Target);
     inline void Set_Radar_Target_Outpost(Enum_Radar_Target_Outpost __Radar_Target_Outpost);
     inline void Set_Radar_Target_Base(Enum_Radar_Target_Base __Radar_Target_Base);
+    inline void Set_UWB_Pos_X(float __UWB_Pos_X);
+    inline void Set_UWB_Pos_Y(float __UWB_Pos_Y);
 
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
@@ -383,13 +385,17 @@ protected:
 
     Pack_tx_t Pack_Tx;
     Pack_rx_t Pack_Rx;
-
+    //写变量
 	float Tx_Angle_Roll;
 	float Tx_Angle_Pitch;
 	float Tx_Angle_Yaw;
     float Tx_Angle_Encoder_Yaw;
     uint8_t Tx_Flag_Control_Radar;
 
+    float UWB_Pos_X = 0.0f;
+    float UWB_Pos_Y = 0.0f;
+
+    //读变量
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
@@ -727,6 +733,14 @@ void Class_MiniPC::Set_Radar_Target_Outpost(Enum_Radar_Target_Outpost __Radar_Ta
 void Class_MiniPC::Set_Radar_Target_Base(Enum_Radar_Target_Base __Radar_Target_Base)
 {
     Radar_Target_Base = __Radar_Target_Base;
+}
+void Class_MiniPC::Set_UWB_Pos_X(float __UWB_Pos_X)
+{
+    UWB_Pos_X = __UWB_Pos_X;
+}
+void Class_MiniPC::Set_UWB_Pos_Y(float __UWB_Pos_Y)
+{
+    UWB_Pos_Y = __UWB_Pos_Y;
 }
 /**
  * @brief 设定迷你主机类型

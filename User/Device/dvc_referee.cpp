@@ -256,6 +256,15 @@ void Class_Referee::Data_Process()
                         buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Dart_Command) + 7;
                     }
                     break;
+                    case (Referee_Command_ID_INTERACTION):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Data_Interaction_Students)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Tx_Data_Interaction_Layer_Delete) + 7;
+                    }
+                    break;
                     }
                 }
             }
@@ -316,9 +325,9 @@ void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
     // Referee_UI_Draw_Line(Get_ID(), Referee_UI_Zero, 1, 0x03, 2, 3, 900, 500, 1000, 500, Referee_UI_ADD);
     // Referee_UI_Draw_Line(Get_ID(), Referee_UI_One, 1, 0x04, 2, 3, 950, 450, 950, 550, Referee_UI_ADD);
     
-    if (__String_Index < 9)
+    if (__String_Index < 10)
         Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据
-    else if(__String_Index >=9 && __String_Index< 10)
+    else if(__String_Index >=10 && __String_Index< 11)
         Referee_UI_Packed_Data(&Interaction_Graphic_7); // 打包图形数据
     else
         Referee_UI_Packed_Data(&Interaction_Graphic_5);

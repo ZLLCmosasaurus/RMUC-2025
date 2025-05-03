@@ -238,6 +238,8 @@ public:
     Enum_Radar_Target_Outpost UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
+    //雷达监测危险状态
+    uint8_t UI_Radar_Checkout_Flag = 0;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
     float Shoot_Speed = 0;
@@ -302,7 +304,7 @@ protected:
         float VT13_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
         //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
         float DR16_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
-        float VT13_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
+        float VT13_Mouse_Pitch_Angle_Resolution = 57.8f*4.0f;
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
         //迷你主机云台pitch自瞄控制系数

@@ -167,7 +167,6 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
  * @param CAN_RxMessage CAN2收到的消息
  */
 #ifdef GIMBAL
-float Shoot;
 void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
@@ -177,23 +176,17 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         //chariot.CAN_Gimbal_Rx_Chassis_Callback(CAN_RxMessage->Data);
         Enum_Referee_Data_Robots_ID robo_id;
         Enum_Referee_Game_Status_Stage game_stage;
-        float shoot_speed;
-        int16_t  projectile_allowance_42mm;
+        int16_t shoot_speed,Pos_X,Pos_Y;
         memcpy(&robo_id,CAN_RxMessage->Data,sizeof(uint8_t));
         memcpy(&game_stage,CAN_RxMessage->Data+1,sizeof(uint8_t));
-        memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(float));
-        memcpy(&projectile_allowance_42mm,CAN_RxMessage->Data+6,sizeof(int16_t));    
+        memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(int16_t));
+        memcpy(&Pos_X,CAN_RxMessage->Data+4,sizeof(int16_t));    
+        memcpy(&Pos_Y,CAN_RxMessage->Data+6,sizeof(int16_t));
         chariot.Referee.Set_Robot_ID(robo_id);
         chariot.Referee.Set_Game_Stage(game_stage);
-        chariot.Booster.Set_Referee_Bullet_Velocity(shoot_speed);
-        if(game_stage != Referee_Game_Status_Stage_BATTLE)
-        {
-            chariot.Booster.Set_Projectile_Allowance_42mm(666);
-        }
-        else
-        {
-            chariot.Booster.Set_Projectile_Allowance_42mm(projectile_allowance_42mm);
-        }
+        chariot.Booster.Set_Referee_Bullet_Velocity((float)shoot_speed / 1000.0f);
+        chariot.MiniPC.Set_UWB_Pos_X((float)Pos_X / 1000.0f);
+        chariot.MiniPC.Set_UWB_Pos_Y((float)Pos_Y / 1000.0f);
         //Math_Constrain(&shoot_speed,5.0f,17.0f);
 
     }
