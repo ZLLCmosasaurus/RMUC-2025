@@ -13,7 +13,7 @@
 
 #include "dvc_dr16.h"
 #include "tsk_config_and_callback.h"
-#include "dvc_buzzer.h"
+
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -362,7 +362,7 @@ void Class_DR16::TIM1msMod50_Alive_PeriodElapsedCallback()
         // 遥控器断开连接
         DR16_Status = DR16_Status_DISABLE;
         Unline_Cnt++;
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        buzzer_setTask(&buzzer, BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

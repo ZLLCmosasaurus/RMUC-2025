@@ -79,8 +79,8 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     MiniPC.Referee = &Referee;
 
 #endif
-
-    Buzzer.Buzzer_Init(&htim4, TIM_CHANNEL_3);
+    buzzer_init_example();
+    // Buzzer.Buzzer_Init(&htim4, TIM_CHANNEL_3);
 }
 
 /**
@@ -410,7 +410,10 @@ void Class_Chariot::Control_Chassis()
                 DR16_Mouse_Chassis_Shift = 2.0f;
                 Sprint_Status = Sprint_Status_DISABLE;
             }
-
+            if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_DISABLE)
+            {
+                Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
+            }
             if (VT13.Get_Keyboard_Key_A() == VT13_Key_Status_PRESSED) // x轴
             {
                 chassis_velocity_x = -Chassis.Get_Velocity_X_Max() / DR16_Mouse_Chassis_Shift;
@@ -1318,7 +1321,7 @@ void Class_Chariot::TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback()
     if (Gimbal_Alive_Flag == Pre_Gimbal_Alive_Flag)
     {
         Gimbal_Status = Gimbal_Status_DISABLE;
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        buzzer_setTask(&buzzer, BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {

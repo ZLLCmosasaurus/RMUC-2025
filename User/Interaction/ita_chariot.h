@@ -23,7 +23,8 @@
 #include "dvc_supercap.h"
 #include "crt_chassis.h"
 #include "config.h"
-#include "dvc_buzzer.h"
+
+#include "buzzer.h"
 /* Exported macros -----------------------------------------------------------*/
 class Class_Chariot;
 /* Exported types ------------------------------------------------------------*/
@@ -261,7 +262,7 @@ protected:
 
     Enum_Gimbal_Status Gimbal_Status = Gimbal_Status_DISABLE;
 #endif
-
+ 
 #ifdef GIMBAL
     // 遥控器拨动的死区, 0~1
     float DR16_Dead_Zone;

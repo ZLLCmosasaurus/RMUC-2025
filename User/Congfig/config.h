@@ -13,7 +13,7 @@
 #define CONFIG_H
 
 /* Includes ------------------------------------------------------------------*/
-
+#include "buzzer.h"
 /* Exported macros -----------------------------------------------------------*/
 #define MINIPC_COMM_CAN
 // #define MINIPC_COMM_USB
@@ -21,8 +21,8 @@
 // #define IMAGE_VT12
 #define IMAGE_VT13
 
-#define CHASSIS
-// #define GIMBAL
+// #define CHASSIS
+#define GIMBAL
 
 #ifdef GIMBAL
 

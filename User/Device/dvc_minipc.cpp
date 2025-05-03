@@ -12,7 +12,7 @@
 /* includes ------------------------------------------------------------------*/
 
 #include "dvc_minipc.h"
-#include "dvc_buzzer.h"
+
 
 /* private macros ------------------------------------------------------------*/
 
@@ -168,7 +168,7 @@ void Class_MiniPC::TIM1msMod50_Alive_PeriodElapsedCallback()
   {
     // 迷你主机断开连接
     MiniPC_Status = MiniPC_Status_DISABLE;
-    Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+    // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
   }
   else
   {

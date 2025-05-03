@@ -54,7 +54,7 @@
 // #include "GraphicsSendTask.h"
 // #include "ui.h"
 #include "dvc_GraphicsSendTask.h"
-
+#include "buzzer.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -399,10 +399,11 @@ void Task1ms_TIM5_Callback()
     if (init_finished > 2000 && start_flag == 0)
     {
         // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        buzzer_setTask(&buzzer, BUZZER_CALIBRATED_PRIORITY);
         start_flag = 1;
     }
     /************ 判断设备在线状态判断 50ms (所有device:电机，遥控器，裁判系统等) ***************/
-
+    buzzer_taskScheduler(&buzzer);
     chariot.TIM1msMod50_Alive_PeriodElapsedCallback();
 
     /****************************** 交互层回调函数 1ms *****************************************/

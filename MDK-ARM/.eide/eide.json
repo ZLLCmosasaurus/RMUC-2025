@@ -260,10 +260,10 @@
             "path": "../User/Device/GraphicsSendTask.cpp"
           },
           {
-            "path": "../User/Device/dvc_buzzer.cpp"
+            "path": "../User/Device/dvc_VT13.cpp"
           },
           {
-            "path": "../User/Device/dvc_VT13.cpp"
+            "path": "../User/Device/buzzer.c"
           }
         ],
         "folders": []

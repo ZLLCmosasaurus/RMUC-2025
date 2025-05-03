@@ -12,10 +12,10 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_referee.h"
-#include "dvc_buzzer.h"
+
 #include "drv_math.h"
 #include "dvc_GraphicsSendTask.h" // 添加这一行，包含完整的JudgeReceive_t定义
-
+#include "buzzer.h"
 /* Private macros ------------------------------------------------------------*/
 // 删除前向声明，因为已经包含了完整定义
 // struct JudgeReceive_t;
@@ -308,7 +308,8 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
     {
         //裁判系统断开连接
         Referee_Status = Referee_Status_DISABLE;
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        // Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        buzzer_setTask(&buzzer, BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
