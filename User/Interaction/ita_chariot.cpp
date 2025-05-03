@@ -1304,7 +1304,7 @@ void Class_Chariot::TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback(
     {
         Chassis_Status = Chassis_Status_DISABLE;
         Referee.Referee_Status = Referee_Status_DISABLE;
-        Buzzer.Set_NowTask(BUZZER_DEVICE_OFFLINE_PRIORITY);
+        buzzer_setTask(&buzzer, BUZZER_DEVICE_OFFLINE_PRIORITY);
     }
     else
     {
