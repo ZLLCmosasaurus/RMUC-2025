@@ -195,9 +195,11 @@ void Class_Booster::Init()
  * @brief 输出到电机
  *
  */
+int16_t Booster_Num;
 void Class_Booster::Output()
 {
     //控制拨弹轮
+    Booster_Num = (Max_Booster_Heat - Ture_Booster_Heat - 20)/10;
     switch (Booster_Control_Type)
     {
         case (Booster_Control_Type_DISABLE):
@@ -240,8 +242,10 @@ void Class_Booster::Output()
             Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
             Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 
-
-            Drvier_Angle += 2.0f * PI / 9.0f;
+            if(Booster_Num >= 1){
+                Drvier_Angle += 2.0f * PI / 9.0f;
+            }
+            
             Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
 
@@ -255,9 +259,14 @@ void Class_Booster::Output()
             Motor_Driver.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_ANGLE);
             Motor_Friction_Left.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
             Motor_Friction_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
+            
+            if(Booster_Num >= 5){
+                Drvier_Angle += 2.0f * PI / 9.0f * 5.0f; //五连发  一圈的角度/一圈弹丸数*发出去的弹丸数
+            }
+            else{
+                Drvier_Angle += 2.0f * PI / 9.0f * Booster_Num;     //可用余量不足5发，尽量打出最多
+            }
 
-
-            Drvier_Angle += 2.0f * PI / 9.0f * 5.0f; //五连发  一圈的角度/一圈弹丸数*发出去的弹丸数
             Motor_Driver.Set_Target_Radian(Drvier_Angle);
 
 

@@ -103,7 +103,7 @@ void Class_Supercap::Data_Process()
 
         Supercap_Data.Chassis_Power = (float)temp_chassis_power / 10.0f;
         Supercap_Data.Buffer_Power = (float)temp_buffer_power/100.0f ;
-        Supercap_Data.Cap_Percent = temp_cap_percent;
+        Supercap_Data.Cap_Percent = Supercap_Data.Buffer_Power/143.0f;
         Supercap_Data.Supercap_Status = static_cast<Enum_Supercap_Status>(CAN_Manage_Object->Rx_Buffer.Data[5]);
         Supercap_Status = Supercap_Data.Supercap_Status;
        // Supercap_Data.Used_Energy = CAN_Manage_Object->Rx_Buffer.Data[6];
@@ -212,7 +212,7 @@ void Class_Supercap::TIM_UART_Tx_PeriodElapsedCallback()
 
 /**
  * @brief TIM定时器修改发送缓冲区
- *
+ * 
  */
 void Class_Supercap::TIM_Supercap_PeriodElapsedCallback()
 {

@@ -38,6 +38,7 @@ class Class_Power_Limit
     inline void Set_Supercap_Print_Flag(uint8_t __flag);
 
     float Get_Torque_Current(uint8_t num);
+    float Get_Buffer_Power();
 
     void Set_Motor(Class_DJI_Motor_C620 (&Motor)[4]);
     //输出功率限制之后的电流到电机缓冲区

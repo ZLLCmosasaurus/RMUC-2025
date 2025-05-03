@@ -29,14 +29,47 @@
  * @param __frame_header 数据包头标
  * @param __frame_rear 数据包尾标
  */
-void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, uint8_t __frame_header, uint8_t __frame_rear)
+void Class_MiniPC::Init(Struct_USB_Manage_Object* __USB_Manage_Object, CAN_HandleTypeDef *hcan, uint8_t __frame_header, uint8_t __frame_rear)
 {
-	  USB_Manage_Object = __USB_Manage_Object;
+  #ifdef MINPC_CAN
+    if(hcan->Instance == CAN1){
+      CAN_Manage_Object = &CAN1_Manage_Object;
+    }
+    else if(hcan->Instance == CAN2){
+      CAN_Manage_Object = &CAN2_Manage_Object;
+    }
+    Pack_Tx_CAN.target_type = MiniPC_Type_Nomal;
+    Pack_Tx_CAN.windmill_type = Windmill_Type_Small;
+    Pack_Tx_CAN.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
+    CAN_Tx_Data = CAN1_0x0a0_Tx_Data;
+  #endif
+
+  #ifdef MINPC_USB
+    USB_Manage_Object = __USB_Manage_Object;
     Frame_Header = __frame_header;
     Frame_Rear = __frame_rear;
     Pack_Tx.target_type = MiniPC_Type_Nomal;
     Pack_Tx.windmill_type = Windmill_Type_Small;
     Pack_Tx.game_stage =  MiniPC_Game_Stage_NOT_STARTED;
+  #endif
+}
+
+void Class_MiniPC::CAN_Data_Process()
+{
+  memcpy(&Pack_Rx_CAN,(Pack_rx_can_t*)CAN_Manage_Object->Rx_Buffer.Data, 6);
+
+  float tmp_yaw,tmp_pitch, target_x, target_y, target_z;
+
+  target_x = (float)Pack_Rx_CAN.target_x/1000.0f;
+  target_y = (float)Pack_Rx_CAN.target_y/1000.0f;
+  target_z = (float)Pack_Rx_CAN.target_z/1000.0f;
+
+  Self_aim(target_x, target_y, target_z, &tmp_yaw, &tmp_pitch, &Distance);
+
+  Rx_Angle_Pitch = -tmp_pitch;
+  Rx_Angle_Yaw = tmp_yaw;
+  Math_Constrain(&Rx_Angle_Pitch,-10.0f,25.0f);
+ 
 }
 
 /**
@@ -56,7 +89,7 @@ void Class_MiniPC::Data_Process()
     // Rx_Angle_Pitch = meanFilter(tmp_pitch);
     Rx_Angle_Pitch = -tmp_pitch;
     Rx_Angle_Yaw = tmp_yaw;
-    Math_Constrain(&Rx_Angle_Pitch,-40.0f,30.0f);
+    Math_Constrain(&Rx_Angle_Pitch,-15.0f,30.0f);
     // if(Pack_Rx.hander!=0xA5) memset(&Pack_Rx,0,USB_Manage_Object->Rx_Buffer_Length);
 
     memset(USB_Manage_Object->Rx_Buffer, 0, USB_Manage_Object->Rx_Buffer_Length);
@@ -68,6 +101,16 @@ void Class_MiniPC::Data_Process()
  */
 void Class_MiniPC::Output()
 {
+#ifdef MINPC_CAN
+  Pack_Tx_CAN.game_stage = (Enum_MiniPC_Game_Stage)Referee->Get_Game_Stage();
+  Pack_Tx_CAN.target_type = Get_MiniPC_Type();
+  Pack_Tx_CAN.Roll = Tx_Angle_Roll*100.0f;
+  Pack_Tx_CAN.Yaw = Tx_Angle_Yaw*100.0f;
+  Pack_Tx_CAN.Pitch = -1.0f * Tx_Angle_Pitch*100.0f;
+  memcpy(CAN_Tx_Data, &Pack_Tx_CAN, sizeof(Pack_tx_can_t));
+#endif
+
+#ifdef MINPC_USB
 	Pack_Tx.header       = Frame_Header;
 
   // 根据referee判断红蓝方
@@ -85,6 +128,7 @@ void Class_MiniPC::Output()
 	memcpy(USB_Manage_Object->Tx_Buffer,&Pack_Tx,sizeof(Pack_Tx));
 	Append_CRC16_Check_Sum(USB_Manage_Object->Tx_Buffer,sizeof(Pack_Tx));
   USB_Manage_Object->Tx_Buffer_Length = sizeof(Pack_Tx);
+#endif
 }
 
 /**
@@ -95,6 +139,16 @@ void Class_MiniPC::TIM_Write_PeriodElapsedCallback()
 {
   Transform_Angle_Tx();
   Output();
+}
+
+/**
+ * @brief 上位机CAN通信使用回调
+ * @param Rx_Data 
+ */
+void Class_MiniPC::CAN_RxCpltCallback(uint8_t *Rx_Data)
+{
+  Flag += 1;
+  CAN_Data_Process();
 }
 
 /**
@@ -254,7 +308,7 @@ float Class_MiniPC::calc_pitch(float x, float y, float z)
   }
 
   // 将弧度制的俯仰角转换为角度制
-  pitch = -(pitch * 180 / PI); // 向上为负，向下为正
+  pitch = -(pitch * 180 / PI); 
 
   return pitch;
 }

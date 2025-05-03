@@ -38,6 +38,7 @@ enum Enum_PID_D_First
 class Class_PID
 {
 public:
+    float i_out = 0.0f;
     float PID_Out = 0.0f;
 
     Class_Filter_Fourier PID_D_Filter;

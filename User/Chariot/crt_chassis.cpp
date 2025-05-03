@@ -64,8 +64,10 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
 
     #ifdef POWER_LIMIT
     //超级电容初始化
+    PowerControl_FSM.Init(2,0);
+    PowerControl_FSM.Supercap = &Supercap;
     Supercap.Init(&hcan1,45);
-    Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+
     #endif
 
     //电机PID批量初始化
@@ -73,10 +75,10 @@ void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max
     // {
     //     Motor_Wheel[i].PID_Omega.Init(1500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[i].Get_Output_Max(), Motor_Wheel[i].Get_Output_Max());
     // }
-    Motor_Wheel[0].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
-    Motor_Wheel[1].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
+    Motor_Wheel[0].PID_Omega.Init(3500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[0].Get_Output_Max(), Motor_Wheel[0].Get_Output_Max());
+    Motor_Wheel[1].PID_Omega.Init(3500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[1].Get_Output_Max(), Motor_Wheel[1].Get_Output_Max());
     Motor_Wheel[2].PID_Omega.Init(3500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[2].Get_Output_Max(), Motor_Wheel[2].Get_Output_Max());
-    Motor_Wheel[3].PID_Omega.Init(2000.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
+    Motor_Wheel[3].PID_Omega.Init(3500.0f, 0.0f, 0.0f, 0.0f, Motor_Wheel[3].Get_Output_Max(), Motor_Wheel[3].Get_Output_Max());
 
     //轮向电机ID初始化
     Motor_Wheel[0].Init(&hcan1, DJI_Motor_ID_0x201);
@@ -200,14 +202,17 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     #ifdef POWER_LIMIT
 
     //Supercap.Set_Now_Power(Referee->Get_Chassis_Power());
+    
     if(Referee->Get_Referee_Status()==Referee_Status_DISABLE){
-        Supercap.Set_Limit_Power(45.0f);
         Power_Limit.Set_Power_Limit(45.0f);
     }
     else
     {
-        Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
-        Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
+        PowerControl_FSM.Set_Sprint_Status(Sprint_Status);
+        PowerControl_FSM.Set_Chassis_Max_Power(Referee->Get_Chassis_Power_Max());
+        PowerControl_FSM.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
+        PowerControl_FSM.Reload_TIM_Status_PeriodElapsedCallback();
+        Power_Limit.Set_Power_Limit(PowerControl_FSM.Get_PowerLimit_Output());
     }
     
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
@@ -219,6 +224,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
 
+    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
     Supercap.TIM_Supercap_PeriodElapsedCallback();          //向超电发送信息
 
     #elif defined (POWER_LIMIT_JH)
@@ -289,6 +295,45 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     // Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
 
     #endif
+}
+
+void Class_PowerControl_FSM::Reload_TIM_Status_PeriodElapsedCallback()
+{
+    Status[Now_Status_Serial].Time++;
+
+    switch (Now_Status_Serial)
+    {
+        case(0):    //超电启用状态
+            if(Sprint_Status == Sprint_Status_ENABLE && Supercap->Get_Supercap_Status() != Disconnected){
+                Buffer_Power = (Chassis_Buffer - Chassis_Buffer_Min) * Chassis_Buffer_Kp;
+                Math_Constrain(&Buffer_Power,-45.0f,45.0f);
+                PowerLimit_Output = Chassis_Max_Power + Supercap->Get_Buffer_Power() + Buffer_Power;
+            }
+            else{
+                Set_Status(1);
+            }
+            
+        break;
+
+        case(1):    //使用裁判系统缓冲能量状态
+            if(Sprint_Status == Sprint_Status_ENABLE && Supercap->Get_Supercap_Status() != Disconnected){
+                Set_Status(0);
+            }
+
+            Buffer_Power = (Chassis_Buffer - Chassis_Buffer_Min) * Chassis_Buffer_Kp;
+            Math_Constrain(&Buffer_Power,-45.0f,45.0f);
+            PowerLimit_Output = Chassis_Max_Power + Buffer_Power;
+
+        break;
+
+        case(2):        //裁判系统低缓冲能量状态
+            
+
+        break;
+
+    default:
+        break;
+    }
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

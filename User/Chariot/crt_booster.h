@@ -125,6 +125,8 @@ public:
     inline void Set_Friction_Control_Type(Enum_Friction_Control_Type __Friction_Control_Type);
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
+    inline void Set_Ture_Booster_Heat(uint16_t __Ture_Booster_Heat);
+    inline void Set_Max_Booster_Heat(uint16_t __Max_Booster_Heat);
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
@@ -162,6 +164,10 @@ protected:
     float Driver_Omega = 2.0f * PI;
     //拨弹轮目标绝对角度 加圈数
     float Drvier_Angle = 0.0f;
+
+    uint16_t Ture_Booster_Heat = 0.0f;
+    uint16_t Max_Booster_Heat = 0.0f;
+
     //读写变量
 
     //内部函数
@@ -262,6 +268,16 @@ void Class_Booster::Set_Friction_Omega(float __Friction_Omega)
 void Class_Booster::Set_Driver_Omega(float __Driver_Omega)
 {
     Driver_Omega = __Driver_Omega;
+}
+
+inline void Class_Booster::Set_Ture_Booster_Heat(uint16_t __Ture_Booster_Heat)
+{
+    Ture_Booster_Heat = __Ture_Booster_Heat;
+}
+
+inline void Class_Booster::Set_Max_Booster_Heat(uint16_t __Max_Booster_Heat)
+{
+    Max_Booster_Heat = __Max_Booster_Heat;
 }
 
 #endif

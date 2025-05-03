@@ -21,6 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "alg_slope.h"
+#include "alg_fsm.h"
 #include "alg_flying_slope.h"
 #include "dvc_imu.h"
 #include "dvc_sampler.h"
@@ -57,6 +58,31 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_SPIN_NePositive,
 };
 
+class Class_PowerControl_FSM : public Class_FSM{
+    public:
+    Class_Supercap *Supercap;
+    
+    inline float Get_PowerLimit_Output();
+
+    inline void Set_Chassis_Buffer(float __Chassis_Buffer);
+    inline void Set_Sprint_Status(Enum_Sprint_Status __Sprint_Status);
+    inline void Set_Chassis_Max_Power(float __Chassis_Max_Power);
+
+    void Reload_TIM_Status_PeriodElapsedCallback();
+
+    private:
+    
+    Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
+    float Buffer_Power = 0.0f;
+    float Chassis_Max_Power = 0.0f;
+    float Chassis_Buffer = 0.0f;                //底盘缓冲能量
+    float Chassis_Buffer_Min = 30.0f;           //底盘最小缓冲能量
+    float Chassis_Buffer_Kp = 1.5f;             
+    float PowerLimit_Output = 0.0f;
+    float Supercap_Protected_Enargy = 30.0f;
+
+};
+
 /**
  * @brief Specialized, 三轮舵轮底盘类
  *
@@ -75,6 +101,8 @@ public:
 
     Class_Supercap Supercap;
 
+    Class_PowerControl_FSM PowerControl_FSM;
+
     #ifdef FLYING_SLOPE
 
     Class_IMU Boardc_BMI;
@@ -86,6 +114,7 @@ public:
     
     //功率限制
     Class_Power_Limit Power_Limit;
+    
     
     
     #endif
@@ -105,7 +134,7 @@ public:
     //下方转动电机
     Class_DJI_Motor_C620 Motor_Wheel[4];
 
-    void Init(float __Velocity_X_Max = 4.0f, float __Velocity_Y_Max = 4.0f, float __Omega_Max = 8.0f, float __Steer_Power_Ratio = 0.5);
+    void Init(float __Velocity_X_Max = 15.0f, float __Velocity_Y_Max = 15.0f, float __Omega_Max = 20.0f, float __Steer_Power_Ratio = 0.5);
 
     inline Enum_Chassis_Control_Type Get_Chassis_Control_Type();
     inline float Get_Velocity_X_Max();
@@ -129,6 +158,7 @@ public:
     inline void Set_Now_Velocity_Y(float __Now_Velocity_Y);
     inline void Set_Now_Omega(float __Now_Omega);
     inline void Set_Spin_Omega(float __Target_Omega);
+    inline void Set_Sprint_Status(Enum_Sprint_Status __Sprint_Status);
 
     inline void Set_Velocity_Y_Max(float __Velocity_Y_Max);
     inline void Set_Velocity_X_Max(float __Velocity_X_Max);
@@ -147,7 +177,7 @@ protected:
     //舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     //底盘小陀螺模式角速度
-    float Spin_Omega = 6.0f;             
+    float Spin_Omega = 15.0f;             
     //常量
 
     //电机理论上最大输出
@@ -174,6 +204,7 @@ protected:
     //读写变量
 
     //底盘控制方法
+    Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
     Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
     //目标速度X
     float Target_Velocity_X = 0.0f;
@@ -418,6 +449,11 @@ void Class_Tricycle_Chassis::Set_Spin_Omega(float __Target_Omega)
     Spin_Omega = __Target_Omega;
 }
 
+inline void Class_Tricycle_Chassis::Set_Sprint_Status(Enum_Sprint_Status __Sprint_Status)
+{
+    Sprint_Status = __Sprint_Status;
+}
+
 /**
  * @brief 设定当前速度X
  *
@@ -468,6 +504,25 @@ void Class_Tricycle_Chassis::Set_Velocity_X_Max(float __Velocity_X_Max)
     Velocity_X_Max = __Velocity_X_Max;
 }
 
+inline float Class_PowerControl_FSM::Get_PowerLimit_Output()
+{
+  return PowerLimit_Output;
+}
+
+inline void Class_PowerControl_FSM::Set_Chassis_Buffer(float __Chassis_Buffer)
+{
+    Chassis_Buffer = __Chassis_Buffer;
+}
+
+inline void Class_PowerControl_FSM::Set_Sprint_Status(Enum_Sprint_Status __Sprint_Status)
+{
+    Sprint_Status = __Sprint_Status;
+}
+
+inline void Class_PowerControl_FSM::Set_Chassis_Max_Power(float __Chassis_Max_Power)
+{
+    Chassis_Max_Power = __Chassis_Max_Power;
+}
 
 #endif
 

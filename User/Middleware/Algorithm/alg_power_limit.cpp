@@ -34,6 +34,11 @@ float Class_Power_Limit::Get_Torque_Current(uint8_t num)
     return Output_Torque[num];
 }
 
+float Class_Power_Limit::Get_Buffer_Power()
+{
+  return Buffer_power;
+}
+
 float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float power_limit, uint8_t motor_nums)
 {
     float limit_k = 1.; // 输出伸缩因子k
@@ -104,13 +109,15 @@ void Class_Power_Limit::TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&
 	// else use motor model to predict and limit the power
 	#elif defined (POWER_LIMIT_NEW_CONTROL)
 		//计算缓冲能量
-		Buffer_power = (Chassis_Buffer-Min_Buffer)*Buffer_K;
-		Math_Constrain(&Buffer_power,-Buffer_power_limit,Buffer_power_limit);
+		
+		// Buffer_power = (Chassis_Buffer-Min_Buffer)*Buffer_K;
+		// Math_Constrain(&Buffer_power,-Buffer_power_limit,Buffer_power_limit);
+
 		//收集电机参数
 		Set_Motor(Motor);
-        //跑功率限制
-		float power_limit_sum = fabs(Total_Power_Limit + Buffer_power);
-        Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4); 
+    //跑功率限制
+		float power_limit_sum = fabs(Total_Power_Limit);
+    Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4); 
         // 设置输出
 		Output(Motor);	
 

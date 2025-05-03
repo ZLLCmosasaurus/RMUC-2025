@@ -13,7 +13,7 @@
  #define DVC_SUPERCAP_H
  
  /* Includes ------------------------------------------------------------------*/
- 
+ #include "alg_fsm.h"
  #include "drv_math.h"
  #include "drv_can.h"
  #include "drv_uart.h"
@@ -56,7 +56,7 @@
      Supercap_Mode_ENABLE = 0, // 正常启用超级电容
      Supercap_Mode_MONITOR = 1 // 关闭电容补偿，仅监听
  };
- 
+
  /**
   * @brief 超级电容发送的数据
   *
@@ -67,6 +67,7 @@
      Enum_Supercap_Mode Supercap_Mode;
  } __attribute__((packed));
  
+
  /**
   * @brief Specialized, 超级电容
   *
@@ -82,6 +83,7 @@
      inline float Get_Stored_Energy();
      inline float Get_Now_Voltage();
      inline float Get_Buffer_Power();
+     inline Enum_Supercap_Mode Get_Supercap_Mode();
      inline void Set_Limit_Power(float __Limit_Power);
      inline void Set_Supercap_Mode(Enum_Supercap_Mode __Mode);
  
@@ -130,7 +132,6 @@
      float actual_power = 0.0f;
      // 限制的功率
      float Limit_Power = 0.0f;
- 
      // 读写变量
  
      // 内部函数
@@ -157,13 +158,18 @@
  {
      return (Supercap_Data.Buffer_Power);
  }
+
+ inline Enum_Supercap_Mode Class_Supercap::Get_Supercap_Mode()
+ {
+   return Enum_Supercap_Mode();
+ }
+
  /**
   * @brief 获取超级电容状态
   *
   * @return Enum_Supercap_Status 超级电容状态
   */
- inline Enum_Supercap_Status
- Class_Supercap::Get_Supercap_Status()
+ inline Enum_Supercap_Status Class_Supercap::Get_Supercap_Status()
  {
      return (Supercap_Status);
  }
@@ -207,7 +213,7 @@
      Supercap_Tx_Data.Limit_Power = __Limit_Power;
  }
  
- #endif
+#endif
  
  /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
  

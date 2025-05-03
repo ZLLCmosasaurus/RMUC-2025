@@ -113,6 +113,20 @@ enum Enum_VT13_Control_Type
     VT13_Control_Type_NONE,
 };
 
+enum Enum_Control_Source{
+    DR16_Control,
+    VT13_Control,
+    Control_DISABLE,
+};
+
+// 添加活动控制器枚举类型
+enum Enum_Active_Controller
+{
+    Controller_NONE = 0,
+    Controller_DR16,
+    Controller_VT13
+};
+
 /**
  * @brief 机器人是否离线 控制模式有限自动机
  *
@@ -181,9 +195,13 @@ public:
     #ifdef CHASSIS
 
         void CAN_Chassis_Rx_Gimbal_Callback();
+        void CAN_Chassis_Rx_Gimbal_Callback_2();
         void CAN_Chassis_Tx_Gimbal_Callback();
         void Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status);
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+
+        float Fric_Omega = 0.0f;
+        Enum_Gimbal_Control_Type Gimbal_Control_Type = Gimbal_Control_Type_DISABLE;
 
     #elif defined(GIMBAL)
 
@@ -195,10 +213,12 @@ public:
         inline Enum_Chassis_Control_Type Get_Pre_Chassis_Control_Type();
         inline Enum_Gimbal_Control_Type Get_Pre_Gimbal_Control_Type();
         inline Enum_Booster_Control_Type Get_Pre_Booster_Control_Type();
+        
 
         inline void Set_Pre_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
         inline void Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
         inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
+        inline void Set_Control_Source(Enum_Control_Source __Control_Source);
 
         inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
@@ -207,6 +227,8 @@ public:
         void CAN_Gimbal_Rx_Chassis_Callback();
         void CAN_Gimbal_Tx_Chassis_Callback();
         
+        void Judge_Active_Controller();
+
         void TIM_Control_Callback();
 
         void TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
@@ -229,6 +251,8 @@ public:
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
+    //射击模式
+    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
 
@@ -244,7 +268,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 3.63f;
+        float Reference_Angle = 5.92f;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //
         //底盘转换后的角度（数据来源yaw电机）
@@ -271,7 +295,7 @@ protected:
         float Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
 
         //云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float Yaw_Angle_Resolution = 0.045f * PI * 57.29577951308232;
+        float Yaw_Angle_Resolution = 0.025f * PI * 57.29577951308232;
         //云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
         float Pitch_Angle_Resolution = 0.012f * PI * 57.29577951308232;
 
@@ -281,9 +305,9 @@ protected:
         float Pitch_Resolution = 0.003f * PI;
 
         //鼠标云台yaw灵敏度系数, 不同鼠标不同参数
-        float Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
+        float Mouse_Yaw_Angle_Resolution = 57.8 * 4.0f;
         //鼠标云台pitch灵敏度系数, 不同鼠标不同参数
-        float Mouse_Pitch_Angle_Resolution = 57.8f;
+        float Mouse_Pitch_Angle_Resolution = 57.8 * 2.0f;
         
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
@@ -317,6 +341,10 @@ protected:
 
         //VT13控制数据来源
         Enum_VT13_Control_Type VT13_Control_Type = VT13_Control_Type_NONE;
+        // 当前活动的控制器
+        Enum_Active_Controller Active_Controller = Controller_NONE;
+
+        Enum_Control_Source Control_Source = Control_DISABLE;       //防止不同遥控从同一个控制回调进入造成的重复触发
 
         //内部函数
 
@@ -429,6 +457,11 @@ protected:
     void Class_Chariot::Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type)
     {
         Pre_Booster_Control_Type = __Booster_Control_Type;
+    }
+
+    inline void Class_Chariot::Set_Control_Source(Enum_Control_Source __Control_Source)
+    {
+        Control_Source = __Control_Source;
     }
 
     /**

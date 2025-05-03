@@ -77,6 +77,7 @@ extern CAN_HandleTypeDef hcan2;
 extern Struct_CAN_Manage_Object CAN1_Manage_Object;
 extern Struct_CAN_Manage_Object CAN2_Manage_Object;
 
+extern uint8_t CAN1_0x0a0_Tx_Data[];
 extern uint8_t CAN1_0x1ff_Tx_Data[];
 extern uint8_t CAN1_0x200_Tx_Data[];
 extern uint8_t CAN1_0x2ff_Tx_Data[];
@@ -103,6 +104,7 @@ extern uint8_t CAN2_0xxf8_Tx_Data[];
 
 extern uint8_t CAN_Supercap_Tx_Data[];
 extern uint8_t CAN2_Gimbal_Tx_Chassis_Data[];  //云台给底盘发送缓冲区
+extern uint8_t CAN2_Gimbal_Tx_Chassis_Data_2[];
 extern uint8_t CAN2_Chassis_Tx_Gimbal_Data[];   //底盘给云台发送缓冲区
 
 /*********LK电机 控制缓冲区***********/

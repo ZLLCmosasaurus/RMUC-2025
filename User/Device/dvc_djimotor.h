@@ -162,7 +162,7 @@ protected:
     //一圈编码器刻度
     uint16_t Encoder_Num_Per_Round = 8192;
     //最大输出电压
-    uint16_t Output_Max = 25000;
+    uint16_t Output_Max = 20000;
 
     //内部变量
 

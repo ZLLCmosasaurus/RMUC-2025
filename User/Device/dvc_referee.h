@@ -969,16 +969,16 @@ struct Struct_Referee_Rx_Data_Robot_Dart_Command
  * Data 最大112
  *
  */
-// struct Struct_Referee_Data_Interaction_Students
-// {
-//     uint16_t Header;
-//     Enum_Referee_Data_Robots_ID Sender;
-//     uint8_t Reserved_1;
-//     Enum_Referee_Data_Robots_ID Receiver;
-//     uint8_t Reserved_2;
-//     uint8_t Data[112];
-//     uint16_t CRC_16;
-// }__attribute__((packed));
+ struct Struct_Referee_Data_Interaction_Students
+ {
+     uint16_t Header;
+     Enum_Referee_Data_Robots_ID Sender;
+     uint8_t Reserved_1;
+     Enum_Referee_Data_Robots_ID Receiver;
+     uint8_t Reserved_2;
+     uint8_t Data[2];
+     uint16_t CRC_16;
+ }__attribute__((packed));
 
 /**
  * @brief 裁判系统发送的数据, 0x0301图形删除交互信息, 用户自主发送
@@ -1308,6 +1308,7 @@ protected:
     //客户端接收小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Client_Receive Interaction_Client_Receive;
 
+Struct_Referee_Data_Interaction_Students  Interaction_Students;
     //写变量
 
     //图形删除交互信息
@@ -1321,7 +1322,7 @@ protected:
     //画七个图形交互信息
     Struct_Referee_Tx_Data_Interaction_Graphic_7 Interaction_Graphic_7;
     //画字符图形交互信息
-    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[10];
+    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[15];
     //雷达发送小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Radar_Send Interaction_Radar_Send;
 

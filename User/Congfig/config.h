@@ -20,9 +20,10 @@
 #define GIMBAL
 
 
+
 #ifdef CHASSIS 	
 
-    //#define FLYING_SLOPE
+    #define FLYING_SLOPE
     //#define POWER_LIMIT_JH
     #define POWER_LIMIT
     #ifdef POWER_LIMIT
@@ -38,9 +39,11 @@
 
 #ifdef GIMBAL
 
+    //#define MINPC_USB
+    #define MINPC_CAN
     #define USE_VT13
-
     //#define USE_DR16
+
 
 #endif
 

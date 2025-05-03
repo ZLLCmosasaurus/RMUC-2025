@@ -52,19 +52,19 @@ void Class_Chariot::Init(float __Dead_Zone)
 
     #elif defined(GIMBAL)
         
-        Chassis.Set_Velocity_X_Max(4.0f);
-        Chassis.Set_Velocity_Y_Max(4.0f);
+        Chassis.Set_Velocity_X_Max(15.0f);
+        Chassis.Set_Velocity_Y_Max(15.0f);
 
         //遥控器离线控制 状态机
-        #ifdef USE_DR16
         FSM_Alive_Control.Chariot = this;
         FSM_Alive_Control.Init(5, 0);
-        #endif
 
         #ifdef USE_VT13
         FSM_Alive_Control_VT13.Chariot = this;
         FSM_Alive_Control_VT13.Init(5,0);
         #endif
+
+        Active_Controller = Controller_NONE;
 
         //遥控器
         DR16.Init(&huart3,&huart1);
@@ -79,7 +79,7 @@ void Class_Chariot::Init(float __Dead_Zone)
         Booster.Init();
 				
         //上位机
-        MiniPC.Init(&MiniPC_USB_Manage_Object);
+        MiniPC.Init(&MiniPC_USB_Manage_Object, &hcan1);
         MiniPC.IMU = &Gimbal.Boardc_BMI;
         MiniPC.Referee = &Referee;
 
@@ -133,8 +133,20 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Referee_UI_Refresh_Status = (Enum_Referee_UI_Refresh_Status)(control_type>>7 & 0x01);
 
    //获取云台坐标系和底盘坐标系的夹角（弧度制）
+   //角速度前馈，保证小陀螺时走直线
+   float Feedback_Angle =  0.0f;
+   if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
+        Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive){
+        Feedback_Angle = -0.008f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 8.0f,8.0f);
+        //Feedback_Angle = 0.0f;
+   }
+   else{
+        Feedback_Angle = 0.0f;
+   }
+   
+
    Chassis_Angle = Motor_Yaw.Get_Now_Radian();
-   derta_angle = Reference_Angle - Chassis_Angle + Offset_Angle;
+   derta_angle = Reference_Angle - Chassis_Angle + Offset_Angle + Feedback_Angle;
    derta_angle = derta_angle<0?(derta_angle+2*PI):derta_angle;  
 
    //云台坐标系的目标速度转为底盘坐标系的目标速度
@@ -147,7 +159,7 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
         Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
     {
-        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 8.0f,8.0f);
+        chassis_omega = Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
         Chassis.Set_Spin_Omega(chassis_omega);
     }
     else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
@@ -179,6 +191,18 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
     Chassis.Set_Target_Omega(chassis_omega);
+}
+
+void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback_2()
+{
+    uint8_t control_type_2;
+    uint16_t Fric_Omega_u16;
+    control_type_2 = CAN_Manage_Object->Rx_Buffer.Data[2];
+    Gimbal_Control_Type = (Enum_Gimbal_Control_Type)(control_type_2 & 0x03);
+    Booster_Control_Type = (Enum_Booster_Control_Type)((control_type_2 >> 2) & 0x07);
+
+    memcpy(&Fric_Omega_u16, &CAN_Manage_Object->Rx_Buffer.Data[0],sizeof(uint16_t));
+    Fric_Omega = Math_Int_To_Float(Fric_Omega_u16,0, 0x7FFF, -800.0f, 800.0f);
 }
 #endif
 
@@ -215,24 +239,36 @@ void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback()
  */
 #ifdef GIMBAL
     //控制类型字节
-    uint8_t control_type;
+    uint8_t control_type, control_type_2;
 void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
 {
     //云台坐标系速度目标值 float
-    float chassis_velocity_x = 0, chassis_velocity_y = 0, gimbal_pitch; 
+    float chassis_velocity_x = 0, chassis_velocity_y = 0, gimbal_pitch, Fric_Omega; 
     //映射之后的目标速度 int16_t
-    uint16_t tmp_chassis_velocity_x = 0, tmp_chassis_velocity_y = 0, tmp_chassis_omega = 0;
+    uint16_t tmp_chassis_velocity_x = 0, tmp_chassis_velocity_y = 0, tmp_chassis_omega = 0, Fric_Omega_u16;
     uint8_t tmp_gimbal_pitch = 0;
     float chassis_omega = 0;
     //底盘控制类型
     Enum_Chassis_Control_Type chassis_control_type;
+    Enum_Gimbal_Control_Type gimbal_control_type;           //2bit
+    Enum_Booster_Control_Type booster_control_type;         //3bit
 
     //控制类型字节
+    gimbal_control_type = Gimbal.Get_Gimbal_Control_Type();
+    booster_control_type = Booster.Get_Booster_Control_Type();
+    control_type_2 = (uint8_t)(booster_control_type << 2 | gimbal_control_type);
+
+    Fric_Omega = (abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian()) + abs(Booster.Motor_Friction_Right.Get_Now_Omega_Radian()))/2.0f;
+    Fric_Omega_u16 = Math_Float_To_Int(Fric_Omega, -800.0f, 800.0f,0,0x7FFF);
+    memcpy(CAN2_Gimbal_Tx_Chassis_Data_2, &Fric_Omega_u16, sizeof(uint16_t));
+
+    memcpy(CAN2_Gimbal_Tx_Chassis_Data_2 + 2, &control_type_2, sizeof(uint8_t));
+
     MiniPC_Status = MiniPC.Get_MiniPC_Status();
     chassis_velocity_x = Chassis.Get_Target_Velocity_X();
     chassis_velocity_y = Chassis.Get_Target_Velocity_Y();
     chassis_omega = Chassis.Get_Target_Omega();
-    gimbal_pitch = Gimbal.Motor_Pitch_LK6010.Get_True_Angle_Pitch();           //不知道为什么，加个负号
+    gimbal_pitch = Gimbal.Motor_Pitch.Get_True_Angle_Pitch();           //不知道为什么，加个负号
     chassis_control_type = Chassis.Get_Chassis_Control_Type();
     control_type =  (uint8_t)(Referee_UI_Refresh_Status << 7|MiniPC_Status << 6|MiniPC_Aim_Status << 5|Fric_Status << 4|Bulletcap_Status << 3|Sprint_Status << 2|chassis_control_type);
 
@@ -243,7 +279,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     tmp_chassis_velocity_y = Math_Float_To_Int(chassis_velocity_y,-1 * Chassis.Get_Velocity_Y_Max() ,Chassis.Get_Velocity_Y_Max() ,0,0x7FFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 2, &tmp_chassis_velocity_y, sizeof(uint16_t));
     
-    tmp_chassis_omega = Math_Float_To_Int(chassis_omega,-1 * 8.0f ,8.0f ,0,0xFF);
+    tmp_chassis_omega = Math_Float_To_Int(chassis_omega,-1 * 20.0f ,20.0f ,0,0xFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 4, &tmp_chassis_omega, sizeof(uint8_t));
 
     tmp_gimbal_pitch = Math_Float_To_Int(gimbal_pitch, -40.0f, 30.0f ,0,0x7FFF);
@@ -252,8 +288,29 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 7,&control_type ,sizeof(uint8_t));
 
 }
-#endif
+void Class_Chariot::Judge_Active_Controller()
+{
+    // 检查DR16是否有输入
+    Judge_DR16_Control_Type();
 
+    // 检查VT13是否有输入
+    Judge_VT13_Control_Type();
+
+    // 判断当前活动的控制器
+    if (VT13_Control_Type != VT13_Control_Type_NONE)
+    {
+        Active_Controller = Controller_VT13;
+    }
+    else if (DR16_Control_Type != DR16_Control_Type_NONE)
+    {
+        Active_Controller = Controller_DR16;
+    }
+    else
+    {
+        Active_Controller = Controller_NONE;
+    }
+}
+#endif
 
 /**
  * @brief 底盘控制逻辑
@@ -263,16 +320,16 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
 void Class_Chariot::Control_Chassis()
 {
     //遥控器摇杆值
-    
+    Judge_Active_Controller();
     //云台坐标系速度目标值 float
     float chassis_velocity_x = 0, chassis_velocity_y = 0;
     static float chassis_omega = 0;     
 
 	/************************************遥控器控制逻辑*********************************************/
-    #ifdef USE_DR16
-    float dr16_l_x, dr16_l_y;    
-    if (Get_DR16_Control_Type()==DR16_Control_Type_REMOTE)
+    
+    if (Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_REMOTE && Control_Source == DR16_Control)
     {
+        float dr16_l_x, dr16_l_y;    
         //排除遥控器死区
         dr16_l_x = (Math_Abs(DR16.Get_Left_X()) > Dead_Zone) ? DR16.Get_Left_X() : 0;
         dr16_l_y = (Math_Abs(DR16.Get_Left_Y()) > Dead_Zone) ? DR16.Get_Left_Y() : 0;
@@ -299,9 +356,9 @@ void Class_Chariot::Control_Chassis()
         }
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_DR16_Control_Type()==DR16_Control_Type_KEYBOARD) 
+    else if(Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_KEYBOARD && Control_Source == DR16_Control) 
     {   
-        
+        Sprint_Status = Sprint_Status_DISABLE;
         if (DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_PRESSED) // 按住shift加速
         {
             Mouse_Chassis_Shift = 1.0f;
@@ -350,11 +407,12 @@ void Class_Chariot::Control_Chassis()
             Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
         }
     }
-    #elif defined(USE_VT13)
-    float vt13_l_x, vt13_l_y;    
-    if (Get_VT13_Control_Type()==VT13_Control_Type_REMOTE)
+    
+    else if (Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_REMOTE && Control_Source == VT13_Control)
     {
+        float vt13_l_x, vt13_l_y;    
         //排除遥控器死区
+        Sprint_Status = Sprint_Status_ENABLE;           //遥控器下默认开启超电冲刺
         vt13_l_x = (Math_Abs(VT13.Get_Left_X()) > Dead_Zone) ? VT13.Get_Left_X() : 0;
         vt13_l_y = (Math_Abs(VT13.Get_Left_Y()) > Dead_Zone) ? VT13.Get_Left_Y() : 0;
 
@@ -389,9 +447,9 @@ void Class_Chariot::Control_Chassis()
         
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_VT13_Control_Type()==VT13_Control_Type_KEYBOARD) 
+    else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_KEYBOARD && Control_Source == VT13_Control) 
     {   
-        
+        Sprint_Status = Sprint_Status_DISABLE;
         if (VT13.Get_Keyboard_Key_Shift() == VT13_Key_Status_PRESSED) // 按住shift加速
         {
             Mouse_Chassis_Shift = 1.0f;
@@ -441,8 +499,6 @@ void Class_Chariot::Control_Chassis()
         }
     }
 
-    #endif
-
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
     Chassis.Set_Target_Omega(chassis_omega);
@@ -475,11 +531,11 @@ void Class_Chariot::Control_Gimbal()
     tmp_gimbal_yaw = Gimbal.Get_Target_Yaw_Angle();
     //tmp_gimbal_yaw = Gimbal.Boardc_BMI.Get_Angle_Yaw();           零飘造成误差
     tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
+    Judge_Active_Controller();
 
     /************************************遥控器控制逻辑*********************************************/
-    #ifdef USE_DR16
     float dr16_y, dr16_r_y;
-    if(Get_DR16_Control_Type()==DR16_Control_Type_REMOTE)
+    if(Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_REMOTE && Control_Source == DR16_Control)
     {
         // 排除遥控器死区
         dr16_y = (Math_Abs(DR16.Get_Right_X()) > Dead_Zone) ? DR16.Get_Right_X() : 0;
@@ -517,7 +573,7 @@ void Class_Chariot::Control_Gimbal()
         }
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_DR16_Control_Type()==DR16_Control_Type_KEYBOARD)
+    else if(Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_KEYBOARD && Control_Source == DR16_Control)
     {
         // 长按右键  开启自瞄
         if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
@@ -577,13 +633,12 @@ void Class_Chariot::Control_Gimbal()
         }
     }
 
-    #endif
 
-    #ifdef USE_VT13
-    static uint8_t Start_Flag = 0;              //记录云台第一次上电，以初始化
-    float vt13_y, vt13_r_y;
-    if(Get_VT13_Control_Type()==VT13_Control_Type_REMOTE)
+    
+    else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_REMOTE && Control_Source == VT13_Control)
     {
+        static uint8_t Start_Flag = 0;              //记录云台第一次上电，以初始化
+        float vt13_y, vt13_r_y;
         // 排除遥控器死区
         vt13_y = (Math_Abs(VT13.Get_Right_X()) > Dead_Zone) ? VT13.Get_Right_X() : 0;
         vt13_r_y = (Math_Abs(VT13.Get_Right_Y()) > Dead_Zone) ? VT13.Get_Right_Y() : 0;
@@ -612,12 +667,12 @@ void Class_Chariot::Control_Gimbal()
         //更新目标角度
         if(Gimbal.Get_Gimbal_Control_Type() == Gimbal_Control_Type_NORMAL){
             tmp_gimbal_yaw -= vt13_y * Yaw_Angle_Resolution;
-            tmp_gimbal_pitch -= vt13_r_y * Pitch_Angle_Resolution;
+            tmp_gimbal_pitch += vt13_r_y * Pitch_Angle_Resolution;
         }
 
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_VT13_Control_Type()==VT13_Control_Type_KEYBOARD)
+    else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_KEYBOARD && Control_Source == VT13_Control)
     {
         // 长按右键  开启自瞄
         if (VT13.Get_Mouse_Right_Key() == VT13_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
@@ -640,8 +695,8 @@ void Class_Chariot::Control_Gimbal()
          
         }
         tmp_gimbal_yaw -= VT13.Get_Mouse_X() * Mouse_Yaw_Angle_Resolution;
-        tmp_gimbal_pitch -= VT13.Get_Mouse_Y() * Mouse_Pitch_Angle_Resolution;
-        // R键按下 一键开关弹舱
+        tmp_gimbal_pitch += VT13.Get_Mouse_Y() * Mouse_Pitch_Angle_Resolution;
+        // F键按下 一键开关弹舱
         if (VT13.Get_Keyboard_Key_F() == VT13_Key_Status_TRIG_FREE_PRESSED)
         {
             if (Compare == 1700)
@@ -655,7 +710,7 @@ void Class_Chariot::Control_Gimbal()
                 Compare = 1700;
             }
         }
-        // F键按下 一键调头
+        // C键按下 一键调头
         if (VT13.Get_Keyboard_Key_C() == VT13_Key_Status_TRIG_FREE_PRESSED)
         {
             tmp_gimbal_yaw += 180;
@@ -678,8 +733,6 @@ void Class_Chariot::Control_Gimbal()
     }
 
 
-    #endif
-
     //如果pitch为锁定状态
     if(Pitch_Control_Status == Pitch_Status_Control_Lock)
         tmp_gimbal_pitch = -4.43f;
@@ -695,10 +748,9 @@ void Class_Chariot::Control_Gimbal()
 #ifdef GIMBAL
 void Class_Chariot::Control_Booster()
 {
+    Judge_Active_Controller();
     /************************************遥控器控制逻辑*********************************************/
-    #ifdef USE_DR16
-
-    if(Get_DR16_Control_Type()==DR16_Control_Type_REMOTE)
+    if(Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_REMOTE && Control_Source == DR16_Control)
     {
         //左上 开启摩擦轮和发射机构
         if(DR16.Get_Right_Switch()==DR16_Switch_Status_UP)
@@ -730,7 +782,7 @@ void Class_Chariot::Control_Booster()
         }
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_DR16_Control_Type()==DR16_Control_Type_KEYBOARD)
+    else if(Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_KEYBOARD && Control_Source == DR16_Control)
     {   
         if (DR16.Get_Keyboard_Key_B() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
@@ -792,11 +844,8 @@ void Class_Chariot::Control_Booster()
             }
         }
     }
-    #endif
 
-    #ifdef USE_VT13
-
-    if(Get_VT13_Control_Type()==VT13_Control_Type_REMOTE)
+    else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_REMOTE && Control_Source == VT13_Control)
     {
         //开启摩擦轮和发射机构
         if(VT13.Get_Button_Right() == VT13_Button_TRIG_FREE_PRESSED){
@@ -831,7 +880,7 @@ void Class_Chariot::Control_Booster()
         }
     }
     /************************************键鼠控制逻辑*********************************************/
-    else if(Get_VT13_Control_Type()==VT13_Control_Type_KEYBOARD)
+    else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_KEYBOARD && Control_Source == VT13_Control)
     {   
         if (VT13.Get_Keyboard_Key_B() == VT13_Key_Status_TRIG_FREE_PRESSED)
         {
@@ -894,7 +943,6 @@ void Class_Chariot::Control_Booster()
         }
     }
 
-    #endif
 }
 #endif
 
@@ -936,13 +984,13 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         temp_yaw = Chassis_Angle;
         temp_reference = Reference_Angle;
 
-        //处理6020绝对编码器0-360度突变问题
-        // if(Chassis_Angle > PI)
-        //     temp_yaw = Chassis_Angle - 2 * PI; 
-        // else if(Chassis_Angle < -PI)
-        //     temp_yaw = Chassis_Angle + 2 * PI;
-        // if(Reference_Angle > PI)
-        //     temp_reference = Reference_Angle - 2 * PI;  
+        //处理6020绝对编码器0-360度突变问题    有时有用有时没用
+        if(Chassis_Angle > PI)
+            temp_yaw = Chassis_Angle - 2 * PI; 
+        else if(Chassis_Angle < -PI)
+            temp_yaw = Chassis_Angle + 2 * PI;
+        if(Reference_Angle > PI)
+            temp_reference = Reference_Angle - 2 * PI;  
 
         //随动环
         PID_Chassis_Fllow.Set_Target(temp_reference);
@@ -952,12 +1000,17 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         Chassis.Set_Target_Omega(PID_Chassis_Fllow.Get_Out());            
     }
     // 底盘解算任务
+    Chassis.Supercap.Set_Supercap_Mode(Supercap_Mode_ENABLE);
+    Chassis.Set_Sprint_Status(Sprint_Status);
+
     Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
 
     #elif defined(GIMBAL)
 
         //各个模块的分别解算
         Gimbal.TIM_Calculate_PeriodElapsedCallback();
+        Booster.Set_Ture_Booster_Heat(Referee.Get_Booster_17mm_1_Heat());
+        Booster.Set_Max_Booster_Heat(Referee.Get_Booster_17mm_1_Heat_Max());
         Booster.TIM_Calculate_PeriodElapsedCallback();        
         //传输数据给上位机
         MiniPC.TIM_Write_PeriodElapsedCallback();
@@ -989,13 +1042,17 @@ void Class_Chariot::Judge_DR16_Control_Type()
     {
         DR16_Control_Type = DR16_Control_Type_KEYBOARD;
     }
+    else{
+        if (DR16.Get_DR16_Status() == DR16_Status_DISABLE)
+            DR16_Control_Type = DR16_Control_Type_NONE;
+    }
+    
 }
 
 /**
  * @brief 判断VT13控制数据来源
  *
  */
-int16_t cnt;
 void Class_Chariot::Judge_VT13_Control_Type()
 {
     if (VT13.Get_Left_X() != 0 ||
@@ -1013,8 +1070,12 @@ void Class_Chariot::Judge_VT13_Control_Type()
              VT13.Get_Keyboard_Key_W() != 0 ||
              VT13.Get_Keyboard_Key_S() != 0)
     {
-        cnt++;
         VT13_Control_Type = VT13_Control_Type_KEYBOARD;
+    }
+    else
+    {
+        if (VT13.Get_VT13_Status() == VT13_Status_DISABLE)
+            VT13_Control_Type = VT13_Control_Type_NONE;
     }
 }
 #endif
@@ -1025,14 +1086,8 @@ void Class_Chariot::Judge_VT13_Control_Type()
 #ifdef GIMBAL
 void Class_Chariot::TIM_Control_Callback()
 {
-    //判断DR16控制数据来源
-    #ifdef USE_DR16
     Judge_DR16_Control_Type();
-    #endif
-
-    #ifdef USE_VT13
     Judge_VT13_Control_Type();
-    #endif
 
     //底盘，云台，发射机构控制逻辑
     Control_Chassis();
@@ -1077,11 +1132,8 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             {
                 //判断底盘通讯在线状态
                 TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();    
-                #ifdef USE_DR16
-                    DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
-                #else defined(USE_VT13)
-                    VT13.TIM1msMod50_Alive_PeriodElapsedCallback();
-                #endif
+                DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
+                VT13.TIM1msMod50_Alive_PeriodElapsedCallback();
                 mod50_mod3 = 0;         
             }
                 
@@ -1217,9 +1269,12 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
         case (1):
         {
             //离线保护
-            Chariot->Booster.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
-            Chariot->Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
-            Chariot->Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+            if (Chariot->VT13.Get_VT13_Status() == VT13_Status_DISABLE)
+            {
+                Chariot->Booster.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
+                Chariot->Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
+                Chariot->Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+            }
 
             if(Chariot->DR16.Get_DR16_Status() == DR16_Status_ENABLE)
             {
@@ -1253,8 +1308,10 @@ void Class_FSM_Alive_Control::Reload_TIM_Status_PeriodElapsedCallback()
         case (3):
         {
             //记录离线检测前控制模式
-            Chariot->Set_Pre_Chassis_Control_Type(Chariot->Chassis.Get_Chassis_Control_Type());
-            Chariot->Set_Pre_Gimbal_Control_Type(Chariot->Gimbal.Get_Gimbal_Control_Type());
+			Chariot->Set_Pre_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
+            Chariot->Set_Pre_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+//            Chariot->Set_Pre_Chassis_Control_Type(Chariot->Chassis.Get_Chassis_Control_Type());
+//            Chariot->Set_Pre_Gimbal_Control_Type(Chariot->Gimbal.Get_Gimbal_Control_Type());
 
             //无条件转移到 离线检测状态
             Status[Now_Status_Serial].Time = 0;
@@ -1310,9 +1367,12 @@ void Class_FSM_Alive_Control_VT13::Reload_TIM_Status_PeriodElapsedCallback(){
         case (1):
         {
             //离线保护
-            Chariot->Booster.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
-            Chariot->Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
-            Chariot->Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+            if (Chariot->DR16.Get_DR16_Status() == DR16_Status_DISABLE)
+            {
+                Chariot->Booster.Set_Booster_Control_Type(Booster_Control_Type_DISABLE);
+                Chariot->Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_DISABLE);
+                Chariot->Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);
+            }
 
             if(Chariot->VT13.Get_VT13_Status() == VT13_Status_ENABLE)
             {
@@ -1346,8 +1406,10 @@ void Class_FSM_Alive_Control_VT13::Reload_TIM_Status_PeriodElapsedCallback(){
         case (3):
         {
             //记录离线检测前控制模式
-            Chariot->Set_Pre_Chassis_Control_Type(Chariot->Chassis.Get_Chassis_Control_Type());
-            Chariot->Set_Pre_Gimbal_Control_Type(Chariot->Gimbal.Get_Gimbal_Control_Type());
+            	Chariot->Set_Pre_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
+        Chariot->Set_Pre_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+//            Chariot->Set_Pre_Chassis_Control_Type(Chariot->Chassis.Get_Chassis_Control_Type());
+//            Chariot->Set_Pre_Gimbal_Control_Type(Chariot->Gimbal.Get_Gimbal_Control_Type());
 
             //无条件转移到 离线检测状态
             Status[Now_Status_Serial].Time = 0;
@@ -1375,18 +1437,21 @@ void Class_FSM_Alive_Control_VT13::Reload_TIM_Status_PeriodElapsedCallback(){
 void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status)
 {
     static uint8_t circle_flag = 0;
-    static uint32_t start_flag = 0;
+    static uint8_t cnt = 0;
     static uint8_t String_Index = 0;
     String_Index++;
-    if (String_Index > 8)
+    cnt++;
+    if (String_Index >= 6 && String_Index < 10)
     {
         String_Index = 0;
     }
-
-    if(start_flag < 20){
-        start_flag ++;
-        __Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_ENABLE;
+    if(String_Index >= 14){
+        String_Index = 0;
     }
+    if(cnt == 24 + circle_flag){            //从0开启，24+1刚好是偶数次，会导致每次只能进入cicle_flag == 0的时候
+        String_Index = 8;
+    }
+
     
     switch (__Referee_UI_Refresh_Status)
     {
@@ -1395,57 +1460,80 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         // 摩擦轮状态
         if (Fric_Status == Fric_Status_OPEN)
         {
-            Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 880, "ON", (sizeof("ON") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_GREEN, 20, 3, 1765, 880, "ON ", (sizeof("ON ") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 880, "OFF", (sizeof("OFF") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 3, 1765, 880, "OFF", (sizeof("OFF") - 1), Referee_UI_CHANGE);
         }
 
         // 底盘状态
         if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)
         {
-            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "FLLOW", (sizeof("FLLOW") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_GREEN, 20, 3, 1765, 800, "FLLOW  ", (sizeof("FLLOW  ") - 1), Referee_UI_CHANGE);
         }
         else if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive || 
                     Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
         {
-            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "SPIN", (sizeof("SPIN") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_ORANGE, 20, 3, 1765, 800, "SPIN   ", (sizeof("SPIN   ") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 800, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 3, 1765, 800, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_CHANGE);
         }
         
         //超电电量
-        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, 2, 45,665 , 35,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 35, Referee_UI_CHANGE);
+        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, 2, 25,665, 48,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 48, Referee_UI_CHANGE);
+
+        //射击状态更新
+        if(Booster_Control_Type == Booster_Control_Type_CEASEFIRE){
+            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Six, 0, 0x60 , Graphic_Color_ORANGE, 20, 3, 1765, 760, "CEASEFI", (sizeof("CEASEFI") - 1), Referee_UI_CHANGE);
+        }
+        else if(Booster_Control_Type == Booster_Control_Type_SINGLE){
+            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Six, 0, 0x60 , Graphic_Color_PURPLE, 20, 3, 1765, 760, "SINGLE ", (sizeof("SINGLE ") - 1), Referee_UI_CHANGE);
+        }
+        else if(Booster_Control_Type == Booster_Control_Type_MULTI){
+            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Six, 0, 0x60 , Graphic_Color_YELLOW, 20, 3, 1765, 760, "MULTI  ", (sizeof("MULTI  ") - 1), Referee_UI_CHANGE);
+        }
+        else{
+            Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Six, 0, 0x60 , Graphic_Color_PINK, 20, 3, 1765, 760, "DISABLE ", (sizeof("DISABLE ") - 1), Referee_UI_CHANGE);
+        }
 
         if(MiniPC_Aim_Status == MinPC_Aim_Status_ENABLE)
         {
-            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "ON", (sizeof("ON") - 1), Referee_UI_ADD);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 2, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, Graphic_Color_GREEN, 3,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 0, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, Graphic_Color_WHITE, 3,670, 270, 670 + 580, 270 + 580, Referee_UI_CHANGE);
+        }
+
+        
+        if(Gimbal_Control_Type == Gimbal_Control_Type_NORMAL){
+            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_GREEN, 20, 3, 1765, 840, "NORMAL ", (sizeof("NORMAL") - 1), Referee_UI_CHANGE);
+        }
+        else if(Gimbal_Control_Type == Gimbal_Control_Type_MINIPC){
+            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_ORANGE, 20, 3, 1765, 840, "MINPC  ", (sizeof("MINPC  ") - 1), Referee_UI_CHANGE);
+        }
+        else{
+            Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 3, 1765, 840, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_CHANGE);
         }
     }
     break;
     case (Referee_UI_Refresh_Status_ENABLE):
     {
         //自瞄变色框
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, 0, 1,670, 270, 670 + 580, 270 + 580, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_One, 0, 0x10, Graphic_Color_WHITE, 3,670, 270, 670 + 580, 270 + 580, Referee_UI_ADD);
         //摩擦轮状态
-        Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 2, 1765, 800, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Five, 0, 0x20 , Graphic_Color_PINK, 20, 3, 1765, 880, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
         //底盘状态
-        Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 2, 1765, 770, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_ADD);
-        //自瞄 Referee_UI_Six没用到
-        Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 2, 1765, 840, "OFF", (sizeof("OFF") - 1), Referee_UI_ADD);
-        //射速
-        //Referee.Referee_UI_Draw_Float()
-        //超电容量
-        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, 2, 45,665 , 35,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 35, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Six, 0, 0x30 , Graphic_Color_PINK, 20, 3, 1765, 800, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_ADD);
+        //云台状态
+        Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_Six, 0, 0x40 , Graphic_Color_PINK, 20, 3, 1765, 840, "DISABLE", (sizeof("DISABLE") - 1), Referee_UI_ADD);
+        //射击状态
+        Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Six, 0, 0x60 , Graphic_Color_PINK, 20, 3, 1765, 760, "DISABLE ", (sizeof("DISABLE ") - 1), Referee_UI_ADD);
+        //超电容量      （35+45)/2 = 40
+        Referee.Referee_UI_Draw_Line_Graphic_5(Referee.Get_ID(),Referee_UI_Two , 0, 0x50, Graphic_Color_GREEN, 25,665, 48,665 + (uint32_t)(590*Chassis.Supercap.Get_Now_Voltage()), 48, Referee_UI_ADD);
     }
     break;
     }
@@ -1453,33 +1541,36 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     // 画瞄准辅助线
     if(!circle_flag){
         circle_flag = 1;
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x01, 3, 1, 620, 0, 770, 450, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x02, 3, 1, 1300, 0, 1150, 450, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x03, 3, 1, 960, 420, 960, 500, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x04, 2, 1, 910, 465, 1010, 465, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Four, 1, 0x05, 2, 1, 930, 445, 990, 445, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x06, 2, 1, 940, 420, 980, 420, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x07, 2, 1, 950, 395, 970, 395, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x01, Graphic_Color_ORANGE, 2, 620, 0, 770, 450, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x02, Graphic_Color_ORANGE, 2, 1300, 0, 1150, 450, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x03, Graphic_Color_ORANGE, 2, 960, 420, 960, 500, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x04, Graphic_Color_GREEN, 2, 910, 465, 1010, 465, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Four, 1, 0x05, Graphic_Color_GREEN, 2, 930, 445, 990, 445, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x06, Graphic_Color_GREEN, 2, 940, 420, 980, 420, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x07, Graphic_Color_GREEN, 2, 950, 395, 970, 395, Referee_UI_ADD);
     }
     else{
         circle_flag = 0;
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 1, 0x11, 3, 1, 952, 540, 935, 540, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 1, 0x22, 3, 1, 968, 540, 985, 540, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 1, 0x33, 3, 1, 960, 548, 960, 565, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 1, 0x44, 3, 1, 960, 532, 960, 515, Referee_UI_ADD);
-        Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x55, 4, 1, 960, 540, 961, 541, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Zero, 2, 0x11, Graphic_Color_ORANGE, 2, 952, 540, 935, 540, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_One, 2, 0x22, Graphic_Color_ORANGE, 2, 968, 540, 985, 540, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Two, 2, 0x33, Graphic_Color_ORANGE, 2, 960, 548, 960, 565, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Three, 2, 0x44, Graphic_Color_ORANGE, 2, 960, 532, 960, 515, Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 2, 0x55, Graphic_Color_PURPLE, 2, 960, 540, 961, 541, Referee_UI_ADD);
     }
     
-    
     // 超电容量 边框
-    Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_Zero, 0, 0x08, 8, 1,665, 35, 665 + 590, 35 + 45, Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(), Referee_UI_Zero, 0, 0x08, Graphic_Color_WHITE, 1,665, 35, 665 + 590, 35 + 25, Referee_UI_ADD);
 
     //摩擦轮等状态字符
-    Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 1, 0x09, Graphic_Color_YELLOW, 20, 2, 1548, 880, "FRICTION :", (sizeof("FRICTION :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(1, Referee.Get_ID(), Referee_UI_One, 1, 0x0A, Graphic_Color_YELLOW, 20, 2, 1548, 840, "AUTOAIM  :", (sizeof("AUTOAIM  :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(2, Referee.Get_ID(), Referee_UI_Two, 1, 0x0B, Graphic_Color_YELLOW, 20, 2, 1548, 800, "CHASSIS  :", (sizeof("CHASSIS  :") - 1), Referee_UI_ADD);
-    Referee.Referee_UI_Draw_String(3, Referee.Get_ID(), Referee_UI_Three, 1, 0x0C, Graphic_Color_YELLOW, 20, 2, 1548, 760, "SHOOT    :", (sizeof("SHOOT    :") - 1), Referee_UI_ADD);
-
+    if (cnt == 35)
+    {      //减小固定字符的发送频率
+        String_Index = 10;
+        Referee.Referee_UI_Draw_String(10, Referee.Get_ID(), Referee_UI_Zero, 1, 0x09, Graphic_Color_YELLOW, 20, 3, 1548, 880, "FRICTION :", (sizeof("FRICTION :") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(11, Referee.Get_ID(), Referee_UI_One, 1, 0x0A, Graphic_Color_YELLOW, 20, 3, 1548, 840, "GIMBAL   :", (sizeof("GIMBAL   :") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(12, Referee.Get_ID(), Referee_UI_Two, 1, 0x0B, Graphic_Color_YELLOW, 20, 3, 1548, 800, "CHASSIS  :", (sizeof("CHASSIS  :") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(13, Referee.Get_ID(), Referee_UI_Three, 1, 0x0C, Graphic_Color_YELLOW, 20, 3, 1548, 760, "SHOOT    :", (sizeof("SHOOT    :") - 1), Referee_UI_ADD);
+        cnt = 0;
+    }
 
     // 善后处理
     Referee.UART_Tx_Referee_UI(String_Index);

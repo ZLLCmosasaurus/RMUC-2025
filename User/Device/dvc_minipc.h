@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include "main.h"
+#include "drv_can.h"
 #include "drv_usb.h"
 #include "dvc_imu.h"
 #include "dvc_referee.h"
@@ -232,6 +233,22 @@ struct Pack_rx_t
 	uint16_t crc16;
 }__attribute__((packed));
 
+//can协议下接收数据包
+struct Pack_rx_can_t{
+    int16_t target_x;
+    int16_t target_y;
+    int16_t target_z;
+}__attribute__((packed));
+
+//can协议下发送数据包
+struct Pack_tx_can_t{
+    Enum_MiniPC_Game_Stage game_stage : 3;
+    Enum_MiniPC_Type target_type      : 1;
+    Enum_Windmill_Type windmill_type  : 1;
+    int16_t Roll;
+    int16_t Pitch;
+    int16_t Yaw;
+}__attribute__((packed));
 
 /**
  * @brief Specialized, 迷你主机类
@@ -240,7 +257,7 @@ struct Pack_rx_t
 class Class_MiniPC
 {
 public:
-    void Init(Struct_USB_Manage_Object* __MiniPC_USB_Manage_Object, uint8_t __frame_header = 0x5A, uint8_t __frame_rear = 0x01);
+    void Init(Struct_USB_Manage_Object* __MiniPC_USB_Manage_Object,CAN_HandleTypeDef *hcan,uint8_t __frame_header = 0x5A, uint8_t __frame_rear = 0x01);
 
     inline Enum_MiniPC_Status Get_MiniPC_Status();
     inline float Get_Chassis_Target_Velocity_X();
@@ -289,6 +306,7 @@ public:
 
     float meanFilter(float input);
 
+    void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void USB_RxCpltCallback(uint8_t *Rx_Data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
@@ -302,6 +320,7 @@ protected:
 
     //绑定的USB
     Struct_USB_Manage_Object *USB_Manage_Object;
+    Struct_CAN_Manage_Object *CAN_Manage_Object;
     //数据包头标
     uint8_t Frame_Header;
     //数据包尾标
@@ -323,6 +342,9 @@ protected:
     //迷你主机对外接口信息
     Struct_MiniPC_Rx_Data Data_NUC_To_MCU;
 
+    uint8_t *CAN_Tx_Data;
+    Pack_rx_can_t Pack_Rx_CAN;
+    Pack_tx_can_t Pack_Tx_CAN;
     Pack_tx_t Pack_Tx;
     Pack_rx_t Pack_Rx;
 
@@ -336,11 +358,11 @@ protected:
 
 
     const float g = 9.8; // 重力加速度
-    const float bullet_v = 28.0; // 子弹速度  
+    const float bullet_v = 24.0; // 子弹速度  
 
     // 距离
     float Distance;
-    float z_offset = 0.05;          //相机和枪管不在同一位置
+    float z_offset = -0.0000;          //相机和枪管不在同一位置
 
     //写变量
 
@@ -351,6 +373,7 @@ protected:
 
     //内部函数
 
+    void CAN_Data_Process();
     void Data_Process();
     void Output();
 };

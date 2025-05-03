@@ -140,6 +140,11 @@ void Chassis_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.CAN_Chassis_Rx_Gimbal_Callback();
     }
     break;
+    case (0x78):    //上板通讯2
+    {
+        chariot.CAN_Chassis_Rx_Gimbal_Callback_2();
+    }
+    break;
     case (0x67):  //留给超级电容
     {
         
@@ -163,9 +168,9 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
     {
-    case (0x203):
+    case (0xa1):
     {
-        
+         chariot.MiniPC.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     case (0x202):
@@ -274,14 +279,17 @@ void Image_UART6_Callback(uint8_t *Buffer, uint16_t Length)
 #ifdef GIMBAL
 void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
 {
+    chariot.Set_Control_Source(DR16_Control);
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
     chariot.TIM_Control_Callback();
 }
 
+//DR16和VT13同时开跑着会有问题
 void VT13_UART_Callback(uint8_t *Buffer, uint16_t Length)
 {
+    chariot.Set_Control_Source(VT13_Control);
     chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
@@ -404,21 +412,14 @@ void Task1ms_TIM5_Callback()
     if(start_flag==1)
     {
         #ifdef GIMBAL
-        #ifdef USE_DR16
-
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-
-        #elif defined(USE_VT13)
-
         chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
-
-        #endif
         #endif
         #ifdef CHASSIS
 
-        static uint32_t mod20 = 0; 
-        mod20 ++;
-        if(mod20 % 34 == 0){
+        static uint32_t mod30 = 0; 
+        mod30 ++;
+        if(mod30 % 30 == 0){
  		    chariot.Chariot_Referee_UI_Tx_Callback(chariot.Referee_UI_Refresh_Status);
 	    }
         
@@ -443,7 +444,9 @@ void Task1ms_TIM5_Callback()
         TIM_UART_PeriodElapsedCallback();
         
         //给上位机发数据
+        #ifdef MINPC_USB
         TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+        #endif
 
         static int mod5 = 0;
         mod5++;
@@ -523,11 +526,14 @@ extern "C" void Task_Init()
         UART_Init(&huart3, DR16_UART3_Callback, 18);
 		UART_Init(&huart6, Image_UART6_Callback, 40);
         #elif defined(USE_VT13)
+        UART_Init(&huart3, DR16_UART3_Callback, 18);
         UART_Init(&huart6, VT13_UART_Callback, 30);
         #endif
 
         //上位机USB
+        #ifdef MINPC_USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
+        #endif
 
         // HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
 
