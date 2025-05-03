@@ -79,7 +79,7 @@ enum Enum_Robotarm_Task_Status
 		Robotarm_Task_Status_Error=3,
 		Robotarm_Task_Status_Exchange=4,
 		Robotarm_Task_Status_Exchange_Pull=5,
-	
+	  Robotarm_Task_Status_Assist_Calibration =6,
     Robotarm_Task_Status_Pick_Sliver_1=11,
 		Robotarm_Task_Status_Pick_Sliver_2=12,
 		Robotarm_Task_Status_Pick_Sliver_3=13,
@@ -397,12 +397,16 @@ protected:
         float DR16_Mouse_Chassis_Shift = 2.0f;
 		//车在特定位置，各种情况机械臂的角度
 		//取出银矿相关角度
-		const float Angle_Pick_Fisrt[6]={90,120,150,0,0,5};
-		const float Angle_Place_Fisrt[6]={100,135,141,90,0,20};
-		const float Angle_Pick_Second[6]={110,0,70,0,0,5};
+//		const float Angle_Pick_Fisrt[6]={90,120,150,0,0,5};
+//		const float Angle_Place_Fisrt[6]={100,135,141,90,0,20};
+//		const float Angle_Pick_Second[6]={110,0,70,0,0,5};
+//		const float Angle_Place_Second[6]={110,0,70,0,0,20};
+//    const float Angle_Pick_Third[6]={90,120,150,0,0,5};
+		const float Angle_Pick_Fisrt[6]={45,135,180,0,0,5};
+		const float Angle_Place_Fisrt[6]={100,135,141,0,0,20};
+		const float Angle_Pick_Second[6]={95,40,45,0,0,5};
 		const float Angle_Place_Second[6]={110,0,70,0,0,20};
-    const float Angle_Pick_Third[6]={90,180,90,0,0,5};
-		
+    const float Angle_Pick_Third[6]={90,120,150,0,0,5};
 		
 		//取出金矿相关角度		
 		const float Angle_Pick_Gold[6]={120,45,115,0,90,5.0f};
