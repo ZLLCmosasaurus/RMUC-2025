@@ -252,7 +252,7 @@ public:
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
     //射击模式
-    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
+    Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_DISABLE;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
 
@@ -267,8 +267,8 @@ protected:
     Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
 
     #ifdef CHASSIS
-        //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 5.92f;
+        //底盘标定参考正方向角度(数据来源yaw电机)       Rad
+        float Reference_Angle = 1.09f;          
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //
         //底盘转换后的角度（数据来源yaw电机）

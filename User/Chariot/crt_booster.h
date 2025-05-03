@@ -118,6 +118,7 @@ public:
     inline float Get_Friction_Omega();
     inline float Get_Friction_Omega_Threshold();
 
+    inline Enum_Booster_User_Control_Type Get_Booster_User_Control_Type();
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
     inline Enum_Friction_Control_Type Get_Friction_Control_Type();
 
@@ -227,6 +228,11 @@ void Class_Booster::Set_Booster_Control_Type(Enum_Booster_Control_Type __Booster
 void Class_Booster::Set_Friction_Control_Type(Enum_Friction_Control_Type __Friction_Control_Type)
 {
     Friction_Control_Type = __Friction_Control_Type;
+}
+
+inline Enum_Booster_User_Control_Type Class_Booster::Get_Booster_User_Control_Type()
+{
+  return Booster_User_Control_Type;
 }
 
 /**

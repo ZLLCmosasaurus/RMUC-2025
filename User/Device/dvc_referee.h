@@ -1218,6 +1218,7 @@ public:
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
     inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
     inline void Set_Shoot_Speed(float __Shoot_Speed);
+    inline void Set_Booster_17mm_1_Heat(int16_t __Booster_17mm_1_Heat);
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
     inline void Set_Booster_42mm_1_Heat_CD(uint16_t __Booster_42mm_1_Heat_CD);
@@ -2269,8 +2270,11 @@ void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
 {
     this->Robot_Booster.Speed = __Shoot_Speed;
 }
+inline void Class_Referee::Set_Booster_17mm_1_Heat(int16_t __Booster_17mm_1_Heat)
+{
+    this->Robot_Power_Heat.Booster_17mm_1_Heat = __Booster_17mm_1_Heat;
+}
 #endif
-
 
 /**
  * @brief 设置17mm枪管冷却cd
