@@ -414,7 +414,7 @@ void Class_Chariot::Control_Chassis()
             }
             }
 
-            else if (DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            else if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
                 if (UI_Radar_Target == Radar_Target_Pos_Outpost)
                     UI_Radar_Target = Radar_Target_Pos_Base;
@@ -423,7 +423,7 @@ void Class_Chariot::Control_Chassis()
 
                 MiniPC.Set_Radar_Target(UI_Radar_Target);
             }
-            else if (DR16.Get_Keyboard_Key_X() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            else if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
                 if (UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_A)
                     UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
@@ -716,9 +716,15 @@ void Class_Chariot::Control_Gimbal()
 
         static uint8_t Switch_Mode_Flag = 0;
         static float tmp_yaw_offest = 0.0f;
-        
-        if (DR16.Get_Mouse_Right_Key() != DR16_Key_Status_PRESSED)
+        // 设定云台控制类型
+        switch (Gimbal.Get_Launch_Mode()) // 吊射模式
         {
+        case Launch_Disable:
+        {
+
+            Switch_Mode_Flag = 0;
+            Remote_K = 2.0f;
+            //非吊射模式下
             tmp_gimbal_yaw_imu = Gimbal.Get_Target_Yaw_Angle();
             tmp_gimbal_yaw_imu += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * Remote_K;
             Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
@@ -726,14 +732,6 @@ void Class_Chariot::Control_Gimbal()
             tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
             tmp_gimbal_pitch += True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
             Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
-        }
-        // 设定云台控制类型
-        switch (Gimbal.Get_Launch_Mode()) // 吊射模式
-        {
-        case Launch_Disable:
-        {
-            Switch_Mode_Flag = 0;
-            Remote_K = 2.0f;
             // C键按下 一键调头
             if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
@@ -741,7 +739,6 @@ void Class_Chariot::Control_Gimbal()
                 Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
             }
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
-
         }
         break;
         case Launch_Enable:
@@ -752,54 +749,61 @@ void Class_Chariot::Control_Gimbal()
                 tmp_yaw_offest = Gimbal.Motor_Yaw.Get_True_Angle_Yaw_From_Encoder() - Gimbal.Motor_Yaw.Get_True_Angle_Yaw();
             }
             Remote_K = 1.0f;
+
             // 更新编码器模式下Yaw_encoder目标角度
             tmp_gimbal_yaw_encoder = Gimbal.Get_Target_Yaw_Angle() + tmp_yaw_offest;
             Gimbal.Set_Target_Yaw_Encoder_Angle(tmp_gimbal_yaw_encoder);
-            // 长按右键  开启自瞄
-            if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED)
+            
+            if (!(DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED || DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_PRESSED))
             {
-                switch (MiniPC.Get_Radar_Enable_Status())
-                {
-                case 1:
-                {
-                    Gimbal.Set_Target_Yaw_Encoder_Angle(MiniPC.Get_Rx_Yaw_Angle() + Gimbal.Get_Transfrom_Yaw_Encoder_Angle());
-                    Gimbal.Set_Target_Pitch_Angle(MiniPC.Get_Rx_Pitch_Angle() + Gimbal.Get_Transfrom_Pitch_IMU_Angle());
-                    Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
-                }
-                break;
-                case 0:
-                {
-                    float transform_yaw_offest_mode2 = 0.0f, transform_pitch_offest_mode2 = 0.0f;
-                    if (DR16.Get_Keyboard_Key_A() == DR16_Key_Status_PRESSED)
-                    {
-                        transform_yaw_offest_mode2 = Gimbal.Get_Target_Yaw_Encoder_Angle();
-                        transform_yaw_offest_mode2 += VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
-                        Gimbal.Set_Target_Yaw_Encoder_Angle(transform_yaw_offest_mode2);
-                    }
-                    else if (DR16.Get_Keyboard_Key_D() == DR16_Key_Status_PRESSED)
-                    {
-                        transform_yaw_offest_mode2 = Gimbal.Get_Target_Yaw_Encoder_Angle();
-                        transform_yaw_offest_mode2 -= VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
-                        Gimbal.Set_Target_Yaw_Encoder_Angle(transform_yaw_offest_mode2);
-                    }
-                    else if (DR16.Get_Keyboard_Key_W() == DR16_Key_Status_PRESSED)
-                    {
-                        transform_pitch_offest_mode2 = Gimbal.Get_Target_Pitch_Angle();
-                        transform_pitch_offest_mode2 -= VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
-                        Gimbal.Set_Target_Pitch_Angle(transform_pitch_offest_mode2);
-                    }
-                    else if (DR16.Get_Keyboard_Key_S() == DR16_Key_Status_PRESSED)
-                    {
-                        transform_pitch_offest_mode2 = Gimbal.Get_Target_Pitch_Angle();
-                        transform_pitch_offest_mode2 += VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
-                        Gimbal.Set_Target_Pitch_Angle(transform_pitch_offest_mode2);
-                    }
-                    Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
-                }
-                break;
-                }
+                tmp_gimbal_yaw_imu = Gimbal.Get_Target_Yaw_Angle();
+                tmp_gimbal_yaw_imu += True_Mouse_X * DR16_Mouse_Yaw_Angle_Resolution * Remote_K;
+                Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
+                // pitch赋值逻辑
+                tmp_gimbal_pitch = Gimbal.Get_Target_Pitch_Angle();
+                tmp_gimbal_pitch += True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
+                Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
+            }
+            // 长按右键  开启自瞄
+            if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_Radar_Enable_Status() == 1)
+            {
+
+                Gimbal.Set_Target_Yaw_Encoder_Angle(MiniPC.Get_Rx_Yaw_Angle() + Gimbal.Get_Transfrom_Yaw_Encoder_Angle());
+                Gimbal.Set_Target_Pitch_Angle(MiniPC.Get_Rx_Pitch_Angle() + Gimbal.Get_Transfrom_Pitch_IMU_Angle());
+                Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
                 Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             }
+
+            if (DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_PRESSED)
+            {
+                float transform_yaw_offest_mode2 = 0.0f, transform_pitch_offest_mode2 = 0.0f;
+                if (DR16.Get_Keyboard_Key_A() == DR16_Key_Status_PRESSED)
+                {
+                    transform_yaw_offest_mode2 = Gimbal.Get_Target_Yaw_Encoder_Angle();
+                    transform_yaw_offest_mode2 += VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
+                    Gimbal.Set_Target_Yaw_Encoder_Angle(transform_yaw_offest_mode2);
+                }
+                else if (DR16.Get_Keyboard_Key_D() == DR16_Key_Status_PRESSED)
+                {
+                    transform_yaw_offest_mode2 = Gimbal.Get_Target_Yaw_Encoder_Angle();
+                    transform_yaw_offest_mode2 -= VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
+                    Gimbal.Set_Target_Yaw_Encoder_Angle(transform_yaw_offest_mode2);
+                }
+                else if (DR16.Get_Keyboard_Key_W() == DR16_Key_Status_PRESSED)
+                {
+                    transform_pitch_offest_mode2 = Gimbal.Get_Target_Pitch_Angle();
+                    transform_pitch_offest_mode2 -= VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
+                    Gimbal.Set_Target_Pitch_Angle(transform_pitch_offest_mode2);
+                }
+                else if (DR16.Get_Keyboard_Key_S() == DR16_Key_Status_PRESSED)
+                {
+                    transform_pitch_offest_mode2 = Gimbal.Get_Target_Pitch_Angle();
+                    transform_pitch_offest_mode2 += VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
+                    Gimbal.Set_Target_Pitch_Angle(transform_pitch_offest_mode2);
+                }
+                Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
+            }
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
         }
         break;
         }
@@ -817,7 +821,7 @@ void Class_Chariot::Control_Gimbal()
         }
     }
 #elif defined(USE_VT13)
-     static uint8_t Start_Flag = 0;              //记录云台第一次上电，以初始化
+    static uint8_t Start_Flag = 0; // 记录云台第一次上电，以初始化
     float vt13_y, vt13_r_y;
     if(Get_VT13_Control_Type()==VT13_Control_Type_REMOTE)
     {
@@ -920,7 +924,7 @@ void Class_Chariot::Control_Gimbal()
         Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
 
     }
-    #endif
+#endif
 
     // 如果小陀螺/随动 yaw给不同参数
     if (Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_FLLOW)

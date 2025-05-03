@@ -262,7 +262,7 @@ void Class_Referee::Data_Process()
                         {
                             reinterpret_cast<uint8_t *>(&Data_Interaction_Students)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
                         }
-                        buffer_index += sizeof(Struct_Referee_Tx_Data_Interaction_Layer_Delete) + 7;
+                        buffer_index += sizeof(Struct_Referee_Data_Interaction_Students) + 7;
                     }
                     break;
                     }
