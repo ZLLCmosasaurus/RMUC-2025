@@ -136,11 +136,11 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
    //角速度前馈，保证小陀螺时走直线
    float Feedback_Angle =  0.0f;
    if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive){
-        Feedback_Angle = -0.016f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
+        Feedback_Angle = -0.025f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
    }
    else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
    {
-        Feedback_Angle = 0.016f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
+        Feedback_Angle = 0.025f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
    }
    else{
         Feedback_Angle = 0.0f;
@@ -454,6 +454,10 @@ void Class_Chariot::Control_Chassis()
     /************************************键鼠控制逻辑*********************************************/
     else if(Active_Controller == Controller_VT13 && VT13_Control_Type == VT13_Control_Type_KEYBOARD) 
     {   
+        if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_DISABLE){
+            Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
+        }
+
         Sprint_Status = Sprint_Status_DISABLE;
         if (VT13.Get_Keyboard_Key_Shift() == VT13_Key_Status_PRESSED) // 按住shift加速
         {
@@ -998,8 +1002,36 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         // if(Reference_Angle > PI)
         //     temp_reference = Reference_Angle - 2 * PI;  
 
+        //对角度的偏移，使角度线性化，即处理0-2PI的角度，使其偏移到-PI -- PI,使突变发生在-PI跳到PI
+        if(Chassis_Angle < PI){
+            temp_yaw = Chassis_Angle;
+        }
+        else if(Chassis_Angle > PI && Chassis_Angle < 2*PI){
+            temp_yaw = Chassis_Angle - 2*PI;
+        }
+
+        if(temp_reference < PI){
+            temp_reference = temp_reference;
+        }
+        else if(temp_reference > PI && temp_reference < 2*PI){
+            temp_reference = temp_reference - 2*PI;
+        }
+
+        // 计算角度差，选择最短路径（优弧）
+        float angle_diff = temp_reference - temp_yaw;
+
+        // 优弧劣弧判断与优化
+        if (angle_diff > PI)
+        {
+            angle_diff -= 2 * PI;
+        }
+        else if (angle_diff < -PI)
+        {
+            angle_diff += 2 * PI;
+        }
+
         //随动环
-        PID_Chassis_Fllow.Set_Target(temp_reference);
+        PID_Chassis_Fllow.Set_Target(temp_yaw + angle_diff);
         PID_Chassis_Fllow.Set_Now(temp_yaw);
         PID_Chassis_Fllow.TIM_Adjust_PeriodElapsedCallback();
         //Chassis.Set_Target_Omega(0.0f);   

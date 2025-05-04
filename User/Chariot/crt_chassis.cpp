@@ -224,7 +224,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);  //功率限制算法
 
-    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
+    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max() + PowerControl_FSM.Get_Buffer_Power() + 5.0f);
     Supercap.TIM_Supercap_PeriodElapsedCallback();          //向超电发送信息
 
     #elif defined (POWER_LIMIT_JH)
