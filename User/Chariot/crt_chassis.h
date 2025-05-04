@@ -58,6 +58,13 @@ enum Enum_Chassis_Control_Type :uint8_t
     Chassis_Control_Type_SPIN_NePositive,
 };
 
+//Reference_Angle标志
+enum Enum_Chassis_Reference_Angle_Status 
+{
+    Chassis_Reference_Angle_Positive = 0,         
+    Chassis_Reference_Angle_Negative,           
+};
+
 class Class_PowerControl_FSM : public Class_FSM{
     public:
     Class_Supercap *Supercap;
@@ -138,6 +145,7 @@ public:
     void Init(float __Velocity_X_Max = 15.0f, float __Velocity_Y_Max = 15.0f, float __Omega_Max = 20.0f, float __Steer_Power_Ratio = 0.5);
 
     inline Enum_Chassis_Control_Type Get_Chassis_Control_Type();
+    inline Enum_Chassis_Reference_Angle_Status Get_Chassis_Reference_Angle_Status();
     inline float Get_Velocity_X_Max();
     inline float Get_Velocity_Y_Max();
     inline float Get_Omega_Max();
@@ -150,7 +158,8 @@ public:
     inline float Get_Target_Velocity_Y();
     inline float Get_Target_Omega();
     inline float Get_Spin_Omega();
-
+    
+    inline void Set_Chassis_Reference_Angle_Status(Enum_Chassis_Reference_Angle_Status __Chassis_Reference_Angle_Status);
     inline void Set_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
     inline void Set_Target_Velocity_X(float __Target_Velocity_X);
     inline void Set_Target_Velocity_Y(float __Target_Velocity_Y);
@@ -178,7 +187,7 @@ protected:
     //舵向电机功率上限比率
     float Steer_Power_Ratio = 0.5f;
     //底盘小陀螺模式角速度
-    float Spin_Omega = 10.0f;             
+    float Spin_Omega = 8.0f;             
     //常量
 
     //电机理论上最大输出
@@ -207,6 +216,7 @@ protected:
     //底盘控制方法
     Enum_Sprint_Status Sprint_Status = Sprint_Status_DISABLE;
     Enum_Chassis_Control_Type Chassis_Control_Type = Chassis_Control_Type_DISABLE;
+    Enum_Chassis_Reference_Angle_Status Chassis_Reference_Angle_Status = Chassis_Reference_Angle_Positive;
     //目标速度X
     float Target_Velocity_X = 0.0f;
     //目标速度Y
@@ -277,6 +287,11 @@ const float VEL2RAD = 1.0f/(WHELL_DIAMETER/2.0f);
 Enum_Chassis_Control_Type Class_Tricycle_Chassis::Get_Chassis_Control_Type()
 {
     return (Chassis_Control_Type);
+}
+
+inline Enum_Chassis_Reference_Angle_Status Class_Tricycle_Chassis::Get_Chassis_Reference_Angle_Status()
+{
+  return Chassis_Reference_Angle_Status;
 }
 
 /**
@@ -398,6 +413,11 @@ float Class_Tricycle_Chassis::Get_Now_Wheel_Power()
 float Class_Tricycle_Chassis::Get_Target_Wheel_Power()
 {
     return (Target_Wheel_Power);
+}
+
+inline void Class_Tricycle_Chassis::Set_Chassis_Reference_Angle_Status(Enum_Chassis_Reference_Angle_Status __Chassis_Reference_Angle_Status)
+{
+    Chassis_Reference_Angle_Status = __Chassis_Reference_Angle_Status;
 }
 
 /**
