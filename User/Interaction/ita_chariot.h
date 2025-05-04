@@ -268,7 +268,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)       Rad
-        float Reference_Angle = 1.09f;          
+        float Reference_Angle = 0.836f;                  //4.23
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //
         //底盘转换后的角度（数据来源yaw电机）

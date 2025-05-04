@@ -221,7 +221,7 @@ void TIM_CAN_PeriodElapsedCallback()
     // CAN1总线  四个底盘电机  
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
+    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);        //未降频
 
     #elif defined (GIMBAL)
     static uint8_t mod10 = 0;

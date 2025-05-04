@@ -354,16 +354,16 @@ void Class_Gimbal::Init()
     Motor_Yaw.PID_Angle.PID_D_Filter.Init(-25000.0f,25000.0f,Filter_Fourier_Type_LOWPASS,3,0);
     Motor_Yaw.PID_Angle.Start_D_Fifter();
 
-    Motor_Yaw.PID_Omega.Init(15000.0f, 12000.0f, 0.0f, -0.0f, 15000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
+    Motor_Yaw.PID_Omega.Init(19000.0f, 14000.0f, 0.0f, -0.0f, 15000.0f, 20000.0f,0.0f,0.0f,0.0f,0.001f,0.0f);
     Motor_Yaw.PID_Torque.Init(0.78f, 100.0f, 0.0f, 0.0f, Motor_Yaw.Get_Output_Max(), Motor_Yaw.Get_Output_Max());
     Motor_Yaw.IMU = &Boardc_BMI;
     Motor_Yaw.Init(&hcan2, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_IMU_ANGLE, -3863);
 
     //pitch轴电机
-    Motor_Pitch.PID_Angle.Init(0.550000012f, 0.0f, 0.00015199995f, 0.0f, 0.800000012, 6.0f * PI, 0.0, 0.0, 0.0, 0.001, 0.0,PID_D_First_ENABLE);
+    Motor_Pitch.PID_Angle.Init(0.479999989f, 3.0f, 0.0f, 0.0f, 0.25f, 6.0f * PI, 0.0, 0.0, 0.0, 0.001, 0.0,PID_D_First_ENABLE);
     Motor_Pitch.PID_Angle.PID_D_Filter.Init(-20000.0f,20000.0f,Filter_Fourier_Type_LOWPASS,3,0);
     Motor_Pitch.PID_Angle.Start_D_Fifter();
-    Motor_Pitch.PID_Omega.Init(-4950.0f, -19000.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.00001f);
+    Motor_Pitch.PID_Omega.Init(-10000.0f, -13000.0f, 0.0f, 0, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max(),0.0f,0.0f,0.0f,0.001f,0.00001f);
     Motor_Pitch.PID_Torque.Init(0.8f, 100.0f, 0.0f, 0.0f, Motor_Pitch.Get_Output_Max(), Motor_Pitch.Get_Output_Max());
     Motor_Pitch.IMU = &Boardc_BMI;
     Motor_Pitch.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_IMU_ANGLE, -1361);

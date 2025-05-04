@@ -362,7 +362,7 @@ protected:
 
     // 距离
     float Distance;
-    float z_offset = -0.0000;          //相机和枪管不在同一位置
+    float z_offset = -0.100;          //相机和枪管不在同一位置
 
     //写变量
 

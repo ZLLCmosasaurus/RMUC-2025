@@ -52,8 +52,8 @@ void Class_Chariot::Init(float __Dead_Zone)
 
     #elif defined(GIMBAL)
         
-        Chassis.Set_Velocity_X_Max(15.0f);
-        Chassis.Set_Velocity_Y_Max(15.0f);
+        Chassis.Set_Velocity_X_Max(18.0f);
+        Chassis.Set_Velocity_Y_Max(18.0f);
 
         //遥控器离线控制 状态机
         FSM_Alive_Control.Chariot = this;
@@ -136,11 +136,11 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
    //角速度前馈，保证小陀螺时走直线
    float Feedback_Angle =  0.0f;
    if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_Positive){
-        Feedback_Angle = -0.008f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
+        Feedback_Angle = -0.016f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
    }
    else if(Chassis.Get_Chassis_Control_Type() == Chassis_Control_Type_SPIN_NePositive)
    {
-        Feedback_Angle = 0.008f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
+        Feedback_Angle = 0.016f * Math_Int_To_Float(tmp_omega,0,0xFF,-1 * 20.0f,20.0f);
    }
    else{
         Feedback_Angle = 0.0f;

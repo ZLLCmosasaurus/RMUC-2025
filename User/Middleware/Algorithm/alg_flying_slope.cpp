@@ -63,9 +63,7 @@ void Class_Flying_Slope::TIM_Calcualte_Feekback()
   float N2 = Gravity * cos(Slope_Radian) * L1 / CHASSIS_L;
   
   //物理上对质量分布的再分配，意义是进一步减小前轮输出，增大后轮输出，当N2 * 的数值大于1， 前轮输出的力矩制动，反向
-  float Compensation_Offset = N2 * 0.2;            
-  F1 = L2 * Gravity * sin(Slope_Radian)/(CHASSIS_L *2) + Compensation_Offset * tan(Slope_Radian);
-  F2 = L1 * Gravity * sin(Slope_Radian)/(CHASSIS_L *2) - Compensation_Offset * tan(Slope_Radian);
+  float Compensation_Offset = N2 * 0.4;            
 
   F1 = (N1 + Compensation_Offset) * tan(Slope_Radian) / 2.0f;           //后轮的单轮补偿
   F2 = (N2 - Compensation_Offset) * tan(Slope_Radian) / 2.0f;           //前轮的单轮补偿

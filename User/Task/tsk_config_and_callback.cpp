@@ -450,7 +450,7 @@ void Task1ms_TIM5_Callback()
 
         static int mod5 = 0;
         mod5++;
-        if (mod5 == 10)  //上下板通信 100hz   尝试降频   发现控制与实际输出角度变化不符
+        if (mod5 == 10)  //上下板通信 100hz
         {
             #ifdef GIMBAL
             //给下板发送数据  
