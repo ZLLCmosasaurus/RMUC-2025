@@ -256,6 +256,15 @@ void Class_Referee::Data_Process()
                         buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Dart_Command) + 7;
                     }
                     break;
+										case (Referee_Command_ID_INTERACTION):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Interaction_Students)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Dart_Command) + 7;
+                    }
+                    break;
                     }
                 }
             }

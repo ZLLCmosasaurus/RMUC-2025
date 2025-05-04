@@ -969,16 +969,16 @@ struct Struct_Referee_Rx_Data_Robot_Dart_Command
  * Data 最大112
  *
  */
-// struct Struct_Referee_Data_Interaction_Students
-// {
-//     uint16_t Header;
-//     Enum_Referee_Data_Robots_ID Sender;
-//     uint8_t Reserved_1;
-//     Enum_Referee_Data_Robots_ID Receiver;
-//     uint8_t Reserved_2;
-//     uint8_t Data[112];
-//     uint16_t CRC_16;
-// }__attribute__((packed));
+ struct Struct_Referee_Data_Interaction_Students
+ {
+     uint16_t Header;
+     Enum_Referee_Data_Robots_ID Sender;
+     uint8_t Reserved_1;
+     Enum_Referee_Data_Robots_ID Receiver;
+     uint8_t Reserved_2;
+     uint8_t Data[1];
+     uint16_t CRC_16;
+ }__attribute__((packed));
 
 /**
  * @brief 裁判系统发送的数据, 0x0301图形删除交互信息, 用户自主发送
@@ -1212,7 +1212,7 @@ public:
     inline Enum_Referee_Data_Robots_ID Get_Radar_Send_Robot_ID();
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
-
+		inline uint8_t Retern_Interaction_Students_Data(void);
     inline uint16_t Get_Circle_Index(uint16_t index);
 
     #ifdef GIMBAL
@@ -1306,6 +1306,8 @@ protected:
     Struct_Referee_Rx_Data_Robot_Dart_Command Robot_Dart_Command;
     //客户端接收小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Client_Receive Interaction_Client_Receive;
+		
+		Struct_Referee_Data_Interaction_Students Interaction_Students;
 
     //写变量
 
@@ -2318,6 +2320,11 @@ void Class_Referee::Set_Booster_42mm_1_Heat_CD(uint16_t __Booster_42mm_1_Heat_CD
 void Class_Referee::Set_Booster_42mm_1_Heat_Max(uint16_t __Booster_42mm_1_Heat_Max)
 {
     this->Robot_Status.Shooter_Barrel_Heat_Limit = __Booster_42mm_1_Heat_Max;
+}
+
+uint8_t Class_Referee::Retern_Interaction_Students_Data(void)
+{
+	return this->Interaction_Students.Data[0];
 }
 
 #endif

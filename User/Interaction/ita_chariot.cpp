@@ -539,7 +539,8 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0D,Graphic_Color_ORANGE,20,5,1342,360,Gimbal.Motor_Pitch.Get_True_Angle_Pitch(),Referee_UI_CHANGE);
         Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x08, Graphic_Color_MAIN, 5, 1405, 617, 1405+70*sinf(Gimbal.Motor_Yaw.Get_Now_Angle()*0.0174), 617+70*cosf(Gimbal.Motor_Yaw.Get_Now_Angle()*0.0174), Referee_UI_CHANGE);
         Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x09, Graphic_Color_MAIN, 5, 1405, 442, 1405+70*cosf(Gimbal.Motor_Pitch.Get_True_Angle_Pitch()*0.0174), 442+70*sinf(Gimbal.Motor_Pitch.Get_True_Angle_Pitch()*0.0174), Referee_UI_CHANGE);
-    }
+				Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Four,0,0x1A,Graphic_Color_ORANGE,20,5,1342,250,Referee.Retern_Interaction_Students_Data(),Referee_UI_CHANGE);
+		}
     break;
     case (Referee_UI_Refresh_Status_ENABLE):
     {
@@ -547,8 +548,9 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_One,0,0x0B,Graphic_Color_ORANGE,25,309,675,50,Referee_UI_ADD);
         Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Two,0,0x0C,Graphic_Color_ORANGE,20,5,1342,748,Gimbal.Motor_Yaw.Get_Now_Angle(),Referee_UI_ADD);
         Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0D,Graphic_Color_ORANGE,20,5,1342,360,Gimbal.Motor_Pitch.Get_True_Angle_Pitch(),Referee_UI_ADD);
-			Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x08, Graphic_Color_MAIN, 5, 1405, 617, 1405, 687, Referee_UI_ADD);
+			  Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Five, 1, 0x08, Graphic_Color_MAIN, 5, 1405, 617, 1405, 687, Referee_UI_ADD);
         Referee.Referee_UI_Draw_Line(Referee.Get_ID(), Referee_UI_Six, 1, 0x09, Graphic_Color_MAIN, 5, 1405, 442, 1475, 442, Referee_UI_ADD);
+			Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Four,0,0x1A,Graphic_Color_ORANGE,20,5,1342,250,Referee.Retern_Interaction_Students_Data(),Referee_UI_ADD);
     }
         
         break;
