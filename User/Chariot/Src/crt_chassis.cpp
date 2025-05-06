@@ -48,7 +48,7 @@ void Class_Tricycle_Chassis::Vector_Plus()//实现向量a+b
 void Class_Tricycle_Chassis::Init(float __Velocity_X_Max, float __Velocity_Y_Max, float __Omega_Max, float __Steer_Power_Ratio)
 {
     //Power_Limit.Init(400,3500);
-    Supercap.Init(&hfdcan3,100.f);
+    Supercap.Init(&hfdcan2,100.f);
     
     Velocity_X_Max = __Velocity_X_Max;
     Velocity_Y_Max = __Velocity_Y_Max;
@@ -380,6 +380,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     //速度解算
     Speed_Resolution();    
     /***************************超级电容*********************************/
+    Supercap.Set_Limit_Power(Referee->Get_Chassis_Power_Max());
     Supercap.Set_Supercap_Mode(Get_Supercap_Mode());
     Supercap.TIM_Supercap_PeriodElapsedCallback();
 
@@ -387,6 +388,7 @@ void Class_Tricycle_Chassis::TIM_Calculate_PeriodElapsedCallback(Enum_Sprint_Sta
     /*************************功率限制策略*******************************/
     //Power_Limit_Update();
     Power_Limit.Set_Motor(Motor_Wheel);//添加四个电机的控制电流和当前转速
+    Power_Limit.Set_Power_Limit(Referee->Get_Chassis_Power_Max());
     Power_Limit.Set_Chassis_Buffer(Referee->Get_Chassis_Energy_Buffer());
     Power_Limit.TIM_Adjust_PeriodElapsedCallback(Motor_Wheel);
     #endif

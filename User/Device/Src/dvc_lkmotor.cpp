@@ -328,7 +328,11 @@ void Class_LK_Motor::TIM_Process_PeriodElapsedCallback()
     {
         case (LK_Motor_Control_Method_TORQUE):
         {        
-            Out = Target_Torque*Torque_Current/Current_Max*Current_Max_Cmd;
+            PID_Torque.Set_Target(Target_Torque);
+            PID_Torque.Set_Now(Data.Now_Current);
+            PID_Torque.TIM_Adjust_PeriodElapsedCallback();
+
+            Out = PID_Torque.Get_Out();
         }
         break;
         case (LK_Motor_Control_Method_OMEGA):

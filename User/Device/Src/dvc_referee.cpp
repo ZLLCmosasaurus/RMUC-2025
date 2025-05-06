@@ -86,21 +86,6 @@ void Class_Referee::Data_Process()
 {
     buffer_index = 0;
     buffer_index_max = UART_Manage_Object->Rx_Buffer_Length;
-    // while (buffer_index < buffer_index_max)
-    // {
-    //     if(UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index)] == 0xA5)
-    //     {
-    //         temp_cmd_id = (UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 6)]) & 0xff;
-    //         temp_cmd_id = (temp_cmd_id << 8) | UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 5)];
-    //         Enum_Referee_Command_ID TEMP_CMD_ID = (Enum_Referee_Command_ID)cmd_id;
-    //         if(TEMP_CMD_ID == Referee_Command_ID_INTERACTION){
-    //             receive_flag = 1;
-    //         }  
-    //         buffer_index = 0;
-    //         break;
-    //     }
-    //     buffer_index ++;
-    // }
     
     // 遍历整个接收缓冲区寻找帧头
     while (buffer_index < buffer_index_max)
@@ -287,6 +272,24 @@ void Class_Referee::Data_Process()
                         buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Dart_Command) + 7;
                     }
                     break;
+                    case (Referee_Command_ID_ROBOT_Sentry_Info):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Sentry_Info)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Sentry_Info) + 7;
+                    }
+                    break;
+                    case (Referee_Command_ID_ROBOT_Radar_Info):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Radar_Info)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Rx_Data_Robot_Radar_Info) + 7;
+                    }
+                    break;
                     case (Referee_Command_ID_INTERACTION):
                     {
                         for (int i = 0; i < data_length + 2; i++)
@@ -295,6 +298,16 @@ void Class_Referee::Data_Process()
                         }
                         buffer_index += sizeof(Struct_Referee_Tx_Data_Interaction_Robot_Receive) + 7;
                     }
+                    break;
+                    case (Referee_Command_ID_INTERACTION_RADAR_SEND):
+                    {
+                        for (int i = 0; i < data_length + 2; i++)
+                        {
+                            reinterpret_cast<uint8_t *>(&Interaction_Radar_Send)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
+                        }
+                        buffer_index += sizeof(Struct_Referee_Tx_Data_Interaction_Radar_Send) + 7;
+                    }
+                    break;
                     }
                 }
             }
@@ -335,6 +348,37 @@ void Class_Referee::TIM1msMod50_Alive_PeriodElapsedCallback()
         Referee_Status = Referee_Status_ENABLE;
     }
     Pre_Flag = Flag;
+}
+/**
+ * @brief UART定时发送函数
+ *
+ * @param 
+ */
+extern Struct_CAN_Referee_Rx_Data_t CAN_Referee_Rx_Data;
+void Class_Referee::TIM_UART_Tx_PeriodElapsedCallback()
+{
+    //雷达发送
+    Sentry_To_Radar.Sender = Get_ID();
+    if(Get_ID() == Referee_Data_Robots_ID_RED_SENTRY_7)
+    {
+        Sentry_To_Radar.Receiver = Referee_Data_Robots_ID_RED_RADAR_9;
+    }
+    else if (Get_ID() == Referee_Data_Robots_ID_BLUE_SENTRY_7)
+    {
+        Sentry_To_Radar.Receiver = Referee_Data_Robots_ID_BLUE_RADAR_9;
+    }
+    Sentry_To_Radar.Robot_Position_X = CAN_Referee_Rx_Data.Robot_Position_X;
+    Sentry_To_Radar.Robot_Position_Y = CAN_Referee_Rx_Data.Robot_Position_Y;
+    Referee_UI_Packed_Data(&Sentry_To_Radar);
+    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10);
+}
+void Class_Referee::Sentry_Auto_cmd_Transmit()
+{
+    //哨兵自主决策
+    Sentry_cmd.Sender = Get_ID();
+    Sentry_cmd.sentry_cmd = CAN_Referee_Rx_Data.Sentry_cmd;
+    Referee_UI_Packed_Data(&Sentry_cmd);
+    HAL_UART_Transmit(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length,10);
 }
 
 unsigned char Get_CRC8_Check_Sum(unsigned  char  *pchMessage,unsigned  int dwLength,unsigned char ucCRC8)

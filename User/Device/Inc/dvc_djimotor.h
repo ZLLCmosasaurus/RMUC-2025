@@ -170,6 +170,7 @@ public:
     void TIM_Alive_PeriodElapsedCallback();
     void TIM_PID_PeriodElapsedCallback();
 
+
     float Yaw;
     float init_Yaw;
     float Pre_Yaw;
@@ -177,9 +178,9 @@ public:
 
     float t_yaw = 0.0f;
     float rpm = 1.0f;
+
     int invert_flag = 0; //正反转标志位
-    uint64_t t = 0.f , pre_t = 0.f;
-    float dt;
+
 
     SpikeFilter filter;
 protected:

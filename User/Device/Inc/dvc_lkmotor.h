@@ -193,7 +193,7 @@ protected:
     
     float Current_Max ;
     
-    const int16_t Current_Max_Cmd = 2000;
+    const int16_t Current_Max_Cmd = 2048;
     
     float Out = 0.0f;
     
@@ -543,6 +543,8 @@ void Class_LK_Motor::Set_Out(float __Out)
     {
         __Out = -Current_Max_Cmd;
     }
+    Out = __Out;
+    Output();
 }
 void Class_LK_Motor::Set_Zero_Position(float __Zero_Position){
     Zero_Position = __Zero_Position;

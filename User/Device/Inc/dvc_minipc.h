@@ -264,8 +264,12 @@ struct Struct_MiniPC_Rx_Data
     uint8_t Control_Type_A; // 云台控制模式
     uint8_t Control_Type_B; // 云台控制模式
     uint8_t Device_Mode; //外设模式
+    uint32_t Sentry_cmd;
+    uint16_t Robot_Position_X;
+    uint16_t Robot_Position_Y;
     uint16_t crc16;
 } __attribute__((packed));
+
 
 typedef __packed struct //0x104
 {
@@ -322,8 +326,13 @@ struct Struct_MiniPC_Tx_Data
     uint16_t Projectile_allowance; // 允许发弹量
     uint16_t Remaining_Time;       // 比赛剩余时间
     uint8_t Color_Invincible_State;      // 敌对方无敌状态/自身颜色
-    uint16_t Robot_Position_X;
-    uint16_t Robot_Position_Y;
+    uint16_t Robot_Position_X; //雷达发送位置X
+    uint16_t Robot_Position_Y; //雷达发送位置Y
+    uint8_t Remaining_Energy;
+    uint8_t Supercap_Proportion;
+    int16_t Target_Position_X;
+    int16_t Target_Position_Y;
+    uint8_t Dart_Target;
     uint16_t crc16;
 } __attribute__((packed));
 
@@ -353,14 +362,15 @@ typedef __packed struct //0x102
 
 typedef __packed struct //0x103
 {
-    uint8_t Game_process;          // 比赛阶段
+    uint8_t Game_process;                // 比赛阶段
     uint8_t Color_Invincible_State;      // 敌对方无敌状态/自身颜色
     uint16_t Robot_Position_X;
     uint16_t Robot_Position_Y;
-    uint16_t reserved;
+    uint8_t  Remaining_Energy;
+    uint8_t  Supercap_Proportion;
 } MiniPC_Tx_D_t;
 
-typedef __packed struct //0x88
+typedef __packed struct //0x188
 {
     uint8_t game_process;
     uint16_t remaining_time;
@@ -369,39 +379,54 @@ typedef __packed struct //0x88
     uint8_t color_invincible_state;
 } Referee_Rx_A_t;
 
-typedef __packed struct //0x99
+typedef __packed struct //0x199
 {
     uint16_t self_base_HP;
     uint16_t oppo_outpost_HP;
     uint16_t projectile_allowance_17mm;  
-    uint8_t  cooling_value;
+    uint16_t cooling_value;
 } Referee_Rx_B_t;
 
-typedef __packed struct // 0x78 
+typedef __packed struct // 0x178 
 {
     uint16_t Booster_Heat_A;
     uint16_t Booster_Heat_B;
-    uint16_t Ammo_Number;
-    uint16_t reserved;
+    uint8_t  Remaining_Energy;
+    uint8_t  Supercap_Proportion;
+    uint8_t  Radar_Info;
+    uint8_t  Dart_Target;
 } Referee_Rx_C_t;
 
-typedef __packed struct // 0x98 
+typedef __packed struct // 0x198 
 {
-    uint8_t Hero_Position_X;
-    uint8_t Hero_Position_Y;
-    uint8_t Sentry_Position_X;
-    uint8_t Sentry_Position_Y;
-    uint8_t Infantry_3_Position_X;
-    uint8_t Infantry_3_Position_Y;
-    uint8_t Infantry_4_Position_X;
-    uint8_t Infantry_4_Position_Y;
+    uint16_t Hero_Position_X;
+    uint16_t Hero_Position_Y;
+    uint16_t Sentry_Position_X;
+    uint16_t Sentry_Position_Y;
 } Referee_Rx_D_t;
 
-typedef __packed struct // 0x97
+typedef __packed struct // 0x197
 {
-    float Bullet_Speed_A;
-    float Bullet_Speed_B;
+    int16_t Self_Position_X;
+    int16_t Self_Position_Y;
+    int16_t Bullet_Speed_A;
+    int16_t Bullet_Speed_B;
 } Referee_Rx_E_t;
+
+typedef __packed struct // 0x196
+{
+    uint16_t Infantry_3_Position_X;
+    uint16_t Infantry_3_Position_Y;
+    uint16_t Infantry_4_Position_X;
+    uint16_t Infantry_4_Position_Y;
+} Referee_Rx_F_t;
+
+typedef __packed struct // 0x191
+{
+    uint16_t Target_Position_X;
+    uint16_t Target_Position_Y;
+    uint32_t Reserved;
+} Referee_Rx_G_t;
 
 class Class_MiniPC
 {

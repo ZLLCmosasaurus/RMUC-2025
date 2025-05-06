@@ -84,15 +84,15 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     uint16_t Shooter_Heat_A,Shooter_Heat_B;
     uint16_t Cooling_Value;
     uint16_t Self_HP,Self_Outpost_HP,Oppo_Outpost_HP,Self_Base_HP,Ammo_number;
-    uint8_t color;
+    uint8_t color,remaining_energy,supercap_proportion,radar_info,dart_target;
     uint16_t Pre_HP[6] = {0};
     uint16_t HP[6] = {0};
     uint8_t Flag[6] = {0};
-    float Count[6] = {0};
     float Pre_Count[6] = {0};
     uint16_t Position[8] = {0};
-    uint8_t Trans_Position[8] = {0};
     float Bullet_Speed_A = 0.f, Bullet_Speed_B = 0.f;
+    int16_t Self_Position_X,Self_Position_Y;
+    int16_t Target_Position_X,Target_Position_Y;
     //数据更新
     if(Referee.Get_ID() == Referee_Data_Robots_ID_RED_SENTRY_7)
     {
@@ -139,15 +139,23 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     Shooter_Heat_A = Referee.Get_Booster_17mm_2_Heat();
     if(Referee.Get_Shoot_Booster_Type() == Referee_Data_Robot_Booster_Type_BOOSTER_17MM_1)
     {
-        Bullet_Speed_B = Referee.Get_Shoot_Speed();
+        Bullet_Speed_B = (int16_t)(Referee.Get_Shoot_Speed() * 100.f);
     }
     else if(Referee.Get_Shoot_Booster_Type() == Referee_Data_Robot_Booster_Type_BOOSTER_17MM_2)
     {
-        Bullet_Speed_A = Referee.Get_Shoot_Speed();
+        Bullet_Speed_A = (int16_t)(Referee.Get_Shoot_Speed() * 100.f);
     }
     Self_HP = Referee.Get_HP();
     Ammo_number = Referee.Get_17mm_Remaining();
     Cooling_Value = Referee.Get_Booster_17mm_Heat_CD();
+    remaining_energy = Referee.Get_Remaining_Energy();
+    supercap_proportion = Chassis.Supercap.Get_Supercap_Proportion();
+    Self_Position_X = (int16_t)(Referee.Get_Location_X() * 100.f);
+    Self_Position_Y = (int16_t)(Referee.Get_Location_Y() * 100.f);
+    Target_Position_X = (int16_t)(Referee.Get_Radar_Send_Coordinate_X() * 100.f);
+    Target_Position_Y = (int16_t)(Referee.Get_Radar_Send_Coordinate_Y() * 100.f);
+    radar_info = Referee.Get_Radar_Info();
+    dart_target = Referee.Get_Dart_Command_Target();
 
     for(int i = 0;i < 6;i++)//无敌状态辨认
     {
@@ -156,17 +164,13 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
             Flag[i] = 1;
             Pre_Count[i] = DWT_GetTimeline_s();
         }
-        if(Flag[i] == 1)
-        {
-            Count[i] = DWT_GetTimeline_s();
-        }
-        if((Count[i] - Pre_Count[i]) > 10.f)
+        if((DWT_GetTimeline_s() - Pre_Count[i]) > 7.f && Flag[i] == 1)
         {
             Flag[i] = 0;
             Pre_Count[i] = 0;
-            Count[i] = 0;
         }
     }
+
     Position[0] = Referee.Get_Hero_Position_X();
     Position[1] = Referee.Get_Hero_Position_Y();
     Position[2] = Referee.Get_Sentry_Position_X();
@@ -175,10 +179,6 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     Position[5] = Referee.Get_Infantry_3_Position_Y();
     Position[6] = Referee.Get_Infantry_4_Position_X();
     Position[7] = Referee.Get_Infantry_4_Position_Y();
-    for(int i = 0;i < 8;i++)
-    {
-        Trans_Position[i] = (uint8_t)((float(Position[i]) / 16384.f) * 255.f);
-    }
 
     //发送数据给云台
     //A包
@@ -200,16 +200,32 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     //C包
     memcpy(CAN3_Chassis_Tx_Data_C + 0, &Shooter_Heat_A, sizeof(uint16_t));
     memcpy(CAN3_Chassis_Tx_Data_C + 2, &Shooter_Heat_B, sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_C + 4, &remaining_energy, sizeof(uint8_t));
+    memcpy(CAN3_Chassis_Tx_Data_C + 5, &supercap_proportion, sizeof(uint8_t));
+    memcpy(CAN3_Chassis_Tx_Data_C + 6, &radar_info, sizeof(uint8_t));
+    memcpy(CAN3_Chassis_Tx_Data_C + 7, &dart_target, sizeof(uint8_t));
 
     //D包
-    for(int i = 0;i < 8;i++)
-    {
-        CAN3_Chassis_Tx_Data_D[i] = Trans_Position[i];
-    }
+    memcpy(CAN3_Chassis_Tx_Data_D + 0, &Position[0], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_D + 2, &Position[1], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_D + 4, &Position[2], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_D + 6, &Position[3], sizeof(uint16_t));
 
     //E包
-    memcpy(CAN3_Chassis_Tx_Data_E + 0, &Bullet_Speed_A, sizeof(float));
-    memcpy(CAN3_Chassis_Tx_Data_E + 4, &Bullet_Speed_B, sizeof(float));
+    memcpy(CAN3_Chassis_Tx_Data_E + 0, &Self_Position_X, sizeof(int16_t));
+    memcpy(CAN3_Chassis_Tx_Data_E + 2, &Self_Position_Y, sizeof(int16_t));
+    memcpy(CAN3_Chassis_Tx_Data_E + 4, &Bullet_Speed_A, sizeof(int16_t));
+    memcpy(CAN3_Chassis_Tx_Data_E + 6, &Bullet_Speed_B, sizeof(int16_t));
+
+    //F包
+    memcpy(CAN3_Chassis_Tx_Data_F + 0, &Position[4], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_F + 2, &Position[5], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_F + 4, &Position[6], sizeof(uint16_t));
+    memcpy(CAN3_Chassis_Tx_Data_F + 6, &Position[7], sizeof(uint16_t));
+
+    //G包
+    memcpy(CAN3_Chassis_Tx_Data_G + 0, &Target_Position_X, sizeof(int16_t));
+    memcpy(CAN3_Chassis_Tx_Data_G + 2, &Target_Position_Y, sizeof(int16_t));
 }
 #endif
 
@@ -217,9 +233,11 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
  * @brief can回调函数处理云台发来的数据
  *
  */
+Struct_CAN_Referee_Rx_Data_t CAN_Referee_Rx_Data;
 #ifdef CHASSIS    
 //控制类型字节
 uint8_t control_type;
+
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback(uint8_t *Rx_Data)
 {   
     Gimbal_Alive_Flag++;
@@ -229,38 +247,50 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback(uint8_t *Rx_Data)
     float chassis_omega;
     //底盘控制类型
     Enum_Chassis_Control_Type chassis_control_type;
-    //
+    //超电控制类型
     Enum_Supercap_Mode supercap_mode;
     //float映射到int16之后的速度
     int16_t tmp_velocity_x, tmp_velocity_y, tmp_omega;
+    switch(CAN_Manage_Object->Rx_Buffer.Header.Identifier){
+        case (0x77):
+        {
+            memcpy(&tmp_velocity_x,&CAN_Manage_Object->Rx_Buffer.Data[0],sizeof(int16_t));
+            memcpy(&tmp_velocity_y,&CAN_Manage_Object->Rx_Buffer.Data[2],sizeof(int16_t));
+            memcpy(&tmp_omega,&CAN_Manage_Object->Rx_Buffer.Data[4],sizeof(int16_t));
+            memcpy(&supercap_mode,&CAN_Manage_Object->Rx_Buffer.Data[6],sizeof(uint8_t));
+            memcpy(&control_type,&CAN_Manage_Object->Rx_Buffer.Data[7],sizeof(uint8_t));
+            
+            #ifdef AGV
+            chassis_velocity_x = Math_Int_To_Float(tmp_velocity_x,-450,450,-4,4);
+            chassis_velocity_y = Math_Int_To_Float(tmp_velocity_y,-450,450,-4,4);
+            chassis_omega = Math_Int_To_Float(tmp_omega, -200, 200, -4.f, 4.f)/ Chassis_Radius;//映射范围除以五十 云台发的是车体角速度 转为舵轮电机的线速度
+            #else
+            chassis_velocity_x = Math_Int_To_Float(tmp_velocity_x,-450,450,-20.f,20.f);
+            chassis_velocity_y = Math_Int_To_Float(tmp_velocity_y,-450,450,-20.f,20.f);
+            chassis_omega = Math_Int_To_Float(tmp_omega, -200, 200, -80.f, 80.f);
+            #endif
+            chassis_control_type = (Enum_Chassis_Control_Type)control_type;
+            //设定底盘控制类型
+            Chassis.Set_Chassis_Control_Type(chassis_control_type);
+            if(chassis_omega < 0.5f && chassis_omega > -0.5f)chassis_omega = 0;
+            //设定底盘目标速度
+            Chassis.Set_Target_Velocity_X(chassis_velocity_x);
+            Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
+            #ifdef OMNI_WHEEL
+                Chassis.Set_Target_Velocity_Y(-chassis_velocity_y);
+            #endif
+            Chassis.Set_Target_Omega(chassis_omega);//线速度
+            Chassis.Set_Supercap_Mode(supercap_mode);
+            break;
+        }
+        case (0x95):
+        {
+            memcpy(&CAN_Referee_Rx_Data,&CAN_Manage_Object->Rx_Buffer.Data,sizeof(Struct_CAN_Referee_Rx_Data_t));
+            break;
+        }
+    }
 
-    memcpy(&tmp_velocity_x,&CAN_Manage_Object->Rx_Buffer.Data[0],sizeof(int16_t));
-    memcpy(&tmp_velocity_y,&CAN_Manage_Object->Rx_Buffer.Data[2],sizeof(int16_t));
-    memcpy(&tmp_omega,&CAN_Manage_Object->Rx_Buffer.Data[4],sizeof(int16_t));
-    memcpy(&supercap_mode,&CAN_Manage_Object->Rx_Buffer.Data[6],sizeof(uint8_t));
-    memcpy(&control_type,&CAN_Manage_Object->Rx_Buffer.Data[7],sizeof(uint8_t));
-    
-    #ifdef AGV
-    chassis_velocity_x = Math_Int_To_Float(tmp_velocity_x,-450,450,-4,4);
-    chassis_velocity_y = Math_Int_To_Float(tmp_velocity_y,-450,450,-4,4);
-    chassis_omega = Math_Int_To_Float(tmp_omega, -200, 200, -4.f, 4.f)/ Chassis_Radius;//映射范围除以五十 云台发的是车体角速度 转为舵轮电机的线速度
-    #else
-    chassis_velocity_x = Math_Int_To_Float(tmp_velocity_x,-450,450,-20.f,20.f);
-    chassis_velocity_y = Math_Int_To_Float(tmp_velocity_y,-450,450,-20.f,20.f);
-    chassis_omega = Math_Int_To_Float(tmp_omega, -200, 200, -80.f, 80.f);
-    #endif
-    chassis_control_type = (Enum_Chassis_Control_Type)control_type;
-    //设定底盘控制类型
-    Chassis.Set_Chassis_Control_Type(chassis_control_type);
-    if(chassis_omega < 0.5f && chassis_omega > -0.5f)chassis_omega = 0;
-    //设定底盘目标速度
-    Chassis.Set_Target_Velocity_X(chassis_velocity_x);
-    Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
-    #ifdef OMNI_WHEEL
-        Chassis.Set_Target_Velocity_Y(-chassis_velocity_y);
-    #endif
-    Chassis.Set_Target_Omega(chassis_omega);//线速度
-    Chassis.Set_Supercap_Mode(supercap_mode);
+
 }
 #endif
 
@@ -274,47 +304,46 @@ Referee_Rx_B_t CAN3_Chassis_Rx_Data_B;
 Referee_Rx_C_t CAN3_Chassis_Rx_Data_C;
 Referee_Rx_D_t CAN3_Chassis_Rx_Data_D;
 Referee_Rx_E_t CAN3_Chassis_Rx_Data_E;
-volatile int atk_flag = 0;
-int atk_cnt = 0;
+Referee_Rx_F_t CAN3_Chassis_Rx_Data_F;
+Referee_Rx_G_t CAN3_Chassis_Rx_Data_G;
 #ifdef GIMBAL
 void Class_Chariot::CAN_Gimbal_Rx_Chassis_Callback()
 {
     Chassis_Alive_Flag++;
-    uint16_t Shooter_Barrel_Cooling_Value;
-    uint16_t Shooter_Barrel_Heat_Limit;
     switch(CAN_Manage_Object->Rx_Buffer.Header.Identifier){
-        case (0x88):{
+        case (0x188):{
             memcpy(&PRE_CAN3_Chassis_Rx_Data_A, &CAN3_Chassis_Rx_Data_A, sizeof(Referee_Rx_A_t));
             CAN3_Chassis_Rx_Data_A.game_process = CAN_Manage_Object->Rx_Buffer.Data[0];
             CAN3_Chassis_Rx_Data_A.remaining_time = CAN_Manage_Object->Rx_Buffer.Data[1] << 8 | CAN_Manage_Object->Rx_Buffer.Data[2];
             CAN3_Chassis_Rx_Data_A.self_blood = CAN_Manage_Object->Rx_Buffer.Data[3] << 8 | CAN_Manage_Object->Rx_Buffer.Data[4];
             CAN3_Chassis_Rx_Data_A.self_outpost_HP = CAN_Manage_Object->Rx_Buffer.Data[5] << 8 | CAN_Manage_Object->Rx_Buffer.Data[6];
             CAN3_Chassis_Rx_Data_A.color_invincible_state = CAN_Manage_Object->Rx_Buffer.Data[7];
-            if(PRE_CAN3_Chassis_Rx_Data_A.self_blood > CAN3_Chassis_Rx_Data_A.self_blood)
-            {
-                atk_flag = 1;
-                atk_cnt = 0;
-            }
-            if(PRE_CAN3_Chassis_Rx_Data_A.self_blood == CAN3_Chassis_Rx_Data_A.self_blood)atk_cnt++;
-            if(atk_cnt > 100)atk_flag = 0;
             break;
         }
-        case (0x99):{
+        case (0x199):{
             memcpy(&CAN3_Chassis_Rx_Data_B, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_B_t));
             break;
         }
-        case (0x78):{
+        case (0x178):{
             memcpy(&CAN3_Chassis_Rx_Data_C, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_C_t));
             Booster_A.Set_Heat(CAN3_Chassis_Rx_Data_C.Booster_Heat_A);
             Booster_B.Set_Heat(CAN3_Chassis_Rx_Data_C.Booster_Heat_B);
             break;
         }
-        case (0x98):{
+        case (0x198):{
             memcpy(&CAN3_Chassis_Rx_Data_D, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_D_t));
             break;
         }
-        case (0x97):{
+        case (0x197):{
             memcpy(&CAN3_Chassis_Rx_Data_E, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_E_t));
+            break;
+        }
+        case (0x196):{
+            memcpy(&CAN3_Chassis_Rx_Data_F, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_F_t));
+            break;
+        }
+        case (0x191):{
+            memcpy(&CAN3_Chassis_Rx_Data_G, CAN_Manage_Object->Rx_Buffer.Data, sizeof(Referee_Rx_G_t));
             break;
         }
     }
@@ -471,7 +500,8 @@ void Class_Chariot::Control_Chassis()
             chassis_omega = 0;
             break;
         }
-        case(Chassis_Control_Type_FLLOW):{//随动 附有非随动和受击陀螺逻辑
+        case(Chassis_Control_Type_FLLOW):
+        {   //随动 附有非随动和受击陀螺逻辑
             if(Gimbal.Motor_Main_Yaw.Get_LK_Motor_Status() == LK_Motor_Status_DISABLE){//大yaw离线失能
                 Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_DISABLE);           
             }
@@ -498,13 +528,19 @@ void Class_Chariot::Control_Chassis()
             }
             break;
         }
-        case(Chassis_Control_Type_SPIN):{
+        case(Chassis_Control_Type_SPIN):
+        {
             chassis_omega = 0.75f;
             relative_angle += Gimbal.Motor_Main_Yaw.Get_Now_Omega_Radian() * Offset_K;
             chassis_velocity_x = Chassis.Get_Target_Velocity_X() * cos(relative_angle) - Chassis.Get_Target_Velocity_Y() * sin(relative_angle);
             chassis_velocity_y = Chassis.Get_Target_Velocity_X() * sin(relative_angle) + Chassis.Get_Target_Velocity_Y() * cos(relative_angle);
-            if(DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN && DR16.Get_Left_Switch() == DR16_Switch_Status_UP)chassis_omega = -0.75f;
-            if(MiniPC.Get_Chassis_Target_Velocity_Omega() != 0.f && DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
+            if(DR16.Get_Right_Switch() == DR16_Switch_Status_DOWN &&
+                DR16.Get_Left_Switch() == DR16_Switch_Status_UP)
+            {
+                chassis_omega = -0.75f;
+            }
+            if(MiniPC.Get_Chassis_Target_Velocity_Omega() != 0.f && 
+                DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN)
             {
                 chassis_omega = float(MiniPC.Get_Chassis_Target_Velocity_Omega() / 100.f);
             }
@@ -742,7 +778,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     #ifdef CHASSIS
         // 底盘给云台发消息
         CAN_Chassis_Tx_Gimbal_Callback();
-
+        
         //云台，随动掉线保护
         if(Get_Gimbal_Status() == DR16_Status_ENABLE || Referee.Get_Game_Stage() == Referee_Game_Status_Stage_BATTLE){
             Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
@@ -754,6 +790,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
                 Chassis.Motor_Steer[i].Set_Out(0.0f);
             }
         }
+        //DWT_SysTimeUpdate();
 				
     #elif defined(GIMBAL)
 

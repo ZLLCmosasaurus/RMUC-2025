@@ -115,6 +115,7 @@ public:
     inline Enum_Warning_Status Get_Warning_Status();
     inline Enum_Supercap_Mode Get_Supercap_Mode();
     inline uint16_t Get_Buffer_Power();
+    inline uint8_t Get_Supercap_Proportion();
     
 
     inline void Set_Limit_Power(float __Limit_Power);
@@ -254,6 +255,10 @@ Enum_Supercap_Mode Class_Supercap::Get_Supercap_Mode()
 uint16_t Class_Supercap::Get_Buffer_Power()
 {
     return(CAN_Supercap_Rx_Data_Normal.Buffer_Power);
+}
+uint8_t Class_Supercap::Get_Supercap_Proportion()
+{
+    return(CAN_Supercap_Rx_Data_Normal.Cap_Proportion);
 }
 /**
  * @brief 设定绝对最大限制功率

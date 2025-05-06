@@ -1,38 +1,22 @@
 
-GraphedExpression="((((chariot).Gimbal).Motor_Main_Yaw).PID_Omega).Pre_Target", Color=#a00909
-GraphedExpression="((((chariot).Gimbal).Motor_Main_Yaw).PID_Angle).Pre_Target", Color=#09a01b
-GraphedExpression="((((chariot).Gimbal).Motor_Main_Yaw).PID_Angle).Pre_Now", Color=#ff007f
-GraphedExpression="((chariot).Gimbal).pre_angle_main", Color=#550000
-GraphedExpression="test_angle", Color=#0964a0
-GraphedExpression="test_angle_a", Color=#094fa0
-GraphedExpression="(((chariot).MiniPC).Data_NUC_To_MCU).Gimbal_Angular_Velocity_Yaw_Main", DisplayFormat=DISPLAY_FORMAT_DEC, Color=#0940a0
-OpenDocument="main.c", FilePath="D:/Embedded system/Project/RM/M57_New/Core/Src/main.c", Line=67
-OpenDocument="dvc_minipc.h", FilePath="D:/Embedded system/Project/RM/M57_New/User/Device/Inc/dvc_minipc.h", Line=0
-OpenDocument="arm_mat_mult_f32.c", FilePath="D:/Embedded system/Tool/keil5/ARM/CMSIS-DSP/1.14.2/Source/MatrixFunctions/arm_mat_mult_f32.c", Line=957
-OpenDocument="crt_gimbal.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Chariot/Src/crt_gimbal.cpp", Line=419
-OpenDocument="tsk_config_and_callback.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Task/Src/tsk_config_and_callback.cpp", Line=375
-OpenDocument="dvc_lkmotor.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Device/Src/dvc_lkmotor.cpp", Line=308
-OpenDocument="dvc_djimotor.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Device/Src/dvc_djimotor.cpp", Line=497
-OpenDocument="stm32h7xx_it.c", FilePath="D:/Embedded system/Project/RM/M57_New/Core/Src/stm32h7xx_it.c", Line=101
+OpenDocument="stm32h7xx_hal_pcd.c", FilePath="D:/Embedded system/Project/RM/M57_New/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pcd.c", Line=2319
+OpenDocument="arm_mat_mult_f32.c", FilePath="D:/Embedded system/Tool/keil5/ARM/CMSIS-DSP/1.14.2/Source/MatrixFunctions/arm_mat_mult_f32.c", Line=975
 OpenDocument="startup_stm32h723xx.s", FilePath="D:/Embedded system/Project/RM/M57_New/MDK-ARM/startup_stm32h723xx.s", Line=248
-OpenDocument="stm32h7xx_hal_spi.c", FilePath="D:/Embedded system/Project/RM/M57_New/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c", Line=1350
-OpenDocument="crt_booster.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Chariot/Src/crt_booster.cpp", Line=279
-OpenDocument="alg_pid.h", FilePath="D:/Embedded system/Project/RM/M57_New/User/Algorithm/Inc/alg_pid.h", Line=79
-OpenDocument="stm32h7xx_hal_fdcan.c", FilePath="D:/Embedded system/Project/RM/M57_New/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c", Line=2740
-OpenDocument="stm32h7xx_hal_uart.c", FilePath="D:/Embedded system/Project/RM/M57_New/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c", Line=3409
+OpenDocument="QuaternionEKF.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Algorithm/Src/QuaternionEKF.cpp", Line=98
+OpenDocument="tsk_config_and_callback.cpp", FilePath="D:/Embedded system/Project/RM/M57_New/User/Task/Src/tsk_config_and_callback.cpp", Line=45
+OpenDocument="main.c", FilePath="D:/Embedded system/Project/RM/M57_New/Core/Src/main.c", Line=68
 OpenToolbar="Debug", Floating=0, x=0, y=0
 OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=444, h=610, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=1077, h=586, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=1077, h=586, TabPos=0, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Data Sampling", DockArea=BOTTOM, x=0, y=0, w=838, h=966, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
-OpenWindow="Timeline", DockArea=BOTTOM, x=1, y=0, w=2041, h=966, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="2 s", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;25", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="1743;-91", CodeGraphLegendShown=0, CodeGraphLegendPosition="1766;0"
+OpenWindow="Timeline", DockArea=BOTTOM, x=1, y=0, w=2041, h=966, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="20 s", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;25", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="1743;0", CodeGraphLegendShown=0, CodeGraphLegendPosition="1766;0"
 TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[339;116;100;116;1224]
-TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";" ((((chariot).Gimbal).Motor_Main_Yaw).PID_Omega).Pre_Target";" ((((chariot).Gimbal).Motor_Main_Yaw).PID_Angle).Pre_Target";" ((((chariot).Gimbal).Motor_Main_Yaw).PID_Angle).Pre_Now";" ((chariot).Gimbal).pre_angle_main";" test_angle";" test_angle_a";" (((chariot).MiniPC).Data_NUC_To_MCU).Gimbal_Angular_Velocity_Yaw_Main"], ColWidths=[100;100;100;100;100;100;100;100;100]
-TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="DESCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[641;196;105;100;100;127;149;171;171]
+TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[100;100]
+TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="DESCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[641;100;105;100;100;127;149;171;171]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[545;433;112;101]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location"], ColWidths=[545;433;131]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;614]
 WatchedExpression="chariot", RefreshRate=5, Window=Watched Data 1
-WatchedExpression="ang", Window=Watched Data 1
-WatchedExpression="pre_angle_main", Window=Watched Data 1
+WatchedExpression="yaw_offset", Window=Watched Data 1

@@ -69,11 +69,14 @@ uint8_t CAN3_Chassis_Tx_Data_B[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_C[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_D[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_Chassis_Tx_Data_E[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_F[8];   //底盘给云台发送缓冲区
+uint8_t CAN3_Chassis_Tx_Data_G[8];   //底盘给云台发送缓冲区
 uint8_t CAN3_MiniPC_Tx_Data_A[8];   //下位机发送缓冲区
 uint8_t CAN3_MiniPC_Tx_Data_B[8];   //下位机发送缓冲区
 uint8_t CAN3_MiniPC_Tx_Data_C[8];   //下位机发送缓冲区
 uint8_t CAN3_MiniPC_Tx_Data_D[8];   //下位机发送缓冲区
 uint8_t CAN3_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
+uint8_t CAN3_Sentry_CMD_Data[8];   //云台给底盘发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
 uint8_t CAN1_0x141_Tx_Data[8];
@@ -321,10 +324,9 @@ void TIM_CAN_PeriodElapsedCallback()
 {
     
     #ifdef CHASSIS
-    
-    static uint8_t mod5 = 0,mod10 = 0;
-    mod5++, mod10++;
-    if (mod5 == 5)
+    static uint8_t mod5 = 0,mod100 = 0,mod20 = 0;
+    mod5++, mod100++,mod20++;
+    if (mod5 == 5)  //200Hz
     {
         mod5 = 0;
         //3508    
@@ -335,23 +337,30 @@ void TIM_CAN_PeriodElapsedCallback()
         #endif
     }
     
-    if (mod10 == 10)
+    if (mod100 == 10) //10Hz
+    {
+        CAN_Send_Data(&hfdcan3, 0x191, CAN3_Chassis_Tx_Data_G, 8);
+        mod100 = 0;
+    }
+    if (mod20 == 20) //50Hz
     {
         //上板
-        CAN_Send_Data(&hfdcan3, 0x88, CAN3_Chassis_Tx_Data_A, 8);
-        CAN_Send_Data(&hfdcan3, 0x99, CAN3_Chassis_Tx_Data_B, 8);
-        CAN_Send_Data(&hfdcan3, 0x78, CAN3_Chassis_Tx_Data_C, 8);
-        CAN_Send_Data(&hfdcan3, 0x98, CAN3_Chassis_Tx_Data_D, 8);
-        CAN_Send_Data(&hfdcan3, 0x97, CAN3_Chassis_Tx_Data_E, 8);
+        CAN_Send_Data(&hfdcan3, 0x188, CAN3_Chassis_Tx_Data_A, 8);
+        CAN_Send_Data(&hfdcan3, 0x199, CAN3_Chassis_Tx_Data_B, 8);
+        CAN_Send_Data(&hfdcan3, 0x178, CAN3_Chassis_Tx_Data_C, 8);      
+        CAN_Send_Data(&hfdcan3, 0x197, CAN3_Chassis_Tx_Data_E, 8);
+        CAN_Send_Data(&hfdcan3, 0x198, CAN3_Chassis_Tx_Data_D, 8);
+        CAN_Send_Data(&hfdcan3, 0x196, CAN3_Chassis_Tx_Data_F, 8);
         //超电
-        CAN_Send_Data(&hfdcan3, 0x66, CAN_Supercap_Tx_Data, 8);
-        mod10 = 0;
+        CAN_Send_Data(&hfdcan2, 0x66, CAN_Supercap_Tx_Data, 8);
+        mod20 = 0;
     }
     #elif defined (GIMBAL)
 
-    static uint8_t mod5 = 0,mod2 = 0;
+    static uint8_t mod5 = 0,mod4 = 0,mod20 = 0;
     mod5++;
-    mod2++;
+    mod4++;
+    mod20++;
     
 //    CAN1_0x1fe_Tx_Data[2] = test >> 8;//B_pitch
 //    CAN1_0x1fe_Tx_Data[3] = test;
@@ -374,17 +383,22 @@ void TIM_CAN_PeriodElapsedCallback()
         //  CAN3  下板 大yaw        
         CAN_Send_Data(&hfdcan3, 0x200, CAN3_0x200_Tx_Data, 8); //拨弹盘  按照0x200 ID 发送 可控制多个电机
         CAN_Send_Data(&hfdcan3, 0x77, CAN3_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
-        // CAN3   MiniPC 
-        CAN_Send_Data(&hfdcan3, 0x100, CAN3_MiniPC_Tx_Data_A, 8); //给上位机发送 按照0x100 ID 发送
-        CAN_Send_Data(&hfdcan3, 0x101, CAN3_MiniPC_Tx_Data_B, 8); //给上位机发送 按照0x101 ID 发送
-        CAN_Send_Data(&hfdcan3, 0x102, CAN3_MiniPC_Tx_Data_C, 8); //给上位机发送 按照0x102 ID 发送
-        CAN_Send_Data(&hfdcan3, 0x103, CAN3_MiniPC_Tx_Data_D, 8); //给上位机发送 按照0x103 ID 发送
-    }
-    if(mod2 == 2)
-    {
-        mod2 = 0;
         CAN_Send_Data(&hfdcan3, 0x141, CAN3_0x141_Tx_Data, 8); //大yaw-MF9025  按照0x141 ID 发送 一次只能控制一个电机
+        // CAN3   MiniPC 
+        // CAN_Send_Data(&hfdcan3, 0x100, CAN3_MiniPC_Tx_Data_A, 8); //给上位机发送 按照0x100 ID 发送
+        // CAN_Send_Data(&hfdcan3, 0x101, CAN3_MiniPC_Tx_Data_B, 8); //给上位机发送 按照0x101 ID 发送
+        // CAN_Send_Data(&hfdcan3, 0x102, CAN3_MiniPC_Tx_Data_C, 8); //给上位机发送 按照0x102 ID 发送
+        // CAN_Send_Data(&hfdcan3, 0x103, CAN3_MiniPC_Tx_Data_D, 8); //给上位机发送 按照0x103 ID 发送
+    }
+    if(mod4 == 4)
+    {
+        mod4 = 0;
     }   
+    if (mod20 == 20) //50Hz
+    {
+        CAN_Send_Data(&hfdcan3, 0x95, CAN3_Sentry_CMD_Data, 8); //给底盘转发自主决策命令和雷达信息 按照0x95 ID 发送
+        mod20 = 0;
+    }
     #endif
 
 }
