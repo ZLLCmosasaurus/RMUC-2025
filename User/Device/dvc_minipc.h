@@ -21,6 +21,7 @@
 #include "dvc_referee.h"
 #include "math.h"
 #include "drv_uart.h"
+#include "drv_can.h"
 /* Exported macros -----------------------------------------------------------*/
 #ifdef __cplusplus
 /* Exported types ------------------------------------------------------------*/
@@ -147,7 +148,30 @@ enum Enum_MiniPC_Self_Color : uint8_t
     MiniPC_Self_Color_RED = 0,
     MiniPC_Self_Color_BLUE,
 };
+enum Enum_Radar_Target : uint8_t
+{
+    Radar_Target_Pos_Outpost = 0,
+    Radar_Target_Pos_Base,
+} ;
+enum Enum_Radar_Target_Outpost : uint8_t
+{
+    Radar_Target_Pos_Outpost_A = 0,//7m
+    Radar_Target_Pos_Outpost_B,//11m
+    Radar_Target_Pos_C,
+    Radar_Target_Pos_D,
+};
 
+enum Enum_Radar_Target_Base : uint8_t
+{
+    Radar_Target_Pos_Base_A = 0,//17m
+    Radar_Target_Pos_Base_B,//21m
+};
+
+enum Enum_Radar_Control_Type : uint8_t
+{
+    Radar_Control_Type_Person = 0,
+    Radar_Control_Type_UWB,
+};
 /**
  * @brief 迷你主机源数据
  *
@@ -206,6 +230,7 @@ struct Struct_MiniPC_Tx_Data
     uint8_t Carriage_Return;
 } __attribute__((packed));
 
+
 /**
  * @brief 发送数据包
  */
@@ -255,6 +280,8 @@ class Class_MiniPC
 public:
     void Init(Struct_USB_Manage_Object* __MiniPC_USB_Manage_Object, uint8_t __frame_header = 0x5A, uint8_t __frame_rear = 0x01);
     void Init_UART(Struct_UART_Manage_Object* __UART_Manage_Object, uint8_t __frame_header = 0x5A);
+    void Init_CAN(CAN_HandleTypeDef *hcan);
+
     inline Enum_MiniPC_Status Get_MiniPC_Status();
     inline float Get_Chassis_Target_Velocity_X();
     inline float Get_Chassis_Target_Velocity_Y();
@@ -292,7 +319,14 @@ public:
     inline void Set_MiniPC_Type(Enum_MiniPC_Type __MiniPC_Type);
     inline void Set_bullet_v(float __bullet_v);
     inline void Set_Tx_Angle_Encoder_Yaw(float Tx_Angle_Encoder_Yaw);
+    inline void Set_Radar_Target(Enum_Radar_Target __Radar_Target);
+    inline void Set_Radar_Target_Outpost(Enum_Radar_Target_Outpost __Radar_Target_Outpost);
+    inline void Set_Radar_Target_Base(Enum_Radar_Target_Base __Radar_Target_Base);
+    inline void Set_UWB_Pos_X(float __UWB_Pos_X);
+    inline void Set_UWB_Pos_Y(float __UWB_Pos_Y);
+    inline void Set_Radar_Control_Type(Enum_Radar_Control_Type __Radar_Control_Type);
 
+    inline Enum_Radar_Control_Type Get_Radar_Control_Type();
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
     uint16_t Get_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength, uint16_t wCRC);
@@ -310,6 +344,7 @@ public:
 
     void USB_RxCpltCallback(uint8_t *Rx_Data);
     void UART_RxCpltCallback(uint8_t *Rx_Data);
+    void CAN_RxCpltCallback(uint8_t *Rx_Data);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
     void TIM_Write_PeriodElapsedCallback();
     void calc_Pos_X_Y_Z(float x, float y, float z, float *calc_x, float *calc_y, float *calc_z);
@@ -325,6 +360,13 @@ protected:
     Struct_USB_Manage_Object *USB_Manage_Object;
     //绑定的UART
     Struct_UART_Manage_Object *UART_Manage_Object;
+     //绑定的CAN
+    Struct_CAN_Manage_Object *CAN_Manage_Object;
+    //收数据绑定的CAN ID, 切记避开0x201~0x20b, 默认收包CAN1的0x210, 滤波器最后一个, 发包CAN1的0x220
+    uint16_t CAN_ID;
+    //发送缓存区
+    uint8_t *CAN_Tx_Data;
+
     //数据包头标
     uint8_t Frame_Header;
     //数据包尾标
@@ -340,6 +382,9 @@ protected:
     //前一时刻的迷你主机接收flag
     uint32_t Pre_Flag = 0;
     uint32_t Pre_UART_Flag = 0;
+    
+    uint32_t CAN_Flag = 0;
+    uint32_t Pre_CAN_Flag = 0;
     //读变量
 
     //迷你主机状态
@@ -350,28 +395,35 @@ protected:
 
     Pack_tx_t Pack_Tx;
     Pack_rx_t Pack_Rx;
-
+    //写变量
 	float Tx_Angle_Roll;
 	float Tx_Angle_Pitch;
 	float Tx_Angle_Yaw;
     float Tx_Angle_Encoder_Yaw;
-    float Tx_Flag_Control_Radar;
+    uint8_t Tx_Flag_Control_Radar;
 
+    float UWB_Pos_X = 0.0f;
+    float UWB_Pos_Y = 0.0f;
+    
+    //读变量
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
 	float Rx_Angle_Yaw;
 
-    float g = 9.7204f; // 重力加速度
+    float g = 9.73365f; // 重力加速度
     float bullet_v = 15.8;//28.0; // 子弹速度  
     float pitch_imu_offset = 4.13314819;
     // 距离
     float Distance;
 
     //写变量
-
+    Enum_Radar_Target Radar_Target = Radar_Target_Pos_Outpost;
+    Enum_Radar_Target_Outpost Radar_Target_Outpost = Radar_Target_Pos_Outpost_A;
+    Enum_Radar_Target_Base Radar_Target_Base = Radar_Target_Pos_Base_A;
+    Enum_Radar_Control_Type Radar_Control_Type = Radar_Control_Type_Person;
     //迷你主机对外接口信息
     Struct_MiniPC_Tx_Data Data_MCU_To_NUC;
-
+     
     //读写变量
 
     //内部函数
@@ -381,6 +433,10 @@ protected:
 
     void Data_Process_UART(uint8_t *Rx_Data);
     void Output_UART();
+
+    void Data_Process_CAN(uint8_t *Rx_Data);
+    void Output_CAN();
+
 };
 /* Exported variables --------------------------------------------------------*/
 
@@ -677,7 +733,34 @@ void Class_MiniPC::Set_Tx_Angle_Encoder_Yaw(float __Tx_Angle_Encoder_Yaw)
 {
     Tx_Angle_Encoder_Yaw = __Tx_Angle_Encoder_Yaw;
 }
-
+void Class_MiniPC::Set_Radar_Target(Enum_Radar_Target __Radar_Target)
+{
+    Radar_Target = __Radar_Target;
+}
+void Class_MiniPC::Set_Radar_Target_Outpost(Enum_Radar_Target_Outpost __Radar_Target_Outpost)
+{
+    Radar_Target_Outpost = __Radar_Target_Outpost;
+}
+void Class_MiniPC::Set_Radar_Target_Base(Enum_Radar_Target_Base __Radar_Target_Base)
+{
+    Radar_Target_Base = __Radar_Target_Base;
+}
+void Class_MiniPC::Set_UWB_Pos_X(float __UWB_Pos_X)
+{
+    UWB_Pos_X = __UWB_Pos_X;
+}
+void Class_MiniPC::Set_UWB_Pos_Y(float __UWB_Pos_Y)
+{
+    UWB_Pos_Y = __UWB_Pos_Y;
+}
+void Class_MiniPC::Set_Radar_Control_Type(Enum_Radar_Control_Type __Radar_Control_Type)
+{
+    Radar_Control_Type = __Radar_Control_Type;
+}
+Enum_Radar_Control_Type Class_MiniPC::Get_Radar_Control_Type()
+{
+    return Radar_Control_Type;
+}
 /**
  * @brief 设定迷你主机类型
  *

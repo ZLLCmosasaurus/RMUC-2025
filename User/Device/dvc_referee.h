@@ -969,16 +969,16 @@ struct Struct_Referee_Rx_Data_Robot_Dart_Command
  * Data 最大112
  *
  */
-// struct Struct_Referee_Data_Interaction_Students
-// {
-//     uint16_t Header;
-//     Enum_Referee_Data_Robots_ID Sender;
-//     uint8_t Reserved_1;
-//     Enum_Referee_Data_Robots_ID Receiver;
-//     uint8_t Reserved_2;
-//     uint8_t Data[112];
-//     uint16_t CRC_16;
-// }__attribute__((packed));
+struct Struct_Referee_Data_Interaction_Students
+{
+    uint16_t Header;
+    Enum_Referee_Data_Robots_ID Sender;
+    uint8_t Reserved_1;
+    Enum_Referee_Data_Robots_ID Receiver;
+    uint8_t Reserved_2;
+    uint8_t Data[2];
+    uint16_t CRC_16;
+}__attribute__((packed));
 
 /**
  * @brief 裁判系统发送的数据, 0x0301图形删除交互信息, 用户自主发送
@@ -1032,7 +1032,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_5
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic[4];
+    Union_Graphic Graphic[5];
 } __attribute__((packed));
 
 /**
@@ -1045,7 +1045,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_7
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic[6];
+    Union_Graphic Graphic[7];
 } __attribute__((packed));
 
 /**
@@ -1212,6 +1212,7 @@ public:
     inline Enum_Referee_Data_Robots_ID Get_Radar_Send_Robot_ID();
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
+    inline uint8_t Get_Referee_Data_Interaction_Students();
 
     inline uint16_t Get_Circle_Index(uint16_t index);
 
@@ -1305,7 +1306,9 @@ protected:
     //飞镖状态
     Struct_Referee_Rx_Data_Robot_Dart_Command Robot_Dart_Command;
     //客户端接收小地图交互信息
-    Struct_Referee_Tx_Data_Interaction_Client_Receive Interaction_Client_Receive;
+    Struct_Referee_Tx_Data_Interaction_Client_Receive Interaction_Client_Receive;   
+    //
+    Struct_Referee_Data_Interaction_Students Data_Interaction_Students;
 
     //写变量
 
@@ -1320,7 +1323,7 @@ protected:
     //画七个图形交互信息
     Struct_Referee_Tx_Data_Interaction_Graphic_7 Interaction_Graphic_7;
     //画字符图形交互信息
-    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[10];
+    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[30];
     //雷达发送小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Radar_Send Interaction_Radar_Send;
 
@@ -2234,6 +2237,10 @@ float Class_Referee::Get_Radar_Send_Coordinate_Y()
     return (Interaction_Client_Receive.Coordinate_Y);
 }
 
+uint8_t Class_Referee::Get_Referee_Data_Interaction_Students()
+{
+    return (Data_Interaction_Students.Data[0]);
+}
 
 uint16_t Class_Referee::Get_Circle_Index(uint16_t index)
 {

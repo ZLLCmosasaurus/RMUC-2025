@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "crt_booster.h"
-
+#include "config.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -217,6 +217,8 @@ void Class_Booster::Init()
     FSM_Antijamming.Booster = this;
     FSM_Antijamming.Init(5, 0);
 
+    FSM_Bullet_Velocity.Init(3, 0);
+
     //拨弹盘电机(需要从新调更新参数)DJI_motor_3508 0X201
     Motor_Driver.PID_Angle.Init(80.0f, 0.8f, 1.0f, 0.0f, 5.0f * PI, 5.0f * PI);
     Motor_Driver.PID_Omega.Init(3000.0f, 40.0f, 0.0f, 0.0f, Motor_Driver.Get_Output_Max(), Motor_Driver.Get_Output_Max());
@@ -336,14 +338,13 @@ void Class_Booster::Output()
     break;
 #endif
     }
-
     // 控制摩擦轮
     if (Friction_Control_Type != Friction_Control_Type_DISABLE)
     {
-         Fric[0].Set_Target_Omega_Rpm(Fric_High_Rpm);
-        Fric[1].Set_Target_Omega_Rpm(-Fric_High_Rpm);
-        Fric[2].Set_Target_Omega_Rpm(-Fric_Low_Rpm);
-        Fric[3].Set_Target_Omega_Rpm(Fric_Low_Rpm);
+         Fric[0].Set_Target_Omega_Rpm((Fric_High_Rpm + Fric_Transform_Rpm));
+        Fric[1].Set_Target_Omega_Rpm(-(Fric_High_Rpm + Fric_Transform_Rpm));
+        Fric[2].Set_Target_Omega_Rpm(-(Fric_Low_Rpm + Fric_Transform_Rpm));
+        Fric[3].Set_Target_Omega_Rpm((Fric_Low_Rpm + Fric_Transform_Rpm));
     }
     else
     {
@@ -352,8 +353,101 @@ void Class_Booster::Output()
         Fric[2].Set_Target_Omega_Rpm(0);
         Fric[3].Set_Target_Omega_Rpm(0);
     }
+
 }
 
+void Class_Booster::TIM_Adjust_Bullet_Velocity_PeriodElapsedCallback()
+{
+#ifdef Booster_Speed_Adjust
+        if (Referee_Bullet_Velocity != Pre_Referee_Bullet_Velocity)
+        {
+            Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_ENABLE;
+        }
+        else
+        {
+            Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_DISABLE;
+        }
+
+        Pre_Referee_Bullet_Velocity = Referee_Bullet_Velocity;
+
+        switch (Referee_Bullet_Velocity_Updata_Status)
+        {
+        case Referee_Bullet_Velocity_Updata_Status_ENABLE:
+        {
+            if(Referee_Bullet_Velocity >= 16.0f)
+            {
+                Fric_Transform_Rpm -= (int16_t)(300.0f * fabs(Referee_Bullet_Velocity - 16.0f));
+            }
+            else if (Referee_Bullet_Velocity >= 15.9f && Referee_Bullet_Velocity < 16.0f)
+            {
+                 Fric_Transform_Rpm -= (int16_t)(150.0f * fabs(Referee_Bullet_Velocity - 15.9f));
+            }
+            else if(Referee_Bullet_Velocity <= 15.75f)
+            {
+                Fric_Transform_Rpm += (int16_t)(100.0f * fabs(Referee_Bullet_Velocity - 15.75f));
+            }
+        }
+        break;
+        default:
+        {
+            //不做处理
+        }
+        break;
+        }
+    // if (Pre_Referee_Bullet_Velocity != Referee_Bullet_Velocity)
+    // {
+    //     Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_ENABLE;
+    // }
+    // else
+    // {
+    //     Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_DISABLE;
+    // }
+
+    // // 速度调整状态机
+    // // FSM_Bullet_Velocity.Status[FSM_Bullet_Velocity.Get_Now_Status_Serial()].Time++;
+    // switch (FSM_Bullet_Velocity.Get_Now_Status_Serial())
+    // {
+    // case 0:
+    // {
+    //     if (Projectile_Allowance_42mm > 0)
+    //     {
+    //         switch (Referee_Bullet_Velocity_Updata_Status)
+    //         {
+    //         case Referee_Bullet_Velocity_Updata_Status_ENABLE:
+    //         {
+    //             if (Referee_Bullet_Velocity >= 15.9f)
+    //             {
+    //                 FSM_Bullet_Velocity.Set_Status(1);
+    //             }
+    //             else if (Referee_Bullet_Velocity <= 15.65f)
+    //             {
+    //                 FSM_Bullet_Velocity.Set_Status(2);
+    //             }
+    //         }
+    //         break;
+
+    //         default:
+    //             break;
+    //         }
+    //     }
+    // }
+    // break;
+    // case 1: // 超速调整
+    // {
+    //     Fric_Transform_Rpm -= (int16_t)(150.0f * fabs(Referee_Bullet_Velocity - 15.9f));
+    //     FSM_Bullet_Velocity.Set_Status(0);
+    // }
+    // break;
+    // case 2: // 低速调整
+    // {
+    //     Fric_Transform_Rpm += (int16_t)(150.0f * fabs(Referee_Bullet_Velocity - 15.65f));
+    //     FSM_Bullet_Velocity.Set_Status(0);
+    // }
+    // break;
+    // }
+    // Pre_Referee_Bullet_Velocity = Referee_Bullet_Velocity;
+#endif
+}
 /**
  * @brief 定时器计算函数
  *
@@ -368,12 +462,15 @@ void Class_Booster::TIM_Calculate_PeriodElapsedCallback()
     // FSM_Heat_Detect.Reload_TIM_Status_PeriodElapsedCallback();
     // 卡弹处理
     FSM_Antijamming.Reload_TIM_Status_PeriodElapsedCallback();
+    TIM_Adjust_Bullet_Velocity_PeriodElapsedCallback();
      //Output();
     Motor_Driver.TIM_PID_PeriodElapsedCallback();
     for (auto i = 0; i < 4; i++)
     {
         Fric[i].TIM_PID_PeriodElapsedCallback();
     }
+
+
     Test_Torque = Motor_Driver.Get_Now_Torque();
     Test_Target_Driver_Angle = Get_Drvier_Angle() * 180.0f / PI;
     Test_Actual_Driver_Angle = Motor_Driver.Get_Now_Angle();

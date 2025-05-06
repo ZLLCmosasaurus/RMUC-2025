@@ -153,14 +153,9 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         chariot.Booster.Fric[3].CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
-    case (0x205):
+    case (0xa1):
     {
-        chariot.Image.Motor_Image_Roll.CAN_RxCpltCallback(CAN_RxMessage->Data);
-    }
-    break;
-    case (0x206):
-    {
-        chariot.Image.Motor_Image_Pitch.CAN_RxCpltCallback(CAN_RxMessage->Data);
+        chariot.MiniPC.CAN_RxCpltCallback(CAN_RxMessage->Data);
     }
     break;
     }
@@ -172,7 +167,6 @@ void Gimbal_Device_CAN1_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
  * @param CAN_RxMessage CAN2收到的消息
  */
 #ifdef GIMBAL
-float Shoot;
 void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
 {
     switch (CAN_RxMessage->Header.StdId)
@@ -182,14 +176,18 @@ void Gimbal_Device_CAN2_Callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)
         //chariot.CAN_Gimbal_Rx_Chassis_Callback(CAN_RxMessage->Data);
         Enum_Referee_Data_Robots_ID robo_id;
         Enum_Referee_Game_Status_Stage game_stage;
-        float shoot_speed;
+        int16_t shoot_speed,Pos_X,Pos_Y;
         memcpy(&robo_id,CAN_RxMessage->Data,sizeof(uint8_t));
         memcpy(&game_stage,CAN_RxMessage->Data+1,sizeof(uint8_t));
-        memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(float));
+        memcpy(&shoot_speed,CAN_RxMessage->Data+2,sizeof(int16_t));
+        memcpy(&Pos_X,CAN_RxMessage->Data+4,sizeof(int16_t));    
+        memcpy(&Pos_Y,CAN_RxMessage->Data+6,sizeof(int16_t));
         chariot.Referee.Set_Robot_ID(robo_id);
         chariot.Referee.Set_Game_Stage(game_stage);
-        chariot.Referee.Set_Shoot_Speed(shoot_speed);
-        Math_Constrain(&shoot_speed,5.0f,17.0f);
+        chariot.Booster.Set_Referee_Bullet_Velocity((float)shoot_speed / 1000.0f);
+        chariot.MiniPC.Set_UWB_Pos_X((float)Pos_X / 1000.0f);
+        chariot.MiniPC.Set_UWB_Pos_Y((float)Pos_Y / 1000.0f);
+        //Math_Constrain(&shoot_speed,5.0f,17.0f);
 
     }
     break;
@@ -390,7 +388,8 @@ void Task1ms_TIM5_Callback()
         #ifdef USE_DR16
 
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
-
+        chariot.TIM_Unline_Protect_PeriodElapsedCallback();
+        
         #elif defined(USE_VT13)
 
         chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
@@ -403,13 +402,13 @@ void Task1ms_TIM5_Callback()
 
         TIM_CAN_PeriodElapsedCallback();
         #ifdef GIMBAL
-        static int mod5 = 0;
-        mod5++;
-        if (mod5 == 5)
-        {
-            TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-            mod5 = 0;
-        }
+        // static int mod5 = 0;
+        // mod5++;
+        // if (mod5 == 5)
+        // {
+        //     TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
+        //     mod5 = 0;
+        // }
         #endif
     }
 }

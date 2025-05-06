@@ -167,9 +167,11 @@ public:
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
         friend class Class_FSM_Alive_Control;
-
+        
         Class_FSM_Alive_Control_VT13 FSM_Alive_Control_VT13;
         friend class Class_FSM_Alive_Control_VT13;
+
+        Class_FSM FSM_VT13_Alive_Protect;
     #endif
 
     void Init(float __DR16_Dead_Zone = 0);
@@ -232,8 +234,19 @@ public:
     Enum_Supercap_Control_Status  Supercap_Control_Status = Supercap_Control_Status_DISABLE;
     //迷你主机状态
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
+    Enum_Radar_Target UI_Radar_Target = Radar_Target_Pos_Outpost;
+    Enum_Radar_Target_Outpost UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
+     Enum_Radar_Control_Type UI_Radar_Control_Type = Radar_Control_Type_Person;
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
+    //雷达监测危险状态
+    uint8_t UI_Flying_Risk_Status = 0;
+    uint8_t UI_DogHole_1_Risk_Status = 0;
+    uint8_t UI_Steps_Risk_Status = 0;
+    uint8_t UI_DogHole_2_Risk_Status = 0;
+    //
+    uint8_t Swtich_Roll = 0;
+    uint8_t Swtich_Pitch = 0;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
     float Shoot_Speed = 0;
@@ -249,7 +262,7 @@ protected:
 
     #ifdef CHASSIS
         //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 1.07800508f;
+        float Reference_Angle = 0.980980754f;
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;//12.0f;
         //底盘转换后的角度（数据来源yaw电机）
@@ -298,7 +311,7 @@ protected:
         float VT13_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
         //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
         float DR16_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
-        float VT13_Mouse_Pitch_Angle_Resolution = 57.8f*2.0f;
+        float VT13_Mouse_Pitch_Angle_Resolution = 57.8f*4.0f;
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
         //迷你主机云台pitch自瞄控制系数
