@@ -167,7 +167,7 @@ protected:
     //摩擦轮角速度
     int16_t Fric_High_Rpm = 4975;//5025;//5075;
     int16_t Fric_Low_Rpm = 4825;//4875;//4925;
-    int16_t Fric_Transform_Rpm = -162;
+    int16_t Fric_Transform_Rpm = -154;
     //子弹实际速度
     float Referee_Bullet_Velocity = 0.0f; 
     float Pre_Referee_Bullet_Velocity = 0.0f;

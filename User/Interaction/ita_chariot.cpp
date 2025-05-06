@@ -154,7 +154,8 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     MiniPC_Status = (Enum_MiniPC_Status)(control_type >> 6 & 0x01);
     Referee_UI_Refresh_Status = (Enum_Referee_UI_Refresh_Status)(control_type >> 7 & 0x01);
     UI_Radar_Target = (Enum_Radar_Target)(ui_type & 0x01);
-    UI_Radar_Target_Pos = (Enum_Radar_Target_Outpost)(ui_type >> 1 & 0x01);
+    UI_Radar_Target_Pos = (Enum_Radar_Target_Outpost)(ui_type >> 1 & 0x03);
+    UI_Radar_Control_Type = (Enum_Radar_Control_Type)(ui_type >> 3 & 0x01);
     // 设定底盘控制类型
     Chassis.Set_Chassis_Control_Type(chassis_control_type);
     //小陀螺补偿角度
@@ -263,7 +264,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
     tmp_chassis_velocity_y = Math_Float_To_Int(chassis_velocity_y, -1 * Chassis.Get_Velocity_Y_Max(), Chassis.Get_Velocity_Y_Max(), 0, 0x7FFF);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 2, &tmp_chassis_velocity_y, sizeof(uint16_t));
 
-    ui_type = (uint8_t)(UI_Radar_Target_Pos << 1 | UI_Radar_Target);
+    ui_type = (uint8_t)(UI_Radar_Control_Type << 3 | UI_Radar_Target_Pos << 1 | UI_Radar_Target);
     memcpy(CAN2_Gimbal_Tx_Chassis_Data + 4, &ui_type, 1);
 
     tmp_gimbal_yaw = Math_Float_To_Int(gimbal_pitch, -50.f, 50.f ,0,0x7FFF);
@@ -345,18 +346,7 @@ void Class_Chariot::Control_Chassis()
         {
             Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
         }
-
-        // if(DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_TRIG_FREE_PRESSED)//按下切换开关超电
-        // {
-        //     if(Supercap_Control_Status == Supercap_Control_Status_DISABLE)
-        //     {
-        //         Supercap_Control_Status = Supercap_Control_Status_ENABLE;
-        //     }
-        //     else
-        //         Supercap_Control_Status = Supercap_Control_Status_DISABLE;
-
-        // }
-
+        
         static uint8_t Switch_Mode_Flag = 0;
         switch (Gimbal.Get_Launch_Mode())
         {
@@ -367,53 +357,65 @@ void Class_Chariot::Control_Chassis()
 
             if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED)
             {
-            switch (MiniPC.Get_Radar_Enable_Status())
-            {
-            case 1:
-            {
-                float transform_yaw_offest = 0.0f, transform_pitch_offest = 0.0f;
-                if (DR16.Get_Keyboard_Key_A() == DR16_Key_Status_PRESSED)
+                switch (MiniPC.Get_Radar_Enable_Status())
                 {
-                    transform_yaw_offest = Gimbal.Get_Transfrom_Yaw_Encoder_Angle();
-                    transform_yaw_offest += VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
-                    Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
-                }
-                else if (DR16.Get_Keyboard_Key_D() == DR16_Key_Status_PRESSED)
+                case 1:
                 {
-                    transform_yaw_offest = Gimbal.Get_Transfrom_Yaw_Encoder_Angle();
-                    transform_yaw_offest -= VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
-                    Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
+                    float transform_yaw_offest = 0.0f, transform_pitch_offest = 0.0f;
+                    if (DR16.Get_Keyboard_Key_A() == DR16_Key_Status_PRESSED)
+                    {
+                        transform_yaw_offest = Gimbal.Get_Transfrom_Yaw_Encoder_Angle();
+                        transform_yaw_offest += VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
+                        Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
+                    }
+                    else if (DR16.Get_Keyboard_Key_D() == DR16_Key_Status_PRESSED)
+                    {
+                        transform_yaw_offest = Gimbal.Get_Transfrom_Yaw_Encoder_Angle();
+                        transform_yaw_offest -= VT13_Mouse_Yaw_Angle_Resolution * Mouse_Yaw_k;
+                        Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
+                    }
+                    else if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED)
+                    {
+                        Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
+                        Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
+                    }
+                    else if (DR16.Get_Keyboard_Key_W() == DR16_Key_Status_PRESSED)
+                    {
+                        transform_pitch_offest = Gimbal.Get_Transfrom_Pitch_IMU_Angle();
+                        transform_pitch_offest -= VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
+                        Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
+                    }
+                    else if (DR16.Get_Keyboard_Key_S() == DR16_Key_Status_PRESSED)
+                    {
+                        transform_pitch_offest = Gimbal.Get_Transfrom_Pitch_IMU_Angle();
+                        transform_pitch_offest += VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
+                        Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
+                    }
+                    // else if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
+                    // {
+                    //     Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
+                    // }
                 }
-                else if (DR16.Get_Keyboard_Key_E() == DR16_Key_Status_TRIG_FREE_PRESSED)
+                break;
+                case 0:
                 {
-                    Gimbal.Set_Transfrom_Yaw_Encoder_Angle(transform_yaw_offest);
+                    // 接口
                 }
-                else if (DR16.Get_Keyboard_Key_W() == DR16_Key_Status_PRESSED)
-                {
-                    transform_pitch_offest = Gimbal.Get_Transfrom_Pitch_IMU_Angle();
-                    transform_pitch_offest -= VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
-                    Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
+                break;
                 }
-                else if (DR16.Get_Keyboard_Key_S() == DR16_Key_Status_PRESSED)
-                {
-                    transform_pitch_offest = Gimbal.Get_Transfrom_Pitch_IMU_Angle();
-                    transform_pitch_offest += VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
-                    Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
-                }
-                else if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
-                {
-                    Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
-                }
-            }
-            break;
-            case 0:
-            {
-                //接口
-            }
-            break;
-            }
-            }
 
+                //切换雷达辅助模式
+                if(DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_TRIG_FREE_PRESSED)
+                {
+                    if(MiniPC.Get_Radar_Control_Type() == Radar_Control_Type_Person)
+                        MiniPC.Set_Radar_Control_Type(Radar_Control_Type_UWB);
+                    else
+                        MiniPC.Set_Radar_Control_Type(Radar_Control_Type_Person);
+                    
+                    UI_Radar_Control_Type = MiniPC.Get_Radar_Control_Type();
+                }
+
+            }
             else if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
                 if (UI_Radar_Target == Radar_Target_Pos_Outpost)
@@ -423,13 +425,29 @@ void Class_Chariot::Control_Chassis()
 
                 MiniPC.Set_Radar_Target(UI_Radar_Target);
             }
-            else if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            else if (DR16.Get_Keyboard_Key_X() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
-                if (UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_A)
-                    UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
-                else
-                    UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
-
+                switch (UI_Radar_Target)
+                {
+                case Radar_Target_Pos_Outpost:
+                {
+                    if (UI_Radar_Target_Pos != Radar_Target_Pos_Outpost_B)
+                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
+                    else
+                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
+                }
+                break;
+                case Radar_Target_Pos_Base:
+                {
+                    if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_A)
+                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
+                    else if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_B)
+                        UI_Radar_Target_Pos = Radar_Target_Pos_C;
+                    else if(UI_Radar_Target_Pos == Radar_Target_Pos_C)
+                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
+                }
+                break;
+                }
                 MiniPC.Set_Radar_Target_Outpost(UI_Radar_Target_Pos);
             }
         }
@@ -480,6 +498,7 @@ void Class_Chariot::Control_Chassis()
                     Chassis.Set_Chassis_Control_Type(Chassis_Control_Type_FLLOW);
             }
         }
+        break;
         }
 
         // if(DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_PRESSED)
@@ -773,7 +792,6 @@ void Class_Chariot::Control_Gimbal()
                 Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
                 Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             }
-
             if (DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_PRESSED)
             {
                 float transform_yaw_offest_mode2 = 0.0f, transform_pitch_offest_mode2 = 0.0f;
@@ -803,10 +821,23 @@ void Class_Chariot::Control_Gimbal()
                 }
                 Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
             }
+            //
+            if(DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            {
+                Gimbal.Set_Launch_Mode(Launch_Disable);
+                Gimbal.Set_Target_Pitch_Angle(-4.5f);
+                Image.Set_Target_Image_Roll_Angle(-10.0f);
+                Image.Set_Target_Image_Pitch_Angle(5.0f);
+                Swtich_Pitch = 0;
+                Swtich_Roll = 0;
+            }
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+            
         }
         break;
         }
+
+        
         // Z键切换模式
         if (DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
@@ -946,7 +977,6 @@ void Class_Chariot::Control_Image()
     static float K;
     // 设置pitch yaw角度
     float tmp_image_pitch = 0.0f,tmp_image_roll = 0.0f;
-    static uint8_t Swtich_Roll = 0,Swtich_Pitch = 0;
     #ifdef USE_DR16
     if (Get_DR16_Control_Type() == DR16_Control_Type_KEYBOARD)
     {
@@ -993,7 +1023,6 @@ void Class_Chariot::Control_Image()
         {
             K = 0.0f;
         }
-        
 
         tmp_image_pitch = Image.Get_Target_Image_Pitch_Angle();
         tmp_image_pitch += DR16.Get_Mouse_Z() * DR16_Mouse_Pitch_Angle_Resolution * 4.0f;
@@ -1346,7 +1375,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     
     static uint8_t String_Index = 0;
     String_Index++;
-    if (String_Index > 11)
+    if (String_Index > 16)
     {
         String_Index = 0;
     }
@@ -1398,11 +1427,13 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         
         if(MiniPC_Status == MiniPC_Status_ENABLE)
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            //Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,4,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle(Referee.Get_ID(),Referee_UI_Six, 1, 0x09,Graphic_Color_PURPLE,3,960 ,540, 450,Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            //Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_Circle(Referee.Get_ID(),Referee_UI_Six, 1, 0x09,Graphic_Color_WHITE,3,960 ,540, 450,Referee_UI_CHANGE);
         }
 
         if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
@@ -1418,34 +1449,79 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
 
         if(UI_Radar_Target == Radar_Target_Pos_Outpost)
         {
-            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250,400+410, "Outpost", (sizeof("Outpost") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,660, "Base", (sizeof("Base") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250,810, "Outpost", (sizeof("Outpost") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,710, "Base", (sizeof("Base") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,400+410, "Outpost", (sizeof("Outpost") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250,660, "Base", (sizeof("Base") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,810, "Outpost", (sizeof("Outpost") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250,710, "Base", (sizeof("Base") - 1), Referee_UI_CHANGE);
         }
 
         if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_A)
         {
-            Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250, 510,"A", (sizeof("A") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 360,"B", (sizeof("B") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250, 610,"A", (sizeof("A") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 510,"B", (sizeof("B") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(13, Referee.Get_ID(), Referee_UI_Zero, 0, 0x18 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 410,"C", (sizeof("C") - 1), Referee_UI_CHANGE);
+        }
+        else if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_B)
+        {
+            Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 610,"A", (sizeof("A") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250, 510,"B", (sizeof("B") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(13, Referee.Get_ID(), Referee_UI_Zero, 0, 0x18 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 410,"C", (sizeof("C") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 510,"A", (sizeof("A") - 1), Referee_UI_CHANGE);
-            Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250, 360,"B", (sizeof("B") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 610,"A", (sizeof("A") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 510,"B", (sizeof("B") - 1), Referee_UI_CHANGE);
+            Referee.Referee_UI_Draw_String(13, Referee.Get_ID(), Referee_UI_Zero, 0, 0x18 , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250, 410,"C", (sizeof("C") - 1), Referee_UI_CHANGE);
         }
 
-        if(UI_Radar_Checkout_Flag == 1)
+        if(UI_Radar_Control_Type == Radar_Control_Type_Person)
         {
-            Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_BLACK, 30, 5, 960 - 300, 540 + 100,"MAN What Can I Say", (sizeof("MAN What Can I Say") - 1), Referee_UI_ADD);
+            Referee.Referee_UI_Draw_String(14, Referee.Get_ID(), Referee_UI_Zero, 0, 0x19 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250 - 100, 410,"UWB", (sizeof("UWB") - 1), Referee_UI_CHANGE);
         }
         else
         {
-            Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_BLACK, 30, 5, 960 - 300, 540 + 100,"MAN What Can I Say", (sizeof("MAN What Can I Say") - 1), Referee_UI_DELETE);
+            Referee.Referee_UI_Draw_String(14, Referee.Get_ID(), Referee_UI_Zero, 0, 0x19 , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250 - 100, 410,"UWB", (sizeof("UWB") - 1), Referee_UI_CHANGE);
         }
+
+        if(UI_Flying_Risk_Status == 1)
+        {
+            Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 300,"Flying Risk", (sizeof("Flying Risk") - 1), Referee_UI_ADD);
+        }
+        else
+        {
+            Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 300,"Flying Risk", (sizeof("Flying Risk") - 1), Referee_UI_DELETE);
+        }
+
+        if(UI_DogHole_1_Risk_Status == 1)
+        {
+            Referee.Referee_UI_Draw_String(10, Referee.Get_ID(), Referee_UI_Zero, 0, 0x14 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 200,"DogHole_1 Risk", (sizeof("DogHole_1 Risk") - 1), Referee_UI_ADD);
+        }
+        else
+        {
+            Referee.Referee_UI_Draw_String(10, Referee.Get_ID(), Referee_UI_Zero, 0, 0x14 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 200,"DogHole_1 Risk", (sizeof("DogHole_1 Risk") - 1), Referee_UI_DELETE);
+        }
+
+        if(UI_Steps_Risk_Status == 1)
+        {
+            Referee.Referee_UI_Draw_String(11, Referee.Get_ID(), Referee_UI_Zero, 0, 0x15 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 100,"Steps Risk", (sizeof("Steps Risk") - 1), Referee_UI_ADD);
+        }
+        else
+        {
+            Referee.Referee_UI_Draw_String(11, Referee.Get_ID(), Referee_UI_Zero, 0, 0x15 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 100,"Steps Risk", (sizeof("Steps Risk") - 1), Referee_UI_DELETE);
+        }
+
+        if(UI_DogHole_2_Risk_Status == 1)
+        {
+             Referee.Referee_UI_Draw_String(12, Referee.Get_ID(), Referee_UI_Zero, 0, 0x17 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 ,"DogHole_2 Risk", (sizeof("DogHole_2 Risk") - 1), Referee_UI_ADD);
+        }
+        else
+        {
+            Referee.Referee_UI_Draw_String(12, Referee.Get_ID(), Referee_UI_Zero, 0, 0x17 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 ,"DogHole_2 Risk", (sizeof("DogHole_2 Risk") - 1), Referee_UI_DELETE);
+        }
+
     }
     break;
     case (Referee_UI_Refresh_Status_ENABLE):
@@ -1462,20 +1538,26 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         //超电
         Referee.Referee_UI_Draw_Line(Referee.Get_ID(),Referee_UI_Five , 1, 0x08, 6, 10,960-400+120 , 45,960-400+120+(uint32_t)(560.0f*0), 45, Referee_UI_ADD);
         //自瞄
-        Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
+        //Referee.Referee_UI_Draw_Rectangle_Graphic_5(Referee.Get_ID(),Referee_UI_Zero,1,0x09,8,3,960-300,540-150,960+300,540+300,Referee_UI_ADD);
+        Referee.Referee_UI_Draw_Circle(Referee.Get_ID(),Referee_UI_Six, 1, 0x09,Graphic_Color_WHITE,3,960 ,540, 450,Referee_UI_ADD);
         //超电
         Referee.Referee_UI_Draw_String(4, Referee.Get_ID(), Referee_UI_Zero, 0, 0x11 , Graphic_Color_WHITE, 20, 5, 500/2+800, 510, "SuperCap", (sizeof("SuperCap") - 1), Referee_UI_ADD);
         //pitch
         Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,0.0f,Referee_UI_ADD);
         //雷达吊射对象
-        Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,400+410, "Outpost", (sizeof("Outpost") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,660, "Base", (sizeof("Base") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 510,"A", (sizeof("A") - 1), Referee_UI_ADD);
-        Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 360,"B", (sizeof("B") - 1), Referee_UI_ADD);
-
+        Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,810, "Outpost", (sizeof("Outpost") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(6, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0D , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250,710, "Base", (sizeof("Base") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(7, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0E , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 610,"A", (sizeof("A") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(8, Referee.Get_ID(), Referee_UI_Zero, 0, 0x12 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 510,"B", (sizeof("B") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(13, Referee.Get_ID(), Referee_UI_Zero, 0, 0x18 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250, 410,"C", (sizeof("C") - 1), Referee_UI_ADD);
+        //UWB
+        Referee.Referee_UI_Draw_String(14, Referee.Get_ID(), Referee_UI_Zero, 0, 0x19 , Graphic_Color_WHITE, 20, 5, 960 * 2 - 250 - 100, 410,"UWB", (sizeof("UWB") - 1), Referee_UI_ADD);
          //雷达监测威胁标志
-        Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_BLACK, 30, 5, 960 - 300, 540 + 100,"MAN What Can I Say", (sizeof("MAN What Can I Say") - 1), Referee_UI_ADD);
-    }
+        Referee.Referee_UI_Draw_String(9, Referee.Get_ID(), Referee_UI_Zero, 0, 0x13 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 300,"Flying Risk", (sizeof("Flying Risk") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(10, Referee.Get_ID(), Referee_UI_Zero, 0, 0x14 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 200,"DogHole_1 Risk", (sizeof("DogHole_1 Risk") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(11, Referee.Get_ID(), Referee_UI_Zero, 0, 0x15 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 + 100,"Steps Risk", (sizeof("Steps Risk") - 1), Referee_UI_ADD);
+        Referee.Referee_UI_Draw_String(12, Referee.Get_ID(), Referee_UI_Zero, 0, 0x17 , Graphic_Color_YELLOW, 30, 5, 960 - 300, 540 ,"DogHole_2 Risk", (sizeof("DogHole_2 Risk") - 1), Referee_UI_ADD);
+    }   
     break;
     }
     Referee.Referee_UI_Draw_String(0, Referee.Get_ID(), Referee_UI_Zero, 0, 0x00, Graphic_Color_GREEN, 20, 5, 500/2, 400+410, "Fric :", (sizeof("Fric :") - 1), Referee_UI_ADD);
@@ -1488,7 +1570,8 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     
     // 超电容量
     Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x07, 8, 3,960-400+120, 50,960+400-120, 40, Referee_UI_ADD);
-
+    //
+    Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Four, 1, 0x16,Graphic_Color_WHITE,3,960 ,465, 10,Referee_UI_ADD);
     // 善后处理
     Referee.UART_Tx_Referee_UI(String_Index);
 }
@@ -1531,6 +1614,10 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //底盘解算控制
         Chassis.TIM_Calculate_PeriodElapsedCallback(Sprint_Status);
         //画UI
+        UI_Flying_Risk_Status = (uint8_t)(Referee.Get_Referee_Data_Interaction_Students() & 0x01);
+        UI_DogHole_1_Risk_Status = (uint8_t)((Referee.Get_Referee_Data_Interaction_Students() >> 1) & 0x01);
+        UI_Steps_Risk_Status = (uint8_t)((Referee.Get_Referee_Data_Interaction_Students() >> 2) & 0x01);
+        UI_DogHole_2_Risk_Status = (uint8_t)((Referee.Get_Referee_Data_Interaction_Students() >> 3) & 0x01);
         static uint8_t mod20 = 0;
         mod20++;
         if(mod20==20)

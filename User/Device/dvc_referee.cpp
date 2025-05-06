@@ -325,9 +325,9 @@ void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
     // Referee_UI_Draw_Line(Get_ID(), Referee_UI_Zero, 1, 0x03, 2, 3, 900, 500, 1000, 500, Referee_UI_ADD);
     // Referee_UI_Draw_Line(Get_ID(), Referee_UI_One, 1, 0x04, 2, 3, 950, 450, 950, 550, Referee_UI_ADD);
     
-    if (__String_Index < 10)
+    if (__String_Index < 15)
         Referee_UI_Packed_Data(&Interaction_Graphic_String[__String_Index]); // 打包字符数据
-    else if(__String_Index >=10 && __String_Index< 11)
+    else if(__String_Index >=15 && __String_Index< 16)
         Referee_UI_Packed_Data(&Interaction_Graphic_7); // 打包图形数据
     else
         Referee_UI_Packed_Data(&Interaction_Graphic_5);
@@ -548,6 +548,7 @@ void Class_Referee::Referee_UI_Draw_Circle(uint8_t __Robot_ID,Enum_Referee_UI_Gr
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Line_Width = __Line_Width;
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_X = __Center_X;
     Interaction_Graphic_7.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
+    Interaction_Graphic_7.Graphic[__Group_Index].Circle.Radius = __Radius;  
 }
 /**
  * @brief 绘制圆形
@@ -576,6 +577,7 @@ void Class_Referee::Referee_UI_Draw_Circle_Graphic_5(uint8_t __Robot_ID, Enum_Re
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Line_Width = __Line_Width;
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_X = __Center_X;
     Interaction_Graphic_5.Graphic[__Group_Index].Circle.Center_Y= __Center_Y;   
+    Interaction_Graphic_5.Graphic[__Group_Index].Circle.Radius = __Radius;
 }
 /**
  * @brief 绘制浮点数

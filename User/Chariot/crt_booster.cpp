@@ -374,8 +374,11 @@ void Class_Booster::TIM_Adjust_Bullet_Velocity_PeriodElapsedCallback()
         {
         case Referee_Bullet_Velocity_Updata_Status_ENABLE:
         {
-            
-            if (Referee_Bullet_Velocity >= 15.9f)
+            if(Referee_Bullet_Velocity >= 16.0f)
+            {
+                Fric_Transform_Rpm -= (int16_t)(300.0f * fabs(Referee_Bullet_Velocity - 16.0f));
+            }
+            else if (Referee_Bullet_Velocity >= 15.9f && Referee_Bullet_Velocity < 16.0f)
             {
                  Fric_Transform_Rpm -= (int16_t)(150.0f * fabs(Referee_Bullet_Velocity - 15.9f));
             }

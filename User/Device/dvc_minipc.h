@@ -157,12 +157,20 @@ enum Enum_Radar_Target_Outpost : uint8_t
 {
     Radar_Target_Pos_Outpost_A = 0,//7m
     Radar_Target_Pos_Outpost_B,//11m
+    Radar_Target_Pos_C,
+    Radar_Target_Pos_D,
 };
 
 enum Enum_Radar_Target_Base : uint8_t
 {
     Radar_Target_Pos_Base_A = 0,//17m
     Radar_Target_Pos_Base_B,//21m
+};
+
+enum Enum_Radar_Control_Type : uint8_t
+{
+    Radar_Control_Type_Person = 0,
+    Radar_Control_Type_UWB,
 };
 /**
  * @brief 迷你主机源数据
@@ -316,7 +324,9 @@ public:
     inline void Set_Radar_Target_Base(Enum_Radar_Target_Base __Radar_Target_Base);
     inline void Set_UWB_Pos_X(float __UWB_Pos_X);
     inline void Set_UWB_Pos_Y(float __UWB_Pos_Y);
+    inline void Set_Radar_Control_Type(Enum_Radar_Control_Type __Radar_Control_Type);
 
+    inline Enum_Radar_Control_Type Get_Radar_Control_Type();
     void Append_CRC16_Check_Sum(uint8_t * pchMessage, uint32_t dwLength);
     bool Verify_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength);
     uint16_t Get_CRC16_Check_Sum(const uint8_t * pchMessage, uint32_t dwLength, uint16_t wCRC);
@@ -394,7 +404,7 @@ protected:
 
     float UWB_Pos_X = 0.0f;
     float UWB_Pos_Y = 0.0f;
-
+    
     //读变量
 	float Rx_Angle_Roll;
 	float Rx_Angle_Pitch;
@@ -410,6 +420,7 @@ protected:
     Enum_Radar_Target Radar_Target = Radar_Target_Pos_Outpost;
     Enum_Radar_Target_Outpost Radar_Target_Outpost = Radar_Target_Pos_Outpost_A;
     Enum_Radar_Target_Base Radar_Target_Base = Radar_Target_Pos_Base_A;
+    Enum_Radar_Control_Type Radar_Control_Type = Radar_Control_Type_Person;
     //迷你主机对外接口信息
     Struct_MiniPC_Tx_Data Data_MCU_To_NUC;
      
@@ -741,6 +752,14 @@ void Class_MiniPC::Set_UWB_Pos_X(float __UWB_Pos_X)
 void Class_MiniPC::Set_UWB_Pos_Y(float __UWB_Pos_Y)
 {
     UWB_Pos_Y = __UWB_Pos_Y;
+}
+void Class_MiniPC::Set_Radar_Control_Type(Enum_Radar_Control_Type __Radar_Control_Type)
+{
+    Radar_Control_Type = __Radar_Control_Type;
+}
+Enum_Radar_Control_Type Class_MiniPC::Get_Radar_Control_Type()
+{
+    return Radar_Control_Type;
 }
 /**
  * @brief 设定迷你主机类型

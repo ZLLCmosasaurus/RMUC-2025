@@ -236,10 +236,17 @@ public:
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
     Enum_Radar_Target UI_Radar_Target = Radar_Target_Pos_Outpost;
     Enum_Radar_Target_Outpost UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
+     Enum_Radar_Control_Type UI_Radar_Control_Type = Radar_Control_Type_Person;
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
     //雷达监测危险状态
-    uint8_t UI_Radar_Checkout_Flag = 0;
+    uint8_t UI_Flying_Risk_Status = 0;
+    uint8_t UI_DogHole_1_Risk_Status = 0;
+    uint8_t UI_Steps_Risk_Status = 0;
+    uint8_t UI_DogHole_2_Risk_Status = 0;
+    //
+    uint8_t Swtich_Roll = 0;
+    uint8_t Swtich_Pitch = 0;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
     float Shoot_Speed = 0;

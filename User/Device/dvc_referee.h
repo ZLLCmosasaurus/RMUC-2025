@@ -976,7 +976,7 @@ struct Struct_Referee_Data_Interaction_Students
     uint8_t Reserved_1;
     Enum_Referee_Data_Robots_ID Receiver;
     uint8_t Reserved_2;
-    uint8_t Data[112];
+    uint8_t Data[2];
     uint16_t CRC_16;
 }__attribute__((packed));
 
@@ -1032,7 +1032,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_5
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic[4];
+    Union_Graphic Graphic[5];
 } __attribute__((packed));
 
 /**
@@ -1045,7 +1045,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_7
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic[6];
+    Union_Graphic Graphic[7];
 } __attribute__((packed));
 
 /**
@@ -1212,6 +1212,7 @@ public:
     inline Enum_Referee_Data_Robots_ID Get_Radar_Send_Robot_ID();
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
+    inline uint8_t Get_Referee_Data_Interaction_Students();
 
     inline uint16_t Get_Circle_Index(uint16_t index);
 
@@ -2236,6 +2237,10 @@ float Class_Referee::Get_Radar_Send_Coordinate_Y()
     return (Interaction_Client_Receive.Coordinate_Y);
 }
 
+uint8_t Class_Referee::Get_Referee_Data_Interaction_Students()
+{
+    return (Data_Interaction_Students.Data[0]);
+}
 
 uint16_t Class_Referee::Get_Circle_Index(uint16_t index)
 {

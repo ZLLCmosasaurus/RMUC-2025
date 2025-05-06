@@ -116,13 +116,25 @@ void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
 } 
 void Class_MiniPC::Output_CAN()
 {
-  uint8_t radar_control_Byte;
-  int16_t tmp_yaw;
+  uint8_t radar_control_Byte,robot_id;
+  int16_t tmp_yaw,tmp_pos_x,tmp_pos_y;
   tmp_yaw = (int16_t)(Tx_Angle_Encoder_Yaw * 100.0f);
-  radar_control_Byte = (uint8_t)(Radar_Target_Outpost << 3 | Radar_Target_Outpost << 2 | Radar_Target << 1 | Tx_Flag_Control_Radar);
+  if(Referee->Get_ID() == Referee_Data_Robots_ID_RED_HERO_1)
+  {
+    robot_id = 0;
+  }
+  else
+  {
+    robot_id = 1;
+  }
+  radar_control_Byte = (uint8_t)(robot_id << 6 | Radar_Control_Type << 5 | Radar_Target_Outpost << 3 | Radar_Target_Outpost << 2 | Radar_Target << 1 | Tx_Flag_Control_Radar);
+  tmp_pos_x = (int16_t)(UWB_Pos_X * 1000.0f);
+  tmp_pos_y = (int16_t)(UWB_Pos_Y * 1000.0f);
   memcpy(CAN_Tx_Data, &tmp_yaw, 2);
   memcpy(CAN_Tx_Data + 2, &radar_control_Byte, 1);
-
+  memcpy(CAN_Tx_Data + 3, &tmp_pos_x, 2);
+  memcpy(CAN_Tx_Data + 5, &tmp_pos_y, 2);
+  
   Pack_Tx.radar_enable_control = Tx_Flag_Control_Radar;
 }
 /**
