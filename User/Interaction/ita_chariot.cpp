@@ -2,22 +2,22 @@
 
 void Class_Chariot::Init()
 {
-    chassis.Init(2.0f,3.0f,2.0f);
+    chassis.Init(2.0f,4.0f,2.0f);
     Auxiliary_Arm_Uplift_X_Lift.Init(&hcan1, DJI_Motor_ID_0x207, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_X_Lift.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 200.0f);
+    Auxiliary_Arm_Uplift_X_Lift.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 400.0f);
     Auxiliary_Arm_Uplift_X_Lift.PID_Omega.Init(40.0f, 0.1f, 0.0f, 0.0f, 2000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_X_Right.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE);
-    Auxiliary_Arm_Uplift_X_Right.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 200.0f);
+    Auxiliary_Arm_Uplift_X_Right.PID_Angle.Init(120.0f, 0.05f, 0.0f, 0.0f, 180.0f, 400.0f);
     Auxiliary_Arm_Uplift_X_Right.PID_Omega.Init(40.0f, 0.1f, 0.0f, 0.0f, 2000.0f, 7000.0f);
     Auxiliary_Arm_Uplift_Y_Lift.Init(&hcan1, DJI_Motor_ID_0x208, DJI_Motor_Control_Method_ANGLE);
     Auxiliary_Arm_Uplift_Y_Lift.PID_Angle.Init(2000.0f, 1.f, 0.0f, 0.0f, 180.0f, 1000.0f);
-    Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(30.0f, 0.1f, 0.0f, 0.0f, 3000.0f, 8000.0f);
+    Auxiliary_Arm_Uplift_Y_Lift.PID_Omega.Init(35.0f, 0.5f, 0.0f, 0.0f, 3000.0f, 8000.0f);
     Auxiliary_Arm_Uplift_Y_Right.Init(&hcan1, DJI_Motor_ID_0x206, DJI_Motor_Control_Method_ANGLE);
     Auxiliary_Arm_Uplift_Y_Right.PID_Angle.Init(2000.0f, 1.f, 0.0f, 0.0f, 180.0f, 1000.0f);
-    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(25.0f, 0.1f, 0.0f, 0.0f, 3000.0f, 8000.0f);
+    Auxiliary_Arm_Uplift_Y_Right.PID_Omega.Init(30.0f, 0.5f, 0.0f, 0.0f, 3000.0f, 8000.0f);
 		Auxiliary_Arm_Uplift_Y_Right.Slope.Init(0.013f, 0.013f);
 		Auxiliary_Arm_Uplift_Y_Lift.Slope.Init(0.013f, 0.013f);
-		chassis.Power_Limit.Set_Power_Limit(100);
+		chassis.Power_Limit.Set_Power_Limit(150);
 	
 	
     
@@ -38,9 +38,9 @@ bool Class_Chariot::Motor_Calibration()
 	if(((Calibration_Flag & (1<<2)) == 0)){Auxiliary_Arm_Uplift_X_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
 	Auxiliary_Arm_Uplift_X_Right.Set_Target_Omega_Angle(80);}
 	if(((Calibration_Flag & (1<<3)) == 0)){ Auxiliary_Arm_Uplift_Y_Lift.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-	Auxiliary_Arm_Uplift_Y_Lift.Set_Target_Omega_Angle(-50);}
+	Auxiliary_Arm_Uplift_Y_Lift.Set_Target_Omega_Angle(-150);}
 	if(((Calibration_Flag & (1<<4)) == 0)){Auxiliary_Arm_Uplift_Y_Right.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-	Auxiliary_Arm_Uplift_Y_Right.Set_Target_Omega_Angle(50);}
+	Auxiliary_Arm_Uplift_Y_Right.Set_Target_Omega_Angle(150);}
 
 	//当电流值大于阈值，同时速度小于一定阈值，判定为堵转条件
 	
