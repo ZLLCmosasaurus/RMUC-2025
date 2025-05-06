@@ -16,8 +16,7 @@
 
 #include "alg_pid.h"
 #include "drv_can.h"
-#include "alg_power_limit.h"
-
+#include "config.h"
 #include "alg_filter.h"
 
 /* Exported macros -----------------------------------------------------------*/
@@ -163,7 +162,7 @@ protected:
     //一圈编码器刻度
     uint16_t Encoder_Num_Per_Round = 8192;
     //最大输出电压
-    uint16_t Output_Max = 25000;
+    uint16_t Output_Max = 20000;
 
     //内部变量
 

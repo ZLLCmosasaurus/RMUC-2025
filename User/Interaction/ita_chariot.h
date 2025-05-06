@@ -15,8 +15,10 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "dvc_dr16.h"
+#include "dvc_VT13.h"
 #include "crt_gimbal.h"
 #include "crt_booster.h"
+#include "dvc_supercap.h"
 #include "dvc_imu.h"
 #include "tsk_config_and_callback.h"
 #include "dvc_supercap.h"
@@ -100,12 +102,47 @@ enum Enum_DR16_Control_Type
 };
 
 /**
+ * @brief VT13控制数据来源
+ *
+ */
+enum Enum_VT13_Control_Type
+{
+    VT13_Control_Type_REMOTE = 0,
+    VT13_Control_Type_KEYBOARD,
+
+    VT13_Control_Type_NONE,
+};
+
+enum Enum_Control_Source{
+    DR16_Control,
+    VT13_Control,
+    Control_DISABLE,
+};
+
+// 添加活动控制器枚举类型
+enum Enum_Active_Controller
+{
+    Controller_NONE = 0,
+    Controller_DR16,
+    Controller_VT13
+};
+
+/**
  * @brief 机器人是否离线 控制模式有限自动机
  *
  */
 class Class_FSM_Alive_Control : public Class_FSM
 {
 public:
+    Class_Chariot *Chariot;
+
+    void Reload_TIM_Status_PeriodElapsedCallback();
+};
+
+class Class_FSM_Alive_Control_VT13 : public Class_FSM
+{
+    public:
+    uint8_t Start_Flag = 0;     //记录第一次上电开机，以初始化状态
     Class_Chariot *Chariot;
 
     void Reload_TIM_Status_PeriodElapsedCallback();
@@ -134,6 +171,8 @@ public:
 
     #ifdef GIMBAL
         //遥控器
+        Class_VT13 VT13;
+
         Class_DR16 DR16;
         //上位机
         Class_MiniPC MiniPC;
@@ -144,7 +183,10 @@ public:
 
         //遥控器离线保护控制状态机
         Class_FSM_Alive_Control FSM_Alive_Control;
+        Class_FSM_Alive_Control_VT13 FSM_Alive_Control_VT13;
+
         friend class Class_FSM_Alive_Control;
+        friend class Class_FSM_Alive_Control_VT13;
 
     #endif
 
@@ -153,8 +195,13 @@ public:
     #ifdef CHASSIS
 
         void CAN_Chassis_Rx_Gimbal_Callback();
+        void CAN_Chassis_Rx_Gimbal_Callback_2();
         void CAN_Chassis_Tx_Gimbal_Callback();
+        void Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Status __Referee_UI_Refresh_Status);
         void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
+
+        float Fric_Omega = 0.0f;
+        Enum_Gimbal_Control_Type Gimbal_Control_Type = Gimbal_Control_Type_DISABLE;
 
     #elif defined(GIMBAL)
 
@@ -166,17 +213,22 @@ public:
         inline Enum_Chassis_Control_Type Get_Pre_Chassis_Control_Type();
         inline Enum_Gimbal_Control_Type Get_Pre_Gimbal_Control_Type();
         inline Enum_Booster_Control_Type Get_Pre_Booster_Control_Type();
+        
 
         inline void Set_Pre_Chassis_Control_Type(Enum_Chassis_Control_Type __Chassis_Control_Type);
         inline void Set_Pre_Gimbal_Control_Type(Enum_Gimbal_Control_Type __Gimbal_Control_Type);
         inline void Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type);
+        inline void Set_Control_Source(Enum_Control_Source __Control_Source);
 
         inline Enum_Chassis_Status Get_Chassis_Status();
         inline Enum_DR16_Control_Type Get_DR16_Control_Type();
+        inline Enum_VT13_Control_Type Get_VT13_Control_Type();
 
         void CAN_Gimbal_Rx_Chassis_Callback();
         void CAN_Gimbal_Tx_Chassis_Callback();
         
+        void Judge_Active_Controller();
+
         void TIM_Control_Callback();
 
         void TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
@@ -199,6 +251,8 @@ public:
     Enum_MiniPC_Status MiniPC_Status = MiniPC_Status_DISABLE;
     //裁判系统UI刷新状态
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
+    //射击模式
+    Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_DISABLE;
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
 
@@ -213,8 +267,8 @@ protected:
     Struct_CAN_Manage_Object *CAN_Manage_Object = &CAN2_Manage_Object;
 
     #ifdef CHASSIS
-        //底盘标定参考正方向角度(数据来源yaw电机)
-        float Reference_Angle = 0.75f;
+        //底盘标定参考正方向角度(数据来源yaw电机)       Rad
+        float Reference_Angle = 0.78f;                  //4.23
         //小陀螺云台坐标系稳定偏转角度 用于矫正
         float Offset_Angle = 0.0f;  //
         //底盘转换后的角度（数据来源yaw电机）
@@ -229,31 +283,31 @@ protected:
 
     #ifdef GIMBAL
         //遥控器拨动的死区, 0~1
-        float DR16_Dead_Zone;
+        float Dead_Zone;
         //常量
         //键鼠模式按住shift 最大速度缩放系数
-        float DR16_Mouse_Chassis_Shift = 2.0f;
+        float Mouse_Chassis_Shift = 2.0f;
         //舵机占空比 默认关闭弹舱
         uint16_t Compare =400;
-        //DR16底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-        float DR16_Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
-        //DR16底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
-        float DR16_Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
+        //底盘加速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
+        float Keyboard_Chassis_Speed_Resolution_Small = 0.001f;
+        //底盘减速灵敏度系数(0.001表示底盘加速度最大为1m/s2)
+        float Keyboard_Chassis_Speed_Resolution_Big = 0.01f;
 
-        //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float DR16_Yaw_Angle_Resolution = 0.045f * PI * 57.29577951308232;
-        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Angle_Resolution = 0.012f * PI * 57.29577951308232;
+        //云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
+        float Yaw_Angle_Resolution = 0.025f * PI * 57.29577951308232;
+        //云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
+        float Pitch_Angle_Resolution = 0.012f * PI * 57.29577951308232;
 
-        //DR16云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
-        float DR16_Yaw_Resolution = 0.003f * PI;
-        //DR16云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
-        float DR16_Pitch_Resolution = 0.003f * PI;
+        //云台yaw灵敏度系数(0.001PI表示yaw速度最大时为1rad/s)
+        float Yaw_Resolution = 0.003f * PI;
+        //云台pitch灵敏度系数(0.001PI表示pitch速度最大时为1rad/s)
+        float Pitch_Resolution = 0.003f * PI;
 
-        //DR16鼠标云台yaw灵敏度系数, 不同鼠标不同参数
-        float DR16_Mouse_Yaw_Angle_Resolution = 57.8*4.0f;
-        //DR16鼠标云台pitch灵敏度系数, 不同鼠标不同参数
-        float DR16_Mouse_Pitch_Angle_Resolution = 57.8f;
+        //鼠标云台yaw灵敏度系数, 不同鼠标不同参数
+        float Mouse_Yaw_Angle_Resolution = 57.8 * 4.0f;
+        //鼠标云台pitch灵敏度系数, 不同鼠标不同参数
+        float Mouse_Pitch_Angle_Resolution = 57.8 * 2.0f;
         
         //迷你主机云台pitch自瞄控制系数
         float MiniPC_Autoaiming_Yaw_Angle_Resolution = 0.003f;
@@ -284,9 +338,19 @@ protected:
         uint8_t Shoot_Flag = 0;
         //DR16控制数据来源
         Enum_DR16_Control_Type DR16_Control_Type = DR16_Control_Type_NONE;
+
+        //VT13控制数据来源
+        Enum_VT13_Control_Type VT13_Control_Type = VT13_Control_Type_NONE;
+        // 当前活动的控制器
+        Enum_Active_Controller Active_Controller = Controller_NONE;
+
+        Enum_Control_Source Control_Source = Control_DISABLE;       //防止不同遥控从同一个控制回调进入造成的重复触发
+
         //内部函数
 
         void Judge_DR16_Control_Type();
+
+        void Judge_VT13_Control_Type();
 
         void Control_Chassis();
         void Control_Gimbal();
@@ -321,6 +385,16 @@ protected:
     Enum_DR16_Control_Type Class_Chariot::Get_DR16_Control_Type()
     {
         return (DR16_Control_Type);
+    }
+
+    /**
+     * @brief 获取VT13控制数据来源
+     * 
+     * @return VT13_Control_Type
+     */
+    inline Enum_VT13_Control_Type Class_Chariot::Get_VT13_Control_Type()
+    {
+      return (VT13_Control_Type);
     }
 
     /**
@@ -383,6 +457,11 @@ protected:
     void Class_Chariot::Set_Pre_Booster_Control_Type(Enum_Booster_Control_Type __Booster_Control_Type)
     {
         Pre_Booster_Control_Type = __Booster_Control_Type;
+    }
+
+    inline void Class_Chariot::Set_Control_Source(Enum_Control_Source __Control_Source)
+    {
+        Control_Source = __Control_Source;
     }
 
     /**

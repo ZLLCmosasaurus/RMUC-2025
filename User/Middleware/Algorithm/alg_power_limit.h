@@ -38,6 +38,7 @@ class Class_Power_Limit
     inline void Set_Supercap_Print_Flag(uint8_t __flag);
 
     float Get_Torque_Current(uint8_t num);
+    float Get_Buffer_Power();
 
     void Set_Motor(Class_DJI_Motor_C620 (&Motor)[4]);
     //输出功率限制之后的电流到电机缓冲区
@@ -64,8 +65,8 @@ class Class_Power_Limit
 
     //电机模型参数
 	float k1 = 1.3;		// k1 
-	float k2 = 0.015;		// k2 
-	float Alpha = 0.0f;
+	float k2 = 0.0013;		// k2 
+	float Alpha = 0.81f;
     float Tansfer_Coefficient = 9.55f;  //转化系数 w*t/Tansfer_Coefficient
 
     //超电电量

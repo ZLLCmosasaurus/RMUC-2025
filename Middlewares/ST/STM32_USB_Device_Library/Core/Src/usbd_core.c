@@ -147,7 +147,7 @@ USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,
   * @retval status: USBD Status
   */
 USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
-{
+  {
   USBD_StatusTypeDef ret;
 
   /* Disconnect the USB Device */

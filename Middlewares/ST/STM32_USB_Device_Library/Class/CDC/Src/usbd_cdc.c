@@ -811,7 +811,8 @@ uint8_t USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev, uint8_t ClassId)
   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[ClassId];
 #else
 uint8_t USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev)
-{
+
+   	{
   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];
 #endif  /* USE_USBD_COMPOSITE */
 

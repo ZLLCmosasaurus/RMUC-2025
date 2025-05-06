@@ -60,13 +60,12 @@ void Class_PID::Init(float __K_P, float __K_I, float __K_D, float __K_F, float _
  *
  * @return float 输出值
  */
-
 void Class_PID::TIM_Adjust_PeriodElapsedCallback()
 {   
     // P输出
     float p_out = 0.0f;
     // I输出
-    float i_out = 0.0f;
+    //float i_out = 0.0f;
     // D输出
     float d_out = 0.0f;
     // F输出
@@ -119,7 +118,7 @@ void Class_PID::TIM_Adjust_PeriodElapsedCallback()
     //积分限幅
     if (I_Out_Max != 0.0f)
     {
-        Math_Constrain(&Integral_Error, -I_Out_Max / K_I, I_Out_Max / K_I);
+        Math_Constrain(&Integral_Error, -I_Out_Max / fabs(K_I), I_Out_Max / fabs(K_I));
     }
     if (I_Separate_Threshold == 0.0f)
     {

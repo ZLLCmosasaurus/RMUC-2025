@@ -34,6 +34,11 @@ float Class_Power_Limit::Get_Torque_Current(uint8_t num)
     return Output_Torque[num];
 }
 
+float Class_Power_Limit::Get_Buffer_Power()
+{
+  return Buffer_power;
+}
+
 float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float power_limit, uint8_t motor_nums)
 {
     float limit_k = 1.; // 输出伸缩因子k
@@ -75,7 +80,7 @@ float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float 
         else
         {
             limit_k = 1;
-        }
+				}
     }
 
     return (limit_k > 1) ? 1 : limit_k;
@@ -105,13 +110,15 @@ void Class_Power_Limit::TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&
 	// else use motor model to predict and limit the power
 	#elif defined (POWER_LIMIT_NEW_CONTROL)
 		//计算缓冲能量
-		Buffer_power = (Chassis_Buffer-Min_Buffer)*Buffer_K;
-		Math_Constrain(&Buffer_power,-Buffer_power_limit,Buffer_power_limit);
+		
+		// Buffer_power = (Chassis_Buffer-Min_Buffer)*Buffer_K;
+		// Math_Constrain(&Buffer_power,-Buffer_power_limit,Buffer_power_limit);
+
 		//收集电机参数
 		Set_Motor(Motor);
-        //跑功率限制
-		float power_limit_sum = fabs(Total_Power_Limit + Buffer_power);
-        Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4);
+    //跑功率限制
+		float power_limit_sum = fabs(Total_Power_Limit);
+    Limit_K = Calculate_Limit_K(Omega,Input_Torque,power_limit_sum,4); 
         // 设置输出
 		Output(Motor);	
 
@@ -196,13 +203,15 @@ void Class_Power_Limit::TIM_Adjust_PeriodElapsedCallback(Class_DJI_Motor_C620 (&
  * @brief �趨����������
  *
  */
+
 void Class_Power_Limit::Output(Class_DJI_Motor_C620 (&Motor)[4])
 {
-    for(int i=0;i<4;i++)
+  for(int i=0;i<4;i++)
 	{
-		int16_t out_limit = Motor[i].Get_Out()*Limit_K;
-        Motor[i].CAN_Tx_Data[0] = (int16_t)out_limit >> 8;
-        Motor[i].CAN_Tx_Data[1] = (int16_t)out_limit;
+				Scaled_Give_Power[i] = Motor[i].Get_Out()*Limit_K;
+			 	//Motor[i].Set_Out(Scaled_Give_Power[i]);
+        Motor[i].CAN_Tx_Data[0] = (int16_t)Scaled_Give_Power[i] >> 8;
+        Motor[i].CAN_Tx_Data[1] = (int16_t)Scaled_Give_Power[i];
     }
 }
 
@@ -216,7 +225,7 @@ void Class_Power_Limit::Set_Motor(Class_DJI_Motor_C620 (&Motor)[4])
     {
         Input_Torque[i] = Motor[i].Get_Out()*current_to_torqure;
         Omega[i] = Motor[i].Get_Now_Omega_Radian();
-				Torque_Now[i] = Motor[i].Get_Now_Torque()*current_to_torqure;
+				Torque_Now[i] = (Motor[i].Get_Now_Torque()/19.f)*current_to_torqure;
     }
 }
 

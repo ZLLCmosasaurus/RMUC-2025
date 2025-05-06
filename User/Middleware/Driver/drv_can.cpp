@@ -23,6 +23,7 @@ Struct_CAN_Manage_Object CAN1_Manage_Object = {0};
 Struct_CAN_Manage_Object CAN2_Manage_Object = {0};
 
 // CAN通信发送缓冲区
+uint8_t CAN1_0x0a0_Tx_Data[8];
 uint8_t CAN1_0x1ff_Tx_Data[8];
 uint8_t CAN1_0x200_Tx_Data[8];
 uint8_t CAN1_0x2ff_Tx_Data[8];
@@ -49,7 +50,8 @@ uint8_t CAN2_0xxf8_Tx_Data[8];
 
 uint8_t CAN_Supercap_Tx_Data[8];
 
-uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];  //云台给底盘发送缓冲区
+uint8_t CAN2_Gimbal_Tx_Chassis_Data[8];   //云台给底盘发送缓冲区---1
+uint8_t CAN2_Gimbal_Tx_Chassis_Data_2[8]; //云台给底盘发送缓冲区---2
 uint8_t CAN2_Chassis_Tx_Gimbal_Data[8];   //底盘给云台发送缓冲区
 
 /*********LK电机 控制缓冲区***********/
@@ -219,15 +221,19 @@ void TIM_CAN_PeriodElapsedCallback()
     // CAN1总线  四个底盘电机  
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8);
     //上板
-    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);
+    CAN_Send_Data(&hcan2, 0x88, CAN2_Chassis_Tx_Gimbal_Data, 8);        //未降频
 
     #elif defined (GIMBAL)
     static uint8_t mod10 = 0;
 
     // CAN1 
+    #ifdef MINPC_CAN
+    CAN_Send_Data(&hcan1, 0xa0, CAN1_0x0a0_Tx_Data, 8);
+    #endif
+
     CAN_Send_Data(&hcan1, 0x200, CAN1_0x200_Tx_Data, 8); //摩擦轮 按照0x200 ID 发送 可控制多个电机
 
-    CAN_Send_Data(&hcan1, 0x141, CAN1_0x141_Tx_Data, 8); //LK-Pitch
+    CAN_Send_Data(&hcan1, 0x1ff, CAN1_0x1ff_Tx_Data, 8); //pitch-6020
     
     // CAN2 
     //CAN_Send_Data(&hcan2, 0x200, CAN2_0x200_Tx_Data, 8); //  按照0x1ff ID 发送 可控制多个电机
@@ -235,6 +241,9 @@ void TIM_CAN_PeriodElapsedCallback()
 
     if(mod10 == 10){
         CAN_Send_Data(&hcan2, 0x77, CAN2_Gimbal_Tx_Chassis_Data, 8); //给底盘发送控制命令 按照0x77 ID 发送
+    }
+    else if(mod10 == 20){
+        CAN_Send_Data(&hcan2, 0x78, CAN2_Gimbal_Tx_Chassis_Data_2, 8);
         mod10 = 0;
     }
     mod10++;

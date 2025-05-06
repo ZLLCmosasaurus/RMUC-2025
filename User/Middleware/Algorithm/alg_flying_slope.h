@@ -9,7 +9,7 @@
 #include "dvc_djimotor.h"
 
 //依据车体状态更改
-#define Gravity        100                                         //整车重量*G == 重力 N
+#define Gravity        210                                         //整车重量*G == 重力 N
 #define CHASSIS_L      0.391f                                         //底盘长  m
 #define CHASSIS_W      0.38f                                         //宽      m
 #define CHASSIS_R      0.0705f                                         //车轮半径 m

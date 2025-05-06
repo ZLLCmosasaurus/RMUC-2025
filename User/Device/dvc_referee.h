@@ -1,11 +1,11 @@
 /**
  * @file dvc_referee.h
- * @author lez by yssickjgd
+ * @author yssickjgd (1345578933@qq.com)
  * @brief PM01裁判系统
  * @version 0.1
- * @date 2024-07-1 0.1 24赛季定稿
+ * @date 2023-08-29 0.1 23赛季定稿
  *
- * @copyright ZLLC 2024
+ * @copyright USTC-RoboWalker (c) 2023
  *
  */
 
@@ -16,7 +16,9 @@
 
 #include "drv_uart.h"
 #include "limits.h"
-#include "string.h"
+#include <string.h>
+#include "config.h"
+#ifdef __cplusplus
 
 /* Exported macros -----------------------------------------------------------*/
 
@@ -99,6 +101,18 @@ const uint16_t CRC16_Table[256] =
 	0xf78f, 0xe606, 0xd49d, 0xc514, 0xb1ab, 0xa022, 0x92b9, 0x8330,
 	0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
+extern "C" {
+#endif
+//CRC_8|16 functions
+extern unsigned char Get_CRC8_Check_Sum(unsigned  char  *pchMessage,unsigned  int dwLength,unsigned char ucCRC8);
+extern unsigned int Verify_CRC8_Check_Sum(unsigned char *pchMessage, unsigned int dwLength);
+extern void Append_CRC8_Check_SUM(unsigned char *pchMessage, unsigned int dwLength);
+extern uint16_t Get_CRC16_Check_Sum(uint8_t *pchMessage,uint32_t dwLength,uint16_t wCRC);
+extern uint32_t Verify_CRC16_Check_Sum(uint8_t *pchMessage, uint32_t dwLength);
+extern void Append_CRC16_Check_Sum(uint8_t * pchMessage,uint32_t dwLength);
+#ifdef __cplusplus
+}
+
 /* Exported types ------------------------------------------------------------*/
 
 /**
@@ -224,10 +238,14 @@ enum Enum_Referee_Command_ID : uint16_t
     Referee_Command_ID_ROBOT_REMAINING_AMMO,
     Referee_Command_ID_ROBOT_RFID,
     Referee_Command_ID_ROBOT_DART_COMMAND,
+    Referee_Command_ID_ROBOT_LOCATION,
+    Referee_Command_ID_ROBOT_RADAR_PROCESS,
+    Referee_Command_ID_ROBOT_SENTRY_DECISION,
+    Referee_Command_ID_ROBOT_RADAR_DECISION,
     Referee_Command_ID_INTERACTION = 0x0301,
     Referee_Command_ID_INTERACTION_CUSTOM_CONTROLLER,
-    Referee_Command_ID_INTERACTION_RADAR_SEND,
-    Referee_Command_ID_INTERACTION_REMOTE_CONTROL,
+    Referee_Command_ID_INTERACTION_CUSTOM_MAP,
+    Referee_Command_ID_INTERACTION_REMOTE_CONTROLLER,
     Referee_Command_ID_INTERACTION_Client_RECEIVE,
 };
 
@@ -319,7 +337,7 @@ enum Enum_Referee_Game_Status_Type
  * @brief 比赛阶段
  *
  */
-enum Enum_Referee_Game_Status_Stage
+enum Enum_Referee_Game_Status_Stage : uint8_t
 {
     Referee_Game_Status_Stage_NOT_STARTED = 0,
     Referee_Game_Status_Stage_READY,
@@ -641,16 +659,16 @@ struct Struct_Graphic_Integer
 struct Struct_Graphic_String
 {
     uint8_t Index[3];
-    uint32_t Operation_Enum : 3;
-    uint32_t Type_Enum : 3;
-    uint32_t Serial : 4;
-    uint32_t Color_Enum : 4;
-    uint32_t Font_Size : 9;
-    uint32_t Length : 9;
-    uint32_t Line_Width : 10;
-    uint32_t Start_X : 11;
-    uint32_t Start_Y : 11;
-    uint32_t Reserved;
+    uint32_t Operation_Enum : 3;// 1增添 2修改 3删除
+    uint32_t Type_Enum : 3;//0 直线 1矩形 2正圆 3椭圆 5浮点数 6整型数 7字符
+    uint32_t Serial : 4;//图层数
+    uint32_t Color_Enum : 4;//颜色：0己方颜色 1黄色 2绿色 3橙色 4紫红色 5粉色 6青色 7黑色 8白色
+    uint32_t Font_Size : 9;//字体大小
+    uint32_t Length : 9;//无作用
+    uint32_t Line_Width : 10;//线宽
+    uint32_t Start_X : 11;//起点或圆心坐标
+    uint32_t Start_Y : 11;//起点或圆心坐标
+    uint32_t Reserved;//
 } __attribute__((packed));
 
 /**
@@ -797,7 +815,7 @@ struct Struct_Referee_Rx_Data_Event_Dart_Remaining_Time
  */
 struct Struct_Referee_Rx_Data_Robot_Status
 {
-    Enum_Referee_Data_Robots_ID Robot_ID;
+    Enum_Referee_Data_Robots_ID Robot_ID = Referee_Data_Robots_ID_RED_HERO_1;
     uint8_t Level;
     uint16_t HP;
     uint16_t HP_Max;
@@ -877,7 +895,7 @@ struct Struct_Referee_Rx_Data_Robot_Damage
 } __attribute__((packed));
 
 /**
- * @brief 裁判系统经过处理的数据, 0x0207子弹信息, 射击发生后发送
+ * @brief 裁判系统经过处理的数据, 0x0207子弹信息, 射击发生后发送Speed
  *
  */
 struct Struct_Referee_Rx_Data_Robot_Booster
@@ -951,16 +969,16 @@ struct Struct_Referee_Rx_Data_Robot_Dart_Command
  * Data 最大112
  *
  */
-// struct Struct_Referee_Data_Interaction_Students
-// {
-//     uint16_t Header;
-//     Enum_Referee_Data_Robots_ID Sender;
-//     uint8_t Reserved_1;
-//     Enum_Referee_Data_Robots_ID Receiver;
-//     uint8_t Reserved_2;
-//     uint8_t Data[112];
-//     uint16_t CRC_16;
-// }__attribute__((packed));
+ struct Struct_Referee_Data_Interaction_Students
+ {
+     uint16_t Header;
+     Enum_Referee_Data_Robots_ID Sender;
+     uint8_t Reserved_1;
+     Enum_Referee_Data_Robots_ID Receiver;
+     uint8_t Reserved_2;
+     uint8_t Data[2];
+     uint16_t CRC_16;
+ }__attribute__((packed));
 
 /**
  * @brief 裁判系统发送的数据, 0x0301图形删除交互信息, 用户自主发送
@@ -1000,8 +1018,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_2
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic_1;
-    Union_Graphic Graphic_2;
+    Union_Graphic Graphic[2];
 } __attribute__((packed));
 
 /**
@@ -1014,11 +1031,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_5
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic_1;
-    Union_Graphic Graphic_2;
-    Union_Graphic Graphic_3;
-    Union_Graphic Graphic_4;
-    Union_Graphic Graphic_5;
+    Union_Graphic Graphic[5];
 } __attribute__((packed));
 
 /**
@@ -1031,7 +1044,7 @@ struct Struct_Referee_Tx_Data_Interaction_Graphic_7
     Enum_Referee_Data_Robots_ID Sender;
     uint8_t Reserved;
     Enum_Referee_Data_Robots_Client_ID Receiver;
-    Union_Graphic Graphic[6];
+    Union_Graphic Graphic[7];
 } __attribute__((packed));
 
 /**
@@ -1124,8 +1137,7 @@ class Class_Referee
 {
 public:
     void Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header = 0xa5);
-
-    inline uint16_t Get_Circle_Index(uint16_t index){return (index%UART_Manage_Object->Rx_Buffer_Length);}
+    
     inline Enum_Referee_Status Get_Referee_Status();
     inline Enum_Referee_Game_Status_Type Get_Game_Type();
     inline Enum_Referee_Game_Status_Stage Get_Game_Stage();
@@ -1200,27 +1212,38 @@ public:
     inline float Get_Radar_Send_Coordinate_X();
     inline float Get_Radar_Send_Coordinate_Y();
 
+    inline uint16_t Get_Circle_Index(uint16_t index);
+
     #ifdef GIMBAL
     inline void Set_Robot_ID(Enum_Referee_Data_Robots_ID __Robot_ID);
     inline void Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage);  
+    inline void Set_Shoot_Speed(float __Shoot_Speed);
+    inline void Set_Booster_17mm_1_Heat(int16_t __Booster_17mm_1_Heat);
     inline void Set_Booster_17mm_1_Heat_CD(uint16_t __Booster_17mm_1_Heat_CD);
     inline void Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_Max);
+    inline void Set_Booster_42mm_1_Heat_CD(uint16_t __Booster_42mm_1_Heat_CD);
+    inline void Set_Booster_42mm_1_Heat_Max(uint16_t __Booster_42mm_1_Heat_Max);
     #endif
 
+    void Referee_UI_Draw_Rectangle_Graphic_2(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Line_Graphic_2(uint8_t __Robot_ID,Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, uint32_t __End_X, uint32_t __End_Y, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Line(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Rectangle(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Oval(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __X_Length, uint32_t __Y_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Circle(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Radius, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Float(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Draw_Integer(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, int32_t __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
-    void Referee_UI_Draw_String(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
-
+    void Referee_UI_Draw_String(uint8_t String_index,uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint32_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, char *__String ,uint32_t __String_Length, Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Circle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Line_Width, uint32_t __Center_X, uint32_t __Center_Y, uint32_t __Radius, Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Line_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Rectangle_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y,  uint32_t __End_X, uint32_t __End_Y,Enum_Referee_UI_Operate_Type __Operate_Type);
+    void Referee_UI_Draw_Float_Graphic_5(uint8_t __Robot_ID, Enum_Referee_UI_Group_Index __Group_Index, uint8_t __Serial, uint8_t __Index, uint32_t __Color, uint32_t __Font_Size,uint32_t __Line_Width, uint32_t __Start_X, uint32_t __Start_Y, float __Number, Enum_Referee_UI_Operate_Type __Operate_Type);
     void Referee_UI_Packed_String();
 
     template <typename T>
     void Referee_UI_Packed_Data(T* __data);
 
-    void UART_Tx_Referee_UI();
+    void UART_Tx_Referee_UI(uint8_t __String_Index);
 
     void UART_RxCpltCallback(uint8_t *Rx_Data, uint16_t Size);
     void TIM1msMod50_Alive_PeriodElapsedCallback();
@@ -1286,6 +1309,7 @@ protected:
     //客户端接收小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Client_Receive Interaction_Client_Receive;
 
+Struct_Referee_Data_Interaction_Students  Interaction_Students;
     //写变量
 
     //图形删除交互信息
@@ -1299,7 +1323,7 @@ protected:
     //画七个图形交互信息
     Struct_Referee_Tx_Data_Interaction_Graphic_7 Interaction_Graphic_7;
     //画字符图形交互信息
-    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String;
+    Struct_Referee_Tx_Data_Interaction_Graphic_String Interaction_Graphic_String[15];
     //雷达发送小地图交互信息
     Struct_Referee_Tx_Data_Interaction_Radar_Send Interaction_Radar_Send;
 
@@ -1311,51 +1335,6 @@ protected:
     
 };
 
-/* Exported variables --------------------------------------------------------*/
-
-/* Exported function declarations --------------------------------------------*/
-
-unsigned char Get_CRC8_Check_Sum(unsigned  char  *pchMessage,unsigned  int dwLength,unsigned char ucCRC8);
-unsigned int Verify_CRC8_Check_Sum(unsigned char *pchMessage, unsigned int dwLength);
-void Append_CRC8_Check_Sum(unsigned char *pchMessage, unsigned int dwLength);
-
-uint16_t Get_CRC16_Check_Sum(uint8_t *pchMessage,uint32_t dwLength,uint16_t wCRC);
-uint32_t Verify_CRC16_Check_Sum(uint8_t *pchMessage, uint32_t dwLength);
-void Append_CRC16_Check_Sum(uint8_t * pchMessage,uint32_t dwLength);
-
-
-/**
- * @brief 裁判系统数据打包
- *
- */
-template <typename T>
-void Class_Referee::Referee_UI_Packed_Data(T* __data)
-{
-    uint16_t frame_length,data_len,cmd_id;
-    
-    cmd_id = 0x0301;    //子内容ID
-    data_len = sizeof(T);      //字符操作数据长度
-	frame_length = frameheader_len + cmd_len + data_len + crc_len;   //数据帧长度	
-
-	memset(UART_Manage_Object->Tx_Buffer,0,frame_length);  //存储数据的数组清零
-	
-	/*****帧头打包*****/
-	UART_Manage_Object->Tx_Buffer[0] = Frame_Header;//数据帧起始字节
-	memcpy(&UART_Manage_Object->Tx_Buffer[1],(uint8_t*)&data_len, 2);//数据帧中data的长度
-	UART_Manage_Object->Tx_Buffer[3] = seq;//包序号
-	Append_CRC8_Check_Sum(UART_Manage_Object->Tx_Buffer,frameheader_len);  //帧头校验CRC8
-
-	/*****命令码打包*****/
-	memcpy(&UART_Manage_Object->Tx_Buffer[frameheader_len],(uint8_t*)&cmd_id, cmd_len);
-	
-	/*****数据打包*****/
-	memcpy(&UART_Manage_Object->Tx_Buffer[frameheader_len+cmd_len], __data, sizeof(T));
-	Append_CRC16_Check_Sum(UART_Manage_Object->Tx_Buffer,frame_length);  //一帧数据校验CRC16
-
-    UART_Manage_Object->Tx_Length = frame_length;
-
-    seq++;
-}
 
 /**
  * @brief 获取裁判系统状态
@@ -1428,40 +1407,90 @@ uint16_t Class_Referee::Get_HP(Enum_Referee_Data_Robots_ID Robots_ID)
     switch (Robots_ID)
     {
     case (Referee_Data_Robots_ID_RED_HERO_1):
+    {
         return (Game_Robot_HP.Red_Hero_1);
-    case (Referee_Data_Robots_ID_RED_ENGINEER_2):
-        return (Game_Robot_HP.Red_Engineer_2);
-    case (Referee_Data_Robots_ID_RED_INFANTRY_3):
-        return (Game_Robot_HP.Red_Infantry_3);
-    case (Referee_Data_Robots_ID_RED_INFANTRY_4):
-        return (Game_Robot_HP.Red_Infantry_4);
-    case (Referee_Data_Robots_ID_RED_INFANTRY_5):
-        return (Game_Robot_HP.Red_Infantry_5);
-    case (Referee_Data_Robots_ID_RED_SENTRY_7):
-        return (Game_Robot_HP.Red_Sentry_7);
-    case (Referee_Data_Robots_ID_RED_OUTPOST_11):
-        return (Game_Robot_HP.Red_Outpost_11);
-    case (Referee_Data_Robots_ID_RED_BASE_10):
-        return (Game_Robot_HP.Red_Base_10);
-    case (Referee_Data_Robots_ID_BLUE_HERO_1):
-        return (Game_Robot_HP.Blue_Hero_1);
-    case (Referee_Data_Robots_ID_BLUE_ENGINEER_2):
-        return (Game_Robot_HP.Blue_Engineer_2);
-    case (Referee_Data_Robots_ID_BLUE_INFANTRY_3):
-        return (Game_Robot_HP.Blue_Infantry_3);
-    case (Referee_Data_Robots_ID_BLUE_INFANTRY_4):
-        return (Game_Robot_HP.Blue_Infantry_4);
-    case (Referee_Data_Robots_ID_BLUE_INFANTRY_5):
-        return (Game_Robot_HP.Blue_Infantry_5);
-    case (Referee_Data_Robots_ID_BLUE_SENTRY_7):
-        return (Game_Robot_HP.Blue_Sentry_7);
-    case (Referee_Data_Robots_ID_BLUE_OUTPOST_11):
-        return (Game_Robot_HP.Blue_Outpost_11);
-    case (Referee_Data_Robots_ID_BLUE_BASE_10):
-        return (Game_Robot_HP.Blue_Base_10);
-    default:
-        return (Game_Robot_HP.Blue_Base_10); // 或者返回一个其他合适的默认值
     }
+    break;
+    case (Referee_Data_Robots_ID_RED_ENGINEER_2):
+    {
+        return (Game_Robot_HP.Red_Engineer_2);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_INFANTRY_3):
+    {
+        return (Game_Robot_HP.Red_Infantry_3);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_INFANTRY_4):
+    {
+        return (Game_Robot_HP.Red_Infantry_4);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_INFANTRY_5):
+    {
+        return (Game_Robot_HP.Red_Infantry_5);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_SENTRY_7):
+    {
+        return (Game_Robot_HP.Red_Sentry_7);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_OUTPOST_11):
+    {
+        return (Game_Robot_HP.Red_Outpost_11);
+    }
+    break;
+    case (Referee_Data_Robots_ID_RED_BASE_10):
+    {
+        return (Game_Robot_HP.Red_Base_10);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_HERO_1):
+    {
+        return (Game_Robot_HP.Blue_Hero_1);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_ENGINEER_2):
+    {
+        return (Game_Robot_HP.Blue_Engineer_2);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_INFANTRY_3):
+    {
+        return (Game_Robot_HP.Blue_Infantry_3);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_INFANTRY_4):
+    {
+        return (Game_Robot_HP.Blue_Infantry_4);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_INFANTRY_5):
+    {
+        return (Game_Robot_HP.Blue_Infantry_5);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_SENTRY_7):
+    {
+        return (Game_Robot_HP.Blue_Sentry_7);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_OUTPOST_11):
+    {
+        return (Game_Robot_HP.Blue_Outpost_11);
+    }
+    break;
+    case (Referee_Data_Robots_ID_BLUE_BASE_10):
+    {
+        return (Game_Robot_HP.Blue_Base_10);
+    }
+    break;
+		default :
+				return 0;
+		break;
+    }
+		
 }
 
 /**
@@ -1475,14 +1504,25 @@ Enum_Referee_Data_Status Class_Referee::Get_Event_Supply_Status(uint8_t Supply_I
     switch (Supply_ID)
     {
     case (1):
-        return static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_1_Status_Enum);
-    case (2):
-        return static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_2_Status_Enum);
-    case (3):
-        return static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_3_Status_Enum);
-    default:
-        return static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_1_Status_Enum); // 
+    {
+        return (static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_1_Status_Enum));
     }
+    break;
+    case (2):
+    {
+        return (static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_2_Status_Enum));
+    }
+    break;
+    case (3):
+    {
+        return (static_cast<Enum_Referee_Data_Status>(Event_Data.Supply_3_Status_Enum));
+    }
+    break;
+		default :
+				return (Enum_Referee_Data_Status)0;
+			break;
+    }
+		
 }
 
 /**
@@ -1540,9 +1580,11 @@ Enum_Referee_Data_Status Class_Referee::Get_Event_Highland_Status(uint8_t Highla
         return (static_cast<Enum_Referee_Data_Status>(Event_Data.Highland_4_Status_Enum));
     }
     break;
-    default :
-	    return (static_cast<Enum_Referee_Data_Status>(Event_Data.Highland_4_Status_Enum));
+		default :
+				return (Enum_Referee_Data_Status)0;
+			break;
     }
+		
 }
 
 /**
@@ -1770,15 +1812,8 @@ uint16_t Class_Referee::Get_Chassis_Power_Max()
         // //超级对抗赛
         // return (150);
     }
-#else
-    if (Robot_Status.Chassis_Power_Limit == 0){
-        return (70);
-    }
-    else{
-        return (Robot_Status.Chassis_Power_Limit);
-    }
-    
 #endif
+    return (Robot_Status.Chassis_Power_Limit);
 }
 
 /**
@@ -2203,6 +2238,11 @@ float Class_Referee::Get_Radar_Send_Coordinate_Y()
 }
 
 
+uint16_t Class_Referee::Get_Circle_Index(uint16_t index)
+{
+    return (index%UART_Manage_Object->Rx_Buffer_Length);
+}
+
 /**
  * @brief 设置机器人ID
  *
@@ -2226,8 +2266,15 @@ void Class_Referee::Set_Game_Stage(Enum_Referee_Game_Status_Stage __Game_Stage)
 {
     this->Game_Status.Stage_Enum = __Game_Stage;
 }
+void Class_Referee::Set_Shoot_Speed(float __Shoot_Speed)
+{
+    this->Robot_Booster.Speed = __Shoot_Speed;
+}
+inline void Class_Referee::Set_Booster_17mm_1_Heat(int16_t __Booster_17mm_1_Heat)
+{
+    this->Robot_Power_Heat.Booster_17mm_1_Heat = __Booster_17mm_1_Heat;
+}
 #endif
-
 
 /**
  * @brief 设置17mm枪管冷却cd
@@ -2252,8 +2299,34 @@ void Class_Referee::Set_Booster_17mm_1_Heat_Max(uint16_t __Booster_17mm_1_Heat_M
 {
     this->Robot_Status.Shooter_Barrel_Heat_Limit = __Booster_17mm_1_Heat_Max;
 }
-#endif
 
 #endif
 
+/**
+ * @brief 设置17mm枪管冷却cd
+ *
+ * @param __Booster_17mm_1_Heat_CD 枪管冷却cd
+ */
+#ifdef GIMBAL
+void Class_Referee::Set_Booster_42mm_1_Heat_CD(uint16_t __Booster_42mm_1_Heat_CD)
+{
+    this->Robot_Status.Shooter_Barrel_Cooling_Value = __Booster_42mm_1_Heat_CD;
+}
+#endif
+
+
+/**
+ * @brief 设置17mm枪管热量上限
+ *
+ * @param __Booster_17mm_1_Heat_Max 枪管热量上限
+ */
+#ifdef GIMBAL
+void Class_Referee::Set_Booster_42mm_1_Heat_Max(uint16_t __Booster_42mm_1_Heat_Max)
+{
+    this->Robot_Status.Shooter_Barrel_Heat_Limit = __Booster_42mm_1_Heat_Max;
+}
+
+#endif
+#endif
+#endif
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

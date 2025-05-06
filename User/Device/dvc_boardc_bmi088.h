@@ -16,6 +16,7 @@
 #include "main.h"
 #include "drv_spi.h"
 #include "tim.h"
+#include "config.h"
 #include "QuaternionEKF.h"
 
 #define BMI088_TEMP_FACTOR 0.125f
@@ -143,7 +144,11 @@ protected:
 
     uint8_t error = BMI088_NO_ERROR;
 
+    #ifdef GIMBAL
     const uint8_t caliOffset = 1;
+    #elif defined(CHASSIS)
+    const uint8_t caliOffset = 0;
+    #endif
 
     uint8_t fac_us = 0;
     uint32_t fac_ms = 0;

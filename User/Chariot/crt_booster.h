@@ -42,6 +42,13 @@ enum Enum_Booster_Control_Type
     Booster_Control_Type_MULTI,  //连发
 };
 
+enum Enum_Booster_User_Control_Type
+{
+    Booster_User_Control_Type_DISABLE = 0,
+    Booster_User_Control_Type_SINGLE,
+    Booster_User_Control_Type_MULTI, // 连发
+};
+
 /**
  * @brief 摩擦轮控制类型
  *
@@ -111,6 +118,7 @@ public:
     inline float Get_Friction_Omega();
     inline float Get_Friction_Omega_Threshold();
 
+    inline Enum_Booster_User_Control_Type Get_Booster_User_Control_Type();
     inline Enum_Booster_Control_Type Get_Booster_Control_Type();
     inline Enum_Friction_Control_Type Get_Friction_Control_Type();
 
@@ -118,9 +126,13 @@ public:
     inline void Set_Friction_Control_Type(Enum_Friction_Control_Type __Friction_Control_Type);
     inline void Set_Friction_Omega(float __Friction_Omega);
     inline void Set_Driver_Omega(float __Driver_Omega);
+    inline void Set_Ture_Booster_Heat(uint16_t __Ture_Booster_Heat);
+    inline void Set_Max_Booster_Heat(uint16_t __Max_Booster_Heat);
 
     void TIM_Calculate_PeriodElapsedCallback();
 	void Output();
+
+    Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
 		
 protected:
     //初始化相关常量
@@ -144,15 +156,19 @@ protected:
     //写变量
 
     //发射机构状态
-    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+    Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_DISABLE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
-    float Friction_Omega = 800.0f;
+    float Friction_Omega = 700.0f;
 		
     //拨弹盘实际的目标速度, 一圈八发子弹
     float Driver_Omega = 2.0f * PI;
     //拨弹轮目标绝对角度 加圈数
     float Drvier_Angle = 0.0f;
+
+    uint16_t Ture_Booster_Heat = 0.0f;
+    uint16_t Max_Booster_Heat = 0.0f;
+
     //读写变量
 
     //内部函数
@@ -214,6 +230,11 @@ void Class_Booster::Set_Friction_Control_Type(Enum_Friction_Control_Type __Frict
     Friction_Control_Type = __Friction_Control_Type;
 }
 
+inline Enum_Booster_User_Control_Type Class_Booster::Get_Booster_User_Control_Type()
+{
+  return Booster_User_Control_Type;
+}
+
 /**
  * @brief 获得发射机构状态
  *
@@ -253,6 +274,16 @@ void Class_Booster::Set_Friction_Omega(float __Friction_Omega)
 void Class_Booster::Set_Driver_Omega(float __Driver_Omega)
 {
     Driver_Omega = __Driver_Omega;
+}
+
+inline void Class_Booster::Set_Ture_Booster_Heat(uint16_t __Ture_Booster_Heat)
+{
+    Ture_Booster_Heat = __Ture_Booster_Heat;
+}
+
+inline void Class_Booster::Set_Max_Booster_Heat(uint16_t __Max_Booster_Heat)
+{
+    Max_Booster_Heat = __Max_Booster_Heat;
 }
 
 #endif

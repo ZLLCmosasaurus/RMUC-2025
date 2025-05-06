@@ -62,6 +62,7 @@ protected:
     //常量
 
     //内部变量
+    float True_Acc_Z = 0.0f;
     float True_Rad_Yaw = 0.0f;
     float True_Angle_Yaw = 0.0f;
     float True_Gyro_Yaw = 0.0f;
@@ -256,9 +257,9 @@ protected:
     float Yaw_Half_Turns;
 
     // pitch轴最小值
-    float Min_Pitch_Angle = -40.0f;
+    float Min_Pitch_Angle = -10.0f;
     // pitch轴最大值
-    float Max_Pitch_Angle = 40.0f ; //多10°
+    float Max_Pitch_Angle = 25.0f ; 
 
     //内部变量 
     
@@ -267,7 +268,7 @@ protected:
     //写变量
 
     //云台状态
-    Enum_Gimbal_Control_Type Gimbal_Control_Type = Gimbal_Control_Type_DISABLE ;
+    Enum_Gimbal_Control_Type Gimbal_Control_Type = Gimbal_Control_Type_DISABLE;
 
     //读写变量
 
@@ -276,7 +277,7 @@ protected:
     float Target_Yaw_Angle = 0.0f;         
     float Pre_Target_Yaw_Angle = 0.0f;
     // pitch轴角度
-    float Target_Pitch_Angle = -6.0f;       //初始角度的偏移量  -6.0度
+    float Target_Pitch_Angle = -0.0f;       //初始角度的偏移量  -6.0度
 
     //内部函数
 
