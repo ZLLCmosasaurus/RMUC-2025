@@ -5,7 +5,11 @@
   "srcDirs": [],
   "virtualFolder": {
     "name": "<virtual_root>",
-    "files": [],
+    "files": [
+      {
+        "path": ".cmsis/libdsp/arm/arm_cortexM7l_math.lib"
+      }
+    ],
     "folders": [
       {
         "name": "Config",
@@ -45,6 +49,42 @@
           },
           {
             "path": "../User/Chariot/Src/crt_gimbal.cpp"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Device",
+        "files": [
+          {
+            "path": "../User/Device/Src/dvc_boardc_bmi088.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_djimotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dmmotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dr16.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_dwt.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_imu.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_lkmotor.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_minipc.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_referee.cpp"
+          },
+          {
+            "path": "../User/Device/Src/dvc_supercap.cpp"
           }
         ],
         "folders": []
@@ -143,6 +183,9 @@
                   },
                   {
                     "path": "../Core/Src/fdcan.c"
+                  },
+                  {
+                    "path": "../Core/Src/iwdg.c"
                   },
                   {
                     "path": "../Core/Src/memorymap.c"
@@ -276,6 +319,9 @@
                 "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c"
               },
               {
+                "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_iwdg.c"
+              },
+              {
                 "path": "../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c"
               },
               {
@@ -333,47 +379,7 @@
       },
       {
         "name": "::CMSIS",
-        "files": [
-          {
-            "path": "../Src/arm_cortexM7l_math.lib"
-          }
-        ],
-        "folders": []
-      },
-      {
-        "name": "Device",
-        "files": [
-          {
-            "path": "../User/Device/Src/dvc_boardc_bmi088.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_djimotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dmmotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dr16.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_dwt.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_imu.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_lkmotor.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_minipc.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_referee.cpp"
-          },
-          {
-            "path": "../User/Device/Src/dvc_supercap.cpp"
-          }
-        ],
+        "files": [],
         "folders": []
       }
     ]
@@ -386,7 +392,9 @@
   },
   "targets": {
     "Sentry": {
-      "excludeList": [],
+      "excludeList": [
+        "<virtual_root>/::CMSIS/arm_cortexM7l_math.lib"
+      ],
       "toolchain": "AC6",
       "compileConfig": {
         "cpuType": "Cortex-M7",
@@ -432,7 +440,7 @@
                 "startAddr": "0x20000000",
                 "size": "0x20000"
               },
-              "isChecked": true,
+              "isChecked": false,
               "noInit": false
             },
             {
@@ -440,7 +448,7 @@
               "id": 2,
               "mem": {
                 "startAddr": "0x24000000",
-                "size": "0x20000"
+                "size": "0x50000"
               },
               "isChecked": true,
               "noInit": false
@@ -533,15 +541,12 @@
           "../User/Device/Inc",
           "../User/Driver/Inc",
           "../User/Algorithm/Inc",
+          "../Drivers/CMSIS/Include",
           "RTE/_Sentry",
-          ".cmsis/driver/VIO/Include",
-          "../DSP/Include",
-          ".cmsis/libdsp/arm",
-          ".cmsis/include"
+          "../DSP/Include"
         ],
         "libList": [
-          ".cmsis/libdsp",
-          ".cmsis/libdsp/arm"
+          ".cmsis/libdsp"
         ],
         "defineList": [
           "USE_HAL_DRIVER",

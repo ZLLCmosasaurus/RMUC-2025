@@ -310,10 +310,7 @@ void Class_Booster::Output()
             // {
             //     Motor_Driver.Set_Target_Omega_Radian(0.0f);
             // }
-            if(MiniPC->Get_Fortress_Mode() == Fortress_ENABLE)
-            {
-                
-            }
+            Cooling_Value = CAN3_Chassis_Rx_Data_B.cooling_value;
             if(shoot_time == 0)
             {
                 ShootTime = ((Heat_Max - Heat) + 2 * Cooling_Value) * 10;
@@ -326,14 +323,14 @@ void Class_Booster::Output()
             }               
             else if(0 < shoot_time && shoot_time < ShootTime)
             {
-                Driver_Omega = shoot_speed * 2 * PI / 8.f;
+                Driver_Omega = shoot_speed * 2 * PI / 7.f;
                 Math_Constrain(&Driver_Omega, 0.0f, 18.0f);
                 Motor_Driver.Set_Target_Omega_Radian(-Driver_Omega);
             }
             else
             {
                 shoot_speed = (Cooling_Value / Heat_Consumption);
-                Driver_Omega = shoot_speed * 2 * PI / 8.f;
+                Driver_Omega = shoot_speed * 2 * PI / 7.f;
                 Math_Constrain(&Driver_Omega, 0.0f, 18.0f);
                 Motor_Driver.Set_Target_Omega_Radian(-Driver_Omega);
             }
@@ -341,7 +338,16 @@ void Class_Booster::Output()
             {
                 shoot_time++;
             }
-            // Motor_Driver.Set_Target_Omega_Radian(Default_Driver_Omega * 2.5f);//测试用 平常注释
+            //Motor_Driver.Set_Target_Omega_Radian(Default_Driver_Omega * 2.5f);//测试用 平常注释
+            if(Heat > 340)
+            {
+                Motor_Driver.Set_Target_Omega_Radian(Default_Driver_Omega * 0.4f);
+            }
+            if(Heat > 370)
+            {
+                Motor_Driver.Set_Target_Omega_Radian(Default_Driver_Omega * 0.25f);
+            }
+            
             Set_Friction_Control_Type(Friction_Control_Type_ENABLE);
         }
         break;  

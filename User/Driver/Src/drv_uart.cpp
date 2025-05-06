@@ -132,8 +132,6 @@ void TIM_UART_PeriodElapsedCallback()
 {
     //上位机通讯
     UART_Send_Data(&huart8, UART8_Manage_Object.Tx_Buffer, 56);
-    //裁判系统通信
-    UART_Send_Data(&huart10, UART10_Manage_Object.Tx_Buffer, 56);
 }
 
 
