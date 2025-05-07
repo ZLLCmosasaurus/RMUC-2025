@@ -39,10 +39,11 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
     {
         // 正常状态
 
-        if (abs(Booster->Motor_Friction_Right.Get_Now_Torque()) >= Booster->Friction_Torque_Threshold)
+			if (abs(Booster->Motor_Friction_Right.Get_Now_Torque()) >= Booster->Friction_Torque_Threshold && abs(Booster->Motor_Friction_Right.Get_Now_Torque())<=10000 )
         {
             // 大扭矩->检测状态
             Set_Status(1);
+            
         }
         else if (Booster->Booster_Control_Type == Booster_Control_Type_DISABLE)
         {
@@ -65,7 +66,7 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
     case (2):
     {
         // 发射完成状态->加上热量进入下一轮检测
-
+        Booster->actual_bullet_num++;
         Heat += 10.0f;
         Set_Status(0);
     }
@@ -93,6 +94,8 @@ void Class_FSM_Heat_Detect::Reload_TIM_Status_PeriodElapsedCallback()
         Heat = 0;
     }
 }
+
+
 
 /**
  * @brief 卡弹策略有限自动机

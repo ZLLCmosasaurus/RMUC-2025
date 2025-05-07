@@ -93,7 +93,7 @@ public:
     // 热量检测有限自动机
     Class_FSM_Heat_Detect FSM_Heat_Detect;
     friend class Class_FSM_Heat_Detect;
-
+		uint16_t actual_bullet_num=0;
     // 卡弹策略有限自动机
     Class_FSM_Antijamming FSM_Antijamming;
     friend class Class_FSM_Antijamming;
@@ -137,7 +137,7 @@ protected:
     // 拨弹盘堵转扭矩阈值, 超出被认为卡弹
     uint16_t Driver_Torque_Threshold = 5500;
     // 摩擦轮单次判定发弹阈值, 超出被认为发射子弹
-    uint16_t Friction_Torque_Threshold = 3300;
+    uint16_t Friction_Torque_Threshold = 2000;
     // 摩擦轮速度判定发弹阈值, 超出则说明已经开机
     float Friction_Omega_Threshold = 600;
 
