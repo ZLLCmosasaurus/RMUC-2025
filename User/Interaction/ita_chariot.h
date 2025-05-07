@@ -45,6 +45,8 @@ enum Enum_MinPC_Aim_Status
     MinPC_Aim_Status_ENABLE,
 };
 
+
+
 /**
  * @brief 摩擦轮状态
  *
@@ -190,6 +192,8 @@ public:
     void TIM1msMod50_Gimbal_Communicate_Alive_PeriodElapsedCallback();
     uint16_t Booster_fric_omega_left = 0;
     uint16_t Booster_fric_omega_right = 0;
+		uint16_t Booster_bullet_num_before=0;
+		uint16_t Booster_bullet_num=0;
 #elif defined(GIMBAL)
 
     inline void DR16_Offline_Cnt_Plus();
@@ -237,6 +241,8 @@ public:
     Enum_Referee_UI_Refresh_Status Referee_UI_Refresh_Status = Referee_UI_Refresh_Status_DISABLE;
     Enum_Booster_User_Control_Type Booster_User_Control_Type = Booster_User_Control_Type_SINGLE;
     Enum_MiniPC_Type MiniPC_Type = MiniPC_Type_Nomal;
+		Enum_Antispin_Type Antispin_Type=Antispin_On;
+		
     // 底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
 

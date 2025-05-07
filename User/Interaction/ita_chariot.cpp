@@ -174,10 +174,16 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
 }
 void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback_1()
 {
+		uint16_t before_game_bullet_num=0;
     MiniPC_Type = Enum_MiniPC_Type(CAN_Manage_Object->Rx_Buffer.Data[0]);
-
+		Antispin_Type=Enum_Antispin_Type(CAN_Manage_Object->Rx_Buffer.Data[1]);
     memcpy(&Booster_fric_omega_left, &CAN_Manage_Object->Rx_Buffer.Data[2], sizeof(uint16_t));
     memcpy(&Booster_fric_omega_right, &CAN_Manage_Object->Rx_Buffer.Data[4], sizeof(uint16_t));
+		memcpy(&Booster_bullet_num,&CAN_Manage_Object->Rx_Buffer.Data[6],sizeof(uint16_t));
+		if(Referee.Get_Game_Stage()==Referee_Game_Status_Stage_NOT_STARTED){
+		Booster_bullet_num_before=before_game_bullet_num;
+		}
+		
 }
 #endif
 
@@ -264,11 +270,15 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback_1()
 {
     uint16_t tmp_fric_omega_left = 0;
     uint16_t tmp_fric_omega_right = 0;
+		uint16_t tmp_actual_bullet_num=0;
     tmp_fric_omega_left = (uint16_t)abs(Booster.Motor_Friction_Left.Get_Now_Omega_Radian());
     tmp_fric_omega_right = (uint16_t)abs(Booster.Motor_Friction_Right.Get_Now_Omega_Radian());
+	tmp_actual_bullet_num=Booster.actual_bullet_num;
     CAN2_Gimbal_Tx_Chassis_Data_1[0] = MiniPC.Get_MiniPC_Type();
+		CAN2_Gimbal_Tx_Chassis_Data_1[1]=MiniPC.Get_Antispin_Type();
     memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 2, &tmp_fric_omega_left, sizeof(uint16_t));
     memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 4, &tmp_fric_omega_right, sizeof(uint16_t));
+		memcpy(CAN2_Gimbal_Tx_Chassis_Data_1 + 6, &tmp_actual_bullet_num, sizeof(uint16_t));
 }
 #endif
 
@@ -591,7 +601,7 @@ void Class_Chariot::Control_Gimbal()
                         tmp_gimbal_yaw = MiniPC.Get_Rx_Yaw_Angle();
                         tmp_gimbal_pitch = MiniPC.Get_Rx_Pitch_Angle();
                     }
-                }
+                }      
             }
             else
             {
@@ -599,7 +609,8 @@ void Class_Chariot::Control_Gimbal()
             }
             tmp_gimbal_yaw -= DR16.Get_Mouse_X() * DR16_Mouse_Yaw_Angle_Resolution;
             tmp_gimbal_pitch += DR16.Get_Mouse_Y() * DR16_Mouse_Pitch_Angle_Resolution;
-
+//           
+						
             // F键按下 一键开关弹舱
             if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
@@ -620,15 +631,15 @@ void Class_Chariot::Control_Gimbal()
                 tmp_gimbal_yaw += 180;
             }
             // V键按下 自瞄模式中切换四点和五点模式
-            if (DR16.Get_Keyboard_Key_V() == DR16_Key_Status_TRIG_FREE_PRESSED)
+            if (DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
-                if (Gimbal.MiniPC->Get_MiniPC_Type() == MiniPC_Type_Windmill)
+                if (Gimbal.MiniPC->Get_Antispin_Type ()== Antispin_On)
                 {
-                    Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal);
+                    Gimbal.MiniPC->Set_Antispin_Type(Antispin_Off);
                 }
                 else
                 {
-                    Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Windmill);
+                    Gimbal.MiniPC->Set_Antispin_Type(Antispin_On);
                 }
             }
             // G键按下切换Pitch锁定模式和free模式

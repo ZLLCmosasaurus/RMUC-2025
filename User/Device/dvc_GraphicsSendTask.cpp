@@ -474,6 +474,28 @@ void FrictSpeed_Draw(uint16_t omega_left, uint16_t omega_right, uint8_t Init_Cnt
 		last_omega_right = omega_right;
 	}
 }
+void BulletNum_Draw(uint16_t bullet_num, uint8_t Init_Cnt)
+{
+	static uint8_t BulletNumName[] = "bun"; // 数值的独立名称
+	static uint16_t last_bullet_num = 0;
+	uint8_t optype = (Init_Cnt == 0) ? Op_Change : Op_Add;
+
+	// 恢复条件更新逻辑，确保数值变化时才更新显示
+	if (bullet_num != last_bullet_num || Init_Cnt > 0)
+	{
+		// 将整数转换为字符串
+		uint8_t num_str[8];
+		snprintf((char *)num_str, sizeof(num_str), "%d", bullet_num);
+
+		Char_Draw(0, optype,
+				  0.9 * SCREEN_LENGTH, 0.60 * SCREEN_WIDTH, // 数值位置 (X, Y)
+				  20, strlen((char *)num_str), 2,
+				  Green, BulletNumName, num_str);
+	}
+
+	// 更新记录的值
+	last_bullet_num = bullet_num;
+}
 /*�������ݵ�������*/
 void CapDraw(float CapVolt, uint8_t Init_Flag)
 {
@@ -545,7 +567,8 @@ void Char_Init(void)
 	static uint8_t GimbalStatusLabelName[] = "gsl"; // 云台状态标签名称
 	static uint8_t BoosterModeLabelName[] = "bml";	// 发射机构模式标签名称
 	static uint8_t MiniPCModeLabelName[] = "mpl";	// MiniPC模式标签名称
-
+	static uint8_t BulletNumName[] = "bnu";			// 弹丸已发射数量
+	static uint8_t AntispinType[] = "ant";
 	/*              FIREMODE字符*/
 	uint8_t fire_char[] = "CHASSIS :";
 	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.40 * SCREEN_WIDTH, 20, sizeof(fire_char), 2, Yellow, FireName, fire_char);
@@ -557,6 +580,11 @@ void Char_Init(void)
 	uint8_t fric_speed_label[] = "OMEGA :";
 	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.35 * SCREEN_WIDTH, 20, sizeof(fric_speed_label), 2, Yellow, FricSpeedName, fric_speed_label);
 
+	uint8_t bullet_num_label[] = "BULLET :";
+	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.60 * SCREEN_WIDTH, 20, sizeof(bullet_num_label), 2, Yellow, BulletNumName, bullet_num_label);
+
+	uint8_t antispintype_label[] = "Antispin :";
+	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.65 * SCREEN_WIDTH, 20, sizeof(antispintype_label), 2, Yellow, BulletNumName, antispintype_label);
 	/*              MINIPC MODE字符*/
 	uint8_t minipc_mode_label[] = "MINIPC :";
 	Char_Draw(0, Op_Add, 0.80 * SCREEN_LENGTH, 0.55 * SCREEN_WIDTH, 20, sizeof(minipc_mode_label), 2, Yellow, MiniPCModeLabelName, minipc_mode_label);
@@ -608,14 +636,12 @@ void PitchUI_Change(float Pitch, uint8_t Init_Cnt)
 	// 圆弧位置和大小参数
 	uint16_t centerX = 0.6 * SCREEN_LENGTH;
 	uint16_t centerY = 0.5 * SCREEN_WIDTH;
-	uint16_t radiusX = 200;	// X轴半径
+	uint16_t radiusX = 200; // X轴半径
 	uint16_t radiusY = 300; // Y轴半径（大于X轴半径，形成竖直方向的椭圆）
-
 
 	float pitchMin = -30.0f;
 	float pitchMax = 30.0f;
 
-	
 	uint16_t bgStartAngle = 30;
 	uint16_t bgEndAngle = 150;
 
@@ -720,7 +746,6 @@ void RadarDoubleDamage_Draw(uint8_t Init_Cnt)
 	default:
 		break;
 	}
-	
 }
 
 /**********************************************************************************************************
@@ -813,7 +838,34 @@ void MiniPCMode_Draw(uint8_t Init_Cnt)
 		break;
 	}
 }
+/**********************************************************************************************************
+ *函 数 名: Antispin_Draw
+ *功能说明: 显示是否开启反小陀螺UI显示
+ *形    参: 初始化标志
+ *返 回 值: 无
+ **********************************************************************************************************/
+void Antispin_Draw(uint8_t Init_Cnt)
+{
+	static uint8_t AntispinTypeName[] = "atn";
+	static uint8_t optype;
+	static uint8_t On[] = "ON  ";
+	static uint8_t Off[] = "OFF";
 
+	optype = (Init_Cnt == 0) ? Op_Change : Op_Add;
+
+	switch (JudgeReceiveData.Minipc_Mode)
+	{
+	case 0: // MiniPC_Mode_ARMOR
+		Char_Draw(0, optype, 0.9 * SCREEN_LENGTH, 0.65 * SCREEN_WIDTH, 20, sizeof(Off), 2, Green, AntispinTypeName, Off);
+		break;
+	case 1: // MiniPC_Mode_WINDMILL
+		Char_Draw(0, optype, 0.9 * SCREEN_LENGTH, 0.65 * SCREEN_WIDTH, 20, sizeof(On), 2, Orange, AntispinTypeName, On);
+		break;
+	default:
+		Char_Draw(0, optype, 0.9 * SCREEN_LENGTH, 0.65 * SCREEN_WIDTH, 20, sizeof(On), 2, Green, AntispinTypeName, On);
+		break;
+	}
+}
 /**********************************************************************************************************
  *函 数 名: GraphicSendtask
  *功能说明: ͼ�η�������
@@ -855,6 +907,8 @@ void GraphicSendtask(void)
 		CapDraw(JudgeReceiveData.Supercap_Voltage, Init_Cnt);
 		// MiniPC_Aim_Change(Init_Cnt);
 		FrictSpeed_Draw(JudgeReceiveData.booster_fric_omega_left, JudgeReceiveData.booster_fric_omega_right, Init_Cnt);
+		BulletNum_Draw(JudgeReceiveData.Booster_bullet_num, Init_Cnt);
+		Antispin_Draw(Init_Cnt);
 		// CapUI_Change(JudgeReceiveData.Supercap_Voltage, Init_Cnt);
 		BoosterMode_Draw(Init_Cnt);
 		GimbalStatus_Draw(Init_Cnt);
@@ -937,7 +991,24 @@ void GraphicSendtask(void)
 			last_update_time = current_time;
 			break;
 		}
+		if (Last_JudgeReceiveData.Antispin_Type != JudgeReceiveData.Antispin_Type)
+		{
 
+			ui_state = UI_STATE_STATUS_UPDATE;
+			last_status_type = 7;
+			status_update_retry = 0;
+			last_update_time = current_time;
+			break;
+		}
+		if (Last_JudgeReceiveData.Booster_bullet_num != JudgeReceiveData.Booster_bullet_num)
+		{
+
+			ui_state = UI_STATE_STATUS_UPDATE;
+			last_status_type = 8;
+			status_update_retry = 0;
+			last_update_time = current_time;
+			break;
+		}
 		// 如果没有状态变化，且距离上次数值更新已经过去足够时间，则进入数值更新状态
 		if (current_time - last_update_time > 10) // 10ms更新一次数值
 		{
@@ -973,6 +1044,14 @@ void GraphicSendtask(void)
 		case 6: // MiniPC模式
 			MiniPCMode_Draw(0);
 			Last_JudgeReceiveData.Minipc_Mode = JudgeReceiveData.Minipc_Mode;
+			break;
+		case 7:
+			Antispin_Draw(0);
+			Last_JudgeReceiveData.Antispin_Type = JudgeReceiveData.Antispin_Type;
+			break;
+		case 8:
+			BulletNum_Draw(JudgeReceiveData.Booster_bullet_num, 0);
+			Last_JudgeReceiveData.Booster_bullet_num = JudgeReceiveData.Booster_bullet_num;
 			break;
 		}
 
