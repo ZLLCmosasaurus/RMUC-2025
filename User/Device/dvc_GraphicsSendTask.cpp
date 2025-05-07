@@ -991,7 +991,24 @@ void GraphicSendtask(void)
 			last_update_time = current_time;
 			break;
 		}
+		if (Last_JudgeReceiveData.Antispin_Type != JudgeReceiveData.Antispin_Type)
+		{
 
+			ui_state = UI_STATE_STATUS_UPDATE;
+			last_status_type = 7;
+			status_update_retry = 0;
+			last_update_time = current_time;
+			break;
+		}
+		if (Last_JudgeReceiveData.Booster_bullet_num != JudgeReceiveData.Booster_bullet_num)
+		{
+
+			ui_state = UI_STATE_STATUS_UPDATE;
+			last_status_type = 8;
+			status_update_retry = 0;
+			last_update_time = current_time;
+			break;
+		}
 		// 如果没有状态变化，且距离上次数值更新已经过去足够时间，则进入数值更新状态
 		if (current_time - last_update_time > 10) // 10ms更新一次数值
 		{
@@ -1032,7 +1049,7 @@ void GraphicSendtask(void)
 			Antispin_Draw(0);
 			Last_JudgeReceiveData.Antispin_Type = JudgeReceiveData.Antispin_Type;
 			break;
-			case 8:
+		case 8:
 			BulletNum_Draw(JudgeReceiveData.Booster_bullet_num, 0);
 			Last_JudgeReceiveData.Booster_bullet_num = JudgeReceiveData.Booster_bullet_num;
 			break;
