@@ -274,7 +274,7 @@ void DR16_UART3_Callback(uint8_t *Buffer, uint16_t Length)
     chariot.DR16.DR16_UART_RxCpltCallback(Buffer);
 
     //底盘 云台 发射机构 的控制策略
-    if(chariot.VT13.Get_VT13_Status() == VT13_Status_DISABLE)
+    
     chariot.TIM_Control_Callback();
 		
 	
@@ -284,12 +284,14 @@ void Image_Callback(uint8_t *Buffer, uint16_t Length)
 {
 
     chariot.VT13.VT13_UART_RxCpltCallback(Buffer);
-
+		if(chariot.DR16.Get_DR16_Status() == DR16_Status_DISABLE)
+		{
     //底盘 云台 发射机构 的控制策略
     if(Buffer[0] == 0xA9 && Buffer[1] == 0x53)
     {
         chariot.TIM_Control_Callback();
     }
+	}
   
    
 		
@@ -400,7 +402,7 @@ void Task1ms_TIM5_Callback()
          if (mod20 == 20)
          {
              TIM_USB_PeriodElapsedCallback(&MiniPC_USB_Manage_Object);
-					 chariot.LED.WaterFall(18,Color_RED);
+
          mod20 = 0;
          }	        
     }
@@ -446,7 +448,7 @@ extern "C" void Task_Init()
         
         //遥控器接收
         UART_Init(&huart3, DR16_UART3_Callback, 18);
-	    UART_Init(&huart1, Image_Callback, 40);
+	    UART_Init(&huart1, Image_Callback, 30);
         UART_Init(&huart6, Referee_Callback, 128);
 
         //上位机USB

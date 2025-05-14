@@ -287,8 +287,8 @@ void Class_Booster::Output()
     //控制摩擦轮
     if(Friction_Control_Type != Friction_Control_Type_DISABLE)
     {
-        Motor_Friction_Left.Set_Target_Omega_Radian(-Friction_Omega);
-        Motor_Friction_Right.Set_Target_Omega_Radian(Friction_Omega);
+        Motor_Friction_Left.Set_Target_Omega_Radian(Friction_Omega);
+        Motor_Friction_Right.Set_Target_Omega_Radian(-Friction_Omega);
     }
     else
     {
