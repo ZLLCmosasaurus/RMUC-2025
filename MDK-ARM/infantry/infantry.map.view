@@ -1,3 +1,6 @@
 tool: AC6
-fileName: infantry.map
-elfName: infantry.axf
+fileName: 'infantry.map'
+elfName: 'infantry.axf'
+compilerName: 'ARMCLANG 6'
+compilerFullName: 'ARMCLANG 6'
+compilerPath: 'D:\Keil_v5\ARM\ARMCLANG\bin\armclang.exe'

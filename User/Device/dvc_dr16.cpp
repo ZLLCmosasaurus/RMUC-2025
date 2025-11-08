@@ -311,6 +311,8 @@ void Class_DR16::Image_Data_Process(uint8_t* __rx_buffer)
     {
         Judge_Key(&Data.Keyboard_Key[i], ((tmp_buffer->key) >> i) & 0x1, ((Pre_UART_Image_Rx_Data.key) >> i) & 0x1);
     }
+
+    Data.Swtich = tmp_buffer->mode_sw;
 }
 
 /**

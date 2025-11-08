@@ -36,7 +36,7 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
 
     // 裁判系统
     Referee.Init(&huart1);
-
+    Chassis.Supercap.Referee = &Referee;
     // 底盘
     Chassis.Referee = &Referee;
     Chassis.Init(Chassis_Velocity_Max, Chassis_Velocity_Max);
@@ -47,8 +47,6 @@ void Class_Chariot::Init(float __DR16_Dead_Zone)
     // yaw电机canid初始化  只获取其编码器值用于底盘随动，并不参与控制
     Motor_Yaw.Init(&hcan1, DJI_Motor_ID_0x205, DJI_Motor_Control_Method_ANGLE, 2);
 
-    // 底盘缓冲能量处理
-    PID_Chassis_Buffer_Power.Init(2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 22.5f, 0.0f, 0.0f, 0.0f, 0.001f);
 #elif defined(GIMBAL)
 
     // 遥控器离线控制 状态机
@@ -162,14 +160,12 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     if(Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN_Positive||
         Chassis.Get_Chassis_Control_Type()==Chassis_Control_Type_SPIN_Negative)
     {
-        //Offset_Angle = fabs(Motor_Yaw.Get_Now_Omega_Radian()/2.0f) * 0.01f;
         Offset_Angle = 15.0f * DEG_TO_RAD;
     }
     else
     {
         Offset_Angle = 0.0f;
     }
-    //
     
     // 获取云台坐标系和底盘坐标系的夹角（弧度制）
     Chassis_Angle = Chassis_Coordinate_System_Angle_Rad;
@@ -180,7 +176,6 @@ void Class_Chariot::CAN_Chassis_Rx_Gimbal_Callback()
     // 设定底盘目标速度
     Chassis.Set_Target_Velocity_X(chassis_velocity_x);
     Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
-    // Chassis.Set_Target_Omega(chassis_omega);
 }
 
 void Class_Chariot::Control_Chassis_Omega_TIM_PeriodElapsedCallback()
@@ -280,6 +275,7 @@ void Class_Chariot::CAN_Gimbal_Tx_Chassis_Callback()
  */
 #ifdef GIMBAL
 float Mouse_Yaw_k = 0.0001f,Mouse_Pitch_k = 0.0001f;
+float Invert_Coordinate_Systerm_Flag = 1.0f; 
 void Class_Chariot::Control_Chassis()
 {
     // 遥控器摇杆值
@@ -391,10 +387,6 @@ void Class_Chariot::Control_Chassis()
                         transform_pitch_offest += VT13_Mouse_Pitch_Angle_Resolution * Mouse_Pitch_k;
                         Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
                     }
-                    // else if (DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
-                    // {
-                    //     Gimbal.Set_Transfrom_Pitch_IMU_Angle(transform_pitch_offest);
-                    // }
                 }
                 break;
                 case 0:
@@ -404,51 +396,6 @@ void Class_Chariot::Control_Chassis()
                 break;
                 }
 
-                //切换雷达辅助模式
-                if(DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_TRIG_FREE_PRESSED)
-                {
-                    if(MiniPC.Get_Radar_Control_Type() == Radar_Control_Type_Person)
-                        MiniPC.Set_Radar_Control_Type(Radar_Control_Type_UWB);
-                    else
-                        MiniPC.Set_Radar_Control_Type(Radar_Control_Type_Person);
-                    
-                    UI_Radar_Control_Type = MiniPC.Get_Radar_Control_Type();
-                }
-
-            }
-            else if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
-            {
-                if (UI_Radar_Target == Radar_Target_Pos_Outpost)
-                    UI_Radar_Target = Radar_Target_Pos_Base;
-                else
-                    UI_Radar_Target = Radar_Target_Pos_Outpost;
-
-                MiniPC.Set_Radar_Target(UI_Radar_Target);
-            }
-            else if (DR16.Get_Keyboard_Key_X() == DR16_Key_Status_TRIG_FREE_PRESSED)
-            {
-                switch (UI_Radar_Target)
-                {
-                case Radar_Target_Pos_Outpost:
-                {
-                    if (UI_Radar_Target_Pos != Radar_Target_Pos_Outpost_B)
-                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
-                    else
-                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
-                }
-                break;
-                case Radar_Target_Pos_Base:
-                {
-                    if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_A)
-                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_B;
-                    else if(UI_Radar_Target_Pos == Radar_Target_Pos_Outpost_B)
-                        UI_Radar_Target_Pos = Radar_Target_Pos_C;
-                    else if(UI_Radar_Target_Pos == Radar_Target_Pos_C)
-                        UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
-                }
-                break;
-                }
-                MiniPC.Set_Radar_Target_Outpost(UI_Radar_Target_Pos);
             }
         }
         break;
@@ -500,15 +447,10 @@ void Class_Chariot::Control_Chassis()
         }
         break;
         }
-
-        // if(DR16.Get_Keyboard_Key_Z() == DR16_Key_Status_PRESSED)
-        // {
-        //     Chassis.Supercap.Get_Supercap_Control_Status(Supercap_Control_Status_ENABLE);
-        // }
-        // if(DR16.Get_Keyboard_Key_X() == DR16_Key_Status_PRESSED)
-        // {
-        //     Chassis.Supercap.Get_Supercap_Control_Status(Supercap_Control_Status_DISABLE);
-        // }
+        if (DR16.Get_Keyboard_Key_G() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        {
+            Invert_Coordinate_Systerm_Flag *= -1.0f;
+        }
     }
 #elif defined(USE_VT13)
      float vt13_l_x, vt13_l_y;    
@@ -629,8 +571,8 @@ void Class_Chariot::Control_Chassis()
 
     #endif
 
-    Chassis.Set_Target_Velocity_X(chassis_velocity_x);
-    Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
+    Chassis.Set_Target_Velocity_X(chassis_velocity_x * Invert_Coordinate_Systerm_Flag);
+    Chassis.Set_Target_Velocity_Y(chassis_velocity_y * Invert_Coordinate_Systerm_Flag);
     Chassis.Set_Target_Omega(chassis_omega);
 }
 #endif
@@ -715,10 +657,9 @@ void Class_Chariot::Control_Gimbal()
         break;
         }
         // 自瞄模式逻辑
-        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下自瞄
+        if (DR16.Get_Left_Switch() == DR16_Switch_Status_DOWN) // 左下部署
         {
-            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
-            Gimbal.MiniPC->Set_MiniPC_Type(MiniPC_Type_Nomal);
+            Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
 						Gimbal.Set_Launch_Mode(Launch_Enable);
         }
         else // 非自瞄模式
@@ -758,6 +699,15 @@ void Class_Chariot::Control_Gimbal()
                 Gimbal.Set_Target_Yaw_Angle(tmp_gimbal_yaw_imu);
             }
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
+
+            // 长按右键  开启自瞄
+            if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_MiniPC_Status() == MiniPC_Status_ENABLE)
+            {
+                //Gimbal.Set_Target_Yaw_Encoder_Angle(MiniPC.Get_Rx_Yaw_Angle() + Gimbal.Get_Transfrom_Yaw_Encoder_Angle());
+                Gimbal.Set_Target_Pitch_Angle(MiniPC.Get_Rx_Pitch_Angle() + Gimbal.Get_Transfrom_Pitch_IMU_Angle());
+                //Gimbal.Set_Target_Yaw_Angle(MiniPC.Get_Rx_Yaw_Angle());
+                Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
+            }
         }
         break;
         case Launch_Enable:
@@ -783,6 +733,7 @@ void Class_Chariot::Control_Gimbal()
                 tmp_gimbal_pitch += True_Mouse_Y * DR16_Mouse_Pitch_Angle_Resolution;
                 Gimbal.Set_Target_Pitch_Angle(tmp_gimbal_pitch);
             }
+            #ifdef OLD
             // 长按右键  开启自瞄
             if (DR16.Get_Mouse_Right_Key() == DR16_Key_Status_PRESSED && MiniPC.Get_Radar_Enable_Status() == 1)
             {
@@ -792,6 +743,7 @@ void Class_Chariot::Control_Gimbal()
                 Gimbal.Set_Target_Yaw_Angle(Gimbal.Get_Target_Yaw_Encoder_Angle() - tmp_yaw_offest);
                 Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_MINIPC);
             }
+            #endif
             if (DR16.Get_Keyboard_Key_Shift() == DR16_Key_Status_PRESSED)
             {
                 float transform_yaw_offest_mode2 = 0.0f, transform_pitch_offest_mode2 = 0.0f;
@@ -824,12 +776,12 @@ void Class_Chariot::Control_Gimbal()
             //
             if(DR16.Get_Keyboard_Key_C() == DR16_Key_Status_TRIG_FREE_PRESSED)
             {
-                Gimbal.Set_Launch_Mode(Launch_Disable);
-                Gimbal.Set_Target_Pitch_Angle(-4.5f);
-                Image.Set_Target_Image_Roll_Angle(-10.0f);
-                Image.Set_Target_Image_Pitch_Angle(5.0f);
-                Swtich_Pitch = 0;
-                Swtich_Roll = 0;
+                 Gimbal.Set_Launch_Mode(Launch_Disable);
+                 Gimbal.Set_Target_Pitch_Angle(0.0f);
+                 Image.Set_Target_Image_Roll_Angle(90.0f);
+                 Image.Set_Target_Image_Pitch_Angle(0.5f);
+                 Swtich_Pitch = 0;
+                 Swtich_Roll = 0;
             }
             Gimbal.Set_Gimbal_Control_Type(Gimbal_Control_Type_NORMAL);
             
@@ -983,47 +935,41 @@ void Class_Chariot::Control_Image()
         if(DR16.Get_Keyboard_Key_Q() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
             if(Swtich_Pitch == 0){
-                Image.Set_Target_Image_Pitch_Angle(40.0f);
+                Image.Set_Target_Image_Pitch_Angle(30.0f);
                 Swtich_Pitch = 1;
             }
             else{
-                Image.Set_Target_Image_Pitch_Angle(5.0f);
+                Image.Set_Target_Image_Pitch_Angle(0.5f);
                 Swtich_Pitch = 0;
             }
-            //Image.Set_Target_Image_Roll_Angle(-170.0f);
         }
-        
-        // else if(DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
-        // {
-        //     Image.Set_Target_Image_Pitch_Angle(5.0f);
-        //     Image.Set_Target_Image_Roll_Angle(-10.0f);
-        // }
 
-        if(DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
+        if (DR16.Get_Keyboard_Key_F() == DR16_Key_Status_TRIG_FREE_PRESSED)
         {
-            if(Swtich_Roll == 0){
-                Image.Set_Target_Image_Roll_Angle(-170.0f);
+            if (Swtich_Roll == 0)
+            {
+                Image.Set_Target_Image_Roll_Angle(90.0f);
                 Swtich_Roll = 1;
             }
-            else{
-                Image.Set_Target_Image_Roll_Angle(-10.0f);
+            else
+            {
+                Image.Set_Target_Image_Roll_Angle(0.0f);
                 Swtich_Roll = 0;
             }
         }
-
-        if(DR16.Get_Keyboard_Key_V() == DR16_Key_Status_PRESSED)
+        
+        if (DR16.Get_Keyboard_Key_V() == DR16_Key_Status_PRESSED)
         {
-            K = 0.008f;
+            K = 0.001f;
         }
-        else if(DR16.Get_Keyboard_Key_B() == DR16_Key_Status_PRESSED)
+        else if (DR16.Get_Keyboard_Key_B() == DR16_Key_Status_PRESSED)
         {
-            K= -0.008f;
+            K = -0.001f;
         }
         else
         {
             K = 0.0f;
         }
-
         tmp_image_pitch = Image.Get_Target_Image_Pitch_Angle();
         tmp_image_pitch += DR16.Get_Mouse_Z() * DR16_Mouse_Pitch_Angle_Resolution * 4.0f;
 
@@ -1031,7 +977,7 @@ void Class_Chariot::Control_Image()
         tmp_image_roll += -K*DR16_Mouse_Pitch_Angle_Resolution;
 
         Math_Constrain(&tmp_image_pitch, 0.0f, 48.0f);
-        Math_Constrain(&tmp_image_roll, -180.0f, 0.0f);
+        Math_Constrain(&tmp_image_roll,0.0f, 100.0f);
         Image.Set_Target_Image_Pitch_Angle(tmp_image_pitch);
         Image.Set_Target_Image_Roll_Angle(tmp_image_roll);
     }
@@ -1085,16 +1031,6 @@ void Class_Chariot::Control_Image()
     float tx_roll_angle = Image.Get_Target_Image_Roll_Angle();
     memcpy(CAN1_0x02E_TX_Data, &tx_pitch_angle, sizeof(float));
     memcpy(CAN1_0x02E_TX_Data + 4, &tx_roll_angle, sizeof(float));
-
-    
-
-    // if(DR16.Get_DR16_Status() == DR16_Status_ENABLE)
-    // {
-    //     Image.Motor_Image_Pitch.Set_DJI_Motor_Control_Method(DJI_Motor_Control_Method_OMEGA);
-    //     Image.Motor_Image_Pitch.Set_Target_Omega_Radian(Omega);
-    // }
-
-    
 }
 #endif
 
@@ -1286,6 +1222,8 @@ void Class_Chariot::CAN_Chassis_Tx_Gimbal_Callback()
     shoot_speed = (int16_t)(Referee.Get_Shoot_Speed() * 1000.0f);
     Pos_X = (int16_t)(Referee.Get_Location_X() * 1000.0f);
     Pos_Y = (int16_t)(Referee.Get_Location_Y() * 1000.0f);
+    // Pos_X = (int16_t)(Uwb_pos_x * 1000.0f);
+    // Pos_Y = (int16_t)(Uwb_pos_y * 1000.0f);
     memcpy(CAN2_Chassis_Tx_Gimbal_Data,&robot_id,sizeof(uint8_t));
     memcpy(CAN2_Chassis_Tx_Gimbal_Data + 1,&game_state,sizeof(uint8_t));
     memcpy(CAN2_Chassis_Tx_Gimbal_Data + 2, &shoot_speed, sizeof(int16_t));
@@ -1328,45 +1266,11 @@ void Class_Chariot::CAN_Chassis_Tx_Streeing_Wheel_Callback()
 
 }
 #endif
+
 #ifdef CHASSIS
-float supercap_target_power;
-float Buffer_Power;
-float Chassis_Actual_Limit_Power;
 void Class_Chariot::CAN_Chassis_Tx_Max_Power_Callback()
 {  
-    //读取底盘限制功率
-    float Power_Max = Chassis.Referee->Get_Chassis_Power_Max();
-     //读取底盘实际功率
-    float Chassis_Actual_Power = fabs(Chassis.Supercap.Get_Chassis_Actual_Power());
-    //针对于关闭超电的缓冲环
-    PID_Chassis_Buffer_Power.Set_Target(30.f);
-    PID_Chassis_Buffer_Power.Set_Now(Chassis.Referee->Get_Chassis_Energy_Buffer());
-    PID_Chassis_Buffer_Power.TIM_Adjust_PeriodElapsedCallback();
-    Buffer_Power = -PID_Chassis_Buffer_Power.Get_Out();
-    
-    Chassis_Actual_Limit_Power = Power_Max + Buffer_Power;
-
-    if(Chassis.Supercap.Get_Supercap_Status() == Supercap_Status_ENABLE && Supercap_Control_Status == Supercap_Control_Status_ENABLE)
-        Chassis_Actual_Limit_Power += ((Chassis.Supercap.Get_Supercap_Buffer_Power() > 0)? Chassis.Supercap.Get_Supercap_Buffer_Power() : 0);
-    else
-        Chassis_Actual_Limit_Power = Chassis_Actual_Limit_Power;
-
-    // //处理超电低电压保护
-    // if( Chassis.Supercap.Get_Supercap_Buffer_Power() == 0.0f)
-    //     Power_Max = Power_Max+fabs(Buffer_Power) + 5.0f;
-    // else
-    //     Power_Max = Power_Max;
-
-    //控制发送给超电的功率上限数据
-    supercap_target_power = (Buffer_Power>0)?0:Buffer_Power;
-    Chassis.Supercap.Set_Limit_Power(Power_Max + supercap_target_power + 5.0f);
-    //控制超电一直处于使能状态
-    Chassis.Supercap.Set_Supercap_Control_Status((Enum_Supercap_Control_Status)SuperCap);
-
-    memcpy(CAN1_0x01E_Tx_Data, &Chassis_Actual_Limit_Power, sizeof(float));
-	memcpy(CAN1_0x01E_Tx_Data+4,&Chassis_Actual_Power,sizeof(float));
 }
-
 #endif
 
 #ifdef CHASSIS
@@ -1446,7 +1350,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
         }
 
         Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,Pitch_IMU_Angle,Referee_UI_CHANGE);
-
+        //Referee.Referee_UI_Draw_Float_Graphic_5(Referee.Get_ID(),Referee_UI_Three,0,0x0F,Graphic_Color_GREEN,20,5,500/2+800+150, 400+410,Chassis.Supercap.Totol_Energy,Referee_UI_CHANGE);
         if(UI_Radar_Target == Radar_Target_Pos_Outpost)
         {
             Referee.Referee_UI_Draw_String(5, Referee.Get_ID(), Referee_UI_Zero, 0, 0x0C , Graphic_Color_PURPLE, 20, 5, 960 * 2 - 250,810, "Outpost", (sizeof("Outpost") - 1), Referee_UI_CHANGE);
@@ -1571,7 +1475,7 @@ void Class_Chariot::Chariot_Referee_UI_Tx_Callback(Enum_Referee_UI_Refresh_Statu
     // 超电容量
     Referee.Referee_UI_Draw_Rectangle(Referee.Get_ID(), Referee_UI_Four, 1, 0x07, 8, 3,960-400+120, 50,960+400-120, 40, Referee_UI_ADD);
     //
-    Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Four, 1, 0x16,Graphic_Color_WHITE,3,960 ,465, 10,Referee_UI_ADD);
+    Referee.Referee_UI_Draw_Circle_Graphic_5(Referee.Get_ID(),Referee_UI_Four, 1, 0x16,Graphic_Color_WHITE,1,960 ,465, 10,Referee_UI_ADD);
     // 善后处理
     Referee.UART_Tx_Referee_UI(String_Index);
 }
@@ -1591,15 +1495,7 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
         //底盘给分别给四个舵轮发消息
         CAN_Chassis_Tx_Streeing_Wheel_Callback();
         //底盘给舵小板发送最大功率
-        //CAN_Chassis_Tx_Max_Power_Callback();
         //超电使用策略
-        if(Referee.Get_Level() == 1){
-            Chassis.Supercap.Set_Referee_MaxPower(55.0f);
-        }
-        else{
-            Chassis.Supercap.Set_Referee_MaxPower(Referee.Get_Chassis_Power_Max());
-        }
-        Chassis.Supercap.Set_Referee_BufferPower(Referee.Get_Chassis_Energy_Buffer());
         if(Supercap_Control_Status == Supercap_Control_Status_ENABLE)
         {
             Chassis.Supercap.Set_Supercap_Usage_Stratage(Supercap_Usage_Stratage_Supercap_BufferPower);
@@ -1632,6 +1528,12 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     Booster.TIM_Calculate_PeriodElapsedCallback();
     
     // 传输数据给上位机
+    UI_Radar_Control_Type = MiniPC.Get_Radar_Control_Type();
+    UI_Radar_Target = Radar_Target_Pos_Base;
+    UI_Radar_Target_Pos = Radar_Target_Pos_Outpost_A;
+    MiniPC.Set_Radar_Control_Type(Radar_Control_Type_UWB);
+    MiniPC.Set_Radar_Target(UI_Radar_Target);
+    MiniPC.Set_Radar_Target_Outpost(UI_Radar_Target_Pos);
     if(Gimbal.Get_Launch_Mode() == Launch_Enable){
         MiniPC.Set_Tx_Flag_Control_Radar(1);
     }
@@ -1642,9 +1544,6 @@ void Class_Chariot::TIM_Calculate_PeriodElapsedCallback()
     MiniPC.TIM_Write_PeriodElapsedCallback();
     // 给下板发送数据
     CAN_Gimbal_Tx_Chassis_Callback();
-    // 弹舱舵机控制
-    //__HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_3, Compare);
-
 #endif   
 }
 
@@ -1766,8 +1665,6 @@ void Class_Chariot::TIM1msMod50_Alive_PeriodElapsedCallback()
             TIM1msMod50_Chassis_Communicate_Alive_PeriodElapsedCallback();
             DR16.TIM1msMod50_Alive_PeriodElapsedCallback();
             VT13.TIM1msMod50_Alive_PeriodElapsedCallback();
-            // Image.Motor_Image_Pitch.TIM_Alive_PeriodElapsedCallback();
-            // Image.Motor_Image_Roll.TIM_Alive_PeriodElapsedCallback();
             mod50_mod3 = 0;
         }
 

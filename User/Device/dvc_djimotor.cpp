@@ -586,6 +586,7 @@ void Class_DJI_Motor_C620::Data_Process()
             Data.Total_Round--;
         }        
     }
+    
     Data.Total_Encoder = Data.Total_Round * Encoder_Num_Per_Round + tmp_encoder;
 
     //计算电机本身信息

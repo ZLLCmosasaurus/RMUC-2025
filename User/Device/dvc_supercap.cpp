@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "config.h"
 #include "dvc_supercap.h"
-
+#include "dvc_dwt.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -90,6 +90,7 @@ void Class_Supercap::Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_heade
  * @brief 
  * 
  */
+//float Fps_Supercap_Rx,E_Sum;
 void Class_Supercap::Data_Process()
 {
     //数据处理过程
@@ -99,7 +100,30 @@ void Class_Supercap::Data_Process()
     Data.Supercap_Buffer_Power = (float)Supercap_Data.Supercap_Buffer_Power / 100.0f;
     Data.Supercap_Charge_Percentage = (float)Supercap_Data.Supercap_Charge_Percentage;
     Data.Supercup_Control_Level_Status = Supercap_Data.Supercup_Control_Level_Status;
-    Data.Supercap_Current_Energy_Consumption = (float)Supercap_Data.Supercap_Current_Energy_Consumption / 100.0f;
+    Data.Supercap_Current_Energy_Consumption = (float)Supercap_Data.Supercap_Current_Energy_Consumption / 10000.0f;
+
+    if(Referee->Get_Game_Stage() == Referee_Game_Status_Stage_BATTLE)
+    {
+        Totol_Energy -= Data.Supercap_Current_Energy_Consumption;
+
+        if(Totol_Energy < 0)
+            Totol_Energy = 0;
+        
+        if(Totol_Energy <= 1000.0f)//损失5%的正常20000J功率
+        {
+            Robot_Power_Status = 1;
+        }
+        else
+        {
+            Robot_Power_Status = 0;
+        }
+
+    }
+    else
+    {
+        Totol_Energy = 20000.0f;
+        Robot_Power_Status = 0;
+    }
 }
 /**
  * @brief CAN通信接收回调函数
@@ -146,10 +170,19 @@ void Class_Supercap::Output()
     break;
     case PowerLimit_Type_Supercap_BufferPower:
     {
-        Chassis_Device_LimitPower = Supercap_BufferPower_Output + Referee_MaxPower;
+        Chassis_Device_LimitPower = Supercap_BufferPower_Output + Referee_MaxPower + Supercap_LimitBufferPower_Output;
         Limit_Power = Supercap_LimitBufferPower_Output + Referee_MaxPower;
     }
     break;
+    }
+
+    if (Chassis_Device_LimitPower < 0.0f)
+    {
+        Chassis_Device_LimitPower = 0.0f;
+    }
+    if (Limit_Power < 0.0f)
+    {
+        Limit_Power = 0.0f;
     }
     //给超电can发送打包
     Set_Supercap_Control_Status((Enum_Supercap_Control_Status)SuperCap);
@@ -162,6 +195,124 @@ void Class_Supercap::Output()
 
 void Class_Supercap::Use_SuperCap_Strategy()
 {
+
+    switch (Robot_Power_Status)
+    {
+    case 0:
+    {
+        //血量优先
+        switch (Referee->Get_Level())
+        {
+        case 1:
+        {
+            Set_Referee_MaxPower(55.0f);
+        }
+        break;
+        case 2:
+        {
+            Set_Referee_MaxPower(60.0f);
+        }
+        break;
+        case 3:
+        {
+            Set_Referee_MaxPower(65.0f);
+        }
+        break;
+        case 4:
+        {
+            Set_Referee_MaxPower(70.0f);
+        }
+        break;
+        case 5:
+        {
+            Set_Referee_MaxPower(75.0f);
+        }
+        break;
+        case 6:
+        {
+            Set_Referee_MaxPower(80.0f);
+        }
+        break;
+        case 7:
+        {
+            Set_Referee_MaxPower(85.0f);
+        }
+        break;
+        case 8:
+        {
+            Set_Referee_MaxPower(90.0f);
+        }
+        break;
+        case 9:
+        {
+            Set_Referee_MaxPower(100.0f);
+        }
+        break;
+        case 10:
+        {
+            Set_Referee_MaxPower(120.0f);
+        }
+        break;
+        }
+        Set_Referee_BufferPower(Referee->Get_Chassis_Energy_Buffer());
+    }
+    break;
+    case 1:
+    {
+        //血量优先
+        switch (Referee->Get_Level())
+        {
+        case 2:
+        {
+            Set_Referee_MaxPower(20.0f);
+        }
+        break;
+        case 3:
+        {
+            Set_Referee_MaxPower(22.0f);
+        }
+        break;
+        case 4:
+        {
+            Set_Referee_MaxPower(23.0f);
+        }
+        break;
+        case 5:
+        {
+            Set_Referee_MaxPower(25.0f);
+        }
+        break;
+        case 6:
+        {
+            Set_Referee_MaxPower(27.0f);
+        }
+        break;
+        case 7:
+        {
+            Set_Referee_MaxPower(28.0f);
+        }
+        break;
+        case 8:
+        {
+            Set_Referee_MaxPower(30.0f);
+        }
+
+        break;
+        case 9:
+        {
+            Set_Referee_MaxPower(33.0f);
+        }
+        break;
+        case 10:
+        {
+            Set_Referee_MaxPower(40.0f);
+        }
+        break;
+        }
+        Set_Referee_BufferPower(Referee->Get_Chassis_Energy_Buffer());
+    }
+    break;
+    }
     // 超级电容策略 超电一直处于使能状态
     // 1.使用裁判系统缓冲环（斜率不易过大 功率控制讲究细水长流）（如果软件功率限制不住，莫慌，超电会帮你补一些）
     // 2.使用超级电容缓冲环并添加缓冲环充能策略（缓冲只加不减 ->充能）
@@ -171,38 +322,57 @@ void Class_Supercap::Use_SuperCap_Strategy()
         {
         case Supercap_Usage_Stratage_Referee_BufferPower:
         {   
-            fsm.Status[fsm.Get_Now_Status_Serial()].Time++;
-            switch (fsm.Get_Now_Status_Serial())
-            {
-            case 0://正常 ：Referee_BufferPower !< 25J
-            {
-                Referee_BufferPower_Output = 0.5f * (Referee_BufferPower - 30.0f);
-                Math_Constrain(&Referee_BufferPower_Output, -15.0f, 15.0f);
-                if(Referee_BufferPower < 25.0f)
-                {
-                    fsm.Set_Status(1);
-                }
-            }
-            break;
-            case 1:
-            {
-                Referee_BufferPower_Output = 0.0f;
-                if(Referee_BufferPower > 55.0f)
-                {
-                    fsm.Set_Status(0);
-                }
-            }
-            break;
-            }
+            //fsm.Status[fsm.Get_Now_Status_Serial()].Time++;
+            // switch (fsm.Get_Now_Status_Serial())
+            // {
+            // case 0://正常 ：Referee_BufferPower !< 25J
+            // {
+            //     if(Referee_BufferPower > 40.0f && Referee_BufferPower <= 60.0f)
+            //     {
+            //         Referee_BufferPower_Output = 1.0f * (Referee_BufferPower - 40.0f);
+            //     }
+            //     else if(Referee_BufferPower <  40.0f)
+            //     {
+            //         Referee_BufferPower_Output = 1.5f * (Referee_BufferPower - 40.0f);
+            //     }
+            //     Math_Constrain(&Referee_BufferPower_Output, -50.0f, 20.0f);
 
+            //     if(Referee_BufferPower < 30.0f && Data.Supercap_Charge_Percentage > 30.0f)
+            //     {
+            //         fsm.Set_Status(1);
+            //     }
+            // }
+            // break;
+            // case 1:
+            // {
+            //     Referee_BufferPower_Output = 1.5f * (Referee_BufferPower - 40.0f);
+            //     Math_Constrain(&Referee_BufferPower_Output,-50.0f,0.0f);
+            //     if(Referee_BufferPower > 50.0f)
+            //     {
+            //         fsm.Set_Status(0);
+            //     }
+            // }
+            // break;
+            // }
+            Referee_BufferPower_Output =  1.5f * (Referee_BufferPower - 60.0f);
+            Math_Constrain(&Referee_BufferPower_Output,-50.0f,0.0f);
             Set_PowerLimit_Type(PowerLimit_Type_Referee_BufferPower);
         }
         break;
         case Supercap_Usage_Stratage_Supercap_BufferPower:
         {
             Supercap_BufferPower_Output = Data.Supercap_Buffer_Power;
-            Supercap_LimitBufferPower_Output = 0.5f * (Referee_BufferPower - 30.0f);
-            Math_Constrain(&Supercap_LimitBufferPower_Output,0.0f,15.0f);
+            // if (Referee_BufferPower > 40.0f && Referee_BufferPower <= 60.0f)
+            // {
+            //     Supercap_LimitBufferPower_Output = 1.0f * (Referee_BufferPower - 40.0f);
+            // }
+            // else if (Referee_BufferPower < 40.0f)
+            // {
+            //     Supercap_LimitBufferPower_Output = 1.5f * (Referee_BufferPower - 40.0f);
+            // }
+            // Math_Constrain(&Supercap_LimitBufferPower_Output,-50.0f,20.0f);
+            Supercap_LimitBufferPower_Output = 1.5f * (Referee_BufferPower - 60.0f);
+            Math_Constrain(&Supercap_LimitBufferPower_Output,-50.0f,0.0f);
             Set_PowerLimit_Type(PowerLimit_Type_Supercap_BufferPower);
         }
         break;
@@ -210,13 +380,19 @@ void Class_Supercap::Use_SuperCap_Strategy()
     }
     else
     {
-        Referee_BufferPower_Output = 0.25f * (Referee_BufferPower - 30.0f);
-        //Math_Constrain(&Referee_BufferPower_Output, -15.0f, 15.0f);
+        // if (Referee_BufferPower > 40.0f && Referee_BufferPower <= 60.0f)
+        // {
+        //     Referee_BufferPower_Output = 1.0f * (Referee_BufferPower - 40.0f);
+        // }
+        // else if (Referee_BufferPower < 40.0f)
+        // {
+        //     Referee_BufferPower_Output = 1.5f * (Referee_BufferPower - 40.0f);
+        // }
+        // Math_Constrain(&Referee_BufferPower_Output, -50.0f, 20.0f);
+        Referee_BufferPower_Output =  1.5f * (Referee_BufferPower - 60.0f);
+        Math_Constrain(&Referee_BufferPower_Output,-50.0f,0.0f);
         Set_PowerLimit_Type(PowerLimit_Type_Referee_BufferPower);
     }
-
-
-
 }
 
 /**

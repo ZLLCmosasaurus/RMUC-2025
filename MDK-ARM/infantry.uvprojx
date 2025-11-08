@@ -520,11 +520,6 @@
           <GroupName>Device</GroupName>
           <Files>
             <File>
-              <FileName>dvc_boardc_bmi088.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\User\Device\dvc_boardc_bmi088.cpp</FilePath>
-            </File>
-            <File>
               <FileName>dvc_boardc_ist8310.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_boardc_ist8310.cpp</FilePath>
@@ -558,6 +553,11 @@
               <FileName>dvc_imu.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_imu.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dvc_boardc_bmi088.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_boardc_bmi088.cpp</FilePath>
             </File>
             <File>
               <FileName>dvc_lkmotor.cpp</FileName>
@@ -613,6 +613,11 @@
               <FileName>dvc_VT13.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Device\dvc_VT13.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dvc_dmimu.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Device\dvc_dmimu.cpp</FilePath>
             </File>
           </Files>
         </Group>

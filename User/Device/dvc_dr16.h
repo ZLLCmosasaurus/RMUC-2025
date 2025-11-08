@@ -192,6 +192,7 @@ struct Struct_DR16_Data
     Enum_DR16_Key_Status Mouse_Right_Key;
     Enum_DR16_Key_Status Keyboard_Key[16];
     float Yaw;
+    uint8_t Swtich;
 };
 
 /**
@@ -239,6 +240,7 @@ public:
     inline Enum_DR16_Key_Status Get_Keyboard_Key_B();
     
     inline float Get_Yaw();
+    inline uint8_t Get_VT13_Swtich();
 
     void DR16_UART_RxCpltCallback(uint8_t *Rx_Data);
     void Image_UART_RxCpltCallback(uint8_t *Rx_Data);
@@ -603,6 +605,10 @@ Enum_DR16_Key_Status Class_DR16::Get_Keyboard_Key_B()
     return (Data.Keyboard_Key[KEY_B]);
 }
 
+uint8_t Class_DR16::Get_VT13_Swtich()
+{
+    return (Data.Swtich);
+}
 /**
  * @brief 获取遥控器yaw轴状态
  *

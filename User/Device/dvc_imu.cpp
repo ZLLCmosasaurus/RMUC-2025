@@ -36,11 +36,13 @@ void Class_IMU::Init()
     INS.AccelLPF = 0.0085;
 
     //初始化温控pid参数
-    PID_IMU_Tempture.Init(1000, 2000, 0, 0.0, uint32_max, uint32_max);
+    PID_IMU_Tempture.Init(1000, 2000, 0, 0.0, 0.0f, 4999.0f);
     HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
 
 }
 
+
+float pid_out;
 float tmp_gravity_b[3];
 void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
 {
@@ -84,9 +86,9 @@ void Class_IMU::TIM_Calculate_PeriodElapsedCallback(void)
     if(Tempture_Cnt_mod50 % 50 == 0)
     {
         PID_IMU_Tempture.Set_Now(BMI088_Raw_Data.Temperature);
-        PID_IMU_Tempture.Set_Target(50.0f);
+        PID_IMU_Tempture.Set_Target(40.0f);
         PID_IMU_Tempture.TIM_Adjust_PeriodElapsedCallback();
-				float pid_out = PID_IMU_Tempture.Get_Out();
+				pid_out = PID_IMU_Tempture.Get_Out();
 				Math_Constrain(&pid_out,0.f,65535.f);
         TIM_Set_PWM(&htim10, TIM_CHANNEL_1, (uint16_t)pid_out);
     }

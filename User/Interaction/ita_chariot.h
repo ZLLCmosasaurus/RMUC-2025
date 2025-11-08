@@ -250,6 +250,12 @@ public:
     //底盘云台通讯数据
     float Gimbal_Tx_Pitch_Angle = 0;
     float Shoot_Speed = 0;
+    #ifdef GIMBAL
+    //底盘 云台 发射机构 前一帧控制类型
+    Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_FLLOW;
+    Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
+    Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+    #endif
 protected:
 
     //pitch控制状态 锁定和自由控制
@@ -332,10 +338,7 @@ protected:
         //读写变量
         Enum_Chassis_Status Chassis_Status = Chassis_Status_DISABLE;
 
-        //底盘 云台 发射机构 前一帧控制类型
-        Enum_Chassis_Control_Type Pre_Chassis_Control_Type = Chassis_Control_Type_FLLOW;
-        Enum_Gimbal_Control_Type Pre_Gimbal_Control_Type = Gimbal_Control_Type_NORMAL;
-        Enum_Booster_Control_Type Pre_Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
+        
 
         //单发连发标志位
         uint8_t Shoot_Flag = 0;

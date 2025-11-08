@@ -387,9 +387,10 @@ void Task1ms_TIM5_Callback()
         #ifdef GIMBAL
         #ifdef USE_DR16
 
+        
         chariot.FSM_Alive_Control.Reload_TIM_Status_PeriodElapsedCallback();
         chariot.TIM_Unline_Protect_PeriodElapsedCallback();
-        
+       
         #elif defined(USE_VT13)
 
         chariot.FSM_Alive_Control_VT13.Reload_TIM_Status_PeriodElapsedCallback();
@@ -430,9 +431,13 @@ extern "C" void Task_Init()
 
         //裁判系统
         // UART_Init(&huart6, Referee_UART6_Callback, 128);   //并未使用环形队列 尽量给长范围增加检索时间 减少丢包
-         __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-	     HAL_UART_Receive_DMA(&huart1, (uint8_t*)UART1_Manage_Object.Rx_Buffer, 256);
-         UART1_Manage_Object.Rx_Buffer_Length = 256;
+        hdma_usart6_rx.Init.Mode = DMA_CIRCULAR;
+        huart6.Instance->BRR = UART_BRR_SAMPLING16(HAL_RCC_GetPCLK2Freq(), 115200);     //裁判系统波特率
+        
+         __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);
+	     HAL_UART_Receive_DMA(&huart6, (uint8_t*)UART6_Manage_Object.Rx_Buffer, 128);
+         UART6_Manage_Object.UART_Handler = &huart6;
+         UART6_Manage_Object.Rx_Buffer_Length = 128;
 
         #ifdef POWER_LIMIT
         //旧版超电
@@ -459,13 +464,6 @@ extern "C" void Task_Init()
         #elif defined(USE_VT13)
         UART_Init(&huart6, VT13_UART_Callback, 40);
         #endif
-        //minipc
-        //UART_Init(&huart1, MiniPC_UART_Callback, MiniPC_Rx_Data_Length);   
-        // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-        // HAL_UART_Receive_DMA(&huart1,(uint8_t*)UART1_Manage_Object.Rx_Buffer,MiniPC_Rx_Data_Length);
-        // UART1_Manage_Object.UART_Handler = &huart1;
-        // UART1_Manage_Object.Rx_Buffer_Length = MiniPC_Rx_Data_Length;
-
         //上位机USB
         USB_Init(&MiniPC_USB_Manage_Object,MiniPC_USB_Callback);
         
@@ -493,7 +491,7 @@ extern "C" void Task_Init()
 extern "C" void Task_Loop()
 {
     #ifdef CHASSIS
-    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer,64);
+    chariot.Referee.UART_RxCpltCallback((uint8_t*)UART6_Manage_Object.Rx_Buffer,128);
     #endif
     #ifdef GIMBAL
     //chariot.MiniPC.UART_RxCpltCallback((uint8_t*)UART1_Manage_Object.Rx_Buffer);

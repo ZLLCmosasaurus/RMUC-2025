@@ -18,6 +18,7 @@
 #include "drv_can.h"
 #include "drv_uart.h"
 #include "alg_fsm.h"
+#include "dvc_referee.h"
 /* Exported macros -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
@@ -75,7 +76,7 @@ struct Struct_Supercap_Data
     float Supercap_Buffer_Power;
     float Supercap_Charge_Percentage;
     uint8_t Supercup_Control_Level_Status;
-    uint8_t Supercap_Current_Energy_Consumption;
+    float Supercap_Current_Energy_Consumption;
 }__attribute__((packed));
 /**
  * @brief 超级电容发送的数据
@@ -94,6 +95,7 @@ struct Struct_Supercap_Tx_Data
 class Class_Supercap
 {
 public:
+    Class_Referee *Referee;
     void Init(CAN_HandleTypeDef *__hcan, float __Limit_Power_Max = 45);
     void Init_UART(UART_HandleTypeDef *__huart, uint8_t __fame_header = '*', uint8_t __fame_tail = ';', float __Limit_Power_Max = 45.0f);
 
@@ -109,6 +111,7 @@ public:
     inline float Get_Chassis_Device_LimitPower();
     inline void Set_Referee_BufferPower(float __Referee_BufferPower);
     inline void Set_Referee_MaxPower(float __Referee_MaxPower);
+    inline float Get_Supercap_Referee_MaxPower();
     inline void Set_PowerLimit_Type(Enum_PowerLimit_Type __PowerLimit_Type);
     inline void Set_Supercap_Usage_Stratage(Enum_Supercap_Usage_Stratage __Supercap_Usage_Stratage);
     void CAN_RxCpltCallback(uint8_t *Rx_Data);
@@ -118,7 +121,7 @@ public:
 
     void TIM_UART_Tx_PeriodElapsedCallback();
     void TIM_Supercap_PeriodElapsedCallback();
-
+    float Totol_Energy  = 20000.0f;
 protected:
     //初始化相关常量
     Class_FSM fsm;
@@ -153,6 +156,8 @@ protected:
     Enum_Supercap_Operating_Status Supercap_Operating_Status = Supercap_Operating_Status_None;
     //底盘限制方式 
     Enum_PowerLimit_Type PowerLimit_Type = PowerLimit_Type_Referee_BufferPower;
+    //虚弱状态
+    uint8_t Robot_Power_Status = 0;//0 正常 1虚弱
     //超级电容对外接口信息
     Struct_Supercap_CAN_Data Supercap_Data;
     Struct_Supercap_Data Data;
@@ -168,6 +173,7 @@ protected:
     float Supercap_LimitBufferPower_Output = 0.0f;
     //给底盘电机发送的限制功率
     float Chassis_Device_LimitPower = 0.0f;
+
     //读写变量
 
     //内部函数
@@ -283,6 +289,10 @@ void Class_Supercap::Set_Referee_BufferPower(float __Referee_BufferPower)
 void Class_Supercap::Set_Referee_MaxPower(float __Referee_MaxPower)
 {
     Referee_MaxPower = __Referee_MaxPower;
+}
+float Class_Supercap::Get_Supercap_Referee_MaxPower()
+{
+    return (Referee_MaxPower);
 }
 void Class_Supercap::Set_PowerLimit_Type(Enum_PowerLimit_Type __PowerLimit_Type)
 {

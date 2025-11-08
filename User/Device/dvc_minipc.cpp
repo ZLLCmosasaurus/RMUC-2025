@@ -90,7 +90,7 @@ void Class_MiniPC::Data_Process()
 
 void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
 {
-  
+  #ifdef OLD
     int16_t tmp_pos_x, tmp_pos_y, tmp_pos_z;
     memcpy(&tmp_pos_x,Rx_Data,2);
     Pack_Rx.radar_target_x = (float)tmp_pos_x / 1000.0f;
@@ -109,6 +109,17 @@ void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
       Rx_Angle_Yaw = calc_yaw(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, 0.0f);
       Rx_Angle_Pitch = calc_pitch_compensated(Pack_Rx.radar_target_x,  Pack_Rx.radar_target_y, Pack_Rx.radar_target_z,Pack_Rx.radar_target_x, Pack_Rx.radar_target_y,Pack_Rx.radar_target_z) - pitch_imu_offset;
     }
+    #endif
+    int16_t tmp_pos_x, tmp_pos_y, tmp_pos_z;
+    memcpy(&tmp_pos_x,Rx_Data,2);
+    Pack_Rx.radar_target_x = (float)tmp_pos_x / 1000.0f;
+    memcpy(&tmp_pos_y,Rx_Data+2,2);
+    Pack_Rx.radar_target_y = (float)tmp_pos_y / 1000.0f;
+    memcpy(&tmp_pos_z,Rx_Data+4,2);
+    Pack_Rx.radar_target_z = (float)tmp_pos_z / 1000.0f;
+    Distance = calc_distance(tmp_pos_x, tmp_pos_y, tmp_pos_z);
+    Rx_Angle_Yaw = calc_yaw(Pack_Rx.radar_target_x, Pack_Rx.radar_target_y, 0.0f);
+    Rx_Angle_Pitch = calc_pitch_compensated(Pack_Rx.radar_target_x,  Pack_Rx.radar_target_y, Pack_Rx.radar_target_z,Pack_Rx.radar_target_x, Pack_Rx.radar_target_y,Pack_Rx.radar_target_z)- pitch_imu_offset;
     //pitch角度限幅
     Math_Constrain(&Rx_Angle_Pitch,-45.0f,5.0f);
     Math_Constrain(&Rx_Angle_Yaw,-180.0f,180.0f);
@@ -116,6 +127,7 @@ void Class_MiniPC::Data_Process_CAN(uint8_t *Rx_Data)
 } 
 void Class_MiniPC::Output_CAN()
 {
+  #ifdef OLD
   uint8_t radar_control_Byte,robot_id;
   int16_t tmp_yaw,tmp_pos_x,tmp_pos_y;
   tmp_yaw = (int16_t)(Tx_Angle_Encoder_Yaw * 100.0f);
@@ -136,6 +148,15 @@ void Class_MiniPC::Output_CAN()
   memcpy(CAN_Tx_Data + 5, &tmp_pos_y, 2);
   
   Pack_Tx.radar_enable_control = Tx_Flag_Control_Radar;
+  #endif
+  CAN_Tx_Data[0] =uint8_t(Pack_Tx.game_stage);
+  int16_t roll_angle,pitch_angle,yaw_angle;
+  roll_angle = Tx_Angle_Roll * 100.0f;
+  pitch_angle = Tx_Angle_Pitch * 100.0f;
+  yaw_angle = Tx_Angle_Yaw * 100.0f;
+  memcpy(CAN_Tx_Data + 1, &roll_angle, 2);
+  memcpy(CAN_Tx_Data + 3, &pitch_angle, 2);
+  memcpy(CAN_Tx_Data + 5, &yaw_angle, 2);
 }
 /**
  * @brief 迷你主机发送数据输出到usb发送缓冲区

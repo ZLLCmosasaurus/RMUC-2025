@@ -13,6 +13,7 @@
 
 #include "dvc_referee.h"
 #include "drv_math.h"
+#include "dvc_dwt.h"
 /* Private macros ------------------------------------------------------------*/
 
 /* Private types -------------------------------------------------------------*/
@@ -59,7 +60,7 @@ void Class_Referee::Init(UART_HandleTypeDef *huart, uint8_t __Frame_Header)
     Frame_Header = __Frame_Header;
 }
 
-
+float fps;
 /**
  * @brief 数据处理过程, 为节约性能不作校验但提供了接口
  * 如遇到大规模丢包或错乱现象, 可重新启用校验过程
@@ -168,6 +169,7 @@ void Class_Referee::Data_Process()
                     break;
                     case (Referee_Command_ID_ROBOT_STATUS):
                     {
+                        fps = FPS_Counter_Update();
                         for (int i = 0; i < data_length + 2; i++)
                         {
                             reinterpret_cast<uint8_t *>(&Robot_Status)[i] = UART_Manage_Object->Rx_Buffer[Get_Circle_Index(buffer_index + 7 + i)];
@@ -332,7 +334,7 @@ void Class_Referee::UART_Tx_Referee_UI(uint8_t __String_Index)
     else
         Referee_UI_Packed_Data(&Interaction_Graphic_5);
     
-    UART_Send_Data(&huart1, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
+    UART_Send_Data(UART_Manage_Object->UART_Handler, UART_Manage_Object->Tx_Buffer, UART_Manage_Object->Tx_Length);
 }
 
 /**

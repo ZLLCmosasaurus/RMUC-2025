@@ -13,8 +13,36 @@
 #   '!Application/*.c':   -O0
 #   '**/*.c':             -O2 -gnu ...
 
-version: "2.0"
+version: "2.1"
 options:
     infantry:
         files: {}
-        virtualPathFiles: {}
+        virtualPathFiles:
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_pcd.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_pcd_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_ll_usb.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_rcc.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_rcc_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_flash.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_flash_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_flash_ramfunc.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_gpio.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_dma_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_dma.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_pwr.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_pwr_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_cortex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_exti.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_can.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_i2c.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_i2c_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_spi.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_tim.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_tim_ex.c: ""
+            <virtual_root>/Drivers/STM32F4xx_HAL_Driver/stm32f4xx_hal_uart.c: ""
+            <virtual_root>/Drivers/CMSIS/system_stm32f4xx.c: ""
+            <virtual_root>/Middlewares/USB_Device_Library/usbd_core.c: ""
+            <virtual_root>/Middlewares/USB_Device_Library/usbd_ctlreq.c: ""
+            <virtual_root>/Middlewares/USB_Device_Library/usbd_ioreq.c: ""
+            <virtual_root>/Middlewares/USB_Device_Library/usbd_cdc.c: ""

@@ -110,7 +110,7 @@ void Class_VT13::VT13_UART_RxCpltCallback(uint8_t *Rx_Data)
     {
       if(verify_crc16_check_sum(Rx_Data, 21) == 1)
       {
-        FPS_Test = FPS_Counter_Update();
+        //FPS_Test = FPS_Counter_Update();
         VT13_Flag ++;
         VT13_Data_Process(Rx_Data);
         memcpy(&Pre_RX_Data,Rx_Data,sizeof(Struct_VT13_UART_Data));

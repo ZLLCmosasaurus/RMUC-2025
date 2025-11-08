@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp --scatter "d:/Users_RM/hero/hero_new/MDK-ARM/infantry/infantry.sct" --diag_suppress=L6329 --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols --info sizes --info totals --info unused --info veneers
+--cpu Cortex-M4.fp --scatter d:/Users_RM/hero/M51-Gimbal/MDK-ARM/infantry/infantry.sct --diag_suppress=L6329 --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols --info sizes --info totals --info unused --info veneers
 --list ./infantry/infantry.map
 ./infantry/.obj/__/Core/Src/can.o
 ./infantry/.obj/__/Core/Src/dma.o
@@ -52,6 +52,7 @@
 ./infantry/.obj/__/User/Device/dvc_boardc_ist8310.o
 ./infantry/.obj/__/User/Device/dvc_buzzer.o
 ./infantry/.obj/__/User/Device/dvc_djimotor.o
+./infantry/.obj/__/User/Device/dvc_dmimu.o
 ./infantry/.obj/__/User/Device/dvc_dmmotor.o
 ./infantry/.obj/__/User/Device/dvc_dr16.o
 ./infantry/.obj/__/User/Device/dvc_dwt.o

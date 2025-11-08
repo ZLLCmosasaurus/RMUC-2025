@@ -248,6 +248,8 @@ void Class_Gimbal::Init()
     //较好的随动参数
     Motor_Yaw.PID_Angle.Init(70.0f, 0.016f, 1.5f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
     Motor_Yaw.PID_Omega.Init(80.0f, 0.15f, 0.01f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    //Motor_Yaw.PID_Angle.Init(50.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f);
+    //Motor_Yaw.PID_Omega.Init(60.0f, 0.0f, 0.00f, 0.0f, 2000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
     //编码器PID初始化
     Motor_Yaw.PID_Yaw_Encoder_Angle.Init(80.0f, 0.1f, 0.3f, 0.0f, 0.0f, 0.0f,0.0f, 0.0f, 0.0f, 0.001f,0.005f);
     Motor_Yaw.PID_Yaw_Encoder_Omega.Init(85.0f, 0.5f, 0.0f, 0.0f, 7000.0f, 20000.0f,0.0f, 0.0f, 0.0f, 0.001f);
@@ -331,6 +333,8 @@ void Class_Gimbal::Output()
         {
             Tmp_Target_Yaw_Angle += (2 * Max_Yaw_Angle);
         }
+
+        //Target_Pitch_Angle = -17.0f;
         //pitch限位
         Math_Constrain(&Target_Pitch_Angle, Min_Pitch_Angle, Max_Pitch_Angle);
         //设置yaw轴与pitch轴目标角度

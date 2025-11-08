@@ -78,7 +78,7 @@ class Class_FSM_Antijamming : public Class_FSM
 {
 public:
     Class_Booster *Booster;
-
+    float original_angle; // 在类中作为成员变量
     void Reload_TIM_Status_PeriodElapsedCallback();
 };
 //摩擦轮电机类
@@ -116,6 +116,7 @@ public:
 
     //4*摩擦轮
     Class_Fric_Motor Fric[4];
+    
     //初始化
     void Init();
 
@@ -150,7 +151,7 @@ protected:
     //摩擦轮单次判定发弹阈值, 超出被认为发射子弹
     uint16_t Friction_Torque_Threshold = 3300;
     //摩擦轮速度判定发弹阈值, 超出则说明已经开机
-    float Friction_Omega_Threshold = 4500;
+    float Friction_Omega_Threshold = 3000;
 
     //内部变量
 
@@ -165,16 +166,17 @@ protected:
     Enum_Booster_Control_Type Booster_Control_Type = Booster_Control_Type_CEASEFIRE;
     Enum_Friction_Control_Type Friction_Control_Type = Friction_Control_Type_DISABLE;
     //摩擦轮角速度
-    int16_t Fric_High_Rpm = 4975;//5025;//5075;
-    int16_t Fric_Low_Rpm = 4825;//4875;//4925;
-    int16_t Fric_Transform_Rpm = -154;
+    int16_t Fric_High_Rpm = 4975;//5015;//4975;
+    int16_t Fric_Low_Rpm = 3975;//3105;//4825;
+    int16_t Fric_Transform_Rpm = 185;
     //子弹实际速度
     float Referee_Bullet_Velocity = 0.0f; 
     float Pre_Referee_Bullet_Velocity = 0.0f;
     Enum_Referee_Bullet_Velocity_Updata_Status Referee_Bullet_Velocity_Updata_Status = Referee_Bullet_Velocity_Updata_Status_DISABLE;
     int16_t Projectile_Allowance_42mm;
-    //沈阳：5025 5175
+    //沈阳：5025 5175 
 	//速度
+    //RMUC 4975 4825
     float Friction_Omega = 0.0f;//暂时用不到
     //拨弹盘实际的目标速度, 一圈八发子弹
     float Driver_Omega = -2.0f * PI;

@@ -38,11 +38,11 @@ float Class_Power_Limit::Calculate_Limit_K(float omega[], float torque[], float 
 {
     float limit_k = 1.; // 输出伸缩因子k
 
-    float tmp_predict;
+    float tmp_predict = 0.0f;
 
-    float torque_square_sum;
-    float omega_square_sum;
-    float torque_multi_omega_sum;
+    float torque_square_sum = 0.0f;
+    float omega_square_sum = 0.0f;
+    float torque_multi_omega_sum = 0.0f;
 
     float func_a, func_b, func_c;
     float delta;
